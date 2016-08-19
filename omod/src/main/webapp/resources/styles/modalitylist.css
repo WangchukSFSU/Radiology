@@ -1,0 +1,79 @@
+.modality {
+    border-style: solid;
+    border-color: gainsboro;
+    padding-left: 3%;
+   
+    padding-top: 15px;
+
+}
+
+.list-modality {
+    padding-top: 30px;
+}
+
+#modality-list {
+
+
+float: left;
+
+
+
+font: bold 26px Arial;
+  text-decoration: none;
+  background-color: #EEEEEE;
+  color: #333333;
+  padding: 2px 6px 2px 6px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+
+}
+
+#modality-concept-message {
+   
+     margin-top: 7px;
+    margin-left: 26px;
+   
+ 
+    
+    font: bold 17px Arial;
+  text-decoration: none;
+  background-color: #EEEEEE;
+  color: #333333;
+  padding: 2px 6px 2px 6px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+  
+
+}
+
+label {
+    margin-left: 5px;    
+     display: inline-block;
+     
+   
+}
+
+#modality-refresh {
+
+    float: right;
+   margin-right: 25px;
+}
+
+.modality-list-btn {
+    margin-top: 84px;
+    padding-bottom: 13px;
+   
+}
+
+
+#select-modality {
+    width: 240px;
+}
+
+#modality-label-list li {
+    list-style-type: none;
+}

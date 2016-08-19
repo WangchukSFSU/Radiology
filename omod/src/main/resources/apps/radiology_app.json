@@ -1,0 +1,28 @@
+[
+    {
+        "id": "radiology.app",
+        "description": "Text description of my app, not shown to regular user",
+        "extensionPoints": [
+            {
+                "id": "subApp1.apps",
+                "description": "Apps on the basic Apps App Home Page"
+            }
+        ],
+        "extensions": [
+             
+            {
+                "id": "radiology.appId71",
+                "extensionPointId": "patientDashboard.overallActions",
+                "type": "link",
+                "label": "Radiology Order",
+                "url": "radiology/radiologyOrder.page?patientId={{patient.uuid}}",
+                "icon": "icon-signin",
+                "order": 23,
+                "requiredPrivilege": "Task: some random privilege"
+            }
+          
+       
+ 
+        ]
+    }
+]

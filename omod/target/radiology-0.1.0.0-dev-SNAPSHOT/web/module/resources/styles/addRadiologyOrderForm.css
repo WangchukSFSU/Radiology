@@ -1,0 +1,35 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jun 24, 2016, 11:16:32 AM
+    Author     : youdon
+*/
+
+
+
+#diagnosislistSelect {
+ 
+    display: inline;
+}
+
+#studySelect {
+ 
+    display: inline;
+}
+
+
+#studyname {
+    width: 435px;
+}
+
+
+.fields {
+    margin-top: 5px;
+}
+#submitForm {
+    margin-top: 15px;
+    margin-left: 53px;
+}

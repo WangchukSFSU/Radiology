@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="org.openmrs.module.radiology">
+	<class name="Study" table="radiology_study">
+		<id name="studyId" type="int" column="studyId" unsaved-value="0">
+			<generator class="native">
+				<param name="sequence">radiology_study_studyId_seq</param>
+			</generator>
+		</id>
+		<property name="studyInstanceUid" column="studyInstanceUid"
+			unique="true">
+		</property>
+		<many-to-one name="radiologyOrder" column="order_id"
+			unique="true" not-null="true" />
+		<property name="scheduledStatus" column="scheduledStatus"
+			length="255">
+			<type name="org.openmrs.util.HibernateEnumType">
+				<param name="enumClassName">org.openmrs.module.radiology.ScheduledProcedureStepStatus</param>
+			</type>
+		</property>
+		<property name="performedStatus" column="performedStatus"
+			length="255">
+			<type name="org.openmrs.util.HibernateEnumType">
+				<param name="enumClassName">org.openmrs.module.radiology.PerformedProcedureStepStatus</param>
+			</type>
+		</property>
+                <property name="studyname" column="studyname"
+                          length="255">
+                </property>
+		<property name="modality" column="modality" length="255"
+			not-null="true">
+		</property>
+		<property name="mwlStatus" column="mwlStatus" length="17"
+			not-null="true">
+			<type name="org.openmrs.util.HibernateEnumType">
+				<param name="enumClassName">org.openmrs.module.radiology.MwlStatus</param>
+			</type>
+		</property>
+              
+	</class>
+</hibernate-mapping>
