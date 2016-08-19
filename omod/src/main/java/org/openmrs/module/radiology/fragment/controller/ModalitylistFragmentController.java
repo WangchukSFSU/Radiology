@@ -75,9 +75,11 @@ public class ModalitylistFragmentController {
 	
 	public void saveModality(FragmentModel model, @RequestParam(value = "modalityList[]") String[] modalityList) {
 		
-		System.out.println("READY TO SAVE LABORDER");
-		RadiologyModalityList modalityName = new RadiologyModalityList();
+		System.out.println("READY TO SAVE LABORDER" + modalityList);
+		
 		for (String modlist : modalityList) {
+			RadiologyModalityList modalityName = new RadiologyModalityList();
+			System.out.println("MODALITY  " + modlist);
 			int modalityConcept = Integer.parseInt(modlist);
 			modalityName.setModalityId(modalityConcept);
 			
@@ -94,8 +96,10 @@ public class ModalitylistFragmentController {
 	
 	public void saveStudy(@RequestParam(value = "studyList[]") Integer[] studyList) {
 		
-		RadiologyStudyList studyName = new RadiologyStudyList();
+		System.out.println("KKKKKKKKKKKKKKKKKKKKLLLLLLLLLLLLLLLL " + studyList);
+		
 		for (Integer studylist : studyList) {
+			RadiologyStudyList studyName = new RadiologyStudyList();
 			studyName.setStudyConceptId(studylist);
 			Context.getService(RadiologyService.class)
 					.saveStudyList(studyName);

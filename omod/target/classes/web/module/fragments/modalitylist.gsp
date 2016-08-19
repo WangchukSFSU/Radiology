@@ -58,10 +58,11 @@
     var resultSave=jq('input[name="studyList"]:checked');
    if(resultSave.length > 0) {
     saveStudy = [];
+    
     resultSave.each(function() {
     saveStudy.push(jq(this).val());
     });
-   
+   alert("SASASASASAS" + saveStudy);
     }
     else {
     alert("Nothing is checked");
@@ -73,6 +74,8 @@
     data : { studyList: saveStudy },
     cache: false,
     success: function(data){
+    
+    alert("SAVE STUDY");
     jq("#modality-list").empty();
     jq("#modality-list").html("Studies"); 
    
