@@ -218,7 +218,7 @@
 
 	<mappingFiles>RadiologyStudy.hbm.xml RadiologyOrder.hbm.xml
 		RadiologyReport.hbm.xml RadiologyModalityList.hbm.xml
-            RadiologyStudyList.hbm.xml
+            RadiologyStudyList.hbm.xml RadiologyReportList.hbm.xml
 	</mappingFiles>
 
 	<!-- Accessed through the url /pageContext()/moduleServlet/<moduleId>/<servlet-name> -->

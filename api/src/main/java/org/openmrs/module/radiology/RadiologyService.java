@@ -32,6 +32,14 @@ public interface RadiologyService extends OpenmrsService {
 	
 	public void setStudyDAO(StudyDAO studyDAO);
 	
+	public RadiologyReportList saveReportList(RadiologyReportList report);
+	
+	List<RadiologyReportList> getAllReport();
+	
+	RadiologyReportList getReport(Integer id);
+	
+	RadiologyReportList getReportUUID(String reportuuid);
+	
 	public RadiologyModalityList saveModalityList(RadiologyModalityList modalityList);
 	
 	public RadiologyStudyList saveStudyList(RadiologyStudyList studyList);

@@ -33,6 +33,7 @@ import org.openmrs.module.radiology.PerformedProcedureStepStatus;
 import org.openmrs.module.radiology.RadiologyModalityList;
 import org.openmrs.module.radiology.RadiologyOrder;
 import org.openmrs.module.radiology.RadiologyProperties;
+import org.openmrs.module.radiology.RadiologyReportList;
 import org.openmrs.module.radiology.RadiologyService;
 import org.openmrs.module.radiology.RadiologyStudyList;
 import org.openmrs.module.radiology.ScheduledProcedureStepStatus;
@@ -40,6 +41,7 @@ import org.openmrs.module.radiology.Study;
 import org.openmrs.module.radiology.db.RadiologyModalityListDAO;
 import org.openmrs.module.radiology.db.RadiologyOrderDAO;
 import org.openmrs.module.radiology.db.RadiologyReportDAO;
+import org.openmrs.module.radiology.db.RadiologyReportListDAO;
 import org.openmrs.module.radiology.db.RadiologyStudyListDAO;
 import org.openmrs.module.radiology.db.StudyDAO;
 import org.openmrs.module.radiology.hl7.CommonOrderOrderControl;
@@ -67,6 +69,16 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	
 	private RadiologyModalityListDAO modalitylistdao;
 	
+	private RadiologyReportListDAO reportlistdao;
+	
+	public void setReportlistdao(RadiologyReportListDAO reportlistdao) {
+		this.reportlistdao = reportlistdao;
+	}
+	
+	public RadiologyReportListDAO getReportlistdao() {
+		return reportlistdao;
+	}
+	
 	public RadiologyModalityListDAO getModalitylistdao() {
 		return modalitylistdao;
 	}
@@ -83,6 +95,26 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	
 	public void setModalitylistdao(RadiologyModalityListDAO modalitylistdao) {
 		this.modalitylistdao = modalitylistdao;
+	}
+	
+	@Override
+	public RadiologyReportList saveReportList(RadiologyReportList report) {
+		return reportlistdao.saveReportList(report);
+	}
+	
+	@Override
+	public List<RadiologyReportList> getAllReport() {
+		return reportlistdao.getAllReport();
+	}
+	
+	@Override
+	public RadiologyReportList getReport(Integer id) {
+		return reportlistdao.getReport(id);
+	}
+	
+	@Override
+	public RadiologyReportList getReportUUID(String reportuuid) {
+		return reportlistdao.getReportUUID(reportuuid);
 	}
 	
 	@Override

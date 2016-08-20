@@ -29,6 +29,16 @@ public class Study {
 	
 	private String modality;
 	
+	private String studyHtmlFormUUID;
+	
+	public String getStudyHtmlFormUUID() {
+		return studyHtmlFormUUID;
+	}
+	
+	public void setStudyHtmlFormUUID(String studyHtmlFormUUID) {
+		this.studyHtmlFormUUID = studyHtmlFormUUID;
+	}
+	
 	public void setModality(String modality) {
 		this.modality = modality;
 	}

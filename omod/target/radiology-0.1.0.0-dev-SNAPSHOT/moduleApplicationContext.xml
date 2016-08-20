@@ -52,6 +52,13 @@
 						</property>
 					</bean>
 				</property>
+                                <property name="reportlistdao">
+					<bean class="org.openmrs.module.radiology.db.hibernate.RadiologyReportListDAOImpl">
+						<property name="sessionFactory">
+							<ref bean="sessionFactory" />
+						</property>
+					</bean>
+				</property>
 				<property name="radiologyReportDAO">
 					<bean
 						class="org.openmrs.module.radiology.db.hibernate.RadiologyReportDAOImpl">

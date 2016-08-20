@@ -76,16 +76,27 @@
     success: function(data){
     
     alert("SAVE STUDY");
+    
     jq("#modality-list").empty();
     jq("#modality-list").html("Studies"); 
-   
-jq(".select-modality").remove();
+    jq("#modality-concept-message").empty();
+    jq("#modality-concept-message").text("Please Create Reports not appearing in the list then refresh");
+    jq("#delete-modality").empty();
+    jq("#delete-modality").val("Select Study to View Report"); 
+    jq("#delete-modality").removeClass('select-modality').addClass('select-report');
+    jq("#view-study").empty();
+    jq("#view-study").val("Delete Selected Reports"); 
+    jq("#view-study").removeClass('delete-study').addClass('delete-report');
+    jq("#Save").empty();
+    jq("#Save").val("Save Report"); 
+    jq("#Save").removeClass('save-study').addClass('save-report');
     jq("#modality-label-list").empty();
 jq('#unorderedlist li :checked').closest('li').appendTo('#modality-label-list');
  jq("#header ul").empty();
    jq('input:checkbox[name=studyList]').each(function() 
     {    
     if(jq(this).is(':checked')){
+    
     myFunction(jq(this).val());
     }
     });
@@ -148,7 +159,7 @@ jq('#unorderedlist li :checked').closest('li').appendTo('#modality-label-list');
     }
     });
     function myFunction(selectedValue) {
- 
+ alert("SSSSSSSSSS TTTT"+selectedValue);
     if (selectedValue != "empty") {
         jq.getJSON('${ ui.actionLink("getStudyConcepts") }',
     {

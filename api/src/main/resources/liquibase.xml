@@ -385,6 +385,32 @@
 			newDataType="varchar(255)" />
 		
 	</changeSet>
+        <changeSet id="radiology-56" author="tenzin">
+		<sql>
+			drop table if exists RadiologyReportList;
+		</sql>
+	</changeSet>
+        <changeSet author="tenzin" id="radiology-57">
+		<preConditions onFail="WARN" onError="WARN">
+			<not>
+				<tableExists tableName="RadiologyReportList" />
+			</not>
+		</preConditions>
+		<createTable tableName="RadiologyReportList">
+                    <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+			<column name="studyConceptName" type="varchar(255)">	
+			</column>
+                        <column name="htmlformuuid" type="varchar(255)">	
+			</column>
+		</createTable>
+	</changeSet>
+           <changeSet author="tenzin" id="radiology-58">
+    <addColumn tableName="radiology_study">
+        <column name="studyHtmlFormUUID" type="varchar(255)"/>
+    </addColumn>
+</changeSet>
       
 </databaseChangeLog>
 

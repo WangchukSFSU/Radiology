@@ -84,6 +84,7 @@ public class AddRadiologyOrderFormFragmentController {
 		study.setModality(modalityname);
 		study.setStudyname(studyname);
 		study.setPerformedStatus(PerformedProcedureStepStatus.COMPLETED);
+                //study.setStudyHtmlFormUUID(study.getStudyHtmlFormUUID());
 		
 		radiologyOrder.setStudy(study);
 		

@@ -16,6 +16,7 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.radiology.Modality;
 import org.openmrs.module.radiology.RadiologyModalityList;
+import org.openmrs.module.radiology.RadiologyReportList;
 import org.openmrs.module.radiology.RadiologyService;
 import org.openmrs.module.radiology.RadiologyStudyList;
 import org.openmrs.module.radiology.Study;
@@ -111,12 +112,17 @@ public class ModalitylistFragmentController {
 	
 	public void saveReport(@RequestParam(value = "reportList[]") Integer[] studyList) {
 		
-		List<Integer> saveStudyList = Arrays.asList(studyList);
-		// RadiologyStudy setStudy = new RadiologyStudy();
-		
-		for (Integer studyName : saveStudyList) {
+		for (Integer studylist : studyList) {
+			RadiologyReportList reportName = new RadiologyReportList();
 			
-			// System.out.println("reportList " + studyName);
+			reportName.setStudyConceptName(Context.getConceptService()
+					.getConcept(studylist)
+					.getDisplayString());
+			reportName.setHtmlformuuid("9e414151-e2d0-4693-9548-b6beb916b213");
+			
+			Context.getService(RadiologyService.class)
+					.saveReportList(reportName);
+			System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ " + studylist);
 			
 		}
 		
