@@ -5,15 +5,55 @@ ui.includeJavascript("uicommons", "datatables/jquery.dataTables.min.js")
 ui.includeCss("uicommons", "datatables/dataTables_jui.css")
 %>
 
-${ ui.includeFragment("radiology", "modalitySoftware") }
+
+    
+    <ul id="breadcrumbs">
+    <li>
+        
+        
+        <a href="/openmrs/index.htm">
+        
+        
+        <i class="icon-home small"></i>
+        
+        
+        
+        </a>
+        
+    </li>
+
+    <li>
+        
+        <i class="icon-chevron-right link"></i>
+        
+        
+        <a href="/openmrs/coreapps/systemadministration/systemAdministration.page">
+        
+        
+        
+        System Administration
+        
+        
+        </a>
+        
+    </li>
+
+    <li>
+        
+        <i class="icon-chevron-right link"></i>
+        
+        
+        
+        
+        Manage Radiology Module
+        
+        
+    </li>
+</ul>
 
 
-<script type="text/javascript">
-    var breadcrumbs = [
-    { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
-    { label: "Admin Initialization"}
-    ];
-</script>
+
+
 
 ${ ui.includeFragment("radiology", "modalitylist") }
 

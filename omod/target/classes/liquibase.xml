@@ -411,6 +411,11 @@
         <column name="studyHtmlFormUUID" type="varchar(255)"/>
     </addColumn>
 </changeSet>
+     <changeSet author="tenzin" id="radiology-59">
+    <addColumn tableName="RadiologyModalityList">
+        <column name="modalitydescription" type="varchar(255)"/>
+    </addColumn>
+</changeSet>
       
 </databaseChangeLog>
 

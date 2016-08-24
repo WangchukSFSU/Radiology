@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.openmrs.Patient;
 import org.openmrs.module.radiology.RadiologyOrder;
+import org.openmrs.module.radiology.Study;
 
 /**
  * RadiologyOrder-related database functions
@@ -25,6 +26,8 @@ public interface RadiologyOrderDAO {
 	 * @see org.openmrs.module.radiology.RadiologyService#getRadiologyOrderByOrderId(Integer)
 	 */
 	public RadiologyOrder getRadiologyOrderByOrderId(Integer orderId);
+	
+	List<RadiologyOrder> getAllRadiologyOrder();
 	
 	/**
 	 * @see org.openmrs.module.radiology.RadiologyService#getRadiologyOrdersByPatient(Patient)

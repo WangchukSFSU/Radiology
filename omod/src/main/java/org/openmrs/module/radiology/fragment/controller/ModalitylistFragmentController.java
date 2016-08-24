@@ -8,9 +8,12 @@ package org.openmrs.module.radiology.fragment.controller;
 import java.util.ArrayList;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.openmrs.Concept;
 import org.openmrs.ConceptClass;
+import org.openmrs.ConceptName;
 import org.openmrs.ConceptSet;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
@@ -38,7 +41,40 @@ public class ModalitylistFragmentController {
 		List<Concept> modality_list = Context.getConceptService()
 				.getConceptsByClass(modality_concept);
 		
+		String ss = null;
+		ArrayList<String> modalityconceptdescription = new ArrayList();
+		ArrayList<ConceptName> modalityconceptnamelist = new ArrayList();
+		Map aps = new HashMap();
+		for (Concept cc : modality_list) {
+			
+			ConceptName modalityConceptName = Context.getConceptService()
+					.getConcept(cc.getConceptId())
+					.getName();
+			
+			if (modalityConceptName.toString()
+					.equals("X-Ray")) {
+				modalityconceptdescription.add("A very energetic form of electromagnetic radiation that can be used to take images of the human body");
+				ss = "A very energetic form of electromagnetic radiation that can be used to take images of the human body.";
+			}
+			if (modalityConceptName.toString()
+					.equals("Ultrasound")) {
+				modalityconceptdescription.add("Sound or other vibrations having an ultrasonic frequency, particularly as used in medical imaging");
+				ss = "Sound or other vibrations having an ultrasonic frequency, particularly as used in medical imaging.";
+			}
+			if (modalityConceptName.toString()
+					.equals("Magnetic Resonance Imaging")) {
+				modalityconceptdescription.add("Uses a magnetic field and pulses of radio wave energy to make pictures of organs and structures inside the body.");
+				ss = "Uses a magnetic field and pulses of radio wave energy to make pictures of organs and structures inside the body.";
+			}
+			aps.put(modalityConceptName, ss);
+			modalityconceptnamelist.add(modalityConceptName);
+			System.out.println("ONEEEEEEEEEEEEE111111 " + modalityConceptName);
+			
+		}
+		model.addAttribute("aps", aps);
 		model.addAttribute("modality_list", modality_list);
+		model.addAttribute("modalityconceptnamelist", modalityconceptnamelist);
+		model.addAttribute("modalityconceptdescription", modalityconceptdescription);
 		
 	}
 	
@@ -87,6 +123,13 @@ public class ModalitylistFragmentController {
 			modalityName.setModalityname(Context.getConceptService()
 					.getConcept(modalityConcept)
 					.getDisplayString());
+			
+			if (modalityName.getModalityname()
+					.equals("Magnetic Resonance Imaging")) {
+				System.out.println("SASASASASASASASAme Same");
+				
+			}
+			
 			Context.getService(RadiologyService.class)
 					.saveModalityList(modalityName);
 			System.out.println("ORDER SAVED");

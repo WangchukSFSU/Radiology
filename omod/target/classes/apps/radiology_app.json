@@ -19,6 +19,16 @@
                 "icon": "icon-signin",
                 "order": 23,
                 "requiredPrivilege": "Task: some random privilege"
+            },
+              {
+                "id": "radiology.appId31",
+                "extensionPointId": "systemAdministration.apps",
+                "type": "link",
+                "order": 10,
+                "label": "Manage Radiology",
+                "url": "radiology/adminInitialize.page",
+                "icon": "icon-signin",
+                "requiredPrivilege": "App: some random privilege"
             }
           
        

@@ -6,8 +6,14 @@
     jq = jQuery;
     jq(document).ready(function() {
    
+    jq(document).on('click', '#modalityhelp', function() { 
+
+    alert("IMPORTANT NOTES FOR CREATING CONCEPT:"+"\\n"+"1) A concept must have at least one fully-specified name."+"\\n"+ "2) A concept description must be clear and concise."+"\\n"+ "3) Select modality as class from the dropdown menu."+"\\n"+ "4) Select text as datatype from the dropdown menu." );
     
-       jq(document).on('click', '.save-report', function() {      
+    });
+    
+    
+   jq(document).on('click', '.save-report', function() {      
        saverReport = [];
    jq('#unorderedlist li input:checked').each(function() {
     saverReport.push(jq(this).val());
@@ -51,7 +57,11 @@
     });
     });
     
+    jq(document).on('click', '.modality-help', function() {
+    alert("IMPORTANT NOTES FOR CREATING REPORT:"+"\\n"+"1) Create new HTML form."+"\\n"+ "2) Create Radiology encounter type ."+"\\n"+ "3) Get the relavent HTML source code from radreport.org based on the study ."+"\\n"+ "4) Create concepts for all the observations."+"\\n"+ "5) Update the HTML source code with all the concepts and click save to generate HTML Form for the study ." );
     
+    
+    });
     
     
     jq(document).on('click', '.save-study', function() {
@@ -79,8 +89,10 @@
     
     jq("#modality-list").empty();
     jq("#modality-list").html("Studies"); 
-    jq("#modality-concept-message").empty();
-    jq("#modality-concept-message").text("Please Create Reports not appearing in the list then refresh");
+   jq("#modalityhelp").hide();
+    jq('.modalityhelp').after(jq('<input type="button" class = "modality-help" value="?">'));
+    jq("#modalityconceptmessage").text("Please Create Reports not appearing in the list then refresh");
+     jq("#modalityconceptmessage").attr("href", "http://localhost:8080/openmrs/module/htmlformentry/htmlForms.list");
     jq("#delete-modality").empty();
     jq("#delete-modality").val("Select Study to View Report"); 
     jq("#delete-modality").removeClass('select-modality').addClass('select-report');
@@ -91,7 +103,7 @@
     jq("#Save").val("Save Report"); 
     jq("#Save").removeClass('save-study').addClass('save-report');
     jq("#modality-label-list").empty();
-jq('#unorderedlist li :checked').closest('li').appendTo('#modality-label-list');
+ jq('#unorderedlist li :checked').closest('li').appendTo('#modality-label-list');
  jq("#header ul").empty();
    jq('input:checkbox[name=studyList]').each(function() 
     {    
@@ -131,9 +143,9 @@ jq('#unorderedlist li :checked').closest('li').appendTo('#modality-label-list');
     });
     jq(document).on('click', '.view-study', function() {
     if(jq('#Save').data('clicked')) {
-    
-    jq("#modality-concept-message").empty();
-    jq("#modality-concept-message").text("Please add studies not appearing in list to concept dictionary then refresh");
+    jq("#modalitySoftware").hide();
+   
+    jq("#modalityconceptmessage").text("Please add studies not appearing in list to concept dictionary then refresh");
     jq('input:checkbox[name=modlist]').each(function() 
     {    
     if(jq(this).is(':checked')){
@@ -188,7 +200,7 @@ jq("#header ul").append(jq("<li>").html('<input type="checkbox"  value="' + conI
     jq(document).ready(function() {
     jq(document).on('click', '.delete-modality', function() {
     var resultDelete=jq('input[type="checkbox"]:checked');
-  if(resultDelete.length > 0) {
+    if(resultDelete.length > 0) {
     resultDelete.each(function() {
     jq(this).parent().remove();
     });
@@ -197,15 +209,36 @@ jq("#header ul").append(jq("<li>").html('<input type="checkbox"  value="' + conI
     alert("Nothing is checked");
     }
     });
-    jq(document).on('click', '.Save', function() {
+    
+    
+    jq(document).on('click', '.Save', function() { 
+    alert("uuuuuu");
     jq(this).data('clicked', true);
     var resultSave=jq('input[type="checkbox"]:checked');
+    
    if(resultSave.length > 0) {
+   alert("Please select one");
     saveModality = [];
     resultSave.each(function() {
     saveModality.push(jq(this).val());
     });
   
+    var resultDeletet=jq("input:checkbox:not(:checked)");
+    if(resultDeletet.length > 0) {
+
+ resultDeletet.each(function() {
+ 
+    jq(this).parent().remove();
+    });
+
+}
+    
+  
+    
+    
+    
+    
+    
     }
     else {
     alert("Nothing is checked");
@@ -224,13 +257,19 @@ jq("#header ul").append(jq("<li>").html('<input type="checkbox"  value="' + conI
     });
 </script>
 
+<div id ="modalitySoftware"  >
+${ ui.includeFragment("radiology", "modalitySoftware") }
+</div>
+
 
 <div class="modality">
-
-    <label id="modality-list" for modality-check> Modalities </label>
-    <label id="modality-concept-message" for modality-concept-label> Please add Modality not appearing in list to concept dictionary and refresh  </label>
+    <label id="modality-concept-message" for modality-concept-label> Please add Modality not appearing in list to concept dictionary and refresh: <a id="modalityconceptmessage" href="http://localhost:8080/openmrs/dictionary/concept.form"> Click here to Concept Dictionary </a></label>
     <input type="button" name="modality-refresh" onclick="location.href='/openmrs/pages/radiology/adminInitialize.page'" id="modality-refresh" value="Refresh">
+ <input type="button" id="modalityhelp" class="modalityhelp" value = "?" >
 
+    <label id="modality-list" for modality-check> Modalities available </label>
+    
+    
     <div class="list-modality">
         <div id="modality-label-list" style="width:50%; float:left">
             <% modality_list.each { modalityname -> %>
@@ -254,3 +293,33 @@ jq("#header ul").append(jq("<li>").html('<input type="checkbox"  value="' + conI
             <input type="button" name="view-study" class="view-study" id="view-study" value="View Studies">
         </div>
     </div>
+
+    
+  
+ 
+        
+<h1>Modality list</h1>
+<table id="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+   <% aps.each { modalitylist -> %>
+  
+    <tr>
+        <td> 
+            ${modalitylist.key}
+            </td>
+            
+        <td> ${modalitylist.value}  
+             </td>
+        <td></td>
+
+    </tr>
+  
+    <% } %>
+
+</table>

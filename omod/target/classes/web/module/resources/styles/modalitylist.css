@@ -31,12 +31,12 @@ font: bold 26px Arial;
 }
 
 #modality-concept-message {
-   
-     margin-top: 7px;
-    margin-left: 26px;
-   
- 
-    
+
+    width: 350px;
+    height: 60px;
+    word-break: break-all;
+  
+    margin-left: 76px;  
     font: bold 17px Arial;
   text-decoration: none;
   background-color: #EEEEEE;
@@ -77,3 +77,8 @@ label {
 #modality-label-list li {
     list-style-type: none;
 }
+
+#modalitySoftware {
+    text-align:center
+}
+

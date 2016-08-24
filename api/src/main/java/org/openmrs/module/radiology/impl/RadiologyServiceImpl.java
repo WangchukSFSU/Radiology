@@ -108,6 +108,11 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	}
 	
 	@Override
+	public List<RadiologyOrder> getAllRadiologyOrder() {
+		return radiologyOrderDAO.getAllRadiologyOrder();
+	}
+	
+	@Override
 	public RadiologyReportList getReport(Integer id) {
 		return reportlistdao.getReport(id);
 	}

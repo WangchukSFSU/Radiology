@@ -17,6 +17,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.Patient;
 import org.openmrs.module.radiology.RadiologyOrder;
+import org.openmrs.module.radiology.Study;
 import org.openmrs.module.radiology.db.RadiologyOrderDAO;
 
 /**
@@ -60,6 +61,13 @@ public class RadiologyOrderDAOImpl implements RadiologyOrderDAO {
 		
 		result = (List<RadiologyOrder>) radiologyOrderCriteria.list();
 		return result;
+	}
+	
+	@Override
+	public List<RadiologyOrder> getAllRadiologyOrder() {
+		return sessionFactory.getCurrentSession()
+				.createCriteria(RadiologyOrder.class)
+				.list();
 	}
 	
 	/**

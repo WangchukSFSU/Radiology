@@ -6,6 +6,7 @@
 package org.openmrs.module.radiology.fragment.controller;
 
 import java.util.Date;
+import java.util.List;
 import org.openmrs.Order;
 import org.openmrs.Patient;
 import org.openmrs.Provider;
@@ -15,6 +16,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.radiology.PerformedProcedureStepStatus;
 
 import org.openmrs.module.radiology.RadiologyOrder;
+import org.openmrs.module.radiology.RadiologyReportList;
 import org.openmrs.module.radiology.RadiologyService;
 
 import org.openmrs.module.radiology.Study;
@@ -83,8 +85,15 @@ public class AddRadiologyOrderFormFragmentController {
 		RadiologyService radiologyservice = Context.getService(RadiologyService.class);
 		study.setModality(modalityname);
 		study.setStudyname(studyname);
-		study.setPerformedStatus(PerformedProcedureStepStatus.COMPLETED);
-                //study.setStudyHtmlFormUUID(study.getStudyHtmlFormUUID());
+		study.setPerformedStatus(PerformedProcedureStepStatus.IN_PROGRESS);
+		
+		List<RadiologyReportList> reportListFromDb = radiologyservice.getAllReport();
+		for (RadiologyReportList rr : reportListFromDb) {
+			
+			if (studyname == rr.getStudyConceptName()) {
+				study.setStudyHtmlFormUUID(rr.getHtmlformuuid());
+			}
+		}
 		
 		radiologyOrder.setStudy(study);
 		
