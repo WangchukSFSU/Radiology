@@ -112,27 +112,22 @@ public class ModalitylistFragmentController {
 	
 	public void saveModality(FragmentModel model, @RequestParam(value = "modalityList[]") String[] modalityList) {
 		
-		System.out.println("READY TO SAVE LABORDER" + modalityList);
+		
 		
 		for (String modlist : modalityList) {
 			RadiologyModalityList modalityName = new RadiologyModalityList();
-			System.out.println("MODALITY  " + modlist);
-			int modalityConcept = Integer.parseInt(modlist);
+			
+			int modalityConcept = Context.getConceptService()
+					.getConcept(modlist.trim())
+					.getConceptId();
+			
 			modalityName.setModalityId(modalityConcept);
 			
-			modalityName.setModalityname(Context.getConceptService()
-					.getConcept(modalityConcept)
-					.getDisplayString());
-			
-			if (modalityName.getModalityname()
-					.equals("Magnetic Resonance Imaging")) {
-				System.out.println("SASASASASASASASAme Same");
-				
-			}
+			modalityName.setModalityname(modlist);
 			
 			Context.getService(RadiologyService.class)
 					.saveModalityList(modalityName);
-			System.out.println("ORDER SAVED");
+			
 			
 		}
 		

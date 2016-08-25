@@ -8,7 +8,7 @@
    
     jq(document).on('click', '#modalityhelp', function() { 
 
-    alert("IMPORTANT NOTES FOR CREATING CONCEPT:"+"\\n"+"1) A concept must have at least one fully-specified name."+"\\n"+ "2) A concept description must be clear and concise."+"\\n"+ "3) Select modality as class from the dropdown menu."+"\\n"+ "4) Select text as datatype from the dropdown menu." );
+    alert("IMPORTANT NOTES FOR CREATING CONCEPT:"+"\\n"+"1) Select modality as class from the dropdown menu."+"\\n"+ "2) Select text as datatype from the dropdown menu." );
     
     });
     
@@ -263,47 +263,22 @@ ${ ui.includeFragment("radiology", "modalitySoftware") }
 
 
 <div class="modality">
-    <label id="modality-concept-message" for modality-concept-label> Please add Modality not appearing in list to concept dictionary and refresh: <a id="modalityconceptmessage" href="http://localhost:8080/openmrs/dictionary/concept.form"> Click here to Concept Dictionary </a></label>
+    <div class="form-group">
+    <label id="modality-concept-message" for modality-concept-label> Please Add Modality not appearing in list to Concept Dictionary and Refresh: <a id="modalityconceptmessage" href="http://localhost:8080/openmrs/dictionary/concept.form"> Click here to Concept Dictionary </a></label>
+    <input type="button" id="modalityhelp" class="modalityhelp" value = "?" >
     <input type="button" name="modality-refresh" onclick="location.href='/openmrs/pages/radiology/adminInitialize.page'" id="modality-refresh" value="Refresh">
- <input type="button" id="modalityhelp" class="modalityhelp" value = "?" >
+     
+</div>
 
-    <label id="modality-list" for modality-check> Modalities available </label>
-    
-    
-    <div class="list-modality">
-        <div id="modality-label-list" style="width:50%; float:left">
-            <% modality_list.each { modalityname -> %>
-            <label class="checkbox">
-                <input id="modlist" name ="modlist" value="$modalityname"  type="checkbox">  ${ ui.format(modalityname) } 
-                <input type="hidden" name="modlist" >  </label>
-            <br>
-            <% } %>
-        </div>
-
-        <div id="header" style="width:50%; float:right">  
-            <ul id="unorderedlist">
-
-            </ul>
-        </div>
-
-        <div class="modality-list-btn">
-
-            <input type="button" name="delete-modality" class="delete-modality" id="delete-modality" value="Delete Selected Modality">
-            <input type="submit" id="Save" class="Save" value="Save Modality">
-            <input type="button" name="view-study" class="view-study" id="view-study" value="View Studies">
-        </div>
-    </div>
-
-    
+  </div>
   
- 
-
+  
 
 
 <script>
    jq = jQuery;
     jq(document).ready(function() {
-    
+   
 jq("#deletebtn").live ('click', function ()
  {
     jq(this).closest ('tr').remove ();
@@ -311,41 +286,73 @@ jq("#deletebtn").live ('click', function ()
 
 
  
- jq('button').click(function() {
-    jq(this).parent().siblings(':first').each(function() {
-        alert('index ' + this.cellIndex + ': ' + jq(this).text());
-    });
+ jq("#continuebtn").click(function() {
+   alert("continue");
 });
- 
+
+
+
+jq("#Savebtn").click(function() {
+var arr = [];
+jq("#tableformodality tr").each(function(){
+    arr.push(jq(this).find("td:first").text());
+});
+for (i=0;i<arr.length;i++)
+{
+alert(arr[i]);
+
+}
+arr.shift();
+jq.ajax({
+    type: "POST",
+    url: "${ ui.actionLink('saveModality') }",
+    data : { modalityList: arr },
+    cache: false,
+    success: function(data){
+ alert("Modality Saved");
+    }
+    });
+
+
+
+}); 
+
 
 });
 
 
     
     </script>
-<h1>Modality list</h1>
-<table id="table">
+    
+<div id="modalitytable">
+<table id="tableformodality">
     <thead>
         <tr>
-            <th>Name</th>
-            <th>Description</th>
+            <th>Modalities available</th>
+         
             <th>Action</th>
         </tr>
     </thead>
-   <% aps.each { modalitylist -> %>
+   <% modalityconceptnamelist.each { modalityname -> %>
   
     <tr>
         <td> 
-            ${modalitylist.key}
+            ${modalityname}
             </td>
             
-        <td> ${modalitylist.value}  
-             </td>
+       
         <td><input type="button" id="deletebtn" value="Delete" >
-            <button>Save</button></td>
+            </td>
 
     </tr>
   
     <% } %>
 
 </table>
+<div class="modalitybtn">
+<input type="button" id="Savebtn" value="Save" >
+<input type="button" id="continuebtn" value="Continue" >
+
+</div>
+
+</div>

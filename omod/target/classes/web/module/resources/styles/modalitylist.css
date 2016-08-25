@@ -3,7 +3,8 @@
     border-color: gainsboro;
     padding-left: 3%;
    
-    padding-top: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 
 }
 
@@ -32,12 +33,12 @@ font: bold 26px Arial;
 
 #modality-concept-message {
 
-    width: 350px;
-    height: 60px;
-    word-break: break-all;
-  
-    margin-left: 76px;  
-    font: bold 17px Arial;
+    width: 550px;
+    height: 40px;
+   
+ 
+    margin-left: 16px;  
+    font: bold 15px Arial;
   text-decoration: none;
   background-color: #EEEEEE;
   color: #333333;
@@ -82,3 +83,23 @@ label {
     text-align:center
 }
 
+
+
+
+
+#modalitytable {
+    margin-top: 23px;
+}
+
+#deletebtn {
+    width: 78px;
+    text-align: center;
+}
+
+#modalityhelp {
+    margin-top: -634px;
+}
+
+.modalitybtn {
+    margin-top: 7px;
+}

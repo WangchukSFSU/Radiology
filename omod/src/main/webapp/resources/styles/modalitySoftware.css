@@ -19,3 +19,12 @@ and open the template in the editor.
     margin-right: 22px;
      display: inline-block;
 }
+
+#modalitysoftwareavailablehelp {
+ 
+    display: inline;
+}
+
+#modalitysoftwareavailable {
+   margin-left: -22px;
+}

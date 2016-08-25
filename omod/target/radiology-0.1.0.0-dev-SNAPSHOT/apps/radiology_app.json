@@ -29,6 +29,15 @@
                 "url": "radiology/adminInitialize.page",
                 "icon": "icon-signin",
                 "requiredPrivilege": "App: some random privilege"
+            },
+               {
+                "id": "radiology.appId22",
+                "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+                "type": "link",
+                "label": "OrderToBeRead",
+                "url": "radiology/radiologistActiveOrders.page",
+                "icon": "icon-signin",
+                "requiredPrivilege": "App: some random privilege"
             }
           
        
