@@ -152,7 +152,9 @@ public class ModalitylistFragmentController {
 	}
 	
 	public void saveReport(@RequestParam(value = "reportList[]") String[] studyList) {
-		
+	
+         
+            
 		for (String studylist : studyList) {
 			RadiologyReportList reportName = new RadiologyReportList();
 			
