@@ -11,8 +11,6 @@ public class AdminInitializePageController {
 	
 	public void controller(PageModel model) {
 		
-		model.addAttribute("message", "HelloFramework!");
-		
 	}
 	
 }

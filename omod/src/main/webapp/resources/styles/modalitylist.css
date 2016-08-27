@@ -8,6 +8,27 @@
 
 }
 
+
+.studygroup {
+    border-style: solid;
+    border-color: gainsboro;
+    padding-left: 3%;
+   
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+}
+
+.reportgroup {
+    border-style: solid;
+    border-color: gainsboro;
+    padding-left: 3%;
+   
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+}
+
 .list-modality {
     padding-top: 30px;
 }
@@ -51,11 +72,59 @@ font: bold 26px Arial;
 
 }
 
+#study-concept-message {
+
+    width: 550px;
+    height: 60px;
+   
+ 
+    margin-left: 16px;  
+    font: bold 15px Arial;
+  text-decoration: none;
+  background-color: #EEEEEE;
+  color: #333333;
+  padding: 2px 6px 2px 6px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+  
+
+}
+
+
+#report-concept-message {
+
+    width: 550px;
+    height: 40px;
+   
+ 
+    margin-left: 16px;  
+    font: bold 15px Arial;
+  text-decoration: none;
+  background-color: #EEEEEE;
+  color: #333333;
+  padding: 2px 6px 2px 6px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+  
+
+}
+
+
 label {
     margin-left: 5px;    
      display: inline-block;
      
    
+}
+
+#studyrefresh {
+
+    float: right;
+   margin-right: 145px;
 }
 
 #modality-refresh {
@@ -64,6 +133,11 @@ label {
    margin-right: 25px;
 }
 
+#reportrefresh {
+
+    float: right;
+   margin-right: 45px;
+}
 .modality-list-btn {
     margin-top: 84px;
     padding-bottom: 13px;
@@ -103,3 +177,14 @@ label {
 .modalitybtn {
     margin-top: 7px;
 }
+
+ .ui-widget-header,.ui-state-default, ui-button{
+            background:#b9cd6d;
+            border: 1px solid #b9cd6d;
+            color: #FFFFFF;
+            font-weight: bold;
+         }
+         
+         #tableformodality{
+             margin-top: 12px;
+         }

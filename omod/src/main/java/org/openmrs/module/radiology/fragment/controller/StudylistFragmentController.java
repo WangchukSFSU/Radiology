@@ -32,7 +32,7 @@ import org.openmrs.ui.framework.page.PageModel;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-public class ModalitylistFragmentController {
+public class StudylistFragmentController {
 	
 	public void controller(FragmentModel model) {
 		ConceptClass modality_concept = Context.getConceptService()
@@ -79,12 +79,10 @@ public class ModalitylistFragmentController {
 	}
 	
 	public List<SimpleObject> getStudyConcepts(
-			@RequestParam(value = "studyconceptclass", required = false) String studyConceptone,
+			@RequestParam(value = "studyconceptclass", required = false) Concept studyConcept,
 			@SpringBean("conceptService") ConceptService service, UiUtils ui) {
 		
-		System.out.println("Labset " + studyConceptone);
-		Concept studyConcept = Context.getConceptService()
-				.getConcept(studyConceptone.trim());
+		System.out.println("Labset " + studyConcept);
 		ArrayList<Concept> studySetMembers = new ArrayList<Concept>();
 		System.out.println("outside for loop ");
 		
@@ -97,10 +95,9 @@ public class ModalitylistFragmentController {
 		
 		ConceptClass study_concept = Context.getConceptService()
 				.getConceptClassByName(studyConcept.getDisplayString());
-		System.out.println("**********Concept yyy ");
+		
 		List<Concept> study_list = Context.getConceptService()
 				.getConceptsByClass(study_concept);
-		System.out.println("**********Concept zzz ");
 		
 		for (Concept nextstudy : study_list) {
 			System.out.println("**********Concept set member:  " + nextstudy.getDisplayString());
@@ -133,16 +130,13 @@ public class ModalitylistFragmentController {
 		
 	}
 	
-	public void saveStudy(@RequestParam(value = "studyList[]") String[] studyList) {
+	public void saveStudy(@RequestParam(value = "studyList[]") Integer[] studyList) {
 		
 		System.out.println("KKKKKKKKKKKKKKKKKKKKLLLLLLLLLLLLLLLL " + studyList);
 		
-		for (String studylist : studyList) {
+		for (Integer studylist : studyList) {
 			RadiologyStudyList studyName = new RadiologyStudyList();
-			int studyConceptid = Context.getConceptService()
-					.getConcept(studylist.trim())
-					.getConceptId();
-			studyName.setStudyConceptId(studyConceptid);
+			studyName.setStudyConceptId(studylist);
 			Context.getService(RadiologyService.class)
 					.saveStudyList(studyName);
 			System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ " + studylist);
@@ -151,12 +145,14 @@ public class ModalitylistFragmentController {
 		
 	}
 	
-	public void saveReport(@RequestParam(value = "reportList[]") String[] studyList) {
+	public void saveReport(@RequestParam(value = "reportList[]") Integer[] studyList) {
 		
-		for (String studylist : studyList) {
+		for (Integer studylist : studyList) {
 			RadiologyReportList reportName = new RadiologyReportList();
 			
-			reportName.setStudyConceptName(studylist);
+			reportName.setStudyConceptName(Context.getConceptService()
+					.getConcept(studylist)
+					.getDisplayString());
 			reportName.setHtmlformuuid("9e414151-e2d0-4693-9548-b6beb916b213");
 			
 			Context.getService(RadiologyService.class)
