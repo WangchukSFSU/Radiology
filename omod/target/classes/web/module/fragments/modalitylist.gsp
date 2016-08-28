@@ -17,6 +17,12 @@
   jq(".breadcrumbs").show();
  jq(".reportgroup").hide();
    jq(".reportbtn").hide();
+   jq("#reportsavebtn").hide();
+   
+   jq("#modalityselect").hide();
+
+   
+
    
       jq( "#modalityConceptDictionaryNotes" ).dialog({
                autoOpen: false, 
@@ -129,6 +135,8 @@ jq("#deletebtn").live ('click', function ()
  });
 
   jq("#studyrefresh").click(function() { 
+  
+  jq(this).data('clicked', true);
   alert("zzzzzzz");
   
   var selected = jq( "#selectlabtest1 option:selected" ).text();
@@ -162,7 +170,7 @@ jq(".studygroup").show();
 jq(".modality").hide();
 jq(".studybtn").show(); 
   jq(".modalitybtn").hide();
-  
+ 
   
  
   
@@ -181,12 +189,12 @@ jq("#managestudy li i").addClass("icon-chevron-right link");
   
    
    
-     var arr = [];
+     var arrcontinuebtn = [];
 jq("#tableformodality tr").each(function(){
-    arr.push(jq(this).find("td:first").text());
+    arrcontinuebtn.push(jq(this).find("td:first").text());
 });
 
-var arrayfirst = arr[1];
+var arrayfirst = arrcontinuebtn[1];
 localStorage.setItem("arrayfirst", arrayfirst);
 
 
@@ -195,9 +203,10 @@ localStorage.setItem("arrayfirst", arrayfirst);
 
 myFunctionT(arrayfirst);
 
-for (var i=1;i<arr.length;i++){
-localStorage.setItem("arr", JSON.stringify(arr));
-   jq('<option/>').val(arr[i]).html(arr[i]).appendTo('#items select');
+for (var i=1;i<arrcontinuebtn.length;i++){
+alert("MODALITY " + arrcontinuebtn[i]);
+localStorage.setItem("arrcontinuebtn", JSON.stringify(arrcontinuebtn));
+   jq('<option/>').val(arrcontinuebtn[i]).html(arrcontinuebtn[i]).appendTo('#items select');
 }
  
  } 
@@ -230,8 +239,12 @@ jq(".studybtn").hide();
   jq(".modalitybtn").hide();
   jq(".reportgroup").show();
   jq(".reportbtn").show();
-  
+  jq("#reportsavebtn").show();
   jq("#selectlabtest1").empty();
+  
+  jq("#items").css("width", "30%");
+jq("#dynamictable").css("width", "40%");
+  jq("#modalityselect").show();
 
    jq("#managestudy").html("<li><i ></i><a href='javascript:void(0);' onClick='a_onClick()'> Add Study</li>");
 jq("#managestudy li i").addClass("icon-chevron-right link");
@@ -256,11 +269,25 @@ alert("POTPOTPOTPOT "+arrayfirst);
 myFunctionT(arrayfirst);
 
 for (var i=1;i<arr.length;i++){
+alert("SUNN");
 
   alert(arr[i]);
   
   jq('<option/>').val(arr[i]).html(arr[i]).appendTo('#items select');
 }
+
+var arr2 = JSON.parse(localStorage.getItem("arrcontinuebtn"));
+
+alert("MMMMMMMMMM arr2 "+arr2);
+for (var i=1;i<arr2.length;i++){
+
+   jq('<option/>').val(arr2[i]).html(arr2[i]).appendTo('#modalityselect select');
+}
+
+
+
+
+
  
  } 
 
@@ -398,27 +425,30 @@ a_onClick.called = true;
    jq(".reportgroup").hide();
    jq('#dynamictable').empty();
     
-    jq("#reportsavebtn").remove();
+    jq("#reportsavebtn").hide();
   
     jq("#managereport").empty();
-    
+    jq("#modalityselect").hide();
    
   jq("#items").show();
   jq("#items select").empty();
 jq(".studygroup").show();
 
 
-jq(".studybtn").show(); 
- 
+jq(".studybtn").show();
+
+
+ jq("#items").css("width", "36%");
+jq("#dynamictable").css("width", "64%");
   
   
 var someVarName = localStorage.getItem("arrayfirst");
-var arr = JSON.parse(localStorage.getItem("arr"));
+var arr1 = JSON.parse(localStorage.getItem("arrcontinuebtn"));
 alert("LKLKLLKLKLK "+someVarName);
-alert("MMMMMMMMMM "+arr);
-for (var i=1;i<arr.length;i++){
+alert("MMMMMMMMMM "+arr1);
+for (var i=1;i<arr1.length;i++){
 
-   jq('<option/>').val(arr[i]).html(arr[i]).appendTo('#items select');
+   jq('<option/>').val(arr1[i]).html(arr1[i]).appendTo('#items select');
 }
 
 
@@ -451,7 +481,19 @@ jq("#dynamictable table").addClass("studyclass");
 var table = jq('#dynamictable').children();
 
 
-if(jq('#reportrefresh').data('clicked') ) {
+
+
+
+
+
+if((jq('#studyrefresh').data('clicked'))){
+
+jq('#studyrefresh').data('clicked', false);
+alert("inside study conitnueeeeee");
+    
+table.append("<tr><td>Studies available</td><td>Action</td></tr>");
+
+} else if(jq('#reportrefresh').data('clicked') ) {
 jq('#reportrefresh').data('clicked', false);
 alert("inside report conitnueeeeee");
     
@@ -488,6 +530,43 @@ alert("ret.length" + ret.length);
  
 
 table.append( '<tr><td>' +  conName + '</td> <td><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+
+}
+
+});
+
+ }
+ 
+ 
+ 
+ 
+ function modalitystudyfunction(selectedValue) {
+
+ 
+  jq.getJSON('${ ui.actionLink("getStudyConcepts") }',
+           {
+             'studyconceptclass': selectedValue
+            })
+       .error(function(xhr, status, err) {
+            alert('AJAX error ' + err);
+        })
+        .success(function(ret) {
+                  alert("goog"); 
+
+
+                                
+                                
+
+
+
+
+
+
+alert("ret.length" + ret.length);
+            for (var i = 0; i < ret.length; i++) {
+            var conId = ret[i].conceptId;
+            var conName = ret[i].displayString;
+ 
 
 }
 
@@ -598,6 +677,13 @@ ${ ui.includeFragment("radiology", "modalitySoftware") }
 <div id='items' style="width:36%; height:234px; margin-top: 24px; float:left">
  
   <select name="labtest" id="selectlabtest1" onchange="myFunctionT(this.value)">
+ 
+  </select>
+</div>
+
+<div id='modalityselect' style="width:30%; height:234px; margin-top: 24px; float:left">
+ 
+  <select name="modalityselectdropdown" id="modalityselectdropdown" onchange="myFunctionT(this.value)">
  
   </select>
 </div>
