@@ -17,6 +17,7 @@
   jq(".breadcrumbs").show();
  jq(".reportgroup").hide();
    jq(".reportbtn").hide();
+   jq("#reportsavebtn").hide();
    
       jq( "#modalityConceptDictionaryNotes" ).dialog({
                autoOpen: false, 
@@ -129,6 +130,8 @@ jq("#deletebtn").live ('click', function ()
  });
 
   jq("#studyrefresh").click(function() { 
+  
+  jq(this).data('clicked', true);
   alert("zzzzzzz");
   
   var selected = jq( "#selectlabtest1 option:selected" ).text();
@@ -230,7 +233,7 @@ jq(".studybtn").hide();
   jq(".modalitybtn").hide();
   jq(".reportgroup").show();
   jq(".reportbtn").show();
-  
+  jq("#reportsavebtn").show();
   jq("#selectlabtest1").empty();
 
    jq("#managestudy").html("<li><i ></i><a href='javascript:void(0);' onClick='a_onClick()'> Add Study</li>");
@@ -398,7 +401,7 @@ a_onClick.called = true;
    jq(".reportgroup").hide();
    jq('#dynamictable').empty();
     
-    jq("#reportsavebtn").remove();
+    jq("#reportsavebtn").hide();
   
     jq("#managereport").empty();
     
@@ -451,7 +454,19 @@ jq("#dynamictable table").addClass("studyclass");
 var table = jq('#dynamictable').children();
 
 
-if(jq('#reportrefresh').data('clicked') ) {
+
+
+
+
+
+if((jq('#studyrefresh').data('clicked'))){
+
+jq('#studyrefresh').data('clicked', false);
+alert("inside study conitnueeeeee");
+    
+table.append("<tr><td>Studies available</td><td>Action</td></tr>");
+
+} else if(jq('#reportrefresh').data('clicked') ) {
 jq('#reportrefresh').data('clicked', false);
 alert("inside report conitnueeeeee");
     
