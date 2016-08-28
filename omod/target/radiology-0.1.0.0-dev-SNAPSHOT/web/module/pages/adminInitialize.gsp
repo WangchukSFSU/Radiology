@@ -6,9 +6,6 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
 %>
 
 
-    
- 
-
 
 ${ ui.includeFragment("radiology", "modalitylist") }
 
