@@ -609,9 +609,14 @@ alert("ret.length" + ret.length);
             for (var i = 0; i < ret.length; i++) {
             var conId = ret[i].conceptId;
             var conName = ret[i].displayString;
- 
+ if((conName == "Cardiac MRI Adenosine Stress Protocol Report")|| (conName == "Cardiac MRI Right Heart Failure Report")) {
 
+table.append( '<tr><td>' +  conName + ' <a href="http://localhost:8080/openmrs/htmlformentryui/htmlform/enterHtmlFormWithStandardUi.page?patientId=5486b0af-8591-40d1-84b9-afab423fd55d&visitId=&formUuid=9e414151-e2d0-4693-9548-b6beb916b213&returnUrl=%2Fopenmrs%2Fcoreapps%2Fclinicianfacing%2Fpatient.page%3FpatientId%3D5486b0af-8591-40d1-84b9-afab423fd55d%26">( Right Click to view Sample Form)</a></td> <td><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+
+} else {
 table.append( '<tr><td>' +  conName + '</td> <td><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+
+}
 
 }
 
