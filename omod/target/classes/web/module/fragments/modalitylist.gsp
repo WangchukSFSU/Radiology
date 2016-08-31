@@ -2,8 +2,10 @@
 
 <% ui.includeJavascript("jquery.js") %>
 <% ui.includeJavascript("jquery-ui.js") %>
-<% ui.includeJavascript("jquery-ui.css") %>
-
+<% ui.includeCss("jquery-ui.css") %>
+<% ui.includeJavascript("jquery-1.11.3.min.js") %>
+<% ui.includeCss("jquery.mobile-1.4.5.min.css") %>
+<% ui.includeJavascript("jquery.mobile-1.4.5.min.js") %>
 
 
 <script>
@@ -125,7 +127,7 @@
                buttons: {
                   OK: function() {jq(this).dialog("close");}
                },
-               title: "HTMLForm",
+               title: "INSTRUCTION ON BUILDING REPORT",
                position: {
                   my: "left center",
                   at: "left center"
@@ -153,12 +155,12 @@ jq("#deletebtn").live ('click', function ()
  jq("#reportrefresh").click(function() { 
  
  jq(this).data('clicked', true);
- 
+ jq("#studycontinuebtn").click();
   alert("zzzzzzz");
   
-  var selected = jq( "#reportstudyselectdropdown option:selected" ).text();
-  jq("#dynamictable tr").remove();
-   myFunctionT(selected);
+  //var selected = jq( "#reportstudyselectdropdown option:selected" ).text();
+  //jq("#dynamictable tr").remove();
+   //myFunctionT(selected);
  
   });
   
@@ -303,7 +305,7 @@ for (var i=1;i<arr2.length;i++){
 
 
 
-
+jq("#reportmodalityselect select").empty();
 
 
 
@@ -315,39 +317,88 @@ alert("modality storage " + arr22[i]);
    jq('<option/>').val(arr22[i]).html(arr22[i]).appendTo('#reportmodalityselect select');
 }
 
+
+
+
 var reportmodalityfirstlist = arr22[1];
 
-modalitystudyfunction(reportmodalityfirstlist);
 
+alert("reportmodalityfirstlist "+reportmodalityfirstlist);
 
-jq('#reportstudyselectdropdown').empty();
-
-
-var arrstudycontinuebtnarr = JSON.parse(localStorage.getItem("arrstudycontinuebtn"));
-
-alert("MMMMMMMMMM "+arrstudycontinuebtnarr);
-
-
-
-   
-   
-jq.getJSON('${ ui.actionLink("getReportConcepts") }',
+jq.getJSON('${ ui.actionLink("getStudyConcepts") }',
            {
-             'studyconceptclass': arrstudycontinuebtnarr
+             'studyconceptclass': reportmodalityfirstlist
             })
        .error(function(xhr, status, err) {
             alert('AJAX error ' + err);
         })
         .success(function(ret) {
                   alert("goog"); 
+                  
+                  
+  
+                  for (var i = 0; i < ret.length; i++) {
+            var conId = ret[i].conceptId;
+            var conNamed = ret[i].displayString;
+            alert("conName" +conNamed);
+            
+          //localStorage.setItem("reportfirstmodalitystudylist", JSON.stringify(conName));
+            
+          
+          
+          
+          
+          
+           // }
+               
 
+  
+                  
+                  
+               //   });
+
+   
+
+
+jq('#reportstudyselectdropdown').empty();
+
+
+//var arrstudycontinuebtnarr = JSON.parse(localStorage.getItem("arrstudycontinuebtn"));
+//var arrstudycontinuebtnarr = JSON.parse(localStorage.getItem("reportfirstmodalitystudylist"));
+//arrstudycontinuebtnarr.shift();
+//for (var i=0;i<arrstudycontinuebtnarr.length;i++){
+
+
+
+   
+//}
+
+
+//alert("MMMMMMMMMM "+arrstudycontinuebtnarr);
+
+
+//var sat = arrstudycontinuebtnarr[0]
+   
  jq('#reporttable').empty();
 jq('#reporttable').append('<table></table>');
 jq("#reporttable table").addClass("reportclass");
 var table = jq('#reporttable').children();
-     
- 
-    table.append("<tr><td>Studies available</td><td>Report Available</td><td>Action</td></tr>");
+table.append("<tr><td>Studies available</td><td>Report Available</td><td>Action</td></tr>");
+
+
+
+jq.getJSON('${ ui.actionLink("getReportConcepts") }',
+           {
+             'studyconceptclass': conNamed
+            })
+       .error(function(xhr, status, err) {
+            alert('AJAX error ' + err);
+        })
+        .success(function(ret) {
+                  alert("googd"); 
+
+
+
     
    
 
@@ -355,7 +406,7 @@ var table = jq('#reporttable').children();
   
   
   
-alert("ret.length" + ret.length);
+alert("ret.length KKKKKK" + ret.length);
             for (var i = 0; i < ret.length; i++) {
             var conId = ret[i].id;
              var conName = ret[i].studyName;
@@ -374,7 +425,7 @@ table.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'>link
   }
 else {
 
-table.append( '<tr><td>'+ conName +'</td><td>'+ conNameReporturl +' </td> <td><input type="button" id="addbtn" value="Add" ><input type="button" id="editbtn" value="Edit" ><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+table.append( '<tr><td>'+ conName +'</td><td>'+ conNameReporturl +' </td> <td><input type="button" id="addbtn" value="Add" ><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
 
 
 }
@@ -391,10 +442,11 @@ table.append( '<tr><td>'+ conName +'</td><td>'+ conNameReporturl +' </td> <td><i
 
 });
 
-   
-   
-   
 
+   
+   
+}
+});
 
 
 
@@ -494,6 +546,7 @@ jq.ajax({
  
  
 jq("#reportHTMLForm").click(function() {
+jq("#reportHTMLFormMessage").dialog( "option", "width", 460 );
 
 jq( "#reportHTMLFormMessage" ).dialog( "open" );
 
@@ -586,8 +639,9 @@ myFunctionT(someVarName);
 
 function myFunctionT(selectedValue) {
 
+  myFunctionT.called = true;
   
-  
+ 
   
   jq.getJSON('${ ui.actionLink("getStudyConcepts") }',
            {
@@ -613,9 +667,10 @@ var table = jq('#dynamictable').children();
 
 
 
-
-
-if((jq('#studyrefresh').data('clicked'))){
+ if(myFunctionT.called) {
+ myFunctionT.called = false;
+ table.append("<tr><td>Studies available</td><td>Action</td></tr>");
+ } else if((jq('#studyrefresh').data('clicked'))){
 alert("1");
 jq('#studyrefresh').data('clicked', false);
 alert("inside study conitnueeeeee");
@@ -691,7 +746,136 @@ table.append( '<tr><td>' +  conName + '</td> <td><input type="button" id="delete
  
  
 
+   function myFunctionreportmodality(select) {
    
+   
+   jq.getJSON('${ ui.actionLink("getStudyConcepts") }',
+           {
+             'studyconceptclass': select
+            })
+       .error(function(xhr, status, err) {
+            alert('AJAX error ' + err);
+        })
+        .success(function(ret) {
+                  alert("goog"); 
+                  
+                  
+  
+                  for (var i = 0; i < ret.length; i++) {
+            var conId = ret[i].conceptId;
+            var conNamed = ret[i].displayString;
+            alert("conName" +conNamed);
+            
+          //localStorage.setItem("reportfirstmodalitystudylist", JSON.stringify(conName));
+            
+          
+          
+          
+          
+          
+           // }
+               
+
+  
+                  
+                  
+               //   });
+
+   
+
+
+jq('#reportstudyselectdropdown').empty();
+
+
+//var arrstudycontinuebtnarr = JSON.parse(localStorage.getItem("arrstudycontinuebtn"));
+//var arrstudycontinuebtnarr = JSON.parse(localStorage.getItem("reportfirstmodalitystudylist"));
+//arrstudycontinuebtnarr.shift();
+//for (var i=0;i<arrstudycontinuebtnarr.length;i++){
+
+
+
+   
+//}
+
+
+//alert("MMMMMMMMMM "+arrstudycontinuebtnarr);
+
+
+//var sat = arrstudycontinuebtnarr[0]
+   
+ jq('#reporttable').empty();
+jq('#reporttable').append('<table></table>');
+jq("#reporttable table").addClass("reportclass");
+var table = jq('#reporttable').children();
+table.append("<tr><td>Studies available</td><td>Report Available</td><td>Action</td></tr>");
+
+
+
+jq.getJSON('${ ui.actionLink("getReportConcepts") }',
+           {
+             'studyconceptclass': conNamed
+            })
+       .error(function(xhr, status, err) {
+            alert('AJAX error ' + err);
+        })
+        .success(function(ret) {
+                  alert("googd"); 
+
+
+
+    
+   
+
+
+  
+  
+  
+alert("ret.length KKKKKK" + ret.length);
+            for (var i = 0; i < ret.length; i++) {
+            var conId = ret[i].id;
+             var conName = ret[i].studyName;
+            var conNameReporturl = ret[i].studyReporturl;
+            
+            alert("conId" + conId);
+             alert("conName" + conName);
+            
+      
+if(conNameReporturl) {
+
+            
+table.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'>link to Report</a> </td> <td><a id="modalityconceptmessage" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form">   <input type="button" id="addbtn" value="Add" ></a> <a href='+ conNameReporturl +'><input type="button" id="editbtn" value="Edit" ></a><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+
+   
+  }
+else {
+
+table.append( '<tr><td>'+ conName +'</td><td>'+ conNameReporturl +' </td> <td><input type="button" id="addbtn" value="Add" ><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+
+
+}
+ 
+  
+         
+
+
+  
+            
+}
+
+ 
+
+});
+
+
+   
+   
+}
+});
+
+
+   
+   
+   }
 
  
  
@@ -884,7 +1068,7 @@ ${ ui.includeFragment("radiology", "modalitySoftware") }
 
 <div id='reportmodalityselect' style="width:30%; height:234px; margin-top: 24px; float:left">
  
-  <select name="reportmodalityselectdropdown" id="reportmodalityselectdropdown" onchange="myFunctionT(this.value)">
+  <select name="reportmodalityselectdropdown" id="reportmodalityselectdropdown" onchange="myFunctionreportmodality(this.value)">
  
   </select>
 </div>
@@ -928,9 +1112,38 @@ ${ ui.includeFragment("radiology", "modalitySoftware") }
 <div id="studycontinuetext" title="Continue">  Please Click Save to save the study before continue </div>
 <div id="modalitysaved" title="Continue">  Modality Saved </div>
 <div id="studysaved" title="Continue">  Study Saved </div>
-<div id="reportHTMLFormMessage" title="reportHTMLForm"> HOW TO CREATE HTMLFORM: <br> 1) Select Radiology Order Encounter type. <br> 2) Select an HTML source code based on the study from http://www.radreport.org. <br> 3)All the observations are stored in concepts therefore create concepts for each observation. <br> 4) Save the uuid of the HTML Form created with the study " </div>
+<div id="reportHTMLFormMessage" style="width:430px" title="reportHTMLForm"> INSTRUCTION ON BUILDING REPORT:
+    <br> 1) Go to Manage HTML Form.<br>
+       2) Click New HTML Form. <br>
+       3) Enter form name similiar to its study name.<br>
+    4) Select Radiology Order Encounter type. <br>
+    5) Click Save will redirect to the default HTML source code.<br>
+    6) Select an HTML source code based on the study from http://www.radreport.org. <br> 
+    7)All the observations are stored in concepts therefore create concepts for each observation. <br>
+    8) Replace the default HTML source code.<br>
+    9)Saved form uuid is saved in the Form table.<br>
+    10) All observations are saved in Obs table.
+    
+ 
+  </div>
+
+
+
+
+
 <div id="reportsaved" title="Continue">  Report Saved </div>
 
 
-
+<div data-role="page" id="pageone">
+  <div data-role="main" class="ui-content">
+    <p>An example of the Plus Icon in different buttons.</p>
+    <a href="#" class="ui-btn ui-icon-plus ui-btn-icon-left">Plus Anchor</a>
+    <button class="ui-btn ui-icon-plus ui-btn-icon-left">Plus Button</button>
+    <input type="button" data-icon="plus" value="Plus Input Button">
+    <p>Only the icon:</p>
+    <a href="#" class="ui-btn ui-corner-all ui-icon-plus ui-btn-icon-notext">Plus Icon</a>
+    
+    <i class='material-icons' onclick='deleteRow(" + rowID + ")'>delete</i>
+  </div>
+</div>
  

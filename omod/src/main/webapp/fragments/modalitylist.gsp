@@ -2,9 +2,7 @@
 
 <% ui.includeJavascript("jquery.js") %>
 <% ui.includeJavascript("jquery-ui.js") %>
-<% ui.includeJavascript("jquery-ui.css") %>
-<% ui.includeJavascript("jquery.mobile-1.4.5.min.css") %>
-<% ui.includeJavascript("jquery.mobile-1.4.5.min.js") %>
+
 
 
 
@@ -13,6 +11,9 @@
    
   
     jq(document).ready(function() {
+    
+   
+    
    jq("#items").hide();
     jq(".studygroup").hide();
   jq(".studybtn").hide();
@@ -223,7 +224,8 @@ localStorage.setItem("arrcontinuebtn", JSON.stringify(arrcontinuebtn));
  
            
                jq( "#continuetext" ).dialog( "open" );
-        
+         
+    jq(".ui-dialog").addClass("customclass");
             
             
  }
@@ -419,13 +421,13 @@ alert("ret.length KKKKKK" + ret.length);
 if(conNameReporturl) {
 
             
-table.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'>link to Report</a> </td> <td><a id="modalityconceptmessage" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form">   <input type="button" id="addbtn" value="Add" ></a> <a href='+ conNameReporturl +'><input type="button" id="editbtn" value="Edit" ></a><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+table.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'>Link to Report</a> </td> <td><a id="addbtn" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a> <a id="editbtn" href='+ conNameReporturl +'><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a> <a id="deletebtn" ><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/></a> </td></tr>' );
 
-   
+
   }
 else {
 
-table.append( '<tr><td>'+ conName +'</td><td>'+ conNameReporturl +' </td> <td><input type="button" id="addbtn" value="Add" ><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+table.append( '<tr><td>'+ conName +'</td><td>'+ conNameReporturl +' </td> <td><a id="addbtn" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a> <a id="editbtn" href='+ conNameReporturl +'><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a> <a id="deletebtn" ><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/></a> </td></tr>' );
 
 
 }
@@ -548,10 +550,18 @@ jq.ajax({
 jq("#reportHTMLForm").click(function() {
 jq("#reportHTMLFormMessage").dialog( "option", "width", 460 );
 
-jq( "#reportHTMLFormMessage" ).dialog( "open" );
+// jq( "#reportHTMLFormMessage" ).dialog( "open" );
 
 
 });
+
+ jq("#reportHTMLForm").click(function(e) {
+    e.preventDefault();  //stop the browser from following
+    window.location.href = " ${ ui.resourceLink ("/images/HowToBuildReport.png") }";
+    
+});
+
+
 
 jq("#studyConceptDictionary").click(function() {
 
@@ -843,13 +853,13 @@ alert("ret.length KKKKKK" + ret.length);
 if(conNameReporturl) {
 
             
-table.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'>link to Report</a> </td> <td><a id="modalityconceptmessage" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form">   <input type="button" id="addbtn" value="Add" ></a> <a href='+ conNameReporturl +'><input type="button" id="editbtn" value="Edit" ></a><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+table.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'>Link to Report</a> </td> <td><a id="addbtn" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a> <a id="editbtn" href='+ conNameReporturl +'><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a> <a id="deletebtn" ><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/></a> </td></tr>' );
 
    
   }
 else {
 
-table.append( '<tr><td>'+ conName +'</td><td>'+ conNameReporturl +' </td> <td><input type="button" id="addbtn" value="Add" ><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+table.append( '<tr><td>'+ conName +'</td><td>'+ conNameReporturl +' </td> <td><a id="addbtn" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a> <a id="editbtn" href='+ conNameReporturl +'><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a> <a id="deletebtn" ><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/></a> </td></tr>' );
 
 
 }
@@ -921,7 +931,7 @@ alert("ret.length" + ret.length);
 if(conNameReporturl) {
 
             
-table.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'>link to Report</a> </td> <td><a id="modalityconceptmessage" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form">   <input type="button" id="addbtn" value="Add" ></a> <a href='+ conNameReporturl +'><input type="button" id="editbtn" value="Edit" ></a><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+table.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'>Link to Report</a> </td> <td><a id="modalityconceptmessage" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form">   <input type="button" id="addbtn" value="Add" ></a> <a href='+ conNameReporturl +'><input type="button" id="editbtn" value="Edit" ></a><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
 
    
   }
@@ -1014,8 +1024,9 @@ ${ ui.includeFragment("radiology", "modalitySoftware") }
 
 <div class="reportgroup">
     <div class="form-group">
-    <label id="report-concept-message" for report-concept-label> Select Study from the dropdown to show the reports available. Please Create Report not appearing in list and Refresh: <a id="modalityconceptmessage" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"> Click here to create HTMLForm  </a></label>
+    <label id="report-concept-message" for report-concept-label> Select Modality from the dropdown to show the studies and reports available. Please Create Report not appearing in list and Refresh: <a id="modalityconceptmessage" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"> Click here to create HTMLForm  </a></label>
     <input type="button" id="reportHTMLForm" class="reportHTMLForm" value = "?" >
+    
     <input type="button" name="reportrefresh" id="reportrefresh" value="Refresh">
      
      </div>
@@ -1134,5 +1145,8 @@ ${ ui.includeFragment("radiology", "modalitySoftware") }
 <div id="reportsaved" title="Continue">  Report Saved </div>
 
 
+
+
+  
 
  

@@ -128,7 +128,7 @@ public class ModalitylistFragmentController {
 		for (String selectedstudy : studyConceptone) {
 			for (RadiologyStudyList getstudyselected : liststudystudy) {
 				if (selectedstudy.equals(getstudyselected.getStudyName())) {
-                                    System.out.println("selectedstudy same ");
+					System.out.println("selectedstudy same ");
 					studylistmember.add(getstudyselected);
 				}
 				
