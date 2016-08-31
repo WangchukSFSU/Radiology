@@ -17,6 +17,36 @@ public class RadiologyStudyList extends BaseOpenmrsObject implements Serializabl
 	
 	private Integer id;
 	
+	private String studyReporturl;
+	
+	private String studyName;
+	
+	public String getStudyName() {
+		return studyName;
+	}
+	
+	public void setStudyName(String studyName) {
+		this.studyName = studyName;
+	}
+	
+	public String getFormreportuuid() {
+		return formreportuuid;
+	}
+	
+	public void setFormreportuuid(String formreportuuid) {
+		this.formreportuuid = formreportuuid;
+	}
+	
+	private String formreportuuid;
+	
+	public String getStudyReporturl() {
+		return studyReporturl;
+	}
+	
+	public void setStudyReporturl(String studyReporturl) {
+		this.studyReporturl = studyReporturl;
+	}
+	
 	public void setId(Integer id) {
 		this.id = id;
 	}

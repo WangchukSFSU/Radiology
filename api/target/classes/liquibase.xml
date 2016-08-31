@@ -416,6 +416,20 @@
         <column name="modalitydescription" type="varchar(255)"/>
     </addColumn>
 </changeSet>
-      
+<changeSet author="tenzin" id="radiology-60">
+    <addColumn tableName="RadiologyStudyList">
+        <column name="studyReporturl" type="varchar(255)"/>
+    </addColumn>
+</changeSet>
+<changeSet author="tenzin" id="radiology-61">
+    <addColumn tableName="RadiologyStudyList">
+        <column name="studyName" type="varchar(255)"/>
+    </addColumn>
+</changeSet>
+<changeSet author="tenzin" id="radiology-62">
+    <addColumn tableName="RadiologyStudyList">
+        <column name="formreportuuid" type="varchar(255)"/>
+    </addColumn>
+</changeSet>
 </databaseChangeLog>
 

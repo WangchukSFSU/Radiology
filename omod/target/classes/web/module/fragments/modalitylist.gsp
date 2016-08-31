@@ -23,7 +23,8 @@
 
    jq("#reportmodalityselect").hide();
    jq("#reportstudyselect").hide();
-   
+   jq("#reporttable").hide();
+ 
    
 
 
@@ -252,10 +253,10 @@ jq("#dynamictable").css("width", "40%");
   jq("#items").hide();
   
   jq("#reportmodalityselect").show();
-  jq("#reportstudyselect").show();
+  jq("#reportstudyselect").hide();
   
-   
-  
+   jq("#dynamictable").hide();
+  jq("#reporttable").show();
   
   
 
@@ -279,7 +280,8 @@ var arrayfirst = arr[1];
 alert("POTPOTPOTPOT "+arrayfirst);
 
 
-myFunctionT(arrayfirst);
+//myFunctionT(arrayfirst);
+
 
 for (var i=1;i<arr.length;i++){
 alert("SUNN");
@@ -324,12 +326,74 @@ jq('#reportstudyselectdropdown').empty();
 var arrstudycontinuebtnarr = JSON.parse(localStorage.getItem("arrstudycontinuebtn"));
 
 alert("MMMMMMMMMM "+arrstudycontinuebtnarr);
-for (var i=1;i<arrstudycontinuebtnarr.length;i++){
 
-   jq('<option/>').val(arrstudycontinuebtnarr[i]).html(arrstudycontinuebtnarr[i]).appendTo('#reportstudyselect select');
+
+
+   
+   
+jq.getJSON('${ ui.actionLink("getReportConcepts") }',
+           {
+             'studyconceptclass': arrstudycontinuebtnarr
+            })
+       .error(function(xhr, status, err) {
+            alert('AJAX error ' + err);
+        })
+        .success(function(ret) {
+                  alert("goog"); 
+
+ jq('#reporttable').empty();
+jq('#reporttable').append('<table></table>');
+jq("#reporttable table").addClass("reportclass");
+var table = jq('#reporttable').children();
+     
+ 
+    table.append("<tr><td>Studies available</td><td>Report Available</td><td>Action</td></tr>");
+    
+   
+
+
+  
+  
+  
+alert("ret.length" + ret.length);
+            for (var i = 0; i < ret.length; i++) {
+            var conId = ret[i].id;
+             var conName = ret[i].studyName;
+            var conNameReporturl = ret[i].studyReporturl;
+            
+            alert("conId" + conId);
+             alert("conName" + conName);
+            
+      
+if(conNameReporturl) {
+
+            
+table.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'>link to Report</a> </td> <td><a id="modalityconceptmessage" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form">   <input type="button" id="addbtn" value="Add" ></a> <a href='+ conNameReporturl +'><input type="button" id="editbtn" value="Edit" ></a><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+
+   
+  }
+else {
+
+table.append( '<tr><td>'+ conName +'</td><td>'+ conNameReporturl +' </td> <td><input type="button" id="addbtn" value="Add" ><input type="button" id="editbtn" value="Edit" ><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+
+
+}
+ 
+  
+         
+
+
+  
+            
 }
 
+ 
 
+});
+
+   
+   
+   
 
 
 
@@ -480,7 +544,7 @@ a_onClick.called = true;
 
    alert('a_onClick');
    
-  
+  jq('#studysavebtn').data('clicked', false);
    jq(".reportgroup").hide();
    jq('#dynamictable').empty();
     
@@ -488,7 +552,7 @@ a_onClick.called = true;
   
     jq("#managereport").empty();
     jq("#modalityselect").hide();
-   
+   jq("#dynamictable").show();
   jq("#items").show();
   jq("#items select").empty();
 jq(".studygroup").show();
@@ -499,7 +563,7 @@ jq(".studygroup").show();
 jq("#selectlabtest1").css( { marginLeft : "32px" } );
 
 jq(".studybtn").show();
-
+jq("#reporttable").hide();
 
  jq("#items").css("width", "36%");
 jq("#dynamictable").css("width", "64%");
@@ -599,7 +663,7 @@ table.append("<tr><td>Report available</td><td>Action</td></tr>");
 }
 else {
 alert("7");
-table.append("<tr><td>Report available</td><td>Action</td></tr>");
+table.append("<tr><td>Studies available</td><td>Action</td></tr>");
 }
 
 
@@ -609,9 +673,14 @@ alert("ret.length" + ret.length);
             for (var i = 0; i < ret.length; i++) {
             var conId = ret[i].conceptId;
             var conName = ret[i].displayString;
- 
+ if((conName == "Cardiac MRI Adenosine Stress Protocol Report")|| (conName == "Cardiac MRI Right Heart Failure Report")) {
 
+table.append( '<tr><td>' +  conName + ' <a href="http://localhost:8080/openmrs/htmlformentryui/htmlform/enterHtmlFormWithStandardUi.page?patientId=5486b0af-8591-40d1-84b9-afab423fd55d&visitId=&formUuid=9e414151-e2d0-4693-9548-b6beb916b213&returnUrl=%2Fopenmrs%2Fcoreapps%2Fclinicianfacing%2Fpatient.page%3FpatientId%3D5486b0af-8591-40d1-84b9-afab423fd55d%26">( Right Click to view Sample Form)</a></td> <td><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+
+} else {
 table.append( '<tr><td>' +  conName + '</td> <td><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+
+}
 
 }
 
@@ -621,11 +690,17 @@ table.append( '<tr><td>' +  conName + '</td> <td><input type="button" id="delete
  
  
  
- 
- function modalitystudyfunction(selectedValue) {
+
+   
 
  
-  jq.getJSON('${ ui.actionLink("getStudyConcepts") }',
+ 
+  function modalitystudyfunction(selectedValue) {
+
+
+    
+ 
+  jq.getJSON('${ ui.actionLink("getReportConcepts") }',
            {
              'studyconceptclass': selectedValue
             })
@@ -635,27 +710,59 @@ table.append( '<tr><td>' +  conName + '</td> <td><input type="button" id="delete
         .success(function(ret) {
                   alert("goog"); 
 
+ jq('#reporttable').empty();
+jq('#reporttable').append('<table></table>');
+jq("#reporttable table").addClass("reportclass");
+var table = jq('#reporttable').children();
+     
+ 
+    table.append("<tr><td>Studies available</td><td>Report Available</td><td>Action</td></tr>");
+    
+   
 
 
+  
+  
+  
 alert("ret.length" + ret.length);
             for (var i = 0; i < ret.length; i++) {
-            var conId = ret[i].conceptId;
-            var conName = ret[i].displayString;
- 
-
-           
-alert("conName " + conName);
-
-  
-  
+            var conId = ret[i].id;
+             var conName = ret[i].studyName;
+            var conNameReporturl = ret[i].studyReporturl;
             
+            alert("conId" + conId);
+             alert("conName" + conName);
+            
+      
+if(conNameReporturl) {
+
+            
+table.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'>link to Report</a> </td> <td><a id="modalityconceptmessage" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form">   <input type="button" id="addbtn" value="Add" ></a> <a href='+ conNameReporturl +'><input type="button" id="editbtn" value="Edit" ></a><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+
+   
+  }
+else {
+
+table.append( '<tr><td>'+ conName +'</td><td>'+ conNameReporturl +' </td> <td><input type="button" id="addbtn" value="Add" ><input type="button" id="editbtn" value="Edit" ><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+
+
+}
+ 
+  
+         
+
+
+  
             
 }
 
+ 
+
 });
 
+
+
  }
-    
     </script>
     
     
@@ -791,6 +898,9 @@ ${ ui.includeFragment("radiology", "modalitySoftware") }
 
 
  <div id="dynamictable" style="width:64%; float:right">  
+       
+ </div>
+  <div id="reporttable" style="width:70%; float:right">  
        
  </div>
 

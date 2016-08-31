@@ -15,6 +15,8 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptClass;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptSet;
+import org.openmrs.Form;
+import org.openmrs.Patient;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.radiology.Modality;
@@ -113,6 +115,33 @@ public class ModalitylistFragmentController {
 		return SimpleObject.fromCollection(studySetMembers, ui, properties);
 	}
 	
+	public List<SimpleObject> getReportConcepts(FragmentModel model,
+			@RequestParam(value = "studyconceptclass", required = false) String[] studyConceptone,
+			@SpringBean("conceptService") ConceptService service, UiUtils ui) {
+		for (String conce : studyConceptone) {
+			System.out.println("getReportConcepts 1 " + conce);
+			
+		}
+		ArrayList<RadiologyStudyList> studylistmember = new ArrayList<RadiologyStudyList>();
+		List<RadiologyStudyList> liststudystudy = Context.getService(RadiologyService.class)
+				.getAllStudy();
+		for (String selectedstudy : studyConceptone) {
+			for (RadiologyStudyList getstudyselected : liststudystudy) {
+				if (selectedstudy.equals(getstudyselected.getStudyName())) {
+                                    System.out.println("selectedstudy same ");
+					studylistmember.add(getstudyselected);
+				}
+				
+			}
+		}
+		
+		String[] properties = new String[3];
+		properties[0] = "id";
+		properties[1] = "studyName";
+		properties[2] = "studyReporturl";
+		return SimpleObject.fromCollection(studylistmember, ui, properties);
+	}
+	
 	public void saveModality(FragmentModel model, @RequestParam(value = "modalityList[]") String[] modalityList) {
 		
 		for (String modlist : modalityList) {
@@ -136,6 +165,15 @@ public class ModalitylistFragmentController {
 	public void saveStudy(@RequestParam(value = "studyList[]") String[] studyList) {
 		
 		System.out.println("KKKKKKKKKKKKKKKKKKKKLLLLLLLLLLLLLLLL " + studyList);
+		List<Form> studyreport = Context.getFormService()
+				.getAllForms();
+		
+		List<Patient> personrowuuid = Context.getPatientService()
+				.getAllPatients(true);
+		Integer patientid = personrowuuid.size();
+		
+		System.out.println("Length of patient " + personrowuuid.get(patientid - 1)
+				.getUuid());
 		
 		for (String studylist : studyList) {
 			RadiologyStudyList studyName = new RadiologyStudyList();
@@ -143,6 +181,35 @@ public class ModalitylistFragmentController {
 					.getConcept(studylist.trim())
 					.getConceptId();
 			studyName.setStudyConceptId(studyConceptid);
+			
+			studyName.setStudyName(studylist);
+			
+			for (Form searchform : studyreport) {
+				
+				String noopa = studylist.trim();
+				String podspdoas = searchform.getName()
+						.trim();
+				
+				if (noopa.equals(podspdoas)) {
+					
+					String domain = "http://localhost:8080/openmrs/htmlformentryui/htmlform/enterHtmlFormWithStandardUi.page?patientId=";
+					String patientidurl = personrowuuid.get(patientid - 1)
+							.getUuid();
+					String visitform = "&visitId=&formUuid=";
+					String formuuidurl = searchform.getUuid();
+					String returnurl = "&returnUrl=/openmrs/radiology/adminInitialize.page";
+					
+					String url = domain.concat(patientidurl)
+							.concat(visitform)
+							.concat(formuuidurl)
+							.concat(returnurl);
+					
+					System.out.println("HYYEYYEYEYYEYEYEYE SAME SAM");
+					studyName.setStudyReporturl(url);
+					
+				}
+				
+			}
 			Context.getService(RadiologyService.class)
 					.saveStudyList(studyName);
 			System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ " + studylist);
@@ -153,11 +220,23 @@ public class ModalitylistFragmentController {
 	
 	public void saveReport(@RequestParam(value = "reportList[]") String[] studyList) {
 		
+		List<Form> formreport = Context.getFormService()
+				.getAllForms();
+		
 		for (String studylist : studyList) {
 			RadiologyReportList reportName = new RadiologyReportList();
 			
 			reportName.setStudyConceptName(studylist);
-			reportName.setHtmlformuuid("9e414151-e2d0-4693-9548-b6beb916b213");
+			for (Form reportform : formreport) {
+				String studyname = studylist.trim();
+				String formname = reportform.getName()
+						.trim();
+				
+				if (studyname.equals(formname)) {
+					reportName.setHtmlformuuid(reportform.getUuid());
+				}
+				
+			}
 			
 			Context.getService(RadiologyService.class)
 					.saveReportList(reportName);
