@@ -8,12 +8,17 @@ package org.openmrs.module.radiology.fragment.controller;
 import java.util.ArrayList;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import org.openmrs.Concept;
+import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptClass;
+import org.openmrs.ConceptDatatype;
 import org.openmrs.ConceptName;
+import org.openmrs.ConceptSearchResult;
 import org.openmrs.ConceptSet;
 import org.openmrs.Form;
 import org.openmrs.Patient;
@@ -42,6 +47,19 @@ public class ModalitylistFragmentController {
 		
 		List<Concept> modality_list = Context.getConceptService()
 				.getConceptsByClass(modality_concept);
+		
+		for (Concept ccd : modality_list) {
+			
+			System.out.println("CMDKCMDKCDMCDMKfdsdfds " + ccd);
+			Collection<ConceptAnswer> monoa = ccd.getAnswers();
+			
+			for (ConceptAnswer ccdd : monoa) {
+				// for (Concept ccd : monoa) {
+				System.out.println("CMDKCMDKCDMCDMK " + ccdd.getAnswerConcept());
+				
+			}
+			
+		}
 		
 		String ss = null;
 		ArrayList<String> modalityconceptdescription = new ArrayList();
@@ -107,6 +125,31 @@ public class ModalitylistFragmentController {
 		for (Concept nextstudy : study_list) {
 			System.out.println("**********Concept set member:  " + nextstudy.getDisplayString());
 			studySetMembers.add(nextstudy);
+		}
+		
+		String[] properties = new String[2];
+		properties[0] = "conceptId";
+		properties[1] = "displayString";
+		return SimpleObject.fromCollection(studySetMembers, ui, properties);
+	}
+	
+	public List<SimpleObject> getStudyConceptsAnswerFromModality(
+			@RequestParam(value = "studyconceptclass", required = false) String studyConceptone,
+			@SpringBean("conceptService") ConceptService service, UiUtils ui) {
+		
+		System.out.println("Labset " + studyConceptone);
+		Concept studyConcept = Context.getConceptService()
+				.getConcept(studyConceptone.trim());
+		
+		ArrayList<Concept> studySetMembers = new ArrayList<Concept>();
+		
+		Collection<ConceptAnswer> monoa = studyConcept.getAnswers();
+		
+		for (ConceptAnswer ccdd : monoa) {
+			// for (Concept ccd : monoa) {
+			System.out.println("CMDKCMDKCDMCDMK " + ccdd.getAnswerConcept());
+			studySetMembers.add(ccdd.getAnswerConcept());
+			
 		}
 		
 		String[] properties = new String[2];

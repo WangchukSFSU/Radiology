@@ -2,10 +2,8 @@
 
 <% ui.includeJavascript("jquery.js") %>
 <% ui.includeJavascript("jquery-ui.js") %>
-<% ui.includeCss("jquery-ui.css") %>
-<% ui.includeJavascript("jquery-1.11.3.min.js") %>
-<% ui.includeCss("jquery.mobile-1.4.5.min.css") %>
-<% ui.includeJavascript("jquery.mobile-1.4.5.min.js") %>
+
+
 
 
 <script>
@@ -13,6 +11,9 @@
    
   
     jq(document).ready(function() {
+    
+   
+    
    jq("#items").hide();
     jq(".studygroup").hide();
   jq(".studybtn").hide();
@@ -127,7 +128,7 @@
                buttons: {
                   OK: function() {jq(this).dialog("close");}
                },
-               title: "INSTRUCTION ON BUILDING REPORT",
+               title: "USER GUIDE",
                position: {
                   my: "left center",
                   at: "left center"
@@ -223,7 +224,8 @@ localStorage.setItem("arrcontinuebtn", JSON.stringify(arrcontinuebtn));
  
            
                jq( "#continuetext" ).dialog( "open" );
-        
+         
+    jq(".ui-dialog").addClass("customclass");
             
             
  }
@@ -383,7 +385,7 @@ jq('#reportstudyselectdropdown').empty();
 jq('#reporttable').append('<table></table>');
 jq("#reporttable table").addClass("reportclass");
 var table = jq('#reporttable').children();
-table.append("<tr><td>Studies available</td><td>Report Available</td><td>Action</td></tr>");
+table.append("<tr><td>Studies available</td><td id='tablesecondcolumn' >Report Available</td><td>Action</td></tr>");
 
 
 
@@ -419,13 +421,13 @@ alert("ret.length KKKKKK" + ret.length);
 if(conNameReporturl) {
 
             
-table.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'>link to Report</a> </td> <td><a id="modalityconceptmessage" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form">   <input type="button" id="addbtn" value="Add" ></a> <a href='+ conNameReporturl +'><input type="button" id="editbtn" value="Edit" ></a><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+table.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'> '+ conName +'</a> </td> <td> <a id="editbtn" href='+ conNameReporturl +'><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a> <a id="deletebtn" ><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/></a> </td></tr>' );
 
-   
+
   }
 else {
 
-table.append( '<tr><td>'+ conName +'</td><td>'+ conNameReporturl +' </td> <td><input type="button" id="addbtn" value="Add" ><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+table.append( '<tr><td>'+ conName +'</td><td>'+ conNameReporturl +' </td> <td><a id="addbtn" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a> <a id="editbtn" href='+ conNameReporturl +'><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a> <a id="deletebtn" ><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/></a> </td></tr>' );
 
 
 }
@@ -547,11 +549,14 @@ jq.ajax({
  
 jq("#reportHTMLForm").click(function() {
 jq("#reportHTMLFormMessage").dialog( "option", "width", 460 );
-
-jq( "#reportHTMLFormMessage" ).dialog( "open" );
+ jq( "#reportHTMLFormMessage" ).dialog( "open" );
 
 
 });
+
+
+
+
 
 jq("#studyConceptDictionary").click(function() {
 
@@ -807,7 +812,7 @@ jq('#reportstudyselectdropdown').empty();
 jq('#reporttable').append('<table></table>');
 jq("#reporttable table").addClass("reportclass");
 var table = jq('#reporttable').children();
-table.append("<tr><td>Studies available</td><td>Report Available</td><td>Action</td></tr>");
+table.append("<tr><td>Studies available</td><td id='tablesecondcolumn'>Report Available</td><td>Action</td></tr>");
 
 
 
@@ -843,13 +848,13 @@ alert("ret.length KKKKKK" + ret.length);
 if(conNameReporturl) {
 
             
-table.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'>link to Report</a> </td> <td><a id="modalityconceptmessage" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form">   <input type="button" id="addbtn" value="Add" ></a> <a href='+ conNameReporturl +'><input type="button" id="editbtn" value="Edit" ></a><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+table.append( '<tr><td>'+ conName +'</td><td> <a href='+ conNameReporturl +'> '+ conName +'</a> </td> <td> <a id="editbtn" href='+ conNameReporturl +'><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a> <a id="deletebtn" ><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/></a> </td></tr>' );
 
    
   }
 else {
 
-table.append( '<tr><td>'+ conName +'</td><td>'+ conNameReporturl +' </td> <td><input type="button" id="addbtn" value="Add" ><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+table.append( '<tr><td>'+ conName +'</td><td>'+ conNameReporturl +' </td> <td><a id="addbtn" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a> <a id="editbtn" href='+ conNameReporturl +'><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a> <a id="deletebtn" ><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/></a> </td></tr>' );
 
 
 }
@@ -921,7 +926,7 @@ alert("ret.length" + ret.length);
 if(conNameReporturl) {
 
             
-table.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'>link to Report</a> </td> <td><a id="modalityconceptmessage" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form">   <input type="button" id="addbtn" value="Add" ></a> <a href='+ conNameReporturl +'><input type="button" id="editbtn" value="Edit" ></a><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+table.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'>'+ conName +'</a> </td> <td><a id="modalityconceptmessage" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form">   <input type="button" id="addbtn" value="Add" ></a> <a href='+ conNameReporturl +'><input type="button" id="editbtn" value="Edit" ></a><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
 
    
   }
@@ -1014,8 +1019,9 @@ ${ ui.includeFragment("radiology", "modalitySoftware") }
 
 <div class="reportgroup">
     <div class="form-group">
-    <label id="report-concept-message" for report-concept-label> Select Study from the dropdown to show the reports available. Please Create Report not appearing in list and Refresh: <a id="modalityconceptmessage" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"> Click here to create HTMLForm  </a></label>
+    <label id="report-concept-message" for report-concept-label> Select Modality from the dropdown to show the studies and reports available. Please Create Report not appearing in list and Refresh: <a id="modalityconceptmessage" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"> Click here to create HTMLForm  </a></label>
     <input type="button" id="reportHTMLForm" class="reportHTMLForm" value = "?" >
+    
     <input type="button" name="reportrefresh" id="reportrefresh" value="Refresh">
      
      </div>
@@ -1073,12 +1079,7 @@ ${ ui.includeFragment("radiology", "modalitySoftware") }
   </select>
 </div>
 
-<div id='reportstudyselect' style="width:30%; height:234px; margin-top: 24px; float:left">
- 
-  <select name="reportstudyselectdropdown" id="reportstudyselectdropdown" onchange="myFunctionT(this.value)">
- 
-  </select>
-</div>
+
 
 
  <div id="dynamictable" style="width:64%; float:right">  
@@ -1112,20 +1113,7 @@ ${ ui.includeFragment("radiology", "modalitySoftware") }
 <div id="studycontinuetext" title="Continue">  Please Click Save to save the study before continue </div>
 <div id="modalitysaved" title="Continue">  Modality Saved </div>
 <div id="studysaved" title="Continue">  Study Saved </div>
-<div id="reportHTMLFormMessage" style="width:430px" title="reportHTMLForm"> INSTRUCTION ON BUILDING REPORT:
-    <br> 1) Go to Manage HTML Form.<br>
-       2) Click New HTML Form. <br>
-       3) Enter form name similiar to its study name.<br>
-    4) Select Radiology Order Encounter type. <br>
-    5) Click Save will redirect to the default HTML source code.<br>
-    6) Select an HTML source code based on the study from http://www.radreport.org. <br> 
-    7)All the observations are stored in concepts therefore create concepts for each observation. <br>
-    8) Replace the default HTML source code.<br>
-    9)Saved form uuid is saved in the Form table.<br>
-    10) All observations are saved in Obs table.
-    
- 
-  </div>
+<div id="reportHTMLFormMessage" style="width:430px" title="reportHTMLForm"> See radiology user guide for directions on creating report </div>
 
 
 
@@ -1134,16 +1122,8 @@ ${ ui.includeFragment("radiology", "modalitySoftware") }
 <div id="reportsaved" title="Continue">  Report Saved </div>
 
 
-<div data-role="page" id="pageone">
-  <div data-role="main" class="ui-content">
-    <p>An example of the Plus Icon in different buttons.</p>
-    <a href="#" class="ui-btn ui-icon-plus ui-btn-icon-left">Plus Anchor</a>
-    <button class="ui-btn ui-icon-plus ui-btn-icon-left">Plus Button</button>
-    <input type="button" data-icon="plus" value="Plus Input Button">
-    <p>Only the icon:</p>
-    <a href="#" class="ui-btn ui-corner-all ui-icon-plus ui-btn-icon-notext">Plus Icon</a>
-    
-    <i class='material-icons' onclick='deleteRow(" + rowID + ")'>delete</i>
-  </div>
-</div>
+
+
+  
+
  

@@ -327,7 +327,7 @@ var reportmodalityfirstlist = arr22[1];
 
 alert("reportmodalityfirstlist "+reportmodalityfirstlist);
 
-jq.getJSON('${ ui.actionLink("getStudyConcepts") }',
+jq.getJSON('${ ui.actionLink("getStudyConceptsAnswerFromModality") }',
            {
              'studyconceptclass': reportmodalityfirstlist
             })
@@ -421,7 +421,7 @@ alert("ret.length KKKKKK" + ret.length);
 if(conNameReporturl) {
 
             
-table.append( '<tr><td>'+ conName +'</td><td>'+ conName +'<a href='+ conNameReporturl +'> Link to Report</a> </td> <td> <a id="editbtn" href='+ conNameReporturl +'><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a> <a id="deletebtn" ><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/></a> </td></tr>' );
+table.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'> '+ conName +'</a> </td> <td> <a id="editbtn" href='+ conNameReporturl +'><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a> <a id="deletebtn" ><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/></a> </td></tr>' );
 
 
   }
@@ -648,7 +648,7 @@ function myFunctionT(selectedValue) {
   
  
   
-  jq.getJSON('${ ui.actionLink("getStudyConcepts") }',
+  jq.getJSON('${ ui.actionLink("getStudyConceptsAnswerFromModality") }',
            {
              'studyconceptclass': selectedValue
             })
@@ -754,7 +754,7 @@ table.append( '<tr><td>' +  conName + '</td> <td><input type="button" id="delete
    function myFunctionreportmodality(select) {
    
    
-   jq.getJSON('${ ui.actionLink("getStudyConcepts") }',
+   jq.getJSON('${ ui.actionLink("getStudyConceptsAnswerFromModality") }',
            {
              'studyconceptclass': select
             })
@@ -848,7 +848,7 @@ alert("ret.length KKKKKK" + ret.length);
 if(conNameReporturl) {
 
             
-table.append( '<tr><td>'+ conName +'</td><td>'+ conName +' <a href='+ conNameReporturl +'> Link to Report</a> </td> <td> <a id="editbtn" href='+ conNameReporturl +'><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a> <a id="deletebtn" ><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/></a> </td></tr>' );
+table.append( '<tr><td>'+ conName +'</td><td> <a href='+ conNameReporturl +'> '+ conName +'</a> </td> <td> <a id="editbtn" href='+ conNameReporturl +'><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a> <a id="deletebtn" ><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/></a> </td></tr>' );
 
    
   }
@@ -926,7 +926,7 @@ alert("ret.length" + ret.length);
 if(conNameReporturl) {
 
             
-table.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'>Link to Report</a> </td> <td><a id="modalityconceptmessage" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form">   <input type="button" id="addbtn" value="Add" ></a> <a href='+ conNameReporturl +'><input type="button" id="editbtn" value="Edit" ></a><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+table.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'>'+ conName +'</a> </td> <td><a id="modalityconceptmessage" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form">   <input type="button" id="addbtn" value="Add" ></a> <a href='+ conNameReporturl +'><input type="button" id="editbtn" value="Edit" ></a><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
 
    
   }
@@ -1113,7 +1113,7 @@ ${ ui.includeFragment("radiology", "modalitySoftware") }
 <div id="studycontinuetext" title="Continue">  Please Click Save to save the study before continue </div>
 <div id="modalitysaved" title="Continue">  Modality Saved </div>
 <div id="studysaved" title="Continue">  Study Saved </div>
-<div id="reportHTMLFormMessage" style="width:430px" title="reportHTMLForm"> PLEASE SEE THE USER GUIDE </div>
+<div id="reportHTMLFormMessage" style="width:430px" title="reportHTMLForm"> See radiology user guide for directions on creating report </div>
 
 
 
