@@ -96,7 +96,7 @@ font: bold 26px Arial;
 #report-concept-message {
 
     width: 550px;
-    height: 50px;
+    height: 60px;
    
  
     margin-left: 16px;  
@@ -202,3 +202,6 @@ label {
              
          }
 
+         #tablesecondcolumn {
+             width: 223px;
+         }

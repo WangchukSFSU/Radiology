@@ -128,7 +128,7 @@
                buttons: {
                   OK: function() {jq(this).dialog("close");}
                },
-               title: "INSTRUCTION ON BUILDING REPORT",
+               title: "USER GUIDE",
                position: {
                   my: "left center",
                   at: "left center"
@@ -385,7 +385,7 @@ jq('#reportstudyselectdropdown').empty();
 jq('#reporttable').append('<table></table>');
 jq("#reporttable table").addClass("reportclass");
 var table = jq('#reporttable').children();
-table.append("<tr><td>Studies available</td><td>Report Available</td><td>Action</td></tr>");
+table.append("<tr><td>Studies available</td><td id='tablesecondcolumn' >Report Available</td><td>Action</td></tr>");
 
 
 
@@ -421,7 +421,7 @@ alert("ret.length KKKKKK" + ret.length);
 if(conNameReporturl) {
 
             
-table.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'>Link to Report</a> </td> <td><a id="addbtn" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a> <a id="editbtn" href='+ conNameReporturl +'><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a> <a id="deletebtn" ><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/></a> </td></tr>' );
+table.append( '<tr><td>'+ conName +'</td><td>'+ conName +'<a href='+ conNameReporturl +'> Link to Report</a> </td> <td> <a id="editbtn" href='+ conNameReporturl +'><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a> <a id="deletebtn" ><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/></a> </td></tr>' );
 
 
   }
@@ -549,17 +549,12 @@ jq.ajax({
  
 jq("#reportHTMLForm").click(function() {
 jq("#reportHTMLFormMessage").dialog( "option", "width", 460 );
-
-// jq( "#reportHTMLFormMessage" ).dialog( "open" );
+ jq( "#reportHTMLFormMessage" ).dialog( "open" );
 
 
 });
 
- jq("#reportHTMLForm").click(function(e) {
-    e.preventDefault();  //stop the browser from following
-    window.location.href = " ${ ui.resourceLink ("/images/HowToBuildReport.png") }";
-    
-});
+
 
 
 
@@ -817,7 +812,7 @@ jq('#reportstudyselectdropdown').empty();
 jq('#reporttable').append('<table></table>');
 jq("#reporttable table").addClass("reportclass");
 var table = jq('#reporttable').children();
-table.append("<tr><td>Studies available</td><td>Report Available</td><td>Action</td></tr>");
+table.append("<tr><td>Studies available</td><td id='tablesecondcolumn'>Report Available</td><td>Action</td></tr>");
 
 
 
@@ -853,7 +848,7 @@ alert("ret.length KKKKKK" + ret.length);
 if(conNameReporturl) {
 
             
-table.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'>Link to Report</a> </td> <td><a id="addbtn" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a> <a id="editbtn" href='+ conNameReporturl +'><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a> <a id="deletebtn" ><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/></a> </td></tr>' );
+table.append( '<tr><td>'+ conName +'</td><td>'+ conName +' <a href='+ conNameReporturl +'> Link to Report</a> </td> <td> <a id="editbtn" href='+ conNameReporturl +'><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a> <a id="deletebtn" ><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/></a> </td></tr>' );
 
    
   }
@@ -1084,12 +1079,7 @@ ${ ui.includeFragment("radiology", "modalitySoftware") }
   </select>
 </div>
 
-<div id='reportstudyselect' style="width:30%; height:234px; margin-top: 24px; float:left">
- 
-  <select name="reportstudyselectdropdown" id="reportstudyselectdropdown" onchange="myFunctionT(this.value)">
- 
-  </select>
-</div>
+
 
 
  <div id="dynamictable" style="width:64%; float:right">  
@@ -1123,20 +1113,7 @@ ${ ui.includeFragment("radiology", "modalitySoftware") }
 <div id="studycontinuetext" title="Continue">  Please Click Save to save the study before continue </div>
 <div id="modalitysaved" title="Continue">  Modality Saved </div>
 <div id="studysaved" title="Continue">  Study Saved </div>
-<div id="reportHTMLFormMessage" style="width:430px" title="reportHTMLForm"> INSTRUCTION ON BUILDING REPORT:
-    <br> 1) Go to Manage HTML Form.<br>
-       2) Click New HTML Form. <br>
-       3) Enter form name similiar to its study name.<br>
-    4) Select Radiology Order Encounter type. <br>
-    5) Click Save will redirect to the default HTML source code.<br>
-    6) Select an HTML source code based on the study from http://www.radreport.org. <br> 
-    7)All the observations are stored in concepts therefore create concepts for each observation. <br>
-    8) Replace the default HTML source code.<br>
-    9)Saved form uuid is saved in the Form table.<br>
-    10) All observations are saved in Obs table.
-    
- 
-  </div>
+<div id="reportHTMLFormMessage" style="width:430px" title="reportHTMLForm"> PLEASE SEE THE USER GUIDE </div>
 
 
 
