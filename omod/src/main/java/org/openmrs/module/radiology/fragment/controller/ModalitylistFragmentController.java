@@ -219,7 +219,37 @@ public class ModalitylistFragmentController {
 				.getUuid());
 		
 		for (String studylist : studyList) {
+			
+			System.out.println("SSSSSSSSSSSSS " + studylist);
 			RadiologyStudyList studyName = new RadiologyStudyList();
+			
+			ConceptClass modality_concept = Context.getConceptService()
+					.getConceptClassByName("modality");
+			
+			List<Concept> modality_list = Context.getConceptService()
+					.getConceptsByClass(modality_concept);
+			
+			for (Concept ccd : modality_list) {
+				
+				System.out.println("435435354435 modality " + ccd);
+				Collection<ConceptAnswer> monoa = ccd.getAnswers();
+				
+				for (ConceptAnswer ccdd : monoa) {
+					// for (Concept ccd : monoa) {
+					System.out.println("876878787867876 answers " + ccdd.getAnswerConcept());
+					System.out.println("ddfssd " + ccdd.getAnswerConcept()
+							.getDisplayString());
+					if ((studylist.equals(ccdd.getAnswerConcept()
+							.getDisplayString()))) {
+						System.out.println("5555555555 ");
+						System.out.println("ccd.getDisplayString() " + ccd.getDisplayString());
+						studyName.setModalityNameSaved(ccd.getDisplayString());
+					}
+					
+				}
+				
+			}
+			
 			int studyConceptid = Context.getConceptService()
 					.getConcept(studylist.trim())
 					.getConceptId();

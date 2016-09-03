@@ -188,7 +188,7 @@ jq(".studybtn").show();
 jq("#manageradiology li i").addClass("icon-chevron-right link");
 
 
-jq("#managestudy").html("<li><i ></i> Add Study</li>");
+jq("#managestudy").html("<li><i ></i> Manage Studies</li>");
 jq("#managestudy li i").addClass("icon-chevron-right link");
 
 
@@ -264,12 +264,12 @@ jq("#dynamictable").css("width", "40%");
   
   
 
-   jq("#managestudy").html("<li><i ></i><a href='javascript:void(0);' onClick='a_onClick()'> Add Study</li>");
+   jq("#managestudy").html("<li><i ></i><a href='javascript:void(0);' onClick='a_onClick()'> Manage Studies</li>");
 jq("#managestudy li i").addClass("icon-chevron-right link");
 jq("#managestudy li a").addClass("addstudylink");
 
 
-jq("#managereport").html("<li><i ></i> Add Report</li>");
+jq("#managereport").html("<li><i ></i> Manage Reports</li>");
 jq("#managereport li i").addClass("icon-chevron-right link");
 
 
@@ -327,7 +327,7 @@ var reportmodalityfirstlist = arr22[1];
 
 alert("reportmodalityfirstlist "+reportmodalityfirstlist);
 
-jq.getJSON('${ ui.actionLink("getStudyConcepts") }',
+jq.getJSON('${ ui.actionLink("getStudyConceptsAnswerFromModality") }',
            {
              'studyconceptclass': reportmodalityfirstlist
             })
@@ -648,7 +648,7 @@ function myFunctionT(selectedValue) {
   
  
   
-  jq.getJSON('${ ui.actionLink("getStudyConcepts") }',
+  jq.getJSON('${ ui.actionLink("getStudyConceptsAnswerFromModality") }',
            {
              'studyconceptclass': selectedValue
             })
@@ -754,7 +754,7 @@ table.append( '<tr><td>' +  conName + '</td> <td><input type="button" id="delete
    function myFunctionreportmodality(select) {
    
    
-   jq.getJSON('${ ui.actionLink("getStudyConcepts") }',
+   jq.getJSON('${ ui.actionLink("getStudyConceptsAnswerFromModality") }',
            {
              'studyconceptclass': select
             })
@@ -1109,7 +1109,7 @@ ${ ui.includeFragment("radiology", "modalitySoftware") }
 
 <div id="modalityConceptDictionaryNotes" title="Modality Concept Dictionary Notes">IMPORTANT NOTES FOR CREATING CONCEPT: <br> 1) Select modality as class from the dropdown menu.<br> 2) Select text as datatype from the dropdown menu. </div>
   <div id="continuetext" title="Continue">  Please Click Save to save the modality before continue </div>
- <div id="studyconceptmessage" title="studyconceptmessage"> IMPORTANT NOTES FOR CREATING CONCEPT: <br> 1) Select modality study as class from the dropdown menu. <br> 2) Select text as datatype from the dropdown menu." </div>
+ <div id="studyconceptmessage" title="studyconceptmessage"> IMPORTANT NOTES FOR CREATING CONCEPT: <br> 1) Select Radiology Study as class from the dropdown menu. <br> 2) Select N/A as datatype from the dropdown menu." </div>
 <div id="studycontinuetext" title="Continue">  Please Click Save to save the study before continue </div>
 <div id="modalitysaved" title="Continue">  Modality Saved </div>
 <div id="studysaved" title="Continue">  Study Saved </div>

@@ -431,5 +431,10 @@
         <column name="formreportuuid" type="varchar(255)"/>
     </addColumn>
 </changeSet>
+<changeSet author="tenzin" id="radiology-63">
+    <addColumn tableName="RadiologyStudyList">
+        <column name="modalityNameSaved" type="varchar(255)"/>
+    </addColumn>
+</changeSet>
 </databaseChangeLog>
 

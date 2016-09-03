@@ -2,10 +2,10 @@
 
 <%
 ui.decorateWith("appui", "standardEmrPage")
-
 ui.includeJavascript("uicommons", "datatables/jquery.dataTables.min.js")
 ui.includeCss("uicommons", "datatables/dataTables_jui.css")
 %>
+
 <% ui.includeCss("radiology", "radiologyOrder.css") %>
     
 <% ui.includeCss("radiology", "performedStatusCompletedOrder.css") %>
@@ -15,7 +15,6 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
     { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
         { label: "${ ui.escapeJs(patient.familyName + ', ' + patient.givenName ) }" , link: '${ui.escapeJs(returnUrl)}'},
     { label: "RadiologyOrder" }
-
     ];
 var ret = "${returnUrl}";
     var x = 1;
@@ -24,6 +23,10 @@ var ret = "${returnUrl}";
 <script>
     jq = jQuery;
     jq(document).ready(function() { 
+    
+    
+    
+    
     jq("#AddRadiologyOrderForm").hide();
     jq("#EmailForm").hide();
     jq("#performedStatusInProgressOrder").hide();
@@ -32,8 +35,6 @@ var ret = "${returnUrl}";
     jq("#ContactRadiologist").hide();
     jq("#performedStatusCompletedOrder").show();
     
-
-
     jq("#addRadiologyOrderBtn").click(function(){
     jq("#performedStatusCompletedOrder").hide();
     jq("#EmailForm").hide();
@@ -42,7 +43,6 @@ var ret = "${returnUrl}";
     jq("#ContactRadiologist").hide(); 
     jq("#AddRadiologyOrderForm").show();
     });
-
     jq("#emailform").click(function(){
     jq("#performedStatusCompletedOrder").hide();
     jq("#performedStatusInProgressOrder").hide();
@@ -51,18 +51,19 @@ var ret = "${returnUrl}";
     jq("#AddRadiologyOrderForm").hide();
     jq("#ContactRadiologist").hide(); 
     });
-
-
     
-   jq("#table tr").click(function(){
+   jq("#performedStatusCompletedOrderTable tr").click(function(){
+
     jq(this).addClass('selected').siblings().removeClass('selected');    
     var value=jq(this).find('td:first').html();
     alert(value); 
-    var splitvalue = value.split(',');
+    var splitvalue = value.split('>');
      jq("#performedStatusCompletedObsSelect").show();
      jq("#performedStatusCompletedOrder").hide();
-    ordervalue = splitvalue[0];
-   var orderId = ordervalue.substr(8);
+    ordervalue = splitvalue[1];
+    alert(ordervalue);
+   var orderId = ordervalue.substr(0, 2);
+  alert(orderId);
      <% if (radiologyOrders) { %>
    
     <% radiologyOrders.each { anOrder -> %>
@@ -70,26 +71,33 @@ var ret = "${returnUrl}";
     var radiologyorderId = ${anOrder.orderId} ;
   
     if(orderId == radiologyorderId) {
- 
-  jq('#completedOrderObs').append( '<tr><td> Observation</td><td> Provider</td><td> Instructions </td><td> Diagnosis</td><td> Study</td><td> ViewStudy</td><td> ContactRadiologist</td></tr>' );
-  jq('#completedOrderObs').append( '<tr><td><a onclick="runMyFunction();"> Obs</a> </td><td> ${anOrder.orderer.name}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td> ${anOrder.study.studyname}</td><td> <a>ViewStudy</a></td><td><a onclick="contactRadiologist();"> ContactRadiologist</td></a></tr>' );
 
-  }
+ 
+  jq('#completedOrderObs').append( '<thead><tr><th> Observation</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th> ViewStudy</th><th> ContactRadiologist</th></tr></thead>' );
+
+
+jq('#completedOrderObs').append( '<tbody><tr><td><a onclick="runMyFunction();"> Obs</a> </td><td> ${anOrder.orderer.name}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td> ${anOrder.study.studyname}</td><td> <a>ViewStudy</a></td><td><a onclick="contactRadiologist();"> ContactRadiologist</td></a></tr></tbody>' );
+  
+}
     
     
    <% } %>
     <% } %> 
     
- 
+ jq('#completedOrderObs').dataTable({
+            "sPaginationType": "full_numbers",
+            "bPaginate": true,
+            "bAutoWidth": false,
+            "bLengthChange": true,
+            "bSort": true,
+            "bJQueryUI": true,
+             "iDisplayLength": 5,
     
-    
-    
+        });
     
     });
     
     });
-
-
 function runMyFunction() {
   alert("run my function");
   jq("#HTMLFORM").show(); 
@@ -103,9 +111,7 @@ function contactRadiologist() {
   jq("#ContactRadiologist").show();
  
 }
-
     function selectFunction(selectedValue) {
-
     if(selectedValue == "COMPLETED") {
   
     jq("#performedStatusCompletedOrder").show();
@@ -130,6 +136,41 @@ function contactRadiologist() {
     } 
     
     }
+</script>
+<script>
+jq = jQuery;
+ 
+
+        
+        
+jq(function() { 
+
+      jq('#performedStatusCompletedOrderTable').dataTable({
+            "sPaginationType": "full_numbers",
+            "bPaginate": true,
+            "bAutoWidth": false,
+            "bLengthChange": true,
+            "bSort": true,
+            "bJQueryUI": true,
+            
+             "iDisplayLength": 5,
+    "aaSorting": [[ 1, "desc" ]] // Sort by first column descending,
+    
+            
+        });
+        
+      
+       
+
+   
+        
+      
+        
+        
+        
+        
+        
+});
 </script>
 
 <div>
@@ -174,36 +215,12 @@ function contactRadiologist() {
     </div>
 
 
-    
-    <div id="performedStatusCompletedOrder">
   
-<h1>COMPLETED RADIOLOGY ORDERS</h1>
-<table id="table">
-    <thead>
-        <tr>
-            <th>Order</th>
-            <th>OrderStartDate</th>
-            <th>DatePictureTaken</th>
-        </tr>
-    </thead>
-    <% radiologyOrders.each { anOrder -> %>
-    <tr>
-        <td>orderid#${anOrder.orderId},
-            ${anOrder.patient}
-            ${anOrder.study.studyname}</td>
-        <td>${ anOrder.dateCreated } </td>
-        <td></td>
-
-    </tr>
-    <% } %>  
-
-</table>
-</div>
 
 
 <div id = "performedStatusCompletedObsSelect">
     
-  <h1>RADIOLOGY ORDER OBSERVATION</h1>
+  <h1>RADIOLOGY ORDER DETAILS</h1>
   
 <table id="completedOrderObs">
    
@@ -225,24 +242,27 @@ function contactRadiologist() {
         ]) }
     </div>
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-     
+    <div id="performedStatusCompletedOrder">
+        <h1>COMPLETED RADIOLOGY ORDERS</h1>
+    <table id="performedStatusCompletedOrderTable">
+    <thead>
+        <tr>
+            <th>Order</th>
+            <th>OrderCompletedDate</th>
+            
+        </tr>
+    </thead>
+     <tbody>
+    <% radiologyOrders.each { anOrder -> %>
+    <tr>
+        <td> <p style="display:none;">${ anOrder.orderId }</p>
+            ${anOrder.study.studyname}</td>
+        <td>${ anOrder.dateCreated } </td>
+        
+
+    </tr>
+    <% } %>  
+</tbody>
+</table>
+ </div>
+ 

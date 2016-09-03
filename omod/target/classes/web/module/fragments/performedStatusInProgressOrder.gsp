@@ -10,8 +10,8 @@
     </thead>
     <% inProgressRadiologyOrders.each { anOrder -> %>
     <tr>
-        <td>orderid#${anOrder.orderId},
-            ${anOrder.patient}
+        <td>
+            
             ${anOrder.study.studyname}</td>
         <td>${ anOrder.dateCreated } </td>
         <td>${anOrder.study.scheduledStatus}</td>

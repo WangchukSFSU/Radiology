@@ -12,6 +12,7 @@
 		 <property name="studyReporturl" column="studyReporturl" length="255" > </property>
                   <property name="studyName" column="studyName" length="255" > </property>
                    <property name="formreportuuid" column="formreportuuid" length="255" > </property>
+                   <property name="modalityNameSaved" column="modalityNameSaved" length="255" > </property>
         </class>
 </hibernate-mapping>
 

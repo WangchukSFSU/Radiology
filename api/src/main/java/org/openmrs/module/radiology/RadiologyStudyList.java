@@ -21,6 +21,16 @@ public class RadiologyStudyList extends BaseOpenmrsObject implements Serializabl
 	
 	private String studyName;
 	
+	private String modalityNameSaved;
+	
+	public String getModalityNameSaved() {
+		return modalityNameSaved;
+	}
+	
+	public void setModalityNameSaved(String modalityNameSaved) {
+		this.modalityNameSaved = modalityNameSaved;
+	}
+	
 	public String getStudyName() {
 		return studyName;
 	}

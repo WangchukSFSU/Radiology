@@ -1,5 +1,7 @@
 <% ui.includeCss("radiology", "addRadiologyOrderForm.css") %>
 
+   
+      <!-- Javascript -->
  
 <script>
 jq = jQuery;
@@ -9,8 +11,6 @@ jq = jQuery;
   
 jq("#diagnosisnamebtn").click(function(){
 jq("#diagnosislistSelect").show();
-
-
 });
   
 jq("#studybtn").click(function(){
@@ -18,23 +18,68 @@ jq("#studySelect").show();
 });
 });
 
+
+function modalityFunction(selectedvalue) {
+alert("innnn");
+jq.getJSON('${ ui.actionLink("getStudyConceptsAnswerFromModality") }',
+           {
+             'modalityselected': selectedvalue
+            })
+       .error(function(xhr, status, err) {
+            alert('AJAX error ' + err);
+        })
+        .success(function(ret) {
+                  alert("googd"); 
+
+ jq('#studyConceptNameList').empty();
+            
+             jq("#studyConceptNameList").append('<option >Select one</option>');
+             
+           
+
+  var availableTutorials = [
+               
+            ];
+  
+alert("ret.length KKKKKK" + ret.length);
+            for (var i = 0; i < ret.length; i++) {
+            var conId = ret[i].id;
+             var conName = ret[i].studyName;
+            var conNameReporturl = ret[i].studyReporturl;
+            
+            alert("conId" + conId);
+             alert("conName" + conName);
+           
+           availableTutorials.push(conName);
+            
+             jq("#studyConceptNameList").append('<option >'+ conName +'</option>');
+             
+             }
+
+             autoCompleteStudy(availableTutorials);
+             
+        });     
+      
+
+             
+
+}
+
+
 function diagnosislistFunction(diagnosis) {
 var text = jq('#diagnosisname');
         text.val(diagnosis);
 }
-
 function studyFunction(study) {
-
 var text = jq('#studyname');
         text.val(study);
 }
-
-
 function autoCompleteStudy(study){
-
-var study = study.slice(1, -1);
- var list = study.split(',');
-
+alert("9999999"+study);
+//var study = study.slice(1, -1);
+//alert("55555555"+study);
+ var list = study.toString().split(",");
+ alert("333333333"+list);
     console.log(list);
     
     jq("#studyname").autocomplete({
@@ -43,6 +88,7 @@ var study = study.slice(1, -1);
     
   
 }
+
 
 
 function autoCompleteDiagnosis(diagnosis){
@@ -54,24 +100,33 @@ function autoCompleteDiagnosis(diagnosis){
     });
 }
 
+
+
+
+
+
 </script>
 
 <script>
     jq = jQuery;
     jq(document).ready(function() {
-
+    
+    
+    jq("#cancelForm").click(function(){
+      jq("#studyname").val('');
+    jq("#diagnosisname").val('');
+    jq("#orderInstruction").val('');
+    });
+    
      jq("#submitForm").click(function(){     
-
  var pat = "${patient}".split("#");
      var patient = pat[1];
-
 var modalityOrder = jq('select[name=modalityConceptName]').val();
 var  studyOrder = jq("#studyname").val();
  
 var  diagnosisOrder = jq("#diagnosisname").val();
 var  instructionOrder = jq("#orderInstruction").val();
 var priorityOrder = jq('select[name=priority]').val();
-
 alert("Sutyd " + studyOrder);
    jq.ajax({
     type: "POST",
@@ -100,8 +155,8 @@ alert("Sutyd " + studyOrder);
      
  <div class="fields"><label>Modality </label>
   <span>
-        <select name="modalityConceptName" id="modalityConceptName">
-             <option name="modalityConceptName" selected="selected" value="modalityName">Select One</option>
+        <select name="modalityConceptName" id="modalityConceptName" onchange="modalityFunction(this.value)">
+             <option name="modalityConceptName" selected="selected" value="modalityName">Select one</option>
            <% modalityConceptNameList.each { modalityName -> %>
                 <option name="modalityConceptName" value="$modalityName">${modalityName}</option>
             <% } %>
@@ -110,10 +165,12 @@ alert("Sutyd " + studyOrder);
 </div>
 
 
- <div class="fields"><label>Study </label>
-<input id="studyname" type="text" autocomplete="on" oninput="autoCompleteStudy('${studyConceptNameList}')" name="studyname"/>
-<input id="studybtn" type="button" value="?" />
+ <div class="fields">
+      <label for="automplete-2">Study </label>
+<input id="studyname" type="text" autocomplete="on" name="studyname"/>
 
+
+<input id="studybtn" type="button" value="?" />
 <div id="studySelect">
 <select name="studyConceptNameList" id="studyConceptNameList" onchange="studyFunction(this.value)">
              <option name="studyConceptNameList" selected="selected" value="studyConceptNameList">Select One</option>
@@ -142,7 +199,8 @@ alert("Sutyd " + studyOrder);
 
  
  <div class="fields"><label>Instruction </label>
-<input id="orderInstruction" type="text" name="orderInstruction"/>
+     <textarea  name="orderInstruction" id="orderInstruction" rows="1" cols="50">  </textarea>
+
 </div>
 
 
@@ -156,7 +214,8 @@ alert("Sutyd " + studyOrder);
         </select>        
         </span>
 </div>
-
 <input class="fields" id="submitForm" type="button" value="Submit" />
+<input class="fields" id="cancelForm" type="button" value="Cancel" />
+
 
 

@@ -28,9 +28,19 @@ public class ContactPatientFragmentController {
 		
 		System.out.println("id  id " + id);
 		System.out.println("returnUrl  returnUrl " + returnUrl);
-		System.out.println("patient  patient " + patient);
+		String PatientName = patient.getNames()
+				.toString();
+		String patientName = PatientName.substring(1, PatientName.length() - 1);
+		System.out.println("patient  patient " + patient.getNames());
+		System.out.println("patient NNNNNNN" + patientName.substring(1, patientName.length() - 1));
+		
 		model.addAttribute("returnUrl", returnUrl);
-		model.addAttribute("patient", patient);
+		model.addAttribute("patientID", patient.getPatientId());
+		model.addAttribute("patientname", patientName);
+		model.addAttribute("patientdob", patient.getBirthdate());
+		model.addAttribute("patientid", patient.getId());
+		model.addAttribute("patientemailaddress", "patientemailaddress@gmail.com");
+		model.addAttribute("subject", "Recent visit information");
 	}
 	
 	public void sendEmailToPatient(@RequestParam(value = "recipient", required = false) String recipient,

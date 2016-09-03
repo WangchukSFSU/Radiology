@@ -16,3 +16,7 @@ and open the template in the editor.
 #performedStatuses {
     height: 36px;
 }
+
+#performedStatusCompletedOrder {
+    margin-top: -42px;
+}
