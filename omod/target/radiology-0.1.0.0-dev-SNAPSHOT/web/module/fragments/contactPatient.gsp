@@ -39,7 +39,7 @@ var  message = jq("#message").val();
                     <td>Message:</td>
                     <td><textarea cols="50" id ="message" rows="10" name="message">
 Name : ${patientname}
-DOB: ${patientdob}
+
                         </textarea></td>
                 </tr>               
                 <tr>

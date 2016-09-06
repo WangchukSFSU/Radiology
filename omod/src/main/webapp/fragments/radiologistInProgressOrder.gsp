@@ -1,52 +1,106 @@
 
-
+<% ui.includeCss("radiology", "radiologistInProgressOrder.css") %>
 
 
 <script>
     jq = jQuery;
-    jq(document).ready(function() { 
+    jq(document).ready(function() {
+
+   
+
+    
+    
+    
+      jq('#performedStatusInProgressOrderTable').dataTable({
+            "sPaginationType": "full_numbers",
+            "bPaginate": true,
+            "bAutoWidth": false,
+            "bLengthChange": true,
+            "bSort": true,
+            "bJQueryUI": true,
+            
+             "iDisplayLength": 5,
+    "aaSorting": [[ 1, "desc" ]] // Sort by first column descending,
+    
+            
+        });
 
  jq("#performedStatusInProgressOrderDetail").hide(); 
-  jq("#ContactRadiologist").hide();
-   jq("#performedStatusInProgressOrder").show();
+ 
   
 
     
-   jq("#table tr").click(function(){
+   jq("#performedStatusInProgressOrderTable tr").click(function(){
+   
+   
+    jq("#activeorders").html("<li><i ></i><a href='/openmrs/radiology/radiologistActiveOrders.page'> Active Order</li>");
+jq("#activeorders li i").addClass("icon-chevron-right link");
+
+
+jq("#orderdetails").html("<li><i ></i> Order Detail</li>");
+jq("#orderdetails li i").addClass("icon-chevron-right link");
+
+
+   
     jq(this).addClass('selected').siblings().removeClass('selected');    
     var value=jq(this).find('td:first').html();
     alert(value); 
-    var splitvalue = value.split(',');
+    jq("#performedStatusInProgressOrderDetail").show();
+      jq("#performedStatusInProgressOrder").hide();
+    var splitvalue = value.split('>');
     
-   jq("#performedStatusInProgressOrderDetail").show(); 
-   
-  jq("#ContactRadiologist").hide();
-  jq("#performedStatusInProgressOrder").show();
-   
-    ordervalue = splitvalue[0];
-   var orderId = ordervalue.substr(8);
+    ordervalue = splitvalue[1];
+    alert("ordervalue" +ordervalue);
+   var orderId = ordervalue.substr(0, 2);
+      alert("orderId" +orderId);
      <% if (inProgressRadiologyOrders) { %>
    
     <% inProgressRadiologyOrders.each { anOrder -> %>
     
     var radiologyorderId = ${anOrder.orderId} ;
   
+  
+  
     if(orderId == radiologyorderId) {
- jq('#completedOrderObs').empty();
-  jq('#completedOrderObs').append( '<tr><td> Observation</td><td> Provider</td><td> Instructions </td><td> Diagnosis</td><td> Study</td><td> ViewStudy</td><td> ContactRadiologist</td><td>Submit</td></tr>' );
-  jq('#completedOrderObs').append( '<tr><td><a onclick="runMyFunction();"> Obs</a> </td><td> ${anOrder.orderer.name}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td> ${anOrder.study.studyname}</td><td> <a>ViewStudy</a></td><td><a onclick="contactRadiologist();"> ContactRadiologist</td></a><td>radio</td></tr>' );
+   
+    
+    
+    alert("YYEYYEYYEYEE");
 
-  }
+  
+  jq('#completedOrderObs').append( '<thead><tr><th> Report</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th>Save</th><th>Submit</th></thead>' );
+
+
+jq('#completedOrderObs').append( '<tbody><tr><td><a href=${ anOrder.study.studyreporturl} >Obs</a></td><td> ${anOrder.orderer.name}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td><a> ${anOrder.study.studyname}</a></td><td><input type="radio"></input></td><td><input type="radio"></input></td></tr></tbody>' );
+  
+
+}
     
     
    <% } %>
     <% } %> 
     
- 
     
     
     
     
+      jq('#completedOrderObs').dataTable({
+            "sPaginationType": "full_numbers",
+            "bPaginate": true,
+            "bAutoWidth": false,
+            "bLengthChange": true,
+            "bSort": true,
+            "bJQueryUI": true,
+            
+             "iDisplayLength": 5,
+    
+    
+            
+        });
+    
+    
+    
+
     });
     
     });
@@ -70,13 +124,34 @@ function contactRadiologist() {
    
 </script>
 
-
+   <div class="breadcrumbsactiveorders">
+ <ul id="breadcrumbs">
+    <li>
+        <a href="/openmrs/index.htm">    
+        <i class="icon-home small"></i>  
+        </a>       
+    </li>
+    <li id="activeorders">
+       <i class="icon-chevron-right link"></i>
+        
+        Active Orders
+         
+    </li>
+    <li id="orderdetails">  
+       
+         
+    </li>
+   
+</ul>
+</div>
     
+ 
+
 
     <div id="performedStatusInProgressOrder">
   
         <h1>ACTIVE RADIOLOGY ORDERS</h1>
-<table id="table">
+<table id="performedStatusInProgressOrderTable">
     <thead>
         <tr>
             <th>Order</th>
@@ -84,17 +159,17 @@ function contactRadiologist() {
             <th>OrderPriority</th>
         </tr>
     </thead>
+    <tbody>
     <% inProgressRadiologyOrders.each { anOrder -> %>
     <tr>
-        <td>orderid#${anOrder.orderId},
-            ${anOrder.patient}
+        <td><p style="display:none;">${ anOrder.orderId }</p>
             ${anOrder.study.studyname}</td>
         <td>${ anOrder.dateCreated } </td>
         <td>${ anOrder.urgency }</td>
 
     </tr>
     <% } %>  
-
+</tbody>
 </table>
 </div>
 
@@ -113,11 +188,6 @@ function contactRadiologist() {
 
 
 
-       <div id="ContactRadiologist" width="50%">
-        ${ ui.includeFragment("radiology", "contactRadiologist",[ returnUrl: '${returnUrl}',
-        patient: '${patient}'
-        ]) }
-    </div>
-    
-    
+     
+  
    

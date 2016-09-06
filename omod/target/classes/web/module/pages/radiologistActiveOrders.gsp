@@ -20,9 +20,7 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
 
 
  <div id="radiologistInProgressOrder">
-        ${ ui.includeFragment("radiology", "radiologistInProgressOrder",[ returnUrl: '${returnUrl}',
-        patient: '${patient}'
-        ]) }
+        ${ ui.includeFragment("radiology", "radiologistInProgressOrder") }
 
     </div>
 

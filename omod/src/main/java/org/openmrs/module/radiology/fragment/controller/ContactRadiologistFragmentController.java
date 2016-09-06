@@ -26,11 +26,20 @@ public class ContactRadiologistFragmentController {
 			@RequestParam(value = "patientId", required = false) Patient patient,
 			@RequestParam(value = "orderId", required = false) Integer id) {
 		
+		String PatientName = patient.getNames()
+				.toString();
+		String patientName = PatientName.substring(1, PatientName.length() - 1);
 		System.out.println("id  id " + id);
 		System.out.println("returnUrl  returnUrl " + returnUrl);
 		System.out.println("patient  patient " + patient);
 		model.addAttribute("returnUrl", returnUrl);
 		model.addAttribute("patient", patient);
+		model.addAttribute("patientID", patient.getPatientId());
+		model.addAttribute("patientname", patientName);
+		model.addAttribute("patientdob", patient.getBirthdate());
+		model.addAttribute("patientid", patient.getId());
+		model.addAttribute("radiologistemailaddress", "radiologistemailaddress@gmail.com");
+		model.addAttribute("subject", "Enquire Patient Observation");
 	}
 	
 	public void sendEmailToRadiologist(@RequestParam(value = "recipient", required = false) String recipient,

@@ -6,7 +6,7 @@ jq = jQuery;
 
         
         
-jq(function() { 
+
 
       jq('#reportObsTable').dataTable({
             "sPaginationType": "full_numbers",
@@ -31,7 +31,7 @@ jq(function() {
         
         
         
-});
+
 </script>
 
 

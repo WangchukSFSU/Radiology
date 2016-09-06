@@ -21,6 +21,16 @@ public class Study {
 	
 	private String studyInstanceUid;
 	
+	private String studyreporturl;
+	
+	public String getStudyreporturl() {
+		return studyreporturl;
+	}
+	
+	public void setStudyreporturl(String studyreporturl) {
+		this.studyreporturl = studyreporturl;
+	}
+	
 	private RadiologyOrder radiologyOrder;
 	
 	private ScheduledProcedureStepStatus scheduledStatus;

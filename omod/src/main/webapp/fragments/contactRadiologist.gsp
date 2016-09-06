@@ -28,16 +28,19 @@ var  message = jq("#message").val();
             <table border="0" width="80%">
                 <tr>
                     <td>To:</td>
-                    <td><input type="text" id ="recipient"  name="recipient" size="65" /></td>
+                    <td><input type="text" id ="recipient"  name="recipient" size="65" value =" radiologistemailaddress" /></td>
                 </tr>
                 <tr>
                     <td>Subject:</td>
 
-                    <td><input type="text" id ="subject" name="subject" size="65" /></td>
+                    <td><input type="text" id ="subject" name="subject" size="65" value=" ${subject}"/></td>
                 </tr>
                 <tr>
                     <td>Message:</td>
-                    <td><textarea cols="50" id ="message" rows="10" name="message"></textarea></td>
+                    <td><textarea cols="50" id ="message" rows="10" name="message">
+Name : ${patientname}
+
+                        </textarea></td>
                 </tr>               
                 <tr>
                     <td colspan="2" align="center">

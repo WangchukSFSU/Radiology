@@ -5,6 +5,7 @@
  */
 package org.openmrs.module.radiology.fragment.controller;
 
+import java.lang.ProcessBuilder.Redirect;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,6 +21,7 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptClass;
 import org.openmrs.ConceptName;
+import org.openmrs.Form;
 import org.openmrs.Order;
 import org.openmrs.Patient;
 import org.openmrs.Provider;
@@ -53,7 +55,10 @@ public class AddRadiologyOrderFormFragmentController {
 	// static final String RADIOLOGY_ORDER_FORM_VIEW = "/module/radiology/addRadiologyOrderForm";
 	static SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 	
-	public void controller(FragmentModel model) throws MessageException {
+	private static int count = 9;
+	
+	public void controller(FragmentModel model, @RequestParam(value = "returnUrl", required = false) String returnUrl,
+			@RequestParam(value = "patientId", required = false) Patient patient) throws MessageException {
 		
 		System.out.println("AddRadiologyOrderFormFragmentController");
 		// ModelAndView modelAndView = new ModelAndView(RADIOLOGY_ORDER_FORM_VIEW);
@@ -124,7 +129,8 @@ public class AddRadiologyOrderFormFragmentController {
 		model.addAttribute("studyConceptNameList", studyConceptNameList);
 		model.addAttribute("modalityConceptNameList", modalityConceptNameList);
 		model.addAttribute("performedStatuses", performedStatuses);
-		
+		model.addAttribute("patient", patient);
+		model.addAttribute("returnUrl", returnUrl);
 		if (Context.isAuthenticated()) {
 			model.addAttribute("order", new Order());
 			final RadiologyOrder radiologyOrder = new RadiologyOrder();
@@ -174,6 +180,9 @@ public class AddRadiologyOrderFormFragmentController {
 			@RequestParam(value = "instructionname") String instructionname,
 			@RequestParam(value = "priorityname") String priorityname) throws ParseException {
 		
+		System.out.println("PAPAPAPAPAPAPATITNTBET " + patient.getGivenName());
+		System.out.println("PAPAPAPAPAPAPATITNTBET " + patient.getUuid());
+		
 		RadiologyOrder radiologyOrder = new RadiologyOrder();
 		
 		User authenticatedUser = Context.getAuthenticatedUser();
@@ -182,16 +191,16 @@ public class AddRadiologyOrderFormFragmentController {
 		System.out.println("USer  PPPPPPPPP " + authenticatedUser.getUsername());
 		
 		// Provider provider = new Provider();
-		// provider.setProviderId(11);
-		// provider.setName("moon");
+		// provider.setProviderId(++count);
+		// provider.setName(authenticatedUser.getUsername());
+		// Provider provider =
+		
 		Provider provider = Context.getProviderService()
-				.getProvider(3);
-		
-		radiologyOrder.setOrderer(provider);
-		
-		// Provider provider = Context.getProviderService()
+				.getProvider(authenticatedUser.getId());
 		// .saveProvider(pp);
 		// radiologyOrder.setOrderer(Context.getProviderService());
+		
+		radiologyOrder.setOrderer(provider);
 		
 		radiologyOrder.setPatient(patient);
 		
@@ -200,12 +209,49 @@ public class AddRadiologyOrderFormFragmentController {
 		radiologyOrder.setUrgency(Order.Urgency.valueOf(priorityname));
 		radiologyOrder.setOrderdiagnosis(diagnosisname);
 		
+		RadiologyService radiologyservice = Context.getService(RadiologyService.class);
+		List<RadiologyStudyList> studyListSaved = radiologyservice.getAllStudy();
 		Study study = new Study();
 		
-		RadiologyService radiologyservice = Context.getService(RadiologyService.class);
 		study.setModality(modalityname);
 		study.setStudyname(studyname);
-		study.setPerformedStatus(PerformedProcedureStepStatus.COMPLETED);
+		
+		List<Form> studyreport = Context.getFormService()
+				.getAllForms();
+		
+		for (Form searchform : studyreport) {
+			
+			String podspdoas = searchform.getName()
+					.trim();
+			
+			if (study.getStudyname()
+					.equals(podspdoas)) {
+				System.out.println("PAPAPAPAPAPAPATITNTBET 6546546 " + patient.getGivenName());
+				System.out.println("PAPAPAPAPAPAPATITNTBET 6576575675" + patient.getUuid());
+				
+				String domain = "http://localhost:8080/openmrs/htmlformentryui/htmlform/enterHtmlFormWithStandardUi.page?patientId=";
+				String patientidurl = patient.getUuid();
+				
+				String visitform = "&visitId=&formUuid=";
+				String formuuidurl = searchform.getUuid();
+				String returnurl = "&returnUrl=/openmrs/radiology/radiologistActiveOrders.page";
+				
+				String url = domain.concat(patientidurl)
+						.concat(visitform)
+						.concat(formuuidurl)
+						.concat(returnurl);
+				
+				System.out.println("HYYEYYEYEYYEYEYEYE SAME SAM");
+				study.setStudyreporturl(url);
+				
+				System.out.println("URL URL URL URL URL URL URL " + url);
+				System.out.println("URL URL URL URL URL URL URL " + study.getStudyreporturl());
+				
+			}
+			
+		}
+		
+		study.setPerformedStatus(PerformedProcedureStepStatus.IN_PROGRESS);
 		
 		List<RadiologyReportList> reportListFromDb = radiologyservice.getAllReport();
 		for (RadiologyReportList rr : reportListFromDb) {
@@ -232,6 +278,16 @@ public class AddRadiologyOrderFormFragmentController {
 		}
 		
 		System.out.println("JJJJJJJJJJJJJJJJJJJJ done");
+		
+	}
+	
+	public String post(FragmentModel model, @RequestParam("patient") Patient patient,
+			@RequestParam(value = "returnUrl", required = false) String returnUrl,
+			@RequestParam(value = "startdate", required = false) String startdate) {
+		
+		System.out.println("***EncountersTodayFragmentController POST - DATES: " + startdate);
+		return "redirect:/openmrs/radiology/radiologyOrder.page?patientId=8f91f42c-4444-4cde-8926-bebe572ec32f&returnUrl=%2Fopenmrs%2Fcoreapps%2Fclinicianfacing%2Fpatient.page%3FpatientId%3D8f91f42c-4444-4cde-8926-bebe572ec32f%26encounterId%3D41%26";
+		// return "redirect:" + returnUrl;
 		
 	}
 	

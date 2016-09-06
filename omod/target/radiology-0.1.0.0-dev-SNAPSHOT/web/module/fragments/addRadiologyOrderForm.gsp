@@ -6,6 +6,22 @@
 <script>
 jq = jQuery;
   jq(document).ready(function() {
+  
+  
+  
+       jq( "#ordersaved" ).dialog({
+               autoOpen: false, 
+               buttons: {
+                  OK: function() {jq(this).dialog("close");}
+               },
+               title: "Important Message",
+               position: {
+                  my: "left center",
+                  at: "left center"
+               }
+            });
+            
+            
   jq("#diagnosislistSelect").hide();
   jq("#studySelect").hide();
   
@@ -113,6 +129,7 @@ function autoCompleteDiagnosis(diagnosis){
     
     
     jq("#cancelForm").click(function(){
+    
       jq("#studyname").val('');
     jq("#diagnosisname").val('');
     jq("#orderInstruction").val('');
@@ -135,12 +152,13 @@ alert("Sutyd " + studyOrder);
     cache: false,
     success: function(data){
     
+    jq( "#ordersaved" ).dialog( "open" );
   
-    jq("#studyname").val('');
-    jq("#diagnosisname").val('');
-    jq("#orderInstruction").val('');
+  location.reload();
     
     alert("JOJOJOJOJ");
+    
+     
   
     }
    });
@@ -199,7 +217,7 @@ alert("Sutyd " + studyOrder);
 
  
  <div class="fields"><label>Instruction </label>
-     <textarea  name="orderInstruction" id="orderInstruction" rows="2" cols="50">  </textarea>
+     <textarea  name="orderInstruction" id="orderInstruction" rows="1" cols="50">  </textarea>
 
 </div>
 
@@ -216,6 +234,10 @@ alert("Sutyd " + studyOrder);
 </div>
 <input class="fields" id="submitForm" type="button" value="Submit" />
 <input class="fields" id="cancelForm" type="button" value="Cancel" />
+
+
+<div id="ordersaved" title="Continue">  Order Saved </div>
+
 
 
 

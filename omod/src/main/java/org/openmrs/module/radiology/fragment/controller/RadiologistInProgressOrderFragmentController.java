@@ -5,6 +5,7 @@
  */
 package org.openmrs.module.radiology.fragment.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import org.openmrs.Order;
@@ -12,6 +13,7 @@ import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.radiology.RadiologyOrder;
 import org.openmrs.module.radiology.RadiologyService;
+import org.openmrs.module.radiology.RadiologyStudyList;
 import org.openmrs.ui.framework.fragment.FragmentModel;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -23,12 +25,15 @@ public class RadiologistInProgressOrderFragmentController {
 	public void controller(FragmentModel model, @RequestParam(value = "returnUrl", required = false) String returnUrl,
 			@RequestParam(value = "patientId", required = false) Patient patient) {
 		
+		RadiologyService radiologyservice = Context.getService(RadiologyService.class);
+		List<RadiologyStudyList> studyListFromDb = radiologyservice.getAllStudy();
+		
 		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrdersByPatient();
 		
 		System.out.println("length LLLLLLLLLLLLL " + inProgressRadiologyOrders.size());
 		
 		model.put("inProgressRadiologyOrders", inProgressRadiologyOrders);
-		
+		model.put("studyListFromDb", studyListFromDb);
 		model.addAttribute("patient", patient);
 		model.addAttribute("returnUrl", returnUrl);
 	}

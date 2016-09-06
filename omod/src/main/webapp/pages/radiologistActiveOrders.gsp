@@ -8,21 +8,8 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
 
 
 
-<script type="text/javascript">
-    var breadcrumbs = [
-    { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
-    { label: "Active Orders"}
-    ];
-</script>
-
-
-
-
-
  <div id="radiologistInProgressOrder">
-        ${ ui.includeFragment("radiology", "radiologistInProgressOrder",[ returnUrl: '${returnUrl}',
-        patient: '${patient}'
-        ]) }
+        ${ ui.includeFragment("radiology", "radiologistInProgressOrder") }
 
     </div>
 

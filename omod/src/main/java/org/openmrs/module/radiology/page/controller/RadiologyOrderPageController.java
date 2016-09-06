@@ -38,15 +38,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 public class RadiologyOrderPageController {
 	
-	static SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-	
 	public void controller(PageModel model, @RequestParam(value = "returnUrl", required = false) String returnUrl,
 			@RequestParam(value = "patientId", required = false) Patient patient) throws ParseException {
 		
 		String aa = Context.getAdministrationService()
 				.getGlobalProperty(RadiologyConstants.GP_RADIOLOGY_CONCEPT_CLASSES);
 		System.out.println("AAAAA" + aa);
-		
+		// System.out.println("PPPPP" + patient.getGivenName());
+		// System.out.println("PPPPP" + patient.getFamilyName());
 		// String date = new Date().toString();
 		// System.out.println("Date Date Date" + date);
 		// Date asp = sdf.parse(date);
@@ -65,7 +64,6 @@ public class RadiologyOrderPageController {
 		}
 		
 		model.addAttribute("performedStatuses", performedStatuses);
-		model.addAttribute("returnUrl", returnUrl);
 		
 		List<RadiologyOrder> radiologyOrders = getCompletedRadiologyOrdersByPatient(patient);
 		

@@ -6,19 +6,20 @@ ui.includeJavascript("uicommons", "datatables/jquery.dataTables.min.js")
 ui.includeCss("uicommons", "datatables/dataTables_jui.css")
 %>
 
+<script type="text/javascript">
+   var breadcrumbs = [
+        { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
+        { label: "${ ui.escapeJs(patient.familyName + ', ' + patient.givenName ) }" , link: '${ui.escapeJs(returnUrl)}'},
+        { label: "Manage Order"}
+    ];
+var ret = "${returnUrl}";
+var x = 1;
+</script>
 <% ui.includeCss("radiology", "radiologyOrder.css") %>
     
 <% ui.includeCss("radiology", "performedStatusCompletedOrder.css") %>
    
-<script type="text/javascript">
-    var breadcrumbs = [
-    { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
-        { label: "${ ui.escapeJs(patient.familyName + ', ' + patient.givenName ) }" , link: '${ui.escapeJs(returnUrl)}'},
-    { label: "RadiologyOrder" }
-    ];
-var ret = "${returnUrl}";
-    var x = 1;
-</script>
+
 
 <script>
     jq = jQuery;
@@ -73,10 +74,10 @@ var ret = "${returnUrl}";
     if(orderId == radiologyorderId) {
 
  
-  jq('#completedOrderObs').append( '<thead><tr><th> Observation</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th> ViewStudy</th><th> ContactRadiologist</th></tr></thead>' );
+  jq('#completedOrderObs').append( '<thead><tr><th> Report</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th> ContactRadiologist</th></tr></thead>' );
 
 
-jq('#completedOrderObs').append( '<tbody><tr><td><a onclick="runMyFunction();"> Obs</a> </td><td> ${anOrder.orderer.name}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td> ${anOrder.study.studyname}</td><td> <a>ViewStudy</a></td><td><a onclick="contactRadiologist();"> ContactRadiologist</td></a></tr></tbody>' );
+jq('#completedOrderObs').append( '<tbody><tr><td><a onclick="runMyFunction();"> Obs</a> </td><td> ${anOrder.orderer.name}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td><a> ${anOrder.study.studyname}</a></td><td><a onclick="contactRadiologist();"> ContactRadiologist</td></a></tr></tbody>' );
   
 }
     
@@ -112,6 +113,7 @@ function contactRadiologist() {
  
 }
     function selectFunction(selectedValue) {
+   // location.reload();
     if(selectedValue == "COMPLETED") {
   
     jq("#performedStatusCompletedOrder").show();
@@ -173,6 +175,8 @@ jq(function() {
 });
 </script>
 
+
+
 <div>
     <div id="performedStatusesDropdown" class="performedStatusesContainer">
         <span>
@@ -230,11 +234,7 @@ jq(function() {
 
 </div>
     
-    <div id="HTMLFORM" width="50%">
-        ${ ui.includeFragment("radiology", "reportObs",[ returnUrl: '${returnUrl}',
-        patient: '${patient}'
-        ]) }
-    </div>
+    
 
        <div id="ContactRadiologist" width="50%">
         ${ ui.includeFragment("radiology", "contactRadiologist",[ returnUrl: '${returnUrl}',
@@ -265,4 +265,11 @@ jq(function() {
 </tbody>
 </table>
  </div>
- 
+
+  
+  <div id="HTMLFORM" width="50%">
+        ${ ui.includeFragment("radiology", "reportObs",[ returnUrl: '${returnUrl}',
+        patient: '${patient}'
+        ]) }
+    </div>
+        

@@ -31,6 +31,9 @@
                 <property name="studyHtmlFormUUID" column="studyHtmlFormUUID"
                           length="255">
                 </property>
+                <property name="studyreporturl" column="studyreporturl"
+                          length="255">
+                </property>
 		<property name="modality" column="modality" length="255"
 			not-null="true">
 		</property>
