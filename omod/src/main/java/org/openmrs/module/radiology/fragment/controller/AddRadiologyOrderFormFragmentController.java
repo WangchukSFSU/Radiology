@@ -199,7 +199,13 @@ public class AddRadiologyOrderFormFragmentController {
 				.getProvider(authenticatedUser.getId());
 		// .saveProvider(pp);
 		// radiologyOrder.setOrderer(Context.getProviderService());
+		System.out.println("KKKKKKKKKKKKK PPPPPPPPPPPPPP " + provider.getCreator());
+		System.out.println("KKKKKKKKKKKKK PPPPPPPPPPPPPP " + provider.getCreator()
+				.getName());
+		System.out.println("KKKKKKKKKKKKK PPPPPPPPPPPPPP " + provider.getCreator()
+				.getUsername());
 		
+		radiologyOrder.setCreator(authenticatedUser);
 		radiologyOrder.setOrderer(provider);
 		
 		radiologyOrder.setPatient(patient);

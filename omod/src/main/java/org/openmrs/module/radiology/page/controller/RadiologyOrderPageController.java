@@ -68,10 +68,13 @@ public class RadiologyOrderPageController {
 		List<RadiologyOrder> radiologyOrders = getCompletedRadiologyOrdersByPatient(patient);
 		
 		System.out.println("length LLLLLLLLLLLLL " + radiologyOrders.size());
-		
+		System.out.println("patient patient PPPPPP " + patient.getUuid());
 		model.put("radiologyOrders", radiologyOrders);
 		
 		model.addAttribute("patient", patient);
+		// model.addAttribute("patientuuid", patient.getUuid());
+		// model.addAttribute("patientfamilyname", patient.getFamilyName());
+		// model.addAttribute("patientgivenname", patient.getGivenName());
 		model.addAttribute("returnUrl", returnUrl);
 		
 	}

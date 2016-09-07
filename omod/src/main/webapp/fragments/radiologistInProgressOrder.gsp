@@ -8,8 +8,7 @@
 
    
 
-    
-    
+ 
     
       jq('#performedStatusInProgressOrderTable').dataTable({
             "sPaginationType": "full_numbers",
@@ -31,6 +30,8 @@
 
     
    jq("#performedStatusInProgressOrderTable tr").click(function(){
+   
+   
    
    
     jq("#activeorders").html("<li><i ></i><a href='/openmrs/radiology/radiologistActiveOrders.page'> Active Order</li>");
@@ -68,10 +69,10 @@ jq("#orderdetails li i").addClass("icon-chevron-right link");
     alert("YYEYYEYYEYEE");
 
   
-  jq('#completedOrderObs').append( '<thead><tr><th> Report</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th>Save</th><th>Submit</th></thead>' );
+  jq('#completedOrderObs').append( '<thead><tr><th> Report</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th></thead>' );
 
 
-jq('#completedOrderObs').append( '<tbody><tr><td><a href=${ anOrder.study.studyreporturl} >Obs</a></td><td> ${anOrder.orderer.name}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td><a> ${anOrder.study.studyname}</a></td><td><input type="radio"></input></td><td><input type="radio"></input></td></tr></tbody>' );
+jq('#completedOrderObs').append( '<tbody><tr><td><a onclick=openDialog("${ anOrder.study.studyreporturl}")>Obs</a></td><td> ${anOrder.creator.username}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td><a> ${anOrder.study.studyname}</a></td></tr></tbody>' );
   
 
 }
@@ -103,6 +104,21 @@ jq('#completedOrderObs').append( '<tbody><tr><td><a href=${ anOrder.study.studyr
 
     });
     
+    
+    
+    
+    
+    
+    
+ 
+
+
+jq("#test").click(function() {
+alert("dsdads");
+jq("#somediv").load('/openmrs/radiology/radiologistActiveOrders.page').dialog({modal:true}); 
+    });  
+    
+    
     });
 
 function runMyFunction() {
@@ -112,6 +128,8 @@ function runMyFunction() {
  
  
 }
+
+  
 function contactRadiologist() {
   alert("run my contactRadiologist");
    
@@ -120,12 +138,28 @@ function contactRadiologist() {
  
 }
 
-
+ function openDialog(url)    {
+ jq('#breadcrumbs').remove();
+        jq('<div/>').dialog({
+            modal: true,
+            open: function ()
+            {
+            if (jq(this).is(':empty')) {
+                jq(this).load(url);
+                }
+            },         
+            height: 600,
+            width: 950,
+            title:"Report"
+        });
+        
+        
+    }
    
 </script>
 
    <div class="breadcrumbsactiveorders">
- <ul id="breadcrumbs">
+ <ul id="breadcrumbs" class="apple">
     <li>
         <a href="/openmrs/index.htm">    
         <i class="icon-home small"></i>  
@@ -188,6 +222,5 @@ function contactRadiologist() {
 
 
 
+
      
-  
-   

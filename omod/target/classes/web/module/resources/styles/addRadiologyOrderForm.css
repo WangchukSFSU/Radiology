@@ -33,7 +33,7 @@ and open the template in the editor.
     margin-top: 15px;
     margin-left: 53px;
 }
-.ui-widget-header,.ui-state-default, ui-button{
+.ui-widget-header {
             background:#b9cd6d;
             border: 1px solid #b9cd6d;
             color: #FFFFFF;

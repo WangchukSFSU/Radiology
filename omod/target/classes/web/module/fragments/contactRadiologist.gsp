@@ -38,7 +38,7 @@ var  message = jq("#message").val();
                 <tr>
                     <td>Message:</td>
                     <td><textarea cols="50" id ="message" rows="10" name="message">
-Name : ${patientname}
+
 
                         </textarea></td>
                 </tr>               

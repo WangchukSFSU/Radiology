@@ -6,15 +6,7 @@ ui.includeJavascript("uicommons", "datatables/jquery.dataTables.min.js")
 ui.includeCss("uicommons", "datatables/dataTables_jui.css")
 %>
 
-<script type="text/javascript">
-   var breadcrumbs = [
-        { icon: "icon-home", link: '/' + OPENMRS_CONTEXT_PATH + '/index.htm' },
-        { label: "${ ui.escapeJs(patient.familyName + ', ' + patient.givenName ) }" , link: '${ui.escapeJs(returnUrl)}'},
-        { label: "Manage Order"}
-    ];
-var ret = "${returnUrl}";
-var x = 1;
-</script>
+
 <% ui.includeCss("radiology", "radiologyOrder.css") %>
     
 <% ui.includeCss("radiology", "performedStatusCompletedOrder.css") %>
@@ -24,9 +16,14 @@ var x = 1;
 <script>
     jq = jQuery;
     jq(document).ready(function() { 
-    
-    
-    
+
+   
+    jq("#orders").hide();
+    jq("#messagepatient").hide();
+    jq("#addorder").hide();
+    jq("#orderdetail").hide();
+   
+   
     
     jq("#AddRadiologyOrderForm").hide();
     jq("#EmailForm").hide();
@@ -43,7 +40,19 @@ var x = 1;
     jq("#performedStatusCompletedObsSelect").hide();
     jq("#ContactRadiologist").hide(); 
     jq("#AddRadiologyOrderForm").show();
+    
+    jq("#ordernolink").hide();
+    jq("#orders").show();
+    jq("#messagepatient").hide();
+    jq("#addorder").show();
+    jq("#orderdetail").hide();
     });
+    
+    
+    
+    
+    
+    
     jq("#emailform").click(function(){
     jq("#performedStatusCompletedOrder").hide();
     jq("#performedStatusInProgressOrder").hide();
@@ -51,10 +60,32 @@ var x = 1;
     jq("#EmailForm").show();
     jq("#AddRadiologyOrderForm").hide();
     jq("#ContactRadiologist").hide(); 
+    
+     jq("#ordernolink").hide();
+    jq("#orders").show();
+    jq("#messagepatient").show();
+    jq("#addorder").hide();
+    jq("#orderdetail").hide();
     });
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
    jq("#performedStatusCompletedOrderTable tr").click(function(){
 
+   jq("#ordernolink").hide();
+    jq("#orders").show();
+    jq("#messagepatient").hide();
+    jq("#addorder").hide();
+    jq("#orderdetail").show();
+   
+   
     jq(this).addClass('selected').siblings().removeClass('selected');    
     var value=jq(this).find('td:first').html();
     alert(value); 
@@ -114,6 +145,12 @@ function contactRadiologist() {
 }
     function selectFunction(selectedValue) {
    // location.reload();
+    jq("#ordernolink").show();
+    jq("#orders").hide();
+    jq("#messagepatient").hide();
+    jq("#addorder").hide();
+    jq("#orderdetail").hide();
+    
     if(selectedValue == "COMPLETED") {
   
     jq("#performedStatusCompletedOrder").show();
@@ -175,7 +212,50 @@ jq(function() {
 });
 </script>
 
-
+   <div class="breadcrumbradiologyorder">
+ <ul id="breadcrumbs" class="radiologyorderbreadcrumb">
+    <li>
+        <a href="/openmrs/index.htm">    
+        <i class="icon-home small"></i>  
+        </a>       
+    </li>
+     <li id="patientname">  
+         
+       <i class="icon-chevron-right link"></i>
+         
+           <a href="/openmrs/coreapps/clinicianfacing/patient.page?patientId=${patient.person.uuid}&">    
+        <i >${patient.familyName + ', ' + patient.givenName}</i>  
+        </a> 
+        
+        
+    </li>
+     <li id="ordernolink">  
+        <i class="icon-chevron-right link"></i>
+        Manage Order         
+    </li>
+    <li id="orders">
+       <i class="icon-chevron-right link"></i>
+        <a href="/openmrs/radiology/radiologyOrder.page?patientId=${patient.person.uuid}&returnUrl="> 
+        Manage Orders
+          </a> 
+    </li>
+    <li id="messagepatient">  
+       <i class="icon-chevron-right link"></i>
+         Message Patient
+    </li>
+    <li id="addorder">  
+        <i class="icon-chevron-right link"></i>
+         Add Radiology Order
+         
+    </li>
+    <li id="orderdetail">  
+        <i class="icon-chevron-right link"></i>
+         Order Detail
+         
+    </li>
+   
+</ul>
+</div>
 
 <div>
     <div id="performedStatusesDropdown" class="performedStatusesContainer">
