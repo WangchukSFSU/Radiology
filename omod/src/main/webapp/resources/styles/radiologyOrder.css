@@ -10,7 +10,8 @@ and open the template in the editor.
 
 
 #performedStatusesDropdown {
-    padding-bottom: 70px;
+    padding-bottom: 50px;
+    margin-top: 17px;
 }
 
 #performedStatuses {
@@ -31,4 +32,8 @@ and open the template in the editor.
 
 #ContactRadiologist {
     margin-top: -154px;
+}
+
+#performedStatusInProgressOrder {
+    margin-top: -23px;
 }
