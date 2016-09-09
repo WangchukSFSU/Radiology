@@ -94,7 +94,8 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
      jq("#performedStatusCompletedOrder").hide();
     ordervalue = splitvalue[1];
     alert(ordervalue);
-   var orderId = ordervalue.substr(0, 2);
+    var orderId= ordervalue.substr(0, ordervalue.indexOf('<'));
+   //var orderId = ordervalue.substr(0, 2);
   alert(orderId);
      <% if (radiologyOrders) { %>
    
