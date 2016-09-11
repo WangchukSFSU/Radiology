@@ -72,7 +72,7 @@ jq("#orderdetails li i").addClass("icon-chevron-right link");
   jq('#completedOrderObs').append( '<thead><tr><th> Report</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th></thead>' );
 
 
-jq('#completedOrderObs').append( '<tbody><tr><td><a onclick=openDialog("${ anOrder.study.studyreporturl}")>Obs</a></td><td> ${anOrder.orderer.name}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td><a> ${anOrder.study.studyname}</a></td></tr></tbody>' );
+jq('#completedOrderObs').append( '<tbody><tr><td><a onclick=openDialog("${ anOrder.study.studyreporturl}")>Obs</a></td><td> ${anOrder.creator.username}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td><a> ${anOrder.study.studyname}</a></td></tr></tbody>' );
   
 
 }

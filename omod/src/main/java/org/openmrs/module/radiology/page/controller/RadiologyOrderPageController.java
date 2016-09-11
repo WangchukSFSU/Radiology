@@ -29,6 +29,7 @@ import org.openmrs.module.radiology.RadiologyOrder;
 import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.RadiologyService;
 import org.openmrs.module.radiology.RadiologyStudyList;
+import org.openmrs.module.radiology.Study;
 import org.openmrs.ui.framework.fragment.FragmentModel;
 import org.openmrs.ui.framework.page.PageModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,12 +45,10 @@ public class RadiologyOrderPageController {
 		String aa = Context.getAdministrationService()
 				.getGlobalProperty(RadiologyConstants.GP_RADIOLOGY_CONCEPT_CLASSES);
 		System.out.println("AAAAA" + aa);
-		// System.out.println("PPPPP" + patient.getGivenName());
-		// System.out.println("PPPPP" + patient.getFamilyName());
-		// String date = new Date().toString();
-		// System.out.println("Date Date Date" + date);
-		// Date asp = sdf.parse(date);
-		// System.out.println("Date Date" + asp);
+		
+		RadiologyOrder radiologyOrder = new RadiologyOrder();
+		Study study = radiologyOrder.getStudy();
+		model.addAttribute("dicomViewerUrl", getDicomViewerUrl(study, radiologyOrder.getPatient()));
 		
 		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 		Date date = new Date();
@@ -77,6 +76,18 @@ public class RadiologyOrderPageController {
 		// model.addAttribute("patientgivenname", patient.getGivenName());
 		model.addAttribute("returnUrl", returnUrl);
 		
+	}
+	
+	private String getDicomViewerUrl(Study study, Patient patient) {
+		RadiologyProperties radiologyProperties = new RadiologyProperties();
+		if (study.isCompleted()) {
+			String studyUidUrl = "studyUID=" + study.getStudyInstanceUid();
+			String patientIdUrl = "patientID=" + patient.getPatientIdentifier()
+					.getIdentifier();
+			return radiologyProperties.getDicomWebViewerAddress() + studyUidUrl + "&" + patientIdUrl;
+		} else {
+			return null;
+		}
 	}
 	
 	public void getRadiologyOrderForm(FragmentModel model) {

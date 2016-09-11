@@ -49,10 +49,6 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
     });
     
     
-    
-    
-    
-    
     jq("#emailform").click(function(){
     jq("#performedStatusCompletedOrder").hide();
     jq("#performedStatusInProgressOrder").hide();
@@ -70,11 +66,7 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
     
     
     
-    
-    
-    
-    
-    
+
     
     
    jq("#performedStatusCompletedOrderTable tr").click(function(){
@@ -94,7 +86,8 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
      jq("#performedStatusCompletedOrder").hide();
     ordervalue = splitvalue[1];
     alert(ordervalue);
-   var orderId = ordervalue.substr(0, 2);
+    var orderId= ordervalue.substr(0, ordervalue.indexOf('<'));
+   //var orderId = ordervalue.substr(0, 2);
   alert(orderId);
      <% if (radiologyOrders) { %>
    
@@ -108,7 +101,7 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
   jq('#completedOrderObs').append( '<thead><tr><th> Report</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th> ContactRadiologist</th></tr></thead>' );
 
 
-jq('#completedOrderObs').append( '<tbody><tr><td><a onclick="runMyFunction();"> Obs</a> </td><td> ${anOrder.orderer.name}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td><a> ${anOrder.study.studyname}</a></td><td><a onclick="contactRadiologist();"> ContactRadiologist</td></a></tr></tbody>' );
+jq('#completedOrderObs').append( '<tbody><tr><td><a onclick="runMyFunction();"> Obs</a> </td><td> ${anOrder.orderer.name}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td><a href="dicomViewerUrl"> ${anOrder.study.studyname}</a></td><td><a onclick="contactRadiologist();"> ContactRadiologist</td></a></tr></tbody>' );
   
 }
     
