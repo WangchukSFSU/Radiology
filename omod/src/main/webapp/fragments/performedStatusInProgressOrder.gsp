@@ -37,7 +37,7 @@ jq(function() {
             
             ${anOrder.study.studyname}</td>
         <td>${ anOrder.dateCreated } </td>
-        <td>${anOrder.study.performedStatus}</td>
+        <td>${anOrder.study.scheduledStatus}</td>
 
     </tr>
     <% } %>  

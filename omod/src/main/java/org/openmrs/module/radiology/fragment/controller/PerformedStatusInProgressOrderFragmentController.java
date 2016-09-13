@@ -53,7 +53,7 @@ public class PerformedStatusInProgressOrderFragmentController {
 				radiologyOrder = Context.getService(RadiologyService.class)
 						.getRadiologyOrderByOrderId(order.getOrderId());
 				
-				if (radiologyOrder.isInProgress()) {
+				if (radiologyOrder.isOrderInProgress()) {
 					radiologyOrders.add(radiologyOrder);
 					
 				}

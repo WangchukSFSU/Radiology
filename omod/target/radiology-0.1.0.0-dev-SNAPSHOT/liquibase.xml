@@ -441,5 +441,10 @@
         <column name="studyreporturl" type="varchar(255)"/>
     </addColumn>
 </changeSet>
+<changeSet author="tenzin" id="radiology-68">
+    <addColumn tableName="radiology_study">
+        <column name="radiologyStatusOrder" type="varchar(255)"/>
+    </addColumn>
+</changeSet>
 </databaseChangeLog>
 

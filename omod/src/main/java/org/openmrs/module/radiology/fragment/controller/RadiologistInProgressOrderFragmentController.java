@@ -58,7 +58,7 @@ public class RadiologistInProgressOrderFragmentController {
 				radiologyOrder = Context.getService(RadiologyService.class)
 						.getRadiologyOrderByOrderId(order.getOrderId());
 				
-				if (radiologyOrder.isInProgress()) {
+				if (radiologyOrder.isCompleted()) {
 					radiologyOrders.add(radiologyOrder);
 					
 				}

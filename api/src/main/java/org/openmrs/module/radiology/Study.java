@@ -69,6 +69,24 @@ public class Study {
 	
 	private MwlStatus mwlStatus;
 	
+	private RadiologyOrderStatus radiologyStatusOrder;
+	
+	public RadiologyOrderStatus getRadiologyStatusOrder() {
+		return radiologyStatusOrder;
+	}
+	
+	public void setRadiologyStatusOrder(RadiologyOrderStatus radiologyStatusOrder) {
+		this.radiologyStatusOrder = radiologyStatusOrder;
+	}
+	
+	public RadiologyOrderStatus getRadiologyorderstatus() {
+		return radiologyStatusOrder;
+	}
+	
+	public void setRadiologyorderstatus(RadiologyOrderStatus radiologyorderstatus) {
+		this.radiologyStatusOrder = radiologyorderstatus;
+	}
+	
 	public Integer getStudyId() {
 		return studyId;
 	}
@@ -105,6 +123,10 @@ public class Study {
 		return performedStatus == PerformedProcedureStepStatus.IN_PROGRESS;
 	}
 	
+	public boolean isOrderInProgress() {
+		return radiologyStatusOrder == RadiologyOrderStatus.INPROGRESS;
+	}
+	
 	/**
 	 * Returns true when this Study's performedStatus is completed and false otherwise.
 	 * 
@@ -115,6 +137,10 @@ public class Study {
 	 */
 	public boolean isCompleted() {
 		return performedStatus == PerformedProcedureStepStatus.COMPLETED;
+	}
+	
+	public boolean isOrderCompleted() {
+		return radiologyStatusOrder == RadiologyOrderStatus.COMPLETED;
 	}
 	
 	public boolean isScheduleable() {

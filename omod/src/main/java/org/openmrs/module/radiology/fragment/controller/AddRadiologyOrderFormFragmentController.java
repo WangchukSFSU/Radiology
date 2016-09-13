@@ -33,9 +33,11 @@ import org.openmrs.module.radiology.PerformedProcedureStepStatus;
 import org.openmrs.module.radiology.RadiologyModalityList;
 
 import org.openmrs.module.radiology.RadiologyOrder;
+import org.openmrs.module.radiology.RadiologyOrderStatus;
 import org.openmrs.module.radiology.RadiologyReportList;
 import org.openmrs.module.radiology.RadiologyService;
 import org.openmrs.module.radiology.RadiologyStudyList;
+import org.openmrs.module.radiology.ScheduledProcedureStepStatus;
 
 import org.openmrs.module.radiology.Study;
 import org.openmrs.notification.MessageException;
@@ -258,6 +260,8 @@ public class AddRadiologyOrderFormFragmentController {
 		}
 		
 		study.setPerformedStatus(PerformedProcedureStepStatus.IN_PROGRESS);
+		study.setScheduledStatus(ScheduledProcedureStepStatus.SCHEDULED);
+		study.setRadiologyStatusOrder(RadiologyOrderStatus.INPROGRESS);
 		
 		List<RadiologyReportList> reportListFromDb = radiologyservice.getAllReport();
 		for (RadiologyReportList rr : reportListFromDb) {

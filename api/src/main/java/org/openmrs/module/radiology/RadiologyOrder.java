@@ -65,6 +65,15 @@ public class RadiologyOrder extends TestOrder {
 		}
 	}
 	
+	public boolean isOrderInProgress() {
+		
+		if (this.study == null) {
+			return false;
+		} else {
+			return this.study.isOrderInProgress();
+		}
+	}
+	
 	/**
 	 * Returns true if study is not in progress and false otherwise.
 	 * 
@@ -92,6 +101,15 @@ public class RadiologyOrder extends TestOrder {
 			return false;
 		} else {
 			return this.study.isCompleted();
+		}
+	}
+	
+	public boolean isOrderCompleted() {
+		
+		if (this.study == null) {
+			return false;
+		} else {
+			return this.study.isOrderCompleted();
 		}
 	}
 	

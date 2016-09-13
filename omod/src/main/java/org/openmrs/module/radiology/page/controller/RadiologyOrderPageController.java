@@ -46,10 +46,6 @@ public class RadiologyOrderPageController {
 				.getGlobalProperty(RadiologyConstants.GP_RADIOLOGY_CONCEPT_CLASSES);
 		System.out.println("AAAAA" + aa);
 		
-		RadiologyOrder radiologyOrder = new RadiologyOrder();
-		Study study = radiologyOrder.getStudy();
-		model.addAttribute("dicomViewerUrl", getDicomViewerUrl(study, radiologyOrder.getPatient()));
-		
 		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 		Date date = new Date();
 		String dd = dateFormat.format(date);
@@ -76,18 +72,6 @@ public class RadiologyOrderPageController {
 		// model.addAttribute("patientgivenname", patient.getGivenName());
 		model.addAttribute("returnUrl", returnUrl);
 		
-	}
-	
-	private String getDicomViewerUrl(Study study, Patient patient) {
-		RadiologyProperties radiologyProperties = new RadiologyProperties();
-		if (study.isCompleted()) {
-			String studyUidUrl = "studyUID=" + study.getStudyInstanceUid();
-			String patientIdUrl = "patientID=" + patient.getPatientIdentifier()
-					.getIdentifier();
-			return radiologyProperties.getDicomWebViewerAddress() + studyUidUrl + "&" + patientIdUrl;
-		} else {
-			return null;
-		}
 	}
 	
 	public void getRadiologyOrderForm(FragmentModel model) {
@@ -118,7 +102,7 @@ public class RadiologyOrderPageController {
 				radiologyOrder = Context.getService(RadiologyService.class)
 						.getRadiologyOrderByOrderId(order.getOrderId());
 				
-				if (radiologyOrder.isCompleted()) {
+				if (radiologyOrder.isOrderCompleted()) {
 					radiologyOrders.add(radiologyOrder);
 					
 				}
