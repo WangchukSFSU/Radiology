@@ -64,6 +64,21 @@ public class RadiologyOrderPageController {
 		
 		System.out.println("length LLLLLLLLLLLLL " + radiologyOrders.size());
 		System.out.println("patient patient PPPPPP " + patient.getUuid());
+		
+		List<String> urllist = new ArrayList<String>();
+		for (RadiologyOrder ro : radiologyOrders) {
+			Study study = ro.getStudy();
+			System.out.println("122");
+			urllist.add(getDicomViewerUrl(study, ro.getPatient()));
+		}
+		
+		for (String ds : urllist) {
+			System.out.println("STRRTRSTRR " + ds);
+		}
+		
+		String aap = getDicomViewerUrladdress();
+		model.addAttribute("dicomViewerUrl", aap);
+		model.addAttribute("dicomViewerUrladdress", aap);
 		model.put("radiologyOrders", radiologyOrders);
 		
 		model.addAttribute("patient", patient);
@@ -72,6 +87,56 @@ public class RadiologyOrderPageController {
 		// model.addAttribute("patientgivenname", patient.getGivenName());
 		model.addAttribute("returnUrl", returnUrl);
 		
+	}
+	
+	private String getDicomViewerUrladdress() {
+		
+		System.out.println("333");
+		RadiologyProperties radiologyProperties = new RadiologyProperties();
+		
+		System.out.println("444");
+		// String studyUidUrl = "studyUID=" + study.getStudyInstanceUid();
+		// String patientIdUrl = "patientID=" + patient.getPatientIdentifier()
+		// .getIdentifier();
+		
+		System.out.println("12232 radiologyProperties.getServersAddress()" + radiologyProperties.getServersAddress());
+		System.out.println("12232 radiologyProperties.getServersPort()" + radiologyProperties.getServersPort());
+		System.out.println("12232 radiologyProperties.getDicomViewerUrlBase()" + radiologyProperties.getDicomViewerUrlBase());
+		System.out.println("12232 radiologyProperties.getDicomViewerLocalServerName()"
+				+ radiologyProperties.getDicomViewerLocalServerName());
+		// System.out.println("12232 studyUidUrl " + studyUidUrl);
+		// System.out.println("12232 patientIdUrl" + patientIdUrl);
+		
+		return radiologyProperties.getServersAddress() + ":" + radiologyProperties.getServersPort()
+				+ radiologyProperties.getDicomViewerUrlBase() + "?" + radiologyProperties.getDicomViewerLocalServerName();
+		
+	}
+	
+	private String getDicomViewerUrl(Study study, Patient patient) {
+		
+		System.out.println("333");
+		RadiologyProperties radiologyProperties = new RadiologyProperties();
+		if (study.isOrderCompleted()) {
+			System.out.println("444");
+			String studyUidUrl = "studyUID=" + study.getStudyInstanceUid();
+			String patientIdUrl = "patientID=" + patient.getPatientIdentifier()
+					.getIdentifier();
+			
+			System.out.println("12232 radiologyProperties.getServersAddress()" + radiologyProperties.getServersAddress());
+			System.out.println("12232 radiologyProperties.getServersPort()" + radiologyProperties.getServersPort());
+			System.out.println("12232 radiologyProperties.getDicomViewerUrlBase()"
+					+ radiologyProperties.getDicomViewerUrlBase());
+			System.out.println("12232 radiologyProperties.getDicomViewerLocalServerName()"
+					+ radiologyProperties.getDicomViewerLocalServerName());
+			System.out.println("12232 studyUidUrl " + studyUidUrl);
+			System.out.println("12232 patientIdUrl" + patientIdUrl);
+			
+			return radiologyProperties.getServersAddress() + ":" + radiologyProperties.getServersPort()
+					+ radiologyProperties.getDicomViewerUrlBase() + "?"
+					+ radiologyProperties.getDicomViewerLocalServerName();
+		} else {
+			return null;
+		}
 	}
 	
 	public void getRadiologyOrderForm(FragmentModel model) {

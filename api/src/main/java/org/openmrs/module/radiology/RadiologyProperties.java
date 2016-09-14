@@ -15,6 +15,7 @@ import org.openmrs.EncounterRole;
 import org.openmrs.EncounterType;
 import org.openmrs.OrderType;
 import org.openmrs.VisitType;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.emrapi.utils.ModuleProperties;
 import org.springframework.stereotype.Component;
 
@@ -312,5 +313,30 @@ public class RadiologyProperties extends ModuleProperties {
 		
 		System.out.println("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK" + result);
 		return result;
+	}
+	
+	public String getServersAddress() {
+		System.out.println("NKNKNKNKKNKNKNNKNKNNKKN ");
+		return "http://" + Context.getAdministrationService()
+				.getGlobalProperty(RadiologyConstants.GP_DICOM_WEB_VIEWER_ADDRESS);
+	}
+	
+	public String getServersPort() {
+		return Context.getAdministrationService()
+				.getGlobalProperty(RadiologyConstants.GP_DICOM_WEB_VIEWER_PORT);
+	}
+	
+	public String getDicomViewerUrlBase() {
+		return Context.getAdministrationService()
+				.getGlobalProperty(RadiologyConstants.GP_DICOM_WEB_VIEWER_BASE_URL);
+	}
+	
+	public String getDicomViewerLocalServerName() {
+		String dicomViewerLocalServerName = Context.getAdministrationService()
+				.getGlobalProperty(RadiologyConstants.GP_DICOM_WEB_VIEWER_LOCAL_SERVER_NAME);
+		if (dicomViewerLocalServerName == null)
+			return "";
+		else
+			return "serverName=" + dicomViewerLocalServerName + "&";
 	}
 }

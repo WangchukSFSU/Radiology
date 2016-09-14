@@ -15,8 +15,38 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
 
 <script>
     jq = jQuery;
+    
+ jq(function(){
+  function runn() {
+  alert("yeheyee");
+         jq('<div/>', {'class':'myDlgClass', 'id':'link-'+( jq(this).index()+1)})
+        .html( jq('<iframe/>', {
+            'src' :  jq(this).attr(url),
+            'style' :'width:100%; height:100%;border:none;'
+        })).appendTo('body')
+        .dialog({
+            'title' :  jq(this).text(),
+            'width' : 400,
+            'height' :250,
+            buttons: [ { 
+                    text: "Close",
+                    click: function() {  jq( this ).dialog( "close" ); } 
+                } ]
+        });
+        
+        
+        }
+    });
+
+    
+    </script>
+    
+<script>
+    jq = jQuery;
     jq(document).ready(function() { 
 
+ 
+    
    
     jq("#orders").hide();
     jq("#messagepatient").hide();
@@ -65,8 +95,12 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
     });
     
     
-    
-
+     
+jq(".email_link").click(function() {
+		
+                alert("Heretre");
+                
+                });
     
     
    jq("#performedStatusCompletedOrderTable tr").click(function(){
@@ -98,10 +132,10 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
     if(orderId == radiologyorderId) {
 
  
-  jq('#completedOrderObs').append( '<thead><tr><th> Report</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th> ContactRadiologist</th></tr></thead>' );
+  jq('#completedOrderObs').append( '<thead><tr><th> Report</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th> ContactRadiologist</th><th>tsest</th></tr></thead>' );
 
 
-jq('#completedOrderObs').append( '<tbody><tr><td><a onclick="runMyFunction();"> Obs</a> </td><td> ${anOrder.orderer.name}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td><a href="dicomViewerUrl"> ${anOrder.study.studyname}</a></td><td><a onclick="contactRadiologist();"> ContactRadiologist</td></a></tr></tbody>' );
+jq('#completedOrderObs').append( '<tbody><tr><td id="dogdog"><a href="http://wikipedia.com/" class="test" onclick="loadImages(); return false;" >comment #1</a></td><td><a onclick="runMyFunction();"> Obs</a> </td><td> ${anOrder.orderer.name}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td><a id="appledog" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + patient.patientIdentifier }"> ${anOrder.study.studyInstanceUid}</a></td><td><a onclick="contactRadiologist();"> ContactRadiologist</a></td></tr></tbody>' );
   
 }
     
@@ -123,6 +157,45 @@ jq('#completedOrderObs').append( '<tbody><tr><td><a onclick="runMyFunction();"> 
     });
     
     });
+    
+   function loadImages() {
+   alert("HUHUHU");
+   var href = jq(this).attr('href');
+   alert(href);
+        jq('<div/>', {'class':'myDlgClass', 'id':'link-'+( jq(this).index()+1)})
+        .html( jq('<iframe/>', {
+            'src' :  jq(this).attr('href'),
+            'style' :'width:100%; height:100%;border:none;'
+        })).appendTo('body')
+        .dialog({
+            'title' :  jq(this).text(),
+            'width' : 400,
+            'height' :250,
+            buttons: [ { 
+                    text: "Close",
+                    click: function() {  jq( this ).dialog( "close" ); } 
+                } ]
+        });
+   }
+    
+     function openDialog(url)    {
+ jq('#breadcrumbs').remove();
+        jq('<div/>').dialog({
+            modal: true,
+            open: function ()
+            {
+            if (jq(this).is(':empty')) {
+                jq(this).load(url);
+                }
+            },         
+            height: 600,
+            width: 950,
+            title:"Report"
+        });
+        
+        
+    }
+    
 function runMyFunction() {
   alert("run my function");
   jq("#HTMLFORM").show(); 
@@ -346,3 +419,75 @@ jq(function() {
         ]) }
     </div>
         
+    
+    
+    
+    
+    
+     <tbody>
+    <% dicomViewerUrl.each { url -> %>
+    <tr>
+       
+  <td><a onclick=openDialogT(" http://localhost:8081/oviyam2/viewer.html?serverName=oviyamlocal&studyUID=1.2.826.0.1.3680043.8.2186.1.10&patientID=10000X ") > oviyan </a></td>
+    <td><a href="http://localhost:8081/oviyam2/viewer.html?serverName=oviyamlocal&studyUID=1.2.826.0.1.3680043.8.2186.1.10&patientID=10000X">Heera IT</a> </td>
+    </tr>
+    <% } %>  
+</tbody>
+
+
+
+<script>
+    jq = jQuery;
+    
+ jq(function(){
+ 
+    jq(".test").click(function () {
+    
+        jq("#thedialog").attr('src', jq(this).attr("href"));
+        jq("#somediv").dialog({
+            width: 400,
+            height: 450,
+            modal: true,
+            close: function () {
+                jq("#thedialog").attr('src', "about:blank");
+            }
+        });
+        return false;
+    });
+    
+    
+    
+     jq('a #apple').on('click', function(e){
+        e.preventDefault();
+         jq('<div/>', {'class':'myDlgClass', 'id':'link-'+( jq(this).index()+1)})
+        .html( jq('<iframe/>', {
+            'src' :  jq(this).attr('href'),
+            'style' :'width:100%; height:100%;border:none;'
+        })).appendTo('body')
+        .dialog({
+            'title' :  jq(this).text(),
+            'width' : 400,
+            'height' :250,
+            buttons: [ { 
+                    text: "Close",
+                    click: function() {  jq( this ).dialog( "close" ); } 
+                } ]
+        });
+    });
+});
+    
+    </script>
+
+<a href="http://localhost:8081/oviyam2/viewer.html?serverName=oviyamlocal&studyUID=1.2.826.0.1.3680043.8.2186.1.10&patientID=10000X">Heera IT</a>
+
+<a id ="apple" href="${ dicomViewerUrladdress + "studyUID=" + "1.2.826.0.1.3680043.8.2186.1.10" + "&patientID=" + "10000X" }"> kdsdf </a>
+
+
+
+<a href="http://wikipedia.com/" class="test">comment #1</a><br>
+<a href="http://ebay.com/" class="test">comment #2</a><br>
+<a href="http://ask.com/" class="test" >comment #3</a><br>
+<div id="somediv" title="this is a dialog" style="display:none;">
+    <iframe id="thedialog" width="350" height="350"></iframe>
+</div>
+
