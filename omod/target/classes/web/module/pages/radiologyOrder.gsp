@@ -1,5 +1,3 @@
-
-
 <%
 ui.decorateWith("appui", "standardEmrPage")
 ui.includeJavascript("uicommons", "datatables/jquery.dataTables.min.js")
@@ -9,37 +7,11 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
 
 <% ui.includeCss("radiology", "radiologyOrder.css") %>
     
-<% ui.includeCss("radiology", "performedStatusCompletedOrder.css") %>
+
    
 
 
-<script>
-    jq = jQuery;
-    
- jq(function(){
-  function runn() {
-  alert("yeheyee");
-         jq('<div/>', {'class':'myDlgClass', 'id':'link-'+( jq(this).index()+1)})
-        .html( jq('<iframe/>', {
-            'src' :  jq(this).attr(url),
-            'style' :'width:100%; height:100%;border:none;'
-        })).appendTo('body')
-        .dialog({
-            'title' :  jq(this).text(),
-            'width' : 400,
-            'height' :250,
-            buttons: [ { 
-                    text: "Close",
-                    click: function() {  jq( this ).dialog( "close" ); } 
-                } ]
-        });
-        
-        
-        }
-    });
 
-    
-    </script>
     
 <script>
     jq = jQuery;
@@ -52,7 +24,8 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
     jq("#messagepatient").hide();
     jq("#addorder").hide();
     jq("#orderdetail").hide();
-   
+    jq("#inprogressorder").hide();
+   jq("#performedStatusCompletedReport").hide();
    
     
     jq("#AddRadiologyOrderForm").hide();
@@ -66,13 +39,16 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
     jq("#addRadiologyOrderBtn").click(function(){
     jq("#performedStatusCompletedOrder").hide();
     jq("#EmailForm").hide();
+    jq("#HTMLFORM").hide(); 
     jq("#performedStatusInProgressOrder").hide();
     jq("#performedStatusCompletedObsSelect").hide();
     jq("#ContactRadiologist").hide(); 
     jq("#AddRadiologyOrderForm").show();
+    jq("#performedStatusCompletedReport").hide();
     
     jq("#ordernolink").hide();
     jq("#orders").show();
+    jq("#inprogressorder").hide();
     jq("#messagepatient").hide();
     jq("#addorder").show();
     jq("#orderdetail").hide();
@@ -86,32 +62,34 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
     jq("#EmailForm").show();
     jq("#AddRadiologyOrderForm").hide();
     jq("#ContactRadiologist").hide(); 
+    jq("#HTMLFORM").hide(); 
+    jq("#performedStatusCompletedReport").hide();
     
      jq("#ordernolink").hide();
     jq("#orders").show();
+    jq("#inprogressorder").hide();
     jq("#messagepatient").show();
     jq("#addorder").hide();
     jq("#orderdetail").hide();
     });
     
     
-     
-jq(".email_link").click(function() {
-		
-                alert("Heretre");
-                
-                });
+     jq('.test').click(function(){
+    alert(jq(this).attr('href'));
+   
+  });
     
     
    jq("#performedStatusCompletedOrderTable tr").click(function(){
 
    jq("#ordernolink").hide();
     jq("#orders").show();
+    jq("#inprogressorder").hide();
     jq("#messagepatient").hide();
     jq("#addorder").hide();
     jq("#orderdetail").show();
-   
-   
+   jq("#HTMLFORM").hide(); 
+   jq("#performedStatusCompletedReport").hide();
     jq(this).addClass('selected').siblings().removeClass('selected');    
     var value=jq(this).find('td:first').html();
     alert(value); 
@@ -122,6 +100,7 @@ jq(".email_link").click(function() {
     alert(ordervalue);
     var orderId= ordervalue.substr(0, ordervalue.indexOf('<'));
    //var orderId = ordervalue.substr(0, 2);
+   jq('#completedOrderObs').empty();
   alert(orderId);
      <% if (radiologyOrders) { %>
    
@@ -130,12 +109,16 @@ jq(".email_link").click(function() {
     var radiologyorderId = ${anOrder.orderId} ;
   
     if(orderId == radiologyorderId) {
-
+    
+    var orderencounterId = ${anOrder.study.orderencounterId} ;
+    
+    alert("orderencounterId" + orderencounterId);
+localStorage.setItem("orderencounterId", orderencounterId);
  
-  jq('#completedOrderObs').append( '<thead><tr><th> Report</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th> ContactRadiologist</th><th>tsest</th></tr></thead>' );
+  jq('#completedOrderObs').append( '<thead><tr><th> Report</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th> ContactRadiologist</th></tr></thead>' );
 
 
-jq('#completedOrderObs').append( '<tbody><tr><td id="dogdog"><a href="http://wikipedia.com/" class="test" onclick="loadImages(); return false;" >comment #1</a></td><td><a onclick="runMyFunction();"> Obs</a> </td><td> ${anOrder.orderer.name}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td><a id="appledog" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + patient.patientIdentifier }"> ${anOrder.study.studyInstanceUid}</a></td><td><a onclick="contactRadiologist();"> ContactRadiologist</a></td></tr></tbody>' );
+jq('#completedOrderObs').append( '<tbody><tr><td><a onclick="runMyFunction();"> Obs</a> </td><td> ${anOrder.orderer.name}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td id="dogdog" href="ddasdas"><a id="tiger" class="tiger" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + patient.patientIdentifier }" onclick="loadImages(); return false;" >${anOrder.study.studyname}</a></td><td><a onclick="contactRadiologist();"> ContactRadiologist</a></td></tr></tbody>' );
   
 }
     
@@ -159,23 +142,22 @@ jq('#completedOrderObs').append( '<tbody><tr><td id="dogdog"><a href="http://wik
     });
     
    function loadImages() {
-   alert("HUHUHU");
-   var href = jq(this).attr('href');
-   alert(href);
-        jq('<div/>', {'class':'myDlgClass', 'id':'link-'+( jq(this).index()+1)})
-        .html( jq('<iframe/>', {
-            'src' :  jq(this).attr('href'),
-            'style' :'width:100%; height:100%;border:none;'
-        })).appendTo('body')
-        .dialog({
-            'title' :  jq(this).text(),
-            'width' : 400,
-            'height' :250,
-            buttons: [ { 
-                    text: "Close",
-                    click: function() {  jq( this ).dialog( "close" ); } 
-                } ]
+ 
+        var addressValue = jq('.tiger').attr("href");
+        alert(addressValue );
+        
+         jq("#thedialog").attr('src', jq('.tiger').attr("href"));
+        jq("#somediv").dialog({
+            width: 400,
+            height: 450,
+            modal: true,
+            close: function () {
+                jq("#thedialog").attr('src', "about:blank");
+            }
         });
+        return false;
+        
+       
    }
     
      function openDialog(url)    {
@@ -197,12 +179,45 @@ jq('#completedOrderObs').append( '<tbody><tr><td id="dogdog"><a href="http://wik
     }
     
 function runMyFunction() {
-  alert("run my function");
-  jq("#HTMLFORM").show(); 
+
+ jq("#performedStatusCompletedReport").show();
+ var orderencounterId = localStorage.getItem("orderencounterId");
+
    jq("#ContactRadiologist").hide(); 
+
+    jq('#completedOrderReport').append( '<thead><tr><th> Report</th><th> Provider</th></tr></thead>');
+    
+   <% if (getObs) { %>
+   
+    <% getObs.each { obs -> %>
+    var obsId = ${ obs.personId };
+     var obsIdCompare = ${ obs.encounter.id };
+   
+    if(orderencounterId == obsIdCompare) {
+    alert("radiologyorderId");
+    alert(orderencounterId);
+     alert("obsIdCompare");
+    alert(obsIdCompare);
+
+    jq('#completedOrderReport').append( '<tbody><tr><td>${obs.concept.getFullySpecifiedName(Locale.ENGLISH)} </td><td>${obs.valueText}</td></tr></tbody>' );
+    
+    
+   // return false;
+    }
+    
+       <% } %>
+    <% } %>
+   
+   
  
  
 }
+
+
+
+
+
+
 function contactRadiologist() {
   alert("run my contactRadiologist");
   jq("#HTMLFORM").hide(); 
@@ -210,17 +225,22 @@ function contactRadiologist() {
  
 }
     function selectFunction(selectedValue) {
-   // location.reload();
+   
     jq("#ordernolink").show();
     jq("#orders").hide();
+    jq("#inprogressorder").hide();
     jq("#messagepatient").hide();
     jq("#addorder").hide();
     jq("#orderdetail").hide();
+     jq("#ContactRadiologist").hide(); 
+    jq("#HTMLFORM").hide();
+
+  
     
     if(selectedValue == "COMPLETED") {
-  
+    
     jq("#performedStatusCompletedOrder").show();
-  
+  jq("#HTMLFORM").hide(); 
     jq("#EmailForm").hide();
     jq("#performedStatusInProgressOrder").hide();
     jq("#AddRadiologyOrderForm").hide();
@@ -236,6 +256,12 @@ function contactRadiologist() {
     jq("#AddRadiologyOrderForm").hide();
     jq("#performedStatusCompletedObsSelect").hide();
     
+    jq("#ordernolink").hide();
+    jq("#orders").show();
+    jq("#inprogressorder").show();
+    jq("#messagepatient").hide();
+    jq("#addorder").hide();
+    jq("#orderdetail").hide();
     
     alert("jiiii progress" + selectedValue);
     } 
@@ -244,10 +270,7 @@ function contactRadiologist() {
 </script>
 <script>
 jq = jQuery;
- 
-
-        
-        
+     
 jq(function() { 
 
       jq('#performedStatusCompletedOrderTable').dataTable({
@@ -305,6 +328,10 @@ jq(function() {
         Manage Orders
           </a> 
     </li>
+     <li id="inprogressorder">  
+       <i class="icon-chevron-right link"></i>
+         InProgressOrder
+    </li>
     <li id="messagepatient">  
        <i class="icon-chevron-right link"></i>
          Message Patient
@@ -322,6 +349,9 @@ jq(function() {
    
 </ul>
 </div>
+
+
+
 
 <div>
     <div id="performedStatusesDropdown" class="performedStatusesContainer">
@@ -380,6 +410,18 @@ jq(function() {
 
 </div>
     
+<div id = "performedStatusCompletedReport">
+    
+  <h1>RADIOLOGY ORDER REPORT</h1>
+  
+<table id="completedOrderReport">
+   
+    
+
+</table>
+
+</div>
+
     
 
        <div id="ContactRadiologist" width="50%">
@@ -424,15 +466,7 @@ jq(function() {
     
     
     
-     <tbody>
-    <% dicomViewerUrl.each { url -> %>
-    <tr>
-       
-  <td><a onclick=openDialogT(" http://localhost:8081/oviyam2/viewer.html?serverName=oviyamlocal&studyUID=1.2.826.0.1.3680043.8.2186.1.10&patientID=10000X ") > oviyan </a></td>
-    <td><a href="http://localhost:8081/oviyam2/viewer.html?serverName=oviyamlocal&studyUID=1.2.826.0.1.3680043.8.2186.1.10&patientID=10000X">Heera IT</a> </td>
-    </tr>
-    <% } %>  
-</tbody>
+
 
 
 
@@ -441,22 +475,7 @@ jq(function() {
     
  jq(function(){
  
-    jq(".test").click(function () {
-    
-        jq("#thedialog").attr('src', jq(this).attr("href"));
-        jq("#somediv").dialog({
-            width: 400,
-            height: 450,
-            modal: true,
-            close: function () {
-                jq("#thedialog").attr('src', "about:blank");
-            }
-        });
-        return false;
-    });
-    
-    
-    
+
      jq('a #apple').on('click', function(e){
         e.preventDefault();
          jq('<div/>', {'class':'myDlgClass', 'id':'link-'+( jq(this).index()+1)})
@@ -478,16 +497,14 @@ jq(function() {
     
     </script>
 
-<a href="http://localhost:8081/oviyam2/viewer.html?serverName=oviyamlocal&studyUID=1.2.826.0.1.3680043.8.2186.1.10&patientID=10000X">Heera IT</a>
-
-<a id ="apple" href="${ dicomViewerUrladdress + "studyUID=" + "1.2.826.0.1.3680043.8.2186.1.10" + "&patientID=" + "10000X" }"> kdsdf </a>
 
 
-
-<a href="http://wikipedia.com/" class="test">comment #1</a><br>
-<a href="http://ebay.com/" class="test">comment #2</a><br>
-<a href="http://ask.com/" class="test" >comment #3</a><br>
-<div id="somediv" title="this is a dialog" style="display:none;">
+<div id="somediv" title="View Study Image" style="display:none;">
     <iframe id="thedialog" width="350" height="350"></iframe>
 </div>
+
+
+
+
+
 

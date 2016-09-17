@@ -446,5 +446,41 @@
         <column name="radiologyStatusOrder" type="varchar(255)"/>
     </addColumn>
 </changeSet>
+<changeSet author="tenzin" id="radiology-69">
+    <addColumn tableName="radiology_study">
+        <column name="orderCompletedDate" type="varchar(255)"/>
+    </addColumn>
+</changeSet>
+<changeSet author="tenzin" id="radiology-70">
+    <addColumn tableName="radiology_study">
+        <column name="encounterId" type="int"/>
+    </addColumn>
+</changeSet>
+<changeSet author="tenzin" id="radiology-71">
+        <dropColumn columnName="orderCompletedDate" tableName="radiology_study" />
+</changeSet>
+<changeSet author="tenzin" id="radiology-72">
+        <dropColumn columnName="encounterId" tableName="radiology_study" />
+</changeSet>
+<changeSet author="tenzin" id="radiology-73">
+    <addColumn tableName="radiology_order">
+        <column name="orderCompletedDate" type="varchar(255)"/>
+    </addColumn>
+</changeSet>
+<changeSet author="tenzin" id="radiology-74">
+    <addColumn tableName="radiology_order">
+        <column name="encounterId" type="int"/>
+    </addColumn>
+</changeSet>
+<changeSet author="tenzin" id="radiology-75">
+    <addColumn tableName="radiology_study">
+        <column name="obsCompletedDate" type="varchar(255)"/>
+    </addColumn>
+</changeSet>
+<changeSet author="tenzin" id="radiology-76">
+    <addColumn tableName="radiology_study">
+        <column name="orderencounterId" type="int"/>
+    </addColumn>
+</changeSet>
 </databaseChangeLog>
 

@@ -46,4 +46,6 @@ public interface StudyDAO {
 	 */
 	public List<Study> getStudiesByRadiologyOrders(List<RadiologyOrder> radiologyOrders);
 	
+	List<Study> getAllStudyRadiologyOrder();
+	
 }

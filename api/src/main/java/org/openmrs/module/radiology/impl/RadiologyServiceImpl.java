@@ -32,6 +32,7 @@ import org.openmrs.module.radiology.MwlStatus;
 import org.openmrs.module.radiology.PerformedProcedureStepStatus;
 import org.openmrs.module.radiology.RadiologyModalityList;
 import org.openmrs.module.radiology.RadiologyOrder;
+import org.openmrs.module.radiology.RadiologyOrderStatus;
 import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.RadiologyReportList;
 import org.openmrs.module.radiology.RadiologyService;
@@ -135,6 +136,11 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	@Override
 	public List<RadiologyStudyList> getAllStudy() {
 		return studylistdao.getAllStudy();
+	}
+	
+	@Override
+	public List<Study> getAllStudyRadiologyOrder() {
+		return studyDAO.getAllStudyRadiologyOrder();
 	}
 	
 	@Override
@@ -400,6 +406,50 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 		
 		final Study studyToBeUpdated = studyDAO.getStudyByStudyInstanceUid(studyInstanceUid);
 		studyToBeUpdated.setPerformedStatus(performedStatus);
+		return studyDAO.saveStudy(studyToBeUpdated);
+	}
+	
+	@Transactional
+	@Override
+	public Study updateRadiologyStatusOrder(String studyInstanceUid, RadiologyOrderStatus radiologyOrderStatus)
+			throws IllegalArgumentException {
+		
+		if (studyInstanceUid == null) {
+			throw new IllegalArgumentException("studyInstanceUid is required");
+		}
+		
+		if (radiologyOrderStatus == null) {
+			throw new IllegalArgumentException("performedStatus is required");
+		}
+		
+		final Study studyToBeUpdated = studyDAO.getStudyByStudyInstanceUid(studyInstanceUid);
+		studyToBeUpdated.setRadiologyStatusOrder(radiologyOrderStatus);
+		return studyDAO.saveStudy(studyToBeUpdated);
+	}
+	
+	@Transactional
+	@Override
+	public Study updateObsCompletedDate(String studyInstanceUid, String obscompleteddate) throws IllegalArgumentException {
+		
+		if (studyInstanceUid == null) {
+			throw new IllegalArgumentException("studyInstanceUid is required");
+		}
+		
+		final Study studyToBeUpdated = studyDAO.getStudyByStudyInstanceUid(studyInstanceUid);
+		studyToBeUpdated.setObsCompletedDate(obscompleteddate);
+		return studyDAO.saveStudy(studyToBeUpdated);
+	}
+	
+	@Transactional
+	@Override
+	public Study updateStudyEncounterId(String studyInstanceUid, Integer studyencounterid) throws IllegalArgumentException {
+		
+		if (studyInstanceUid == null) {
+			throw new IllegalArgumentException("studyInstanceUid is required");
+		}
+		
+		final Study studyToBeUpdated = studyDAO.getStudyByStudyInstanceUid(studyInstanceUid);
+		studyToBeUpdated.setOrderencounterId(studyencounterid);
 		return studyDAO.saveStudy(studyToBeUpdated);
 	}
 	

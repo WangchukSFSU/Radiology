@@ -21,6 +21,26 @@ public class Study {
 	
 	private String studyInstanceUid;
 	
+	private Integer orderencounterId;
+	
+	public Integer getOrderencounterId() {
+		return orderencounterId;
+	}
+	
+	public void setOrderencounterId(Integer orderencounterId) {
+		this.orderencounterId = orderencounterId;
+	}
+	
+	public String getObsCompletedDate() {
+		return obsCompletedDate;
+	}
+	
+	public void setObsCompletedDate(String obsCompletedDate) {
+		this.obsCompletedDate = obsCompletedDate;
+	}
+	
+	private String obsCompletedDate;
+	
 	private String studyreporturl;
 	
 	public String getStudyreporturl() {

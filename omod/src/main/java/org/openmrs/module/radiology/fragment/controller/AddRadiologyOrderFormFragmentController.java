@@ -21,6 +21,7 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptClass;
 import org.openmrs.ConceptName;
+import org.openmrs.Encounter;
 import org.openmrs.Form;
 import org.openmrs.Order;
 import org.openmrs.Patient;
@@ -209,9 +210,10 @@ public class AddRadiologyOrderFormFragmentController {
 		
 		radiologyOrder.setCreator(authenticatedUser);
 		radiologyOrder.setOrderer(provider);
+		// Encounter ee = new Encounter();
 		
 		radiologyOrder.setPatient(patient);
-		
+		// radiologyOrder.getEncounter().getEncounterId();
 		radiologyOrder.setDateCreated(new Date());
 		radiologyOrder.setInstructions(instructionname);
 		radiologyOrder.setUrgency(Order.Urgency.valueOf(priorityname));
@@ -242,7 +244,8 @@ public class AddRadiologyOrderFormFragmentController {
 				
 				String visitform = "&visitId=&formUuid=";
 				String formuuidurl = searchform.getUuid();
-				String returnurl = "&returnUrl=/openmrs/radiology/radiologistActiveOrders.page";
+				String returnurl = "&returnUrl=";
+				// String returnurl = "&returnUrl=/openmrs/radiology/radiologistActiveOrders.page";
 				
 				String url = domain.concat(patientidurl)
 						.concat(visitform)
@@ -259,7 +262,7 @@ public class AddRadiologyOrderFormFragmentController {
 			
 		}
 		
-		study.setPerformedStatus(PerformedProcedureStepStatus.IN_PROGRESS);
+		study.setPerformedStatus(PerformedProcedureStepStatus.COMPLETED);
 		study.setScheduledStatus(ScheduledProcedureStepStatus.SCHEDULED);
 		study.setRadiologyStatusOrder(RadiologyOrderStatus.INPROGRESS);
 		

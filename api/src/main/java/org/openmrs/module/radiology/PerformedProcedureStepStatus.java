@@ -18,6 +18,7 @@ package org.openmrs.module.radiology;
 public enum PerformedProcedureStepStatus {
 	
 	IN_PROGRESS,
+	DONE,
 	// DISCONTINUED,
 	COMPLETED;
 	

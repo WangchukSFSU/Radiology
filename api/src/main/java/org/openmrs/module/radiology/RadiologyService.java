@@ -48,6 +48,8 @@ public interface RadiologyService extends OpenmrsService {
 	
 	List<RadiologyStudyList> getAllStudy();
 	
+	List<Study> getAllStudyRadiologyOrder();
+	
 	@Transactional(readOnly = true)
 	RadiologyModalityList getModality(Integer id);
 	
@@ -163,6 +165,13 @@ public interface RadiologyService extends OpenmrsService {
 	 */
 	public Study updateStudyPerformedStatus(String studyInstanceUid, PerformedProcedureStepStatus performedStatus)
 			throws IllegalArgumentException;
+	
+	public Study updateRadiologyStatusOrder(String studyInstanceUid, RadiologyOrderStatus radiologyOrderStatus)
+			throws IllegalArgumentException;
+	
+	public Study updateObsCompletedDate(String studyInstanceUid, String obscompleteddate) throws IllegalArgumentException;
+	
+	public Study updateStudyEncounterId(String studyInstanceUid, Integer studyencounterid) throws IllegalArgumentException;
 	
 	/**
 	 * Save given <code>RadiologyOrder</code> in the PACS by sending an HL7 order message.

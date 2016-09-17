@@ -9,6 +9,12 @@
 		<property name="orderdiagnosis" column="orderdiagnosis"
                           length="255">
                 </property>
+                <property name="orderCompletedDate" column="orderCompletedDate"
+                          length="255">
+                </property>
+                <property name="encounterId" column="encounterId"
+                          type="int">
+                </property>
                 <one-to-one name="study" property-ref="radiologyOrder" />
 	</joined-subclass>
 

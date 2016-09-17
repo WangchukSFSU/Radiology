@@ -69,6 +69,13 @@ public class StudyDAOImpl implements StudyDAO {
 				.uniqueResult();
 	}
 	
+	@Override
+	public List<Study> getAllStudyRadiologyOrder() {
+		return sessionFactory.getCurrentSession()
+				.createCriteria(Study.class)
+				.list();
+	}
+	
 	/**
 	 * @see org.openmrs.module.radiology.RadiologyService#getStudyByStudyInstanceUid(String)
 	 */

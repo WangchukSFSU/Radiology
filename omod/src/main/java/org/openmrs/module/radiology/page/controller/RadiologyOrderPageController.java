@@ -19,6 +19,7 @@ import java.util.Vector;
 import org.openmrs.Concept;
 import org.openmrs.ConceptClass;
 import org.openmrs.ConceptName;
+import org.openmrs.Obs;
 import org.openmrs.Order;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
@@ -54,8 +55,14 @@ public class RadiologyOrderPageController {
 		
 		Map<String, String> performedStatuses = new HashMap<String, String>();
 		for (PerformedProcedureStepStatus performedStatus : PerformedProcedureStepStatus.values()) {
-			performedStatuses.put(performedStatus.name(), performedStatus.name());
-			System.out.println("list performned status " + performedStatus.name());
+			if (performedStatus.name()
+					.equals("DONE")) {
+				
+			} else {
+				performedStatuses.put(performedStatus.name(), performedStatus.name());
+				System.out.println("list performned status " + performedStatus.name());
+				
+			}
 		}
 		
 		model.addAttribute("performedStatuses", performedStatuses);
@@ -75,6 +82,11 @@ public class RadiologyOrderPageController {
 		for (String ds : urllist) {
 			System.out.println("STRRTRSTRR " + ds);
 		}
+		
+		List<Obs> getObs = Context.getObsService()
+				.getObservationsByPerson(patient);
+		
+		model.addAttribute("getObs", getObs);
 		
 		String aap = getDicomViewerUrladdress();
 		model.addAttribute("dicomViewerUrl", aap);

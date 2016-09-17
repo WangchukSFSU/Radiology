@@ -25,7 +25,7 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
     jq("#addorder").hide();
     jq("#orderdetail").hide();
     jq("#inprogressorder").hide();
-   
+   jq("#performedStatusCompletedReport").hide();
    
     
     jq("#AddRadiologyOrderForm").hide();
@@ -44,6 +44,7 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
     jq("#performedStatusCompletedObsSelect").hide();
     jq("#ContactRadiologist").hide(); 
     jq("#AddRadiologyOrderForm").show();
+    jq("#performedStatusCompletedReport").hide();
     
     jq("#ordernolink").hide();
     jq("#orders").show();
@@ -62,6 +63,7 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
     jq("#AddRadiologyOrderForm").hide();
     jq("#ContactRadiologist").hide(); 
     jq("#HTMLFORM").hide(); 
+    jq("#performedStatusCompletedReport").hide();
     
      jq("#ordernolink").hide();
     jq("#orders").show();
@@ -87,7 +89,7 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
     jq("#addorder").hide();
     jq("#orderdetail").show();
    jq("#HTMLFORM").hide(); 
-   
+   jq("#performedStatusCompletedReport").hide();
     jq(this).addClass('selected').siblings().removeClass('selected');    
     var value=jq(this).find('td:first').html();
     alert(value); 
@@ -107,7 +109,11 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
     var radiologyorderId = ${anOrder.orderId} ;
   
     if(orderId == radiologyorderId) {
-
+    
+    var orderencounterId = ${anOrder.study.orderencounterId} ;
+    
+    alert("orderencounterId" + orderencounterId);
+localStorage.setItem("orderencounterId", orderencounterId);
  
   jq('#completedOrderObs').append( '<thead><tr><th> Report</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th> ContactRadiologist</th></tr></thead>' );
 
@@ -173,12 +179,45 @@ jq('#completedOrderObs').append( '<tbody><tr><td><a onclick="runMyFunction();"> 
     }
     
 function runMyFunction() {
-  alert("run my function");
-  jq("#HTMLFORM").show(); 
+
+ jq("#performedStatusCompletedReport").show();
+ var orderencounterId = localStorage.getItem("orderencounterId");
+
    jq("#ContactRadiologist").hide(); 
+
+    jq('#completedOrderReport').append( '<thead><tr><th> Report</th><th> Provider</th></tr></thead>');
+    
+   <% if (getObs) { %>
+   
+    <% getObs.each { obs -> %>
+    var obsId = ${ obs.personId };
+     var obsIdCompare = ${ obs.encounter.id };
+   
+    if(orderencounterId == obsIdCompare) {
+    alert("radiologyorderId");
+    alert(orderencounterId);
+     alert("obsIdCompare");
+    alert(obsIdCompare);
+
+    jq('#completedOrderReport').append( '<tbody><tr><td>${obs.concept.getFullySpecifiedName(Locale.ENGLISH)} </td><td>${obs.valueText}</td></tr></tbody>' );
+    
+    
+   // return false;
+    }
+    
+       <% } %>
+    <% } %>
+   
+   
  
  
 }
+
+
+
+
+
+
 function contactRadiologist() {
   alert("run my contactRadiologist");
   jq("#HTMLFORM").hide(); 
@@ -194,7 +233,10 @@ function contactRadiologist() {
     jq("#addorder").hide();
     jq("#orderdetail").hide();
      jq("#ContactRadiologist").hide(); 
-    jq("#HTMLFORM").hide(); 
+    jq("#HTMLFORM").hide();
+
+  
+    
     if(selectedValue == "COMPLETED") {
     
     jq("#performedStatusCompletedOrder").show();
@@ -368,6 +410,18 @@ jq(function() {
 
 </div>
     
+<div id = "performedStatusCompletedReport">
+    
+  <h1>RADIOLOGY ORDER REPORT</h1>
+  
+<table id="completedOrderReport">
+   
+    
+
+</table>
+
+</div>
+
     
 
        <div id="ContactRadiologist" width="50%">
@@ -448,3 +502,9 @@ jq(function() {
 <div id="somediv" title="View Study Image" style="display:none;">
     <iframe id="thedialog" width="350" height="350"></iframe>
 </div>
+
+
+
+
+
+

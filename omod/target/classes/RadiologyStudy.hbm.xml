@@ -28,6 +28,12 @@
                 <property name="studyname" column="studyname"
                           length="255">
                 </property>
+                <property name="obsCompletedDate" column="obsCompletedDate"
+                          length="255">
+                </property>
+                <property name="orderencounterId" column="orderencounterId"
+                          type="int">
+                </property>
                 <property name="studyHtmlFormUUID" column="studyHtmlFormUUID"
                           length="255">
                 </property>
