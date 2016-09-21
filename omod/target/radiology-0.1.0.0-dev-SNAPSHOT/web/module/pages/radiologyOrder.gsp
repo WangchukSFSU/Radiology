@@ -24,7 +24,7 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
     jq("#messagepatient").hide();
     jq("#addorder").hide();
     jq("#orderdetail").hide();
-    jq("#inprogressorder").hide();
+
    jq("#performedStatusCompletedReport").hide();
    
     
@@ -37,6 +37,7 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
     jq("#performedStatusCompletedOrder").show();
     
     jq("#addRadiologyOrderBtn").click(function(){
+   
     jq("#performedStatusCompletedOrder").hide();
     jq("#EmailForm").hide();
     jq("#HTMLFORM").hide(); 
@@ -46,9 +47,11 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
     jq("#AddRadiologyOrderForm").show();
     jq("#performedStatusCompletedReport").hide();
     
+     jq(".dropdown1").hide();
+     
     jq("#ordernolink").hide();
     jq("#orders").show();
-    jq("#inprogressorder").hide();
+   
     jq("#messagepatient").hide();
     jq("#addorder").show();
     jq("#orderdetail").hide();
@@ -67,7 +70,7 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
     
      jq("#ordernolink").hide();
     jq("#orders").show();
-    jq("#inprogressorder").hide();
+   
     jq("#messagepatient").show();
     jq("#addorder").hide();
     jq("#orderdetail").hide();
@@ -84,7 +87,7 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
 
    jq("#ordernolink").hide();
     jq("#orders").show();
-    jq("#inprogressorder").hide();
+   
     jq("#messagepatient").hide();
     jq("#addorder").hide();
     jq("#orderdetail").show();
@@ -115,10 +118,10 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
     alert("orderencounterId" + orderencounterId);
 localStorage.setItem("orderencounterId", orderencounterId);
  
-  jq('#completedOrderObs').append( '<thead><tr><th> Report</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th> ContactRadiologist</th></tr></thead>' );
+  jq('#completedOrderObs').append( '<thead><tr><th> Report</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th>ViewStudy</th><th> ContactRadiologist</th></tr></thead>' );
 
 
-jq('#completedOrderObs').append( '<tbody><tr><td><a onclick="runMyFunction();"> Obs</a> </td><td> ${anOrder.orderer.name}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td id="dogdog" href="ddasdas"><a id="tiger" class="tiger" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + patient.patientIdentifier }" onclick="loadImages(); return false;" >${anOrder.study.studyname}</a></td><td><a onclick="contactRadiologist();"> ContactRadiologist</a></td></tr></tbody>' );
+jq('#completedOrderObs').append( '<tbody><tr><td><a onclick="runMyFunction();"> Obs</a> </td><td> ${anOrder.orderer.name}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td>${anOrder.study.studyname}</td><td id="dogdog" href="ddasdas"><a id="tiger" class="tiger" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + patient.patientIdentifier }" onclick="loadImages(); return false;" >ViewStudy</a></td><td><a onclick="contactRadiologist();"> ContactRadiologist</a></td></tr></tbody>' );
   
 }
     
@@ -182,10 +185,10 @@ function runMyFunction() {
 
  jq("#performedStatusCompletedReport").show();
  var orderencounterId = localStorage.getItem("orderencounterId");
-
+jq('#completedOrderReport').empty();
    jq("#ContactRadiologist").hide(); 
 
-    jq('#completedOrderReport').append( '<thead><tr><th> Report</th><th> Provider</th></tr></thead>');
+               // jq('#completedOrderReport').append( '<thead><tr><th> Report</th><th> Provider</th></tr></thead>');
     
    <% if (getObs) { %>
    
@@ -222,13 +225,14 @@ function contactRadiologist() {
   alert("run my contactRadiologist");
   jq("#HTMLFORM").hide(); 
   jq("#ContactRadiologist").show();
+  jq("#performedStatusCompletedReport").hide();
  
 }
     function selectFunction(selectedValue) {
    
     jq("#ordernolink").show();
     jq("#orders").hide();
-    jq("#inprogressorder").hide();
+   
     jq("#messagepatient").hide();
     jq("#addorder").hide();
     jq("#orderdetail").hide();
@@ -256,9 +260,8 @@ function contactRadiologist() {
     jq("#AddRadiologyOrderForm").hide();
     jq("#performedStatusCompletedObsSelect").hide();
     
-    jq("#ordernolink").hide();
-    jq("#orders").show();
-    jq("#inprogressorder").show();
+    jq("#ordernolink").show();
+    jq("#orders").hide();
     jq("#messagepatient").hide();
     jq("#addorder").hide();
     jq("#orderdetail").hide();
@@ -320,18 +323,15 @@ jq(function() {
     </li>
      <li id="ordernolink">  
         <i class="icon-chevron-right link"></i>
-        Manage Order         
+        Manage Radiology Order         
     </li>
     <li id="orders">
        <i class="icon-chevron-right link"></i>
         <a href="/openmrs/radiology/radiologyOrder.page?patientId=${patient.person.uuid}&returnUrl="> 
-        Manage Orders
+        Manage Radiology Order
           </a> 
     </li>
-     <li id="inprogressorder">  
-       <i class="icon-chevron-right link"></i>
-         InProgressOrder
-    </li>
+   
     <li id="messagepatient">  
        <i class="icon-chevron-right link"></i>
          Message Patient
@@ -343,7 +343,7 @@ jq(function() {
     </li>
     <li id="orderdetail">  
         <i class="icon-chevron-right link"></i>
-         Order Detail
+         Radiology Order Detail
          
     </li>
    
@@ -355,7 +355,7 @@ jq(function() {
 
 <div>
     <div id="performedStatusesDropdown" class="performedStatusesContainer">
-        <span>
+        <span class="dropdown1">
             <select name="performedStatuses" id="performedStatuses" onchange="selectFunction(this.value)">
                 <option name="performedStatuses" selected="selected" value="${performedStatuses.value}">COMPLETED</option>
                 <% performedStatuses.each { performedStatuses -> %>

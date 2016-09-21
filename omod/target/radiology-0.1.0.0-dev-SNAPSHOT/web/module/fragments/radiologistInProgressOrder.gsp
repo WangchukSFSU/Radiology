@@ -33,11 +33,11 @@
    
    
    
-    jq("#activeorders").html("<li><i ></i><a href='/openmrs/radiology/radiologistActiveOrders.page'> Active Order</li>");
+    jq("#activeorders").html("<li><i ></i><a href='/openmrs/radiology/radiologistActiveOrders.page'> Radiology Active Orders</li>");
 jq("#activeorders li i").addClass("icon-chevron-right link");
 
 
-jq("#orderdetails").html("<li><i ></i> Order Detail</li>");
+jq("#orderdetails").html("<li><i ></i> Radiology Order Detail</li>");
 jq("#orderdetails li i").addClass("icon-chevron-right link");
 
 
@@ -69,10 +69,10 @@ jq("#orderdetails li i").addClass("icon-chevron-right link");
     alert("YYEYYEYYEYEE");
 
   
-  jq('#completedOrderObs').append( '<thead><tr><th> Report</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th>SubmitObs</th></thead>' );
+  jq('#completedOrderObs').append( '<thead><tr><th> Report</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th>ViewStudy</th><th>SubmitObs</th></thead>' );
 
 
-jq('#completedOrderObs').append( '<tbody><tr><td><a id="fillreport" class="fillreport" href="${anOrder.study.studyreporturl  }" onclick="fillReport(); return false;" >Obs </a></td><td> ${anOrder.creator.username}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td id="dogdog" href="ddasdas"><a id="tiger" class="tiger" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + anOrder.patient.patientIdentifier }" onclick="loadImages(); return false;" >${anOrder.study.studyname}</a></td><td><a href="javascript: void(0)" id="linkActButton" onclick="submitObs(); return false;">Submit</a></td></tr></tbody>' );
+jq('#completedOrderObs').append( '<tbody><tr><td><a id="fillreport" class="fillreport" href="${anOrder.study.studyreporturl  }" onclick="fillReport(); return false;" >Obs </a></td><td> ${anOrder.creator.username}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td>${anOrder.study.studyname}</td><td id="dogdog" href="ddasdas"><a id="tiger" class="tiger" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + anOrder.patient.patientIdentifier }" onclick="loadImages(); return false;" >ViewStudy</a></td><td><a href="javascript: void(0)" id="linkActButton" onclick="submitObs(); return false;">Submit</a></td></tr></tbody>' );
   
 
 }
@@ -235,7 +235,7 @@ function contactRadiologist() {
     <li id="activeorders">
        <i class="icon-chevron-right link"></i>
         
-        Active Orders
+        Active Radiology Orders
          
     </li>
     <li id="orderdetails">  

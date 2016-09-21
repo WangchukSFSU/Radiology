@@ -1,6 +1,13 @@
 <script>
     jq = jQuery;
     jq(document).ready(function() {
+    
+     jq("#clearmessage").click(function(){
+    
+      jq("#message").val('');
+ 
+    });
+    
      jq("#sendEmail").click(function(){     
 var recipient = jq("#recipient").val();
 var  subject = jq("#subject").val();
@@ -45,6 +52,7 @@ var  message = jq("#message").val();
                 <tr>
                     <td colspan="2" align="center">
                         <input type="submit" id ="sendEmail" value="Send E-mail" />
+                        <input class="fields" id="clearmessage" type="button" value="Cancel" />
                     </td>
                 </tr>
             </table>
