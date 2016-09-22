@@ -44,6 +44,7 @@ jq("#orderdetails li i").addClass("icon-chevron-right link");
    
     jq(this).addClass('selected').siblings().removeClass('selected');    
     var value=jq(this).find('td:first').html();
+    
     alert(value); 
     jq("#performedStatusInProgressOrderDetail").show();
       jq("#performedStatusInProgressOrder").hide();
@@ -51,15 +52,22 @@ jq("#orderdetails li i").addClass("icon-chevron-right link");
     
     ordervalue = splitvalue[1];
     alert("ordervalue" +ordervalue);
-   var orderId = ordervalue.substr(0, 2);
+   //var orderId = ordervalue.substr(0, 2);
+      //alert("orderId" +orderId);
+      var orderId= ordervalue.substr(0, ordervalue.indexOf('<'));
       alert("orderId" +orderId);
      <% if (inProgressRadiologyOrders) { %>
-   
+   alert("yess");
     <% inProgressRadiologyOrders.each { anOrder -> %>
     
     var radiologyorderId = ${anOrder.orderId} ;
   
    
+  alert("444444");
+  alert("orderId");
+  alert(orderId);
+  alert("radiologyorderId");
+  alert(radiologyorderId);
   
     if(orderId == radiologyorderId) {
     alert("NJSDSD " + radiologyorderId);

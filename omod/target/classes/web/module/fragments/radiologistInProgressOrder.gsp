@@ -44,6 +44,7 @@ jq("#orderdetails li i").addClass("icon-chevron-right link");
    
     jq(this).addClass('selected').siblings().removeClass('selected');    
     var value=jq(this).find('td:first').html();
+    alert("123");
     alert(value); 
     jq("#performedStatusInProgressOrderDetail").show();
       jq("#performedStatusInProgressOrder").hide();
@@ -54,7 +55,7 @@ jq("#orderdetails li i").addClass("icon-chevron-right link");
    var orderId = ordervalue.substr(0, 2);
       alert("orderId" +orderId);
      <% if (inProgressRadiologyOrders) { %>
-   
+   alert("yess");
     <% inProgressRadiologyOrders.each { anOrder -> %>
     
     var radiologyorderId = ${anOrder.orderId} ;

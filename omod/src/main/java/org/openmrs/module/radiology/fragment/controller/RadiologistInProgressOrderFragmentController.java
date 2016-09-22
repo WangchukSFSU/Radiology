@@ -48,18 +48,6 @@ public class RadiologistInProgressOrderFragmentController {
 		
 		System.out.println("length LLLLLLLLLLLLL " + inProgressRadiologyOrders.size());
 		
-		RadiologyOrder radiologyOrder = Context.getService(RadiologyService.class)
-				.getRadiologyOrderByOrderId(62);
-		
-		System.out.println("test " + radiologyOrder.getStudy()
-				.getPerformedStatus());
-		System.out.println("test " + radiologyOrder.getStudy()
-				.getRadiologyStatusOrder());
-		System.out.println("test " + radiologyOrder.getStudy()
-				.getRadiologyorderstatus());
-		System.out.println("test " + radiologyOrder.getStudy()
-				.getObsCompletedDate());
-		
 		String aap = getDicomViewerUrladdress();
 		
 		model.addAttribute("dicomViewerUrladdress", aap);
@@ -112,6 +100,7 @@ public class RadiologistInProgressOrderFragmentController {
 						.getRadiologyOrderByOrderId(order.getOrderId());
 				
 				if (radiologyOrder.isCompleted()) {
+					System.out.println("222222 " + radiologyOrder.getInstructions());
 					radiologyOrders.add(radiologyOrder);
 					
 				}
