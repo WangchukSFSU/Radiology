@@ -141,7 +141,7 @@ jq("#somediv").load('/openmrs/radiology/radiologistActiveOrders.page').dialog({m
     data : { 'radiologyorderId': radiologyorderId},
     cache: false,
     success: function(data){
-    
+    location.reload();
 alert("COOL");
     }
     });
@@ -289,7 +289,7 @@ function contactRadiologist() {
 
 
 <div id="somedivreport" title="Fill Report" style="display:none;">
-    <iframe id="thedialogreport" width="550" height="350"></iframe>
+    <iframe id="thedialogreport" width="1250" height="550"></iframe>
 </div>
 
 

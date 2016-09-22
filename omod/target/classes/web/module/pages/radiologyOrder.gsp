@@ -24,7 +24,7 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
     jq("#messagepatient").hide();
     jq("#addorder").hide();
     jq("#orderdetail").hide();
-
+  
    jq("#performedStatusCompletedReport").hide();
    
     
@@ -37,7 +37,7 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
     jq("#performedStatusCompletedOrder").show();
     
     jq("#addRadiologyOrderBtn").click(function(){
-   
+        jq("#performedStatusesDropdown").hide();
     jq("#performedStatusCompletedOrder").hide();
     jq("#EmailForm").hide();
     jq("#HTMLFORM").hide(); 
@@ -47,7 +47,7 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
     jq("#AddRadiologyOrderForm").show();
     jq("#performedStatusCompletedReport").hide();
     
-     jq(".dropdown1").hide();
+
      
     jq("#ordernolink").hide();
     jq("#orders").show();
@@ -66,7 +66,10 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
     jq("#AddRadiologyOrderForm").hide();
     jq("#ContactRadiologist").hide(); 
     jq("#HTMLFORM").hide(); 
-    jq("#performedStatusCompletedReport").hide();
+    jq("#performedStatusCompletedReport").hide(); 
+
+    jq("#performedStatusesDropdown").hide();
+    
     
      jq("#ordernolink").hide();
     jq("#orders").show();

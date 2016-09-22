@@ -262,7 +262,7 @@ public class AddRadiologyOrderFormFragmentController {
 			
 		}
 		
-		study.setPerformedStatus(PerformedProcedureStepStatus.COMPLETED);
+		study.setPerformedStatus(PerformedProcedureStepStatus.IN_PROGRESS);
 		study.setScheduledStatus(ScheduledProcedureStepStatus.SCHEDULED);
 		study.setRadiologyStatusOrder(RadiologyOrderStatus.INPROGRESS);
 		
