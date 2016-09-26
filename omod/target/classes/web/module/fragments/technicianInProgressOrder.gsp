@@ -69,10 +69,10 @@ jq("#orderdetails li i").addClass("icon-chevron-right link");
     alert("YYEYYEYYEYEE");
 
   
-  jq('#completedOrderObs').append( '<thead><tr><th> Report</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th>ViewStudy</th><th>SubmitObs</th></thead>' );
+  jq('#completedOrderObs').append( '<thead><tr><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th> SendDicomToPAC </th><th>SubmitObs</th></thead>' );
 
 
-jq('#completedOrderObs').append( '<tbody><tr><td><a id="fillreport" class="fillreport" href="${anOrder.study.studyreporturl  }" onclick="fillReport(); return false;" >Obs </a></td><td> ${anOrder.creator.username}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td>${anOrder.study.studyname}</td><td id="dogdog" href="ddasdas"><a id="tiger" class="tiger" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + anOrder.patient.patientIdentifier }" onclick="loadImages(); return false;" >ViewStudy</a></td><td><a href="javascript: void(0)" id="linkActButton" onclick="submitObs(); return false;">Submit</a></td></tr></tbody>' );
+jq('#completedOrderObs').append( '<tbody><tr><td> ${anOrder.creator.username}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td>${anOrder.study.studyname}</td><td><a onclick="contactRadiologist();"> SendDicomToPACs</a></td><td><a href="javascript: void(0)" id="linkActButton" onclick="submitObs(); return false;">Submit</a></td></tr></tbody>' );
   
 
 }
@@ -125,7 +125,13 @@ jq("#somediv").load('/openmrs/radiology/radiologistActiveOrders.page').dialog({m
     });
 
     
-  
+  function contactRadiologist() {
+  alert("run my contactRadiologist");
+ 
+  jq("#ContactRadiologist").show();
+ 
+ 
+}
     function submitObs() {
     
    
@@ -286,6 +292,14 @@ function contactRadiologist() {
 </table>
 
 </div>
+
+
+
+
+   <div id="ContactRadiologist" width="50%">
+        ${ ui.includeFragment("radiology", "sendDicomToPAC") }
+    </div>
+
 
 
 <div id="somedivreport" title="Fill Report" style="display:none;">

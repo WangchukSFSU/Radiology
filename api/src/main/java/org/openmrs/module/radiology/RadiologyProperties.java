@@ -67,6 +67,10 @@ public class RadiologyProperties extends ModuleProperties {
 		return getGlobalProperty(RadiologyConstants.GP_PACS_HL7_PORT, true);
 	}
 	
+	public String getPacsSTORESCUPort() {
+		return getGlobalProperty(RadiologyConstants.GP_PACS_STORESCU_PORT, true);
+	}
+	
 	/**
 	 * Return PACS DICOM AE title.
 	 * 

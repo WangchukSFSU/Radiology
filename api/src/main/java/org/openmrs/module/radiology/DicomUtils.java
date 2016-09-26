@@ -20,6 +20,8 @@ import org.openmrs.module.radiology.hl7.CommonOrderOrderControl;
 import org.openmrs.module.radiology.hl7.message.RadiologyORMO01;
 
 import ca.uhn.hl7v2.HL7Exception;
+import java.io.File;
+import org.dcm4che.tool.storescu.StoreSCU;
 
 /**
  * DicomUtils is a utility class helping to process DicomObject's like DICOM MPPS messages and
@@ -166,6 +168,15 @@ public class DicomUtils {
 				hl7message };
 		final int hl7SendStatus = HL7Snd.main(input);
 		return hl7SendStatus == HL7_SEND_SUCCESS ? true : false;
+	}
+	
+	public static void sendDicomToPACs(String hl7message) {
+		final String input[] = {
+				"-c",
+				radiologyProperties.getPacsDicomAeTitle() + "@" + radiologyProperties.getPacsAddress() + ":"
+						+ radiologyProperties.getPacsSTORESCUPort(), hl7message };
+		StoreSCU.main(input);
+		// return hl7SendStatus == HL7_SEND_SUCCESS ? true : false;
 	}
 	
 	static RadiologyService radiologyService() {

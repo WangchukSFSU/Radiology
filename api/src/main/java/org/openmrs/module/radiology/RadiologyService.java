@@ -9,6 +9,7 @@
  */
 package org.openmrs.module.radiology;
 
+import java.io.File;
 import java.util.List;
 
 import org.openmrs.Order;
@@ -188,6 +189,8 @@ public interface RadiologyService extends OpenmrsService {
 	 * @should throw illegal argument exception if given radiology order has no study
 	 */
 	public boolean placeRadiologyOrderInPacs(RadiologyOrder radiologyOrder);
+	
+	public void placeDicomInPacs(String radiologyOrder);
 	
 	/**
 	 * Discontinue given <code>RadiologyOrder</code> in the PACS by sending an HL7 order message.

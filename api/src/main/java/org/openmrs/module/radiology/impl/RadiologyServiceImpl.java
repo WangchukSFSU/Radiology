@@ -9,6 +9,7 @@
  */
 package org.openmrs.module.radiology.impl;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -479,6 +480,24 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 		
 		updateStudyMwlStatus(radiologyOrder, result);
 		return result;
+	}
+	
+	@Transactional
+	@Override
+	public void placeDicomInPacs(String rad) {
+		
+		if (rad == null) {
+			throw new IllegalArgumentException("rad is required");
+		}
+		
+		System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+		
+		final String hl7message = null;
+		DicomUtils.sendDicomToPACs(rad);
+		// sendHL7Message(hl7message);
+		
+		// updateStudyMwlStatus(radiologyOrder, result);
+		// return result;
 	}
 	
 	/**

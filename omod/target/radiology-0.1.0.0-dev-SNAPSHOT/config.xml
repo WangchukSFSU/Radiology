@@ -72,6 +72,12 @@
 		<description>HL7 port of the PACS to send radiology orders to
 		</description>
 	</globalProperty>
+        <globalProperty>
+		<property>radiology.pacsStoreSCUPort</property>
+		<defaultValue>11112</defaultValue>
+		<description>Storescp port of the PACS to send radiology study to
+		</description>
+	</globalProperty>
 	<globalProperty>
 		<property>radiology.pacsDicomAeTitle</property>
 		<defaultValue>DCM4CHEE</defaultValue>
@@ -201,7 +207,10 @@
 
 	<!-- Internationalization -->
 	<!-- All message codes should start with moduleId.* -->
-
+         <messages>
+		<lang>en</lang>
+		<file>storescumessages.properties</file>
+	</messages>
 	<messages>
 		<lang>en</lang>
 		<file>hl7messages.properties</file>

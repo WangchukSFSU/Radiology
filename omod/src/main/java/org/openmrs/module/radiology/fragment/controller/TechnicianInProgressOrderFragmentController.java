@@ -29,6 +29,7 @@ import org.openmrs.module.radiology.RadiologyService;
 import org.openmrs.module.radiology.RadiologyStudyList;
 import org.openmrs.module.radiology.ScheduledProcedureStepStatus;
 import org.openmrs.module.radiology.Study;
+
 import org.openmrs.ui.framework.fragment.FragmentModel;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -47,18 +48,6 @@ public class TechnicianInProgressOrderFragmentController {
 		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrdersByPatient();
 		
 		System.out.println("length LLLLLLLLLLLLL " + inProgressRadiologyOrders.size());
-		
-		RadiologyOrder radiologyOrder = Context.getService(RadiologyService.class)
-				.getRadiologyOrderByOrderId(62);
-		
-		System.out.println("test " + radiologyOrder.getStudy()
-				.getPerformedStatus());
-		System.out.println("test " + radiologyOrder.getStudy()
-				.getRadiologyStatusOrder());
-		System.out.println("test " + radiologyOrder.getStudy()
-				.getRadiologyorderstatus());
-		System.out.println("test " + radiologyOrder.getStudy()
-				.getObsCompletedDate());
 		
 		String aap = getDicomViewerUrladdress();
 		
