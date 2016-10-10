@@ -1,9 +1,10 @@
 <% ui.includeCss("radiology", "modalitylist.css") %>
 
-<% ui.includeJavascript("jquery.js") %>
-<% ui.includeJavascript("jquery-ui.js") %>
+<% ui.includeJavascript("uicommons", "datatables/jquery.dataTables.min.js") %>
 
+  
 
+  <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
 
 
 <script>
@@ -12,22 +13,30 @@
   
     jq(document).ready(function() {
     
-   
+ 
+jq('#tableformodality').DataTable({
+           "sPaginationType": "full_numbers",
+            "bPaginate": true,
+            "bAutoWidth": false,
+            "bLengthChange": true,
+            "bSort": true,
+            //"bJQueryUI": true,
+             "iDisplayLength": 5,   
+        });
     
-   jq("#items").hide();
+
+
     jq(".studygroup").hide();
   jq(".studybtn").hide();
   jq(".breadcrumbs").show();
  jq(".reportgroup").hide();
-   jq(".reportbtn").hide();
-   jq("#reportsavebtn").hide();
-   
-   jq("#modalityselect").hide();
 
-   jq("#reportmodalityselect").hide();
+
+   
+ 
    jq("#reportstudyselect").hide();
    jq("#reporttable").hide();
- 
+ jq("#studytable").hide();
    
 
 
@@ -143,42 +152,48 @@ jq("#deletebtn").live ('click', function ()
  });
 
   jq("#studyrefresh").click(function() { 
-  
+  jq("#studytable").hide();
   jq(this).data('clicked', true);
   alert("zzzzzzz");
-  
-  var selected = jq( "#selectlabtest1 option:selected" ).text();
-  jq("#dynamictable tr").remove();
-   myFunctionT(selected);
+ jq("#continuebtn").click();
+   //myFunctionT(selected);
  
   });
  
  jq("#reportrefresh").click(function() { 
- 
+ jq("#reporttable").hide();
  jq(this).data('clicked', true);
  jq("#studycontinuebtn").click();
   alert("zzzzzzz");
+   // jq("#reporttable").hide();
+ 
   
   //var selected = jq( "#reportstudyselectdropdown option:selected" ).text();
   //jq("#dynamictable tr").remove();
    //myFunctionT(selected);
- 
+ //jq("#reporttable").show();
   });
+  
+  
+  
+  
+  
   
  jq("#continuebtn").click(function() {
   
 jq(this).data('clicked', true);
  
- if(jq('#Savebtn').data('clicked')) {
+ //if(jq('#Savebtn').data('clicked')) {
  
 alert("CLCICLCLCLCLCCLC");
    jq("#modalitySoftware").hide();
-  jq("#items").show();
+
 jq(".studygroup").show();
 jq(".modality").hide();
 jq(".studybtn").show(); 
   jq(".modalitybtn").hide();
  
+   jq("#performedStatusInProgressOrder").hide();
   
  
   
@@ -193,52 +208,27 @@ jq("#managestudy li i").addClass("icon-chevron-right link");
 
 
 
+            
 
   
+ 
    
-   
-     var arrcontinuebtn = [];
-jq("#tableformodality tr").each(function(){
-    arrcontinuebtn.push(jq(this).find("td:first").text());
-});
-
-var arrayfirst = arrcontinuebtn[1];
-localStorage.setItem("arrayfirst", arrayfirst);
 
 
 
+myFunctionStudyList();
 
 
-myFunctionT(arrayfirst);
-
-for (var i=1;i<arrcontinuebtn.length;i++){
-alert("MODALITY " + arrcontinuebtn[i]);
-localStorage.setItem("arrcontinuebtn", JSON.stringify(arrcontinuebtn));
-   jq('<option/>').val(arrcontinuebtn[i]).html(arrcontinuebtn[i]).appendTo('#items select');
-}
- 
- } 
- 
- else {
  
  
-           
-               jq( "#continuetext" ).dialog( "open" );
-         
-    jq(".ui-dialog").addClass("customclass");
-            
-            
- }
    
 });
-
-
 
 
 
 jq("#studycontinuebtn").click(function() {
   jq(this).data('clicked', true);
- if(jq('#studysavebtn').data('clicked')) {
+ 
  alert("YES");
  jq("#modalitySoftware").hide();
   
@@ -247,21 +237,18 @@ jq(".modality").hide();
 jq(".studybtn").hide(); 
   jq(".modalitybtn").hide();
   jq(".reportgroup").show();
-  jq(".reportbtn").show();
-  jq("#reportsavebtn").show();
+
+ 
+
   jq("#selectlabtest1").empty();
   
-  jq("#items").css("width", "30%");
-jq("#dynamictable").css("width", "40%");
-  jq("#modalityselect").hide();
-  jq("#items").hide();
-  
-  jq("#reportmodalityselect").show();
+ 
+
   jq("#reportstudyselect").hide();
   
-   jq("#dynamictable").hide();
-  jq("#reporttable").show();
+   jq("#studytable").hide();
   
+   
   
 
    jq("#managestudy").html("<li><i ></i><a href='javascript:void(0);' onClick='a_onClick()'> Manage Studies</li>");
@@ -274,237 +261,25 @@ jq("#managereport li i").addClass("icon-chevron-right link");
 
 
 
-     
-     var arr = [];
-jq("#dynamictable table tr").each(function(){
-    arr.push(jq(this).find("td:first").text());
-});
-
-var arrayfirst = arr[1];
-alert("POTPOTPOTPOT "+arrayfirst);
-
-
-//myFunctionT(arrayfirst);
-
-
-for (var i=1;i<arr.length;i++){
-alert("SUNN");
-
-  alert(arr[i]);
   
-  jq('<option/>').val(arr[i]).html(arr[i]).appendTo('#items select');
-}
 
-var arr2 = JSON.parse(localStorage.getItem("arrcontinuebtn"));
 
-alert("MMMMMMMMMM arr2 "+arr2);
-for (var i=1;i<arr2.length;i++){
+functionreportlist();
 
-   jq('<option/>').val(arr2[i]).html(arr2[i]).appendTo('#modalityselect select');
-}
 
 
 
 
 
-jq("#reportmodalityselect select").empty();
-
-
-
-var arr22 = JSON.parse(localStorage.getItem("arrcontinuebtn"));
-for (var i=1;i<arr22.length;i++){
-
-alert("modality storage " + arr22[i]);
-
-   jq('<option/>').val(arr22[i]).html(arr22[i]).appendTo('#reportmodalityselect select');
-}
-
-
-
-
-var reportmodalityfirstlist = arr22[1];
-
-
-alert("reportmodalityfirstlist "+reportmodalityfirstlist);
-
-jq.getJSON('${ ui.actionLink("getStudyConceptsAnswerFromModality") }',
-           {
-             'studyconceptclass': reportmodalityfirstlist
-            })
-       .error(function(xhr, status, err) {
-            alert('AJAX error ' + err);
-        })
-        .success(function(ret) {
-                  alert("goog"); 
-                  
-                  
-  
-                  for (var i = 0; i < ret.length; i++) {
-            var conId = ret[i].conceptId;
-            var conNamed = ret[i].displayString;
-            alert("conName" +conNamed);
-            
-          //localStorage.setItem("reportfirstmodalitystudylist", JSON.stringify(conName));
-            
-          
-          
-          
-          
-          
-           // }
-               
-
-  
-                  
-                  
-               //   });
-
-   
-
-
-jq('#reportstudyselectdropdown').empty();
-
-
-//var arrstudycontinuebtnarr = JSON.parse(localStorage.getItem("arrstudycontinuebtn"));
-//var arrstudycontinuebtnarr = JSON.parse(localStorage.getItem("reportfirstmodalitystudylist"));
-//arrstudycontinuebtnarr.shift();
-//for (var i=0;i<arrstudycontinuebtnarr.length;i++){
-
-
-
-   
-//}
-
-
-//alert("MMMMMMMMMM "+arrstudycontinuebtnarr);
-
-
-//var sat = arrstudycontinuebtnarr[0]
-   
- jq('#reporttable').empty();
-jq('#reporttable').append('<table></table>');
-jq("#reporttable table").addClass("reportclass");
-var table = jq('#reporttable').children();
-table.append("<tr><td>Studies available</td><td id='tablesecondcolumn' >Report Available</td><td>Action</td></tr>");
-
-
-
-jq.getJSON('${ ui.actionLink("getReportConcepts") }',
-           {
-             'studyconceptclass': conNamed
-            })
-       .error(function(xhr, status, err) {
-            alert('AJAX error ' + err);
-        })
-        .success(function(ret) {
-                  alert("googd"); 
-
-
-
-    
-   
-
-
-  
-  
-  
-alert("ret.length KKKKKK" + ret.length);
-            for (var i = 0; i < ret.length; i++) {
-            var conId = ret[i].id;
-             var conName = ret[i].studyName;
-            var conNameReporturl = ret[i].studyReporturl;
-            
-            alert("conId" + conId);
-             alert("conName" + conName);
-            
-      
-if(conNameReporturl) {
-
-            
-table.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'> '+ conName +'</a> </td> <td> <a id="editbtn" href='+ conNameReporturl +'><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a> <a id="deletebtn" ><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/></a> </td></tr>' );
-
-
-  }
-else {
-
-table.append( '<tr><td>'+ conName +'</td><td>'+ conNameReporturl +' </td> <td><a id="addbtn" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a> <a id="editbtn" href='+ conNameReporturl +'><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a> <a id="deletebtn" ><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/></a> </td></tr>' );
-
-
-}
- 
-  
-         
-
-
-  
-            
-}
-
- 
-
-});
-
-
-   
-   
-}
-});
-
-
-
-
-
-
-
-jq("#selectlabtest1").css( { marginLeft : "-32px" } );
-
-
- 
- } 
-
-
-
-
- else {
- jq( "#studycontinuetext" ).dialog( "open" );
- 
- }
  
  });
 
+
+
  
 
  
-  jq("#reportsavebtn").click(function() { 
- 
- 
- var arr = [];
-jq("#dynamictable tr").each(function(){
-    arr.push(jq(this).find("td:first").text());
-});
-for (i=0;i<arr.length;i++)
-{
-alert(arr[i]);
 
-}
-
-arr.shift();
-
-jq.ajax({
-    type: "POST",
-    url: "${ ui.actionLink('saveReport') }",
-    data : { reportList: arr },
-    cache: false,
-    success: function(data){
-
-
-
-
- jq( "#reportsaved" ).dialog( "open" );
- }
- });
- 
- });
  
  
  
@@ -604,40 +379,34 @@ a_onClick.called = true;
    
   jq('#studysavebtn').data('clicked', false);
    jq(".reportgroup").hide();
-   jq('#dynamictable').empty();
-    
-    jq("#reportsavebtn").hide();
+  
+  
   
     jq("#managereport").empty();
-    jq("#modalityselect").hide();
-   jq("#dynamictable").show();
-  jq("#items").show();
-  jq("#items select").empty();
+ 
+
+
 jq(".studygroup").show();
 
-   jq("#reportmodalityselect").hide();
-   jq("#reportstudyselect").hide();
 
-jq("#selectlabtest1").css( { marginLeft : "32px" } );
 
 jq(".studybtn").show();
+
+
+ 
+
+
 jq("#reporttable").hide();
 
- jq("#items").css("width", "36%");
-jq("#dynamictable").css("width", "64%");
+//jq("#studytable").show();
+  
+  myFunctionStudyList();
   
   
-var someVarName = localStorage.getItem("arrayfirst");
-var arr1 = JSON.parse(localStorage.getItem("arrcontinuebtn"));
-alert("LKLKLLKLKLK "+someVarName);
-alert("MMMMMMMMMM "+arr1);
-for (var i=1;i<arr1.length;i++){
-
-   jq('<option/>').val(arr1[i]).html(arr1[i]).appendTo('#items select');
-}
+ //jq("#studycontinuebtn").click();
 
 
-myFunctionT(someVarName);
+//myFunctionT(someVarName);
 
   }
 
@@ -662,6 +431,9 @@ var tablemodality = document.getElementById("tableformodality");
                                     document.getElementById("tableformodality").deleteRow(i - 1);
                                 }
 
+      
+
+                                
                                 
                                 jq('#dynamictable').empty();
 jq('#dynamictable').append('<table></table>');
@@ -674,13 +446,13 @@ var table = jq('#dynamictable').children();
 
  if(myFunctionT.called) {
  myFunctionT.called = false;
- table.append("<tr><td>Studies available</td><td>Action</td></tr>");
+ table.append("<thead><tr><td>Studies available</td></tr></thead>");
  } else if((jq('#studyrefresh').data('clicked'))){
 alert("1");
 jq('#studyrefresh').data('clicked', false);
 alert("inside study conitnueeeeee");
     
-table.append("<tr><td>Studies available</td><td>Action</td></tr>");
+table.append("<thead><tr><td>Studies available</td></tr></thead>");
 
 }else if(jq('#reportrefresh').data('clicked') ) {
 jq('#reportrefresh').data('clicked', false);
@@ -703,14 +475,14 @@ a_onClick.called = false;
 alert("inside study conitnueeeeee");
 alert("4");
     
-table.append("<tr><td>Studies available</td><td>Action</td></tr>");
+table.append("<thead><tr><td>Studies available</td></tr></thead>");
 
 }
 else if((jq('#continuebtn').data('clicked'))) {
 jq('#continuebtn').data('clicked', false);
 alert("inside study conitnueeeeee");
     alert("5");
-table.append("<tr><td>Studies available</td><td>Action</td></tr>");
+table.append("<thead><tr><td>Studies available</td></tr></thead>");
 
 }
 else if((jq('#studycontinuebtn').data('clicked'))) {
@@ -723,7 +495,7 @@ table.append("<tr><td>Report available</td><td>Action</td></tr>");
 }
 else {
 alert("7");
-table.append("<tr><td>Studies available</td><td>Action</td></tr>");
+table.append("<thead><tr><td>Studies available</td></tr></thead>");
 }
 
 
@@ -738,15 +510,91 @@ alert("ret.length" + ret.length);
 table.append( '<tr><td>' +  conName + ' <a href="http://localhost:8080/openmrs/htmlformentryui/htmlform/enterHtmlFormWithStandardUi.page?patientId=5486b0af-8591-40d1-84b9-afab423fd55d&visitId=&formUuid=9e414151-e2d0-4693-9548-b6beb916b213&returnUrl=%2Fopenmrs%2Fcoreapps%2Fclinicianfacing%2Fpatient.page%3FpatientId%3D5486b0af-8591-40d1-84b9-afab423fd55d%26">( Right Click to view Sample Form)</a></td> <td><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
 
 } else {
-table.append( '<tr><td>' +  conName + '</td> <td><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+table.append( '<tbody><tr><td>' +  conName + '</td> </tr></tbody>' );
+
 
 }
 
+
+
 }
+
+  
 
 });
 
  }
+ 
+ 
+ 
+ function myFunctionStudyList() {
+
+  //myFunctionT.called = true;
+  jq("#studytable").show();
+    jq('#studytable').empty();
+jq('#studytable').append('<table></table>');
+jq('#studytable table').attr('id','studytablelistid');
+jq("#studytable table").addClass("studyclass");
+var studytablelist = jq('#studytable').children();
+  
+  
+  
+  jq.getJSON('${ ui.actionLink("getStudyConceptsAnswerFromModality") }',
+           {
+             
+            })
+       .error(function(xhr, status, err) {
+            alert('AJAX error ' + err);
+        })
+        .success(function(ret) {
+                  alert("goog"); 
+                  
+                  
+                  
+               
+                  
+                  
+                  
+studytablelist.append( '<thead><tr><th> Studies Available</th></thead><tbody>' );
+
+
+          
+
+                                  
+                                
+                                
+alert("ret.length" + ret.length);
+            for (var i = 0; i < ret.length; i++) {
+            var conId = ret[i].conceptId;
+            var conName = ret[i].displayString;
+ 
+studytablelist.append( '<tr><td>' +  conName + '</td> </tr>' );
+
+
+}
+
+studytablelist.append( '</tbody>' );
+jq('#studytablelistid').dataTable({
+            "sPaginationType": "full_numbers",
+            "bPaginate": true,
+            "bAutoWidth": false,
+            "bLengthChange": true,
+            "bSort": true,
+            //"bJQueryUI": true,
+             "iDisplayLength": 5,   
+        });
+ 
+
+  
+
+})
+            
+
+
+ }
+ 
+ 
+ 
  
  
  
@@ -769,7 +617,7 @@ table.append( '<tr><td>' +  conName + '</td> <td><input type="button" id="delete
                   for (var i = 0; i < ret.length; i++) {
             var conId = ret[i].conceptId;
             var conNamed = ret[i].displayString;
-            alert("conName" +conNamed);
+            //alert("conName" +conNamed);
             
           //localStorage.setItem("reportfirstmodalitystudylist", JSON.stringify(conName));
             
@@ -814,8 +662,6 @@ jq("#reporttable table").addClass("reportclass");
 var table = jq('#reporttable').children();
 table.append("<tr><td>Studies available</td><td id='tablesecondcolumn'>Report Available</td><td>Action</td></tr>");
 
-
-
 jq.getJSON('${ ui.actionLink("getReportConcepts") }',
            {
              'studyconceptclass': conNamed
@@ -827,22 +673,14 @@ jq.getJSON('${ ui.actionLink("getReportConcepts") }',
                   alert("googd"); 
 
 
-
-    
-   
-
-
-  
-  
-  
 alert("ret.length KKKKKK" + ret.length);
             for (var i = 0; i < ret.length; i++) {
             var conId = ret[i].id;
              var conName = ret[i].studyName;
             var conNameReporturl = ret[i].studyReporturl;
             
-            alert("conId" + conId);
-             alert("conName" + conName);
+           // alert("conId" + conId);
+            // alert("conName" + conName);
             
       
 if(conNameReporturl) {
@@ -859,20 +697,17 @@ table.append( '<tr><td>'+ conName +'</td><td>'+ conNameReporturl +' </td> <td><a
 
 }
  
-  
-         
-
-
-  
             
 }
 
  
 
-});
+})
 
 
-   
+
+
+
    
 }
 });
@@ -884,70 +719,107 @@ table.append( '<tr><td>'+ conName +'</td><td>'+ conNameReporturl +' </td> <td><a
 
  
  
-  function modalitystudyfunction(selectedValue) {
+  function functionreportlist() {
 
-
+   
+                                
+    jq('#reporttable').empty();
+jq('#reporttable').append('<table></table>');
+jq('#reporttable table').attr('id','reporttablelistid');
+jq("#reporttable table").addClass("reportclass");
+var reporttablelist = jq('#reporttable').children();
+  
+  
+alert("report ");
     
  
   jq.getJSON('${ ui.actionLink("getReportConcepts") }',
            {
-             'studyconceptclass': selectedValue
+        
             })
        .error(function(xhr, status, err) {
             alert('AJAX error ' + err);
         })
         .success(function(ret) {
-                  alert("goog"); 
+                  alert("report goog"); 
 
- jq('#reporttable').empty();
-jq('#reporttable').append('<table></table>');
-jq("#reporttable table").addClass("reportclass");
-var table = jq('#reporttable').children();
-     
- 
-    table.append("<tr><td>Studies available</td><td>Report Available</td><td>Action</td></tr>");
+
+                  
+     reporttablelist.append("<thead><tr><td>Studies</td><td>Report Available</td><td>Action</td></tr></thead><tbody>");
     
-   
 
-
-  
-  
-  
 alert("ret.length" + ret.length);
             for (var i = 0; i < ret.length; i++) {
             var conId = ret[i].id;
              var conName = ret[i].studyName;
             var conNameReporturl = ret[i].studyReporturl;
             
-            alert("conId" + conId);
-             alert("conName" + conName);
-            
+            //alert("conId" + conId);
+            // alert("conName" + conName);
+
       
 if(conNameReporturl) {
 
             
-table.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'>'+ conName +'</a> </td> <td><a id="modalityconceptmessage" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form">   <input type="button" id="addbtn" value="Add" ></a> <a href='+ conNameReporturl +'><input type="button" id="editbtn" value="Edit" ></a><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
+ reporttablelist.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'>'+ conName +'</a> </td> <td><a id="editbtn" href='+ conNameReporturl +'><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a>  </td></tr>' );
 
    
   }
-else {
 
-table.append( '<tr><td>'+ conName +'</td><td>'+ conNameReporturl +' </td> <td><input type="button" id="addbtn" value="Add" ><input type="button" id="editbtn" value="Edit" ><input type="button" id="deletebtn" value="Delete" > </td></tr>' );
-
-
-}
  
-  
-         
+       
+}
 
 
-  
+    
+ 
+ 
+ 
+})
+
+ 
+
+  jq.getJSON('${ ui.actionLink("getStudyConcepts") }',
+           {
+        
+            })
+       .error(function(xhr, status, err) {
+            alert('AJAX error ' + err);
+        })
+        .success(function(ret) {
+                  alert("report goog"); 
+
+  jq("#reporttable").show();
+
+alert("ret.length" + ret.length);
+            for (var i = 0; i < ret.length; i++) {
+            var conId = ret[i].id;
+            var conName = ret[i].name;
             
-}
+          
+            
+           // alert("conId study" + conId);
+            //alert("conId conName" + conName);
+ reporttablelist.append( '<tr><td> '+ conName +' </td><td> </td> <td><a id="addbtn" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a><a id<img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a>  </td></tr>' );
 
+      
+}
+    
+  jq('#reporttablelist').append("</tbody>");
+ jq('#reporttablelistid').dataTable({
+ destroy: true,
+            "sPaginationType": "full_numbers",
+            "bPaginate": true,
+            "bAutoWidth": false,
+            "bLengthChange": true,
+            "bSort": true,
+            //"bJQueryUI": true,
+             "iDisplayLength": 5,   
+        });
+ 
+})
  
 
-});
 
 
 
@@ -1010,7 +882,7 @@ ${ ui.includeFragment("radiology", "modalitySoftware") }
 
 <div class="studygroup">
     <div class="form-group">
-    <label id="study-concept-message" for modality-concept-label> Select Modality from the dropdown to show the studies available. Please Add Study not appearing in list to Concept Dictionary and Refresh: <a id="modalityconceptmessage" href="http://localhost:8080/openmrs/dictionary/concept.form"> Click here to Concept Dictionary </a></label>
+    <label id="study-concept-message" for modality-concept-label> Please Add Study not appearing in list to Concept Dictionary and Refresh: <a id="modalityconceptmessage" href="http://localhost:8080/openmrs/dictionary/concept.form"> Click here to Concept Dictionary </a></label>
     <input type="button" id="studyConceptDictionary" class="studyConceptDictionary" value = "?" >
     <input type="button" name="studyrefresh" id="studyrefresh" value="Refresh">
      
@@ -1019,7 +891,7 @@ ${ ui.includeFragment("radiology", "modalitySoftware") }
 
 <div class="reportgroup">
     <div class="form-group">
-    <label id="report-concept-message" for report-concept-label> Select Modality from the dropdown to show the studies and reports available. Please Create Report not appearing in list and Refresh: <a id="modalityconceptmessage" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"> Click here to create HTMLForm  </a></label>
+    <label id="report-concept-message" for report-concept-label>  Please Create Report not appearing in list and Refresh: <a id="modalityconceptmessage" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"> Click here to create HTMLForm  </a></label>
     <input type="button" id="reportHTMLForm" class="reportHTMLForm" value = "?" >
     
     <input type="button" name="reportrefresh" id="reportrefresh" value="Refresh">
@@ -1028,88 +900,93 @@ ${ ui.includeFragment("radiology", "modalitySoftware") }
 </div>
 
 
+
+
+
+    <div id="performedStatusInProgressOrder">
+  
 <table id="tableformodality">
     <thead>
         <tr>
-            <th>Modalities available</th>
-         
-            <th>Action</th>
+            <th>Modality Available</th>
+           
+           
         </tr>
     </thead>
-   <% modalityconceptnamelist.each { modalityname -> %>
-  
+    <tbody>
+     
+   <% mmm.each { modalityname -> %>
     <tr>
-        <td> 
-            ${modalityname}
-            </td>
-            
+        <td>
+            ${modalityname}</td>
        
-        <td><input type="button" id="deletebtn" value="Delete" >
-            </td>
+       
 
     </tr>
-  
-    <% } %>
-
+    <% } %>  
+</tbody>
 </table>
-
-<div id='modalityselect' style="width:30%; height:234px; margin-top: 24px; float:left">
- 
-  <select name="modalityselectdropdown" id="modalityselectdropdown" onchange="myFunctionT(this.value)">
- 
-  </select>
-</div>
-
-
-<div id='items' style="width:36%; height:234px; margin-top: 24px; float:left">
- 
-  <select name="labtest" id="selectlabtest1" onchange="myFunctionT(this.value)">
- 
-  </select>
 </div>
 
 
 
 
 
-<div id='reportmodalityselect' style="width:30%; height:234px; margin-top: 24px; float:left">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ <div id="studytable" >  
  
-  <select name="reportmodalityselectdropdown" id="reportmodalityselectdropdown" onchange="myFunctionreportmodality(this.value)">
- 
-  </select>
-</div>
 
 
-
-
- <div id="dynamictable" style="width:64%; float:right">  
        
  </div>
-  <div id="reporttable" style="width:70%; float:right">  
-       
+ 
+ 
+  <div id="reporttable" >  
+  
+    
  </div>
 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 <div class="modalitybtn">
-<input type="button" id="Savebtn" class="Savebtn" value="Save" >
+
 <input type="button" id="continuebtn" class="continuebtn" value="Continue" >
+
 
 </div>
 
 <div class="studybtn">
-<input type="button" id="studysavebtn" class="studysavebtn" value="Save" >
+
 <input type="button" id="studycontinuebtn" class="studycontinuebtn" value="Continue" >
 </div>
 
-<div class="reportbtn">
-<input type="button" id="reportsavebtn" class="reportsavebtn" value="Save" >
-
-</div>
 
 
 
-<div id="modalityConceptDictionaryNotes" title="Modality Concept Dictionary Notes">IMPORTANT NOTES FOR CREATING CONCEPT: <br> 1) Select modality as class from the dropdown menu.<br> 2) Select text as datatype from the dropdown menu. </div>
+
+<div id="modalityConceptDictionaryNotes" title="Modality Concept Dictionary Notes">IMPORTANT NOTES FOR CREATING MODALITY CONCEPT: <br> 1) Select Radiology Imaging/Procedure as class from the dropdown menu.<br> 2) Select N/A as datatype from the dropdown menu.<br> 3) Add newly created modality concept to Imaging modalitites ConvSet in the concept dictionary." </div>
   <div id="continuetext" title="Continue">  Please Click Save to save the modality before continue </div>
- <div id="studyconceptmessage" title="studyconceptmessage"> IMPORTANT NOTES FOR CREATING CONCEPT: <br> 1) Select Radiology Study as class from the dropdown menu. <br> 2) Select N/A as datatype from the dropdown menu." </div>
+  <div id="studyconceptmessage" title="studyconceptmessage"> IMPORTANT NOTES FOR CREATING STUDY CONCEPT: <br> 1) Select Radiology Imaging/Procedure  as class from the dropdown menu. <br> 2) Select N/A as datatype from the dropdown menu. <br> 3)  Include the newly created study concept to modality set using concept dictionary.  " </div>
 <div id="studycontinuetext" title="Continue">  Please Click Save to save the study before continue </div>
 <div id="modalitysaved" title="Continue">  Modality Saved </div>
 <div id="studysaved" title="Continue">  Study Saved </div>
@@ -1122,8 +999,3 @@ ${ ui.includeFragment("radiology", "modalitySoftware") }
 <div id="reportsaved" title="Continue">  Report Saved </div>
 
 
-
-
-  
-
- 

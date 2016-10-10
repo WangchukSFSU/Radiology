@@ -182,7 +182,7 @@ label {
  .ui-widget-header {
             background:#b9cd6d;
             border: 1px solid #b9cd6d;
-            color: #FFFFFF;
+            color: red;
             font-weight: bold;
          }
          
@@ -205,3 +205,12 @@ label {
          #tablesecondcolumn {
              width: 223px;
          }
+         
+         #performedStatusInProgressOrder {
+             margin-bottom: -25px;
+           
+         }
+         
+         table th:nth-child(3), td:nth-child(3) {
+  display: none;
+}

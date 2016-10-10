@@ -5,23 +5,18 @@
  */
 package org.openmrs.module.radiology.fragment.controller;
 
-import java.lang.ProcessBuilder.Redirect;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import org.openmrs.Concept;
-import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptClass;
 import org.openmrs.ConceptName;
-import org.openmrs.Encounter;
+import org.openmrs.ConceptSearchResult;
 import org.openmrs.Form;
 import org.openmrs.Order;
 import org.openmrs.Patient;
@@ -31,7 +26,6 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 
 import org.openmrs.module.radiology.PerformedProcedureStepStatus;
-import org.openmrs.module.radiology.RadiologyModalityList;
 
 import org.openmrs.module.radiology.RadiologyOrder;
 import org.openmrs.module.radiology.RadiologyOrderStatus;
@@ -64,12 +58,30 @@ public class AddRadiologyOrderFormFragmentController {
 			@RequestParam(value = "patientId", required = false) Patient patient) throws MessageException {
 		
 		System.out.println("AddRadiologyOrderFormFragmentController");
-		// ModelAndView modelAndView = new ModelAndView(RADIOLOGY_ORDER_FORM_VIEW);
+		
 		final List<String> urgencies = new LinkedList<String>();
 		
 		for (Order.Urgency urgency : Order.Urgency.values()) {
 			System.out.println("EEEEEEEE" + urgency.name());
 			urgencies.add(urgency.name());
+		}
+		
+		ArrayList<ConceptName> studyConceptNameList = new ArrayList();
+		
+		ConceptClass mot = Context.getConceptService()
+				.getConceptClassByName("Radiology/Imaging Procedure");
+		
+		List<Concept> mot_list = Context.getConceptService()
+				.getConceptsByClass(mot);
+		
+		for (Concept ccc : mot_list) {
+			if (ccc.getDisplayString()
+					.endsWith("modality")) {
+				
+			} else {
+				ConceptName studyConceptName = ccc.getName();
+				studyConceptNameList.add(studyConceptName);
+			}
 		}
 		
 		Map<String, String> performedStatuses = new HashMap<String, String>();
@@ -78,59 +90,23 @@ public class AddRadiologyOrderFormFragmentController {
 			System.out.println("list performned status " + performedStatus.name());
 		}
 		
-		RadiologyService radiologyservice = Context.getService(RadiologyService.class);
-		final List<RadiologyModalityList> modalityListFromDb = radiologyservice.getAllModality();
-		ArrayList<ConceptName> modalityConceptNameList = new ArrayList();
-		for (RadiologyModalityList modalityConceptId : modalityListFromDb) {
-			int modalityConceptIdInteger = modalityConceptId.getModalityId();
-			ConceptName modalityConceptName = Context.getConceptService()
-					.getConcept(modalityConceptIdInteger)
-					.getName();
-			modalityConceptNameList.add(modalityConceptName);
-			
-		}
-		
-		final List<RadiologyStudyList> studyListFromDb = radiologyservice.getAllStudy();
-		ArrayList<ConceptName> studyConceptNameList = new ArrayList();
-		for (RadiologyStudyList studyConceptId : studyListFromDb) {
-			int studyConceptIdInteger = studyConceptId.getStudyConceptId();
-			ConceptName studyConceptName = Context.getConceptService()
-					.getConcept(studyConceptIdInteger)
-					.getName();
-			String app = modalityConceptNameList.get(0)
-					.toString();
-			System.out.println("CN45454565665 " + modalityConceptNameList.get(0));
-			System.out.println("CN45454565665 " + studyConceptId.getModalityNameSaved());
-			if ((modalityConceptNameList.get(0).toString()).equals(studyConceptId.getModalityNameSaved())) {
-				System.out.println("YDHDYDYDYDYDYDYDDY  ");
-				studyConceptNameList.add(studyConceptName);
-			}
-			
-			System.out.println("Study name " + studyConceptName);
-			
-		}
-		
 		ArrayList<ConceptName> diagnosisConceptNameList = new ArrayList();
 		ConceptClass diagnosisConcept = Context.getConceptService()
 				.getConceptClassByName("Diagnosis");
-		String diagnosislist = Context.getConceptService()
-				.getConceptsByClass(diagnosisConcept)
-				.toString();
-		String diagnosislisttrim = diagnosislist.substring(1, diagnosislist.length() - 1)
-				.trim();
-		List<String> diagnosisnewlist = new ArrayList<String>(Arrays.asList(diagnosislisttrim.split(",")));
-		for (String diagnosisString : diagnosisnewlist) {
-			int diagnosisToInt = Integer.parseInt(diagnosisString.trim());
-			ConceptName diagnosisConceptName = Context.getConceptService()
-					.getConcept(diagnosisToInt)
-					.getName();
-			diagnosisConceptNameList.add(diagnosisConceptName);
-		}
+		System.out.println("KKDSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS diagnosisConcept  " + diagnosisConcept);
+		List<Concept> modd = Context.getConceptService()
+				.getConceptsByClass(diagnosisConcept);
+		/*
+		 * for (Concept ade : modd) {
+		 * ConceptName diagnosisConceptNamet = ade.getName();
+		 * diagnosisConceptNameList.add(diagnosisConceptNamet);
+		 * }
+		 */
 		
 		model.addAttribute("urgencies", urgencies);
-		model.addAttribute("diagnosislist", diagnosisConceptNameList);
+		model.addAttribute("diagnosislist", modd);
 		model.addAttribute("studyConceptNameList", studyConceptNameList);
-		model.addAttribute("modalityConceptNameList", modalityConceptNameList);
+		// model.addAttribute("modalityConceptNameList", modalityConceptNameList);
 		model.addAttribute("performedStatuses", performedStatuses);
 		model.addAttribute("patient", patient);
 		model.addAttribute("returnUrl", returnUrl);
@@ -141,7 +117,6 @@ public class AddRadiologyOrderFormFragmentController {
 			model.addAttribute("radiologyOrder", radiologyOrder);
 		}
 		
-		// return modelAndView;
 	}
 	
 	public List<SimpleObject> getStudyConceptsAnswerFromModality(FragmentModel model,
@@ -294,14 +269,41 @@ public class AddRadiologyOrderFormFragmentController {
 		
 	}
 	
-	public String post(FragmentModel model, @RequestParam("patient") Patient patient,
-			@RequestParam(value = "returnUrl", required = false) String returnUrl,
-			@RequestParam(value = "startdate", required = false) String startdate) {
+	public List<SimpleObject> getSuggestions(@RequestParam(value = "query", required = false) String query,
+			@RequestParam(value = "conceptClass", required = false) String requireConceptClass,
+			@SpringBean("conceptService") ConceptService service, UiUtils ui) {
 		
-		System.out.println("***EncountersTodayFragmentController POST - DATES: " + startdate);
-		return "redirect:/openmrs/radiology/radiologyOrder.page?patientId=8f91f42c-4444-4cde-8926-bebe572ec32f&returnUrl=%2Fopenmrs%2Fcoreapps%2Fclinicianfacing%2Fpatient.page%3FpatientId%3D8f91f42c-4444-4cde-8926-bebe572ec32f%26encounterId%3D41%26";
-		// return "redirect:" + returnUrl;
+		System.out.println("**********getSuggestions: query: " + query + "  requireConceptClass: " + requireConceptClass);
+		List<ConceptClass> requireClasses = new ArrayList<ConceptClass>();
 		
+		if ((requireConceptClass == null) || (requireConceptClass.equals(""))) {
+			requireClasses = null;
+		} else {
+			for (ConceptClass cl : service.getAllConceptClasses()) {
+				if (requireConceptClass.equals(cl.getName())) {
+					requireClasses.add(cl);
+					System.out.println("Concept Class Name Found: " + cl.getName());
+					break;
+				}
+			}
+		}
+		
+		// the following will return at most 100 matches
+		List<ConceptSearchResult> results = Context.getConceptService()
+				.getConcepts(query, null, false, requireClasses, null, null, null, null, 0, 100);
+		
+		List<Concept> names = new ArrayList<Concept>();
+		for (ConceptSearchResult con : results) {
+			names.add(con.getConcept()); // con.getConcept().getName().getName()
+			System.out.println("Concept: " + con.getConceptName());
+		}
+		/*
+		 * The Ajax call requires a json result;
+		 * names are concepts and properties indicate the Concept properties of interest;
+		 * The framework will build the json response when the method returns
+		 */
+		String[] properties = new String[] { "name" };
+		return SimpleObject.fromCollection(names, ui, properties);
 	}
 	
 }

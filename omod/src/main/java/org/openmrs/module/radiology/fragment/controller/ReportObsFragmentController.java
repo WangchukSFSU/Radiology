@@ -5,18 +5,12 @@
  */
 package org.openmrs.module.radiology.fragment.controller;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import org.openmrs.ConceptName;
-import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
-import org.openmrs.api.ObsService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.radiology.RadiologyService;
 import org.openmrs.ui.framework.fragment.FragmentModel;
-import org.openmrs.ui.framework.page.PageModel;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**

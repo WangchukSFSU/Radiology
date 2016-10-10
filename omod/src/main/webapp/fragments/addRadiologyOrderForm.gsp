@@ -33,8 +33,6 @@ jq("#studybtn").click(function(){
 jq("#studySelect").show();
 });
 });
-
-
 function modalityFunction(selectedvalue) {
 alert("innnn");
 jq.getJSON('${ ui.actionLink("getStudyConceptsAnswerFromModality") }',
@@ -46,13 +44,11 @@ jq.getJSON('${ ui.actionLink("getStudyConceptsAnswerFromModality") }',
         })
         .success(function(ret) {
                   alert("googd"); 
-
  jq('#studyConceptNameList').empty();
             
              jq("#studyConceptNameList").append('<option >Select one</option>');
              
            
-
   var availableTutorials = [
                
             ];
@@ -71,17 +67,12 @@ alert("ret.length KKKKKK" + ret.length);
              jq("#studyConceptNameList").append('<option >'+ conName +'</option>');
              
              }
-
              autoCompleteStudy(availableTutorials);
              
         });     
       
-
              
-
 }
-
-
 function diagnosislistFunction(diagnosis) {
 var text = jq('#diagnosisname');
         text.val(diagnosis);
@@ -104,9 +95,6 @@ alert("9999999"+study);
     
   
 }
-
-
-
 function autoCompleteDiagnosis(diagnosis){
  var list = diagnosis.split(',');
     console.log(list);
@@ -115,12 +103,6 @@ function autoCompleteDiagnosis(diagnosis){
        source : list
     });
 }
-
-
-
-
-
-
 </script>
 
 <script>
@@ -171,23 +153,11 @@ alert("Sutyd " + studyOrder);
 
 
      
- <div class="fields"><label>Modality </label>
-  <span>
-        <select name="modalityConceptName" id="modalityConceptName" onchange="modalityFunction(this.value)">
-             <option name="modalityConceptName" selected="selected" value="modalityName">Select one</option>
-           <% modalityConceptNameList.each { modalityName -> %>
-                <option name="modalityConceptName" value="$modalityName">${modalityName}</option>
-            <% } %>
-        </select>        
-        </span>
-</div>
+ 
 
 
- <div class="fields">
-      <label for="automplete-2">Study </label>
+ <div class="fields"><label for="automplete-2">Study </label>
 <input id="studyname" type="text" autocomplete="on" name="studyname"/>
-
-
 <input id="studybtn" type="button" value="?" />
 <div id="studySelect">
 <select name="studyConceptNameList" id="studyConceptNameList" onchange="studyFunction(this.value)">
@@ -234,10 +204,17 @@ alert("Sutyd " + studyOrder);
 </div>
 <input class="fields" id="submitForm" type="button" value="Submit" />
 <input class="fields" id="cancelForm" type="button" value="Cancel" />
-
-
 <div id="ordersaved" title="Continue">  Order Saved </div>
 
 
 
 
+
+
+
+
+
+
+
+
+ 

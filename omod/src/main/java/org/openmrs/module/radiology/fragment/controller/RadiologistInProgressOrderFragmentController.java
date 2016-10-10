@@ -5,29 +5,18 @@
  */
 package org.openmrs.module.radiology.fragment.controller;
 
-import static java.lang.reflect.Array.set;
-import java.util.ArrayList;
-import org.openmrs.EncounterProvider;
-import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 import org.openmrs.Encounter;
-import org.openmrs.EncounterProvider;
-import org.openmrs.Obs;
 import org.openmrs.Order;
-import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.radiology.PerformedProcedureStepStatus;
-import org.openmrs.module.radiology.RadiologyEncounterMatcher;
 import org.openmrs.module.radiology.RadiologyOrder;
 import org.openmrs.module.radiology.RadiologyOrderStatus;
 import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.RadiologyService;
 import org.openmrs.module.radiology.RadiologyStudyList;
-import org.openmrs.module.radiology.ScheduledProcedureStepStatus;
 import org.openmrs.module.radiology.Study;
 import org.openmrs.ui.framework.fragment.FragmentModel;
 import org.springframework.web.bind.annotation.RequestParam;

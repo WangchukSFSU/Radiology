@@ -1,8 +1,6 @@
 
 <% ui.includeCss("radiology", "modalitySoftware.css") %>
-<% ui.includeJavascript("jquery.js") %>
-<% ui.includeJavascript("jquery-ui.js") %>
-<% ui.includeJavascript("jquery-ui.css") %>
+
 
 
 

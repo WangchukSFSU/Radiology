@@ -385,7 +385,7 @@ jq(function() {
 
     <div id="AddRadiologyOrderForm">
         ${ ui.includeFragment("radiology", "addRadiologyOrderForm",[ returnUrl: '${returnUrl}',
-        patient: '${patient}'
+        patient: '${patient}', requireClass: 'Diagnosis'
         ]) }
     </div>
 
