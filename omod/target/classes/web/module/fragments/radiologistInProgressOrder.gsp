@@ -135,9 +135,7 @@ jq("#somediv").load('/openmrs/radiology/radiologistActiveOrders.page').dialog({m
     
   
     function submitObs() {
-    
-   
- 
+
     alert("YESS");
    var radiologyorderId = localStorage.getItem("radiologyorderId");
    

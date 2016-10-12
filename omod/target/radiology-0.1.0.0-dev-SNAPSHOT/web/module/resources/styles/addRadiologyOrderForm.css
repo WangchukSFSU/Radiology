@@ -21,10 +21,13 @@ and open the template in the editor.
 }
 
 
-#studyname {
-    width: 305px;
+#studytags {
+    width: 505px;
 }
 
+#diagnosistags {
+    width: 505px;
+}
 
 .fields {
     margin-top: 5px;
@@ -38,4 +41,9 @@ and open the template in the editor.
             border: 1px solid #b9cd6d;
             color: #FFFFFF;
             font-weight: bold;
+         }
+         
+         
+         .fieldclass {
+             margin-top: 12px;
          }

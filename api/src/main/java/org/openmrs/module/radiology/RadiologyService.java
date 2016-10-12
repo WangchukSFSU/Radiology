@@ -10,6 +10,7 @@
 package org.openmrs.module.radiology;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openmrs.Order;
@@ -190,7 +191,7 @@ public interface RadiologyService extends OpenmrsService {
 	 */
 	public boolean placeRadiologyOrderInPacs(RadiologyOrder radiologyOrder);
 	
-	public void placeDicomInPacs(String radiologyOrder);
+	public void placeDicomInPacs(String apo);
 	
 	/**
 	 * Discontinue given <code>RadiologyOrder</code> in the PACS by sending an HL7 order message.

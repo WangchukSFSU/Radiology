@@ -1,12 +1,67 @@
 <% ui.includeCss("radiology", "addRadiologyOrderForm.css") %>
-
+<%
+ 
+    def conceptStudyClass = config.requireStudyClass
+    
+%>
+<%
+ 
+    def conceptDiagnosisClass = config.requireDiagnosisClass
+    
+%>
    
       <!-- Javascript -->
- 
+   <script>
+  jq( function() {
+    jq( "#studytags" ).autocomplete({
+      source: function( request, response ) {
+        var results = [];
+        jq.getJSON('${ ui.actionLink("getStudyAutocomplete") }',
+            {
+              'query': request.term, 
+              'conceptStudyClass': "<%= conceptStudyClass %>"
+            })
+        .success(function(data) {
+            for (index in data) {
+                var item = data[index];
+                results.push(item.name);
+                }
+            response( results );
+        })
+       .error(function(xhr, status, err) {
+            alert('AJAX error ' + err);
+        });
+      }
+    } )
+    
+    
+        jq( "#diagnosistags" ).autocomplete({
+      source: function( request, response ) {
+        var results = [];
+        jq.getJSON('${ ui.actionLink("getDiagnosisAutocomplete") }',
+            {
+              'query': request.term, 
+              'conceptDiagnosisClass': "<%= conceptDiagnosisClass %>"
+            })
+        .success(function(data) {
+            for (index in data) {
+                var item = data[index];
+                results.push(item.name);
+                }
+            response( results );
+        })
+       .error(function(xhr, status, err) {
+            alert('AJAX error ' + err);
+        });
+      }
+    } )
+});
+  </script>
 <script>
 jq = jQuery;
   jq(document).ready(function() {
   
+
   
   
        jq( "#ordersaved" ).dialog({
@@ -109,32 +164,32 @@ function autoCompleteDiagnosis(diagnosis){
     jq = jQuery;
     jq(document).ready(function() {
     
-    
+    jq("#ordersaved").hide();
     jq("#cancelForm").click(function(){
     
-      jq("#studyname").val('');
-    jq("#diagnosisname").val('');
+      jq("#studytags").val('');
+    jq("#diagnosistags").val('');
     jq("#orderInstruction").val('');
     });
     
      jq("#submitForm").click(function(){     
  var pat = "${patient}".split("#");
      var patient = pat[1];
-var modalityOrder = jq('select[name=modalityConceptName]').val();
-var  studyOrder = jq("#studyname").val();
+//var modalityOrder = jq('select[name=modalityConceptName]').val();
+var  studyOrder = jq("#studytags").val();
  
-var  diagnosisOrder = jq("#diagnosisname").val();
+var  diagnosisOrder = jq("#diagnosistags").val();
 var  instructionOrder = jq("#orderInstruction").val();
 var priorityOrder = jq('select[name=priority]').val();
 alert("Sutyd " + studyOrder);
    jq.ajax({
     type: "POST",
     url: "${ ui.actionLink('placeRadiologyOrder') }",
-    data : { 'patient': patient, 'modalityname': modalityOrder, 'studyname': studyOrder, 'diagnosisname': diagnosisOrder, 'instructionname':instructionOrder, 'priorityname':priorityOrder},
+    data : { 'patient': patient, 'studyname': studyOrder, 'diagnosisname': diagnosisOrder, 'instructionname':instructionOrder, 'priorityname':priorityOrder},
     cache: false,
     success: function(data){
     
-    jq( "#ordersaved" ).dialog( "open" );
+    jq( "#ordersaved" ).show();
   
   location.reload();
     
@@ -151,48 +206,31 @@ alert("Sutyd " + studyOrder);
     
 
 
-
+<div id="ordersaved" title="Continue">  Order Saved </div>
      
  
+<h2> ADD RADIOLOGY ORDER</h2>
+
+<div class="studyfieldclass">
+  <label for="tags">Study </label>
+  <input id="studytags">
+</div>
 
 
- <div class="fields"><label for="automplete-2">Study </label>
-<input id="studyname" type="text" autocomplete="on" name="studyname"/>
-<input id="studybtn" type="button" value="?" />
-<div id="studySelect">
-<select name="studyConceptNameList" id="studyConceptNameList" onchange="studyFunction(this.value)">
-             <option name="studyConceptNameList" selected="selected" value="studyConceptNameList">Select One</option>
-           <% studyConceptNameList.each { studyConceptNameList -> %>
-                <option name="studyConceptNameList" value="$studyConceptNameList">${studyConceptNameList}</option>
-            <% } %>
-        </select>  
-        </div>
- </div>
+<div class="fieldclass">
+  <label for="tags">Diagnosis </label>
+  <input id="diagnosistags">
+</div>
 
-
-
- <div class="fields"><label>Diagnosis </label>
-<input id="diagnosisname" type="text" autocomplete="on" oninput="autoCompleteDiagnosis('${diagnosislist}')" name="diagnosisname"/>
-<input id="diagnosisnamebtn" type="button" value="?" />
-
-<div id="diagnosislistSelect">
-<select name="diagnosislist" id="diagnosislist" onchange="diagnosislistFunction(this.value)">
-             <option name="diagnosislist" selected="selected" value="diagnosislist">Select One</option>
-           <% diagnosislist.each { diagnosislist -> %>
-                <option name="diagnosislist" value="$diagnosislist">${diagnosislist}</option>
-            <% } %>
-        </select>  
-        </div>
- </div>
 
  
- <div class="fields"><label>Instruction </label>
+ <div class="fieldclass"><label>Instruction </label>
      <textarea  name="orderInstruction" id="orderInstruction" rows="1" cols="50">  </textarea>
 
 </div>
 
 
- <div class="fields"><label>Priority </label>
+ <div class="fieldclass"><label>Priority </label>
   <span>
         <select name="priority" id="priority"">
              <option name="priority" selected="selected" value="priority">Select One</option>
@@ -204,7 +242,14 @@ alert("Sutyd " + studyOrder);
 </div>
 <input class="fields" id="submitForm" type="button" value="Submit" />
 <input class="fields" id="cancelForm" type="button" value="Cancel" />
-<div id="ordersaved" title="Continue">  Order Saved </div>
+
+
+
+
+
+
+
+
 
 
 

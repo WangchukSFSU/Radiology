@@ -90,12 +90,12 @@ public class AddRadiologyOrderFormFragmentController {
 			System.out.println("list performned status " + performedStatus.name());
 		}
 		
-		ArrayList<ConceptName> diagnosisConceptNameList = new ArrayList();
-		ConceptClass diagnosisConcept = Context.getConceptService()
-				.getConceptClassByName("Diagnosis");
-		System.out.println("KKDSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS diagnosisConcept  " + diagnosisConcept);
-		List<Concept> modd = Context.getConceptService()
-				.getConceptsByClass(diagnosisConcept);
+		// ArrayList<ConceptName> diagnosisConceptNameList = new ArrayList();
+		// ConceptClass diagnosisConcept = Context.getConceptService()
+		// .getConceptClassByName("Diagnosis");
+		// System.out.println("KKDSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS diagnosisConcept  " + diagnosisConcept);
+		// List<Concept> modd = Context.getConceptService()
+		// .getConceptsByClass(diagnosisConcept);
 		/*
 		 * for (Concept ade : modd) {
 		 * ConceptName diagnosisConceptNamet = ade.getName();
@@ -104,7 +104,7 @@ public class AddRadiologyOrderFormFragmentController {
 		 */
 		
 		model.addAttribute("urgencies", urgencies);
-		model.addAttribute("diagnosislist", modd);
+		// model.addAttribute("diagnosislist", modd);
 		model.addAttribute("studyConceptNameList", studyConceptNameList);
 		// model.addAttribute("modalityConceptNameList", modalityConceptNameList);
 		model.addAttribute("performedStatuses", performedStatuses);
@@ -153,7 +153,7 @@ public class AddRadiologyOrderFormFragmentController {
 	
 	public void placeRadiologyOrder(FragmentModel model, @RequestParam("patient") Patient patient,
 			@RequestParam(value = "returnUrl", required = false) String returnUrl,
-			@RequestParam(value = "modalityname") String modalityname, @RequestParam(value = "studyname") String studyname,
+			@RequestParam(value = "studyname") String studyname,
 			@RequestParam(value = "diagnosisname") String diagnosisname,
 			@RequestParam(value = "instructionname") String instructionname,
 			@RequestParam(value = "priorityname") String priorityname) throws ParseException {
@@ -198,7 +198,7 @@ public class AddRadiologyOrderFormFragmentController {
 		List<RadiologyStudyList> studyListSaved = radiologyservice.getAllStudy();
 		Study study = new Study();
 		
-		study.setModality(modalityname);
+		// study.setModality(modalityname);
 		study.setStudyname(studyname);
 		
 		List<Form> studyreport = Context.getFormService()
@@ -269,8 +269,45 @@ public class AddRadiologyOrderFormFragmentController {
 		
 	}
 	
-	public List<SimpleObject> getSuggestions(@RequestParam(value = "query", required = false) String query,
-			@RequestParam(value = "conceptClass", required = false) String requireConceptClass,
+	public List<SimpleObject> getStudyAutocomplete(@RequestParam(value = "query", required = false) String query,
+			@RequestParam(value = "conceptStudyClass", required = false) String requireConceptClass,
+			@SpringBean("conceptService") ConceptService service, UiUtils ui) {
+		
+		System.out.println("**********getSuggestions: query: " + query + "  requireConceptClass: " + requireConceptClass);
+		List<ConceptClass> requireClasses = new ArrayList<ConceptClass>();
+		
+		if ((requireConceptClass == null) || (requireConceptClass.equals(""))) {
+			requireClasses = null;
+		} else {
+			for (ConceptClass cl : service.getAllConceptClasses()) {
+				if (requireConceptClass.equals(cl.getName())) {
+					requireClasses.add(cl);
+					System.out.println("Concept Class Name Found: " + cl.getName());
+					break;
+				}
+			}
+		}
+		
+		// the following will return at most 100 matches
+		List<ConceptSearchResult> results = Context.getConceptService()
+				.getConcepts(query, null, false, requireClasses, null, null, null, null, 0, 100);
+		
+		List<Concept> names = new ArrayList<Concept>();
+		for (ConceptSearchResult con : results) {
+			names.add(con.getConcept()); // con.getConcept().getName().getName()
+			System.out.println("Concept: " + con.getConceptName());
+		}
+		/*
+		 * The Ajax call requires a json result;
+		 * names are concepts and properties indicate the Concept properties of interest;
+		 * The framework will build the json response when the method returns
+		 */
+		String[] properties = new String[] { "name" };
+		return SimpleObject.fromCollection(names, ui, properties);
+	}
+	
+	public List<SimpleObject> getDiagnosisAutocomplete(@RequestParam(value = "query", required = false) String query,
+			@RequestParam(value = "conceptDiagnosisClass", required = false) String requireConceptClass,
 			@SpringBean("conceptService") ConceptService service, UiUtils ui) {
 		
 		System.out.println("**********getSuggestions: query: " + query + "  requireConceptClass: " + requireConceptClass);

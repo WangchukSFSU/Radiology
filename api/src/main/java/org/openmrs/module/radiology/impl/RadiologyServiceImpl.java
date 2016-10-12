@@ -217,11 +217,6 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 			throw new IllegalArgumentException("radiologyOrder.study is required");
 		}
 		
-		if (radiologyOrder.getStudy()
-				.getModality() == null) {
-			throw new IllegalArgumentException("radiologyOrder.study.modality is required");
-		}
-		
 		final Encounter encounter = saveRadiologyOrderEncounter(radiologyOrder.getPatient(), radiologyOrder.getOrderer(),
 			new Date());
 		encounter.addOrder(radiologyOrder);
@@ -484,17 +479,17 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	
 	@Transactional
 	@Override
-	public void placeDicomInPacs(String rad) {
-		
-		if (rad == null) {
-			throw new IllegalArgumentException("rad is required");
-		}
+	public void placeDicomInPacs(String arrays) {
 		
 		System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 		
-		final String hl7message = null;
-		DicomUtils.sendDicomToPACs(rad);
+		// for (String arrays : apo) {
+		
+		// final String hl7message = null;
+		System.out.println("POPOPOPOPPOP " + arrays);
+		DicomUtils.sendDicomToPACs(arrays);
 		// sendHL7Message(hl7message);
+		// }
 		
 		// updateStudyMwlStatus(radiologyOrder, result);
 		// return result;

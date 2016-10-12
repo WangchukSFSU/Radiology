@@ -10,9 +10,6 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
 
    
 
-
-
-    
 <script>
     jq = jQuery;
     jq(document).ready(function() { 
@@ -35,6 +32,8 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
     jq("#HTMLFORM").hide();
     jq("#ContactRadiologist").hide();
     jq("#performedStatusCompletedOrder").show();
+    
+    
     
     jq("#addRadiologyOrderBtn").click(function(){
         jq("#performedStatusesDropdown").hide();
@@ -274,6 +273,9 @@ function contactRadiologist() {
     
     }
 </script>
+
+    
+
 <script>
 jq = jQuery;
      
@@ -372,8 +374,30 @@ jq(function() {
 
     </div>
 
+    <div id="performedStatusCompletedOrder">
+        <h1>COMPLETED RADIOLOGY ORDERS</h1>
+    <table id="performedStatusCompletedOrderTable">
+    <thead>
+        <tr>
+            <th>Order</th>
+            <th>OrderCompletedDate</th>
+            
+        </tr>
+    </thead>
+     <tbody>
+    <% radiologyOrders.each { anOrder -> %>
+    <tr>
+        <td> <p style="display:none;">${ anOrder.orderId }</p>
+            ${anOrder.study.studyname}</td>
+        <td>${ anOrder.dateCreated } </td>
+        
 
-   
+    </tr>
+    <% } %>  
+</tbody>
+</table>
+ </div>
+       
 
      <div id="performedStatusInProgressOrder">
         ${ ui.includeFragment("radiology", "performedStatusInProgressOrder",[ returnUrl: '${returnUrl}',
@@ -381,13 +405,9 @@ jq(function() {
         ]) }
 
     </div>
-    
+  
 
-    <div id="AddRadiologyOrderForm">
-        ${ ui.includeFragment("radiology", "addRadiologyOrderForm",[ returnUrl: '${returnUrl}',
-        patient: '${patient}', requireClass: 'Diagnosis'
-        ]) }
-    </div>
+  
 
 
 
@@ -398,7 +418,7 @@ jq(function() {
     </div>
 
 
-  
+    
 
 
 <div id = "performedStatusCompletedObsSelect">
@@ -433,29 +453,7 @@ jq(function() {
         ]) }
     </div>
     
-    <div id="performedStatusCompletedOrder">
-        <h1>COMPLETED RADIOLOGY ORDERS</h1>
-    <table id="performedStatusCompletedOrderTable">
-    <thead>
-        <tr>
-            <th>Order</th>
-            <th>OrderCompletedDate</th>
-            
-        </tr>
-    </thead>
-     <tbody>
-    <% radiologyOrders.each { anOrder -> %>
-    <tr>
-        <td> <p style="display:none;">${ anOrder.orderId }</p>
-            ${anOrder.study.studyname}</td>
-        <td>${ anOrder.dateCreated } </td>
-        
 
-    </tr>
-    <% } %>  
-</tbody>
-</table>
- </div>
 
   
   <div id="HTMLFORM" width="50%">
@@ -466,6 +464,12 @@ jq(function() {
         
     
     
+      <div id="AddRadiologyOrderForm">
+        ${ ui.includeFragment("radiology", "addRadiologyOrderForm",[ returnUrl: '${returnUrl}',
+        patient: '${patient}', requireDiagnosisClass: 'Diagnosis', requireStudyClass: 'Radiology/Imaging Procedure'
+        ]) }
+    </div>
+
     
     
     
@@ -473,41 +477,9 @@ jq(function() {
 
 
 
-<script>
-    jq = jQuery;
-    
- jq(function(){
- 
-
-     jq('a #apple').on('click', function(e){
-        e.preventDefault();
-         jq('<div/>', {'class':'myDlgClass', 'id':'link-'+( jq(this).index()+1)})
-        .html( jq('<iframe/>', {
-            'src' :  jq(this).attr('href'),
-            'style' :'width:100%; height:100%;border:none;'
-        })).appendTo('body')
-        .dialog({
-            'title' :  jq(this).text(),
-            'width' : 400,
-            'height' :250,
-            buttons: [ { 
-                    text: "Close",
-                    click: function() {  jq( this ).dialog( "close" ); } 
-                } ]
-        });
-    });
-});
-    
-    </script>
-
-
-
-<div id="somediv" title="View Study Image" style="display:none;">
-    <iframe id="thedialog" width="350" height="350"></iframe>
-</div>
 
 
 
 
-
+  
 

@@ -43,21 +43,12 @@
                 "id": "radiology.appId26",
                 "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
                 "type": "link",
-                "label": "SendImage",
+                "label": "Send RadiologyImage toPACS",
                 "url": "radiology/technicianActiveOrders.page",
                 "icon": "icon-signin",
                 "requiredPrivilege": "App: some random privilege"
-            },
-              {
-                "id": "radiology.appId39",
-                "extensionPointId": "systemAdministration.apps",
-                "type": "link",
-                "order": 10,
-                "label": "Manage Radiology 2",
-                "url": "radiology/admin.page",
-                "icon": "icon-signin",
-                "requiredPrivilege": "App: some random privilege"
             }
+           
           
        
  

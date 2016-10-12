@@ -37,13 +37,14 @@
 jq("#activeorders li i").addClass("icon-chevron-right link");
 
 
-jq("#orderdetails").html("<li><i ></i> Radiology Order Detail</li>");
+jq("#orderdetails").html("<li><i ></i> Send Dicom to PACS</li>");
 jq("#orderdetails li i").addClass("icon-chevron-right link");
 
 
    
     jq(this).addClass('selected').siblings().removeClass('selected');    
     var value=jq(this).find('td:first').html();
+    
     alert(value); 
     jq("#performedStatusInProgressOrderDetail").show();
       jq("#performedStatusInProgressOrder").hide();
@@ -51,56 +52,40 @@ jq("#orderdetails li i").addClass("icon-chevron-right link");
     
     ordervalue = splitvalue[1];
     alert("ordervalue" +ordervalue);
-   var orderId = ordervalue.substr(0, 2);
+   //var orderId = ordervalue.substr(0, 2);
+      //alert("orderId" +orderId);
+      var orderId= ordervalue.substr(0, ordervalue.indexOf('<'));
       alert("orderId" +orderId);
-     <% if (inProgressRadiologyOrders) { %>
-   
-    <% inProgressRadiologyOrders.each { anOrder -> %>
     
-    var radiologyorderId = ${anOrder.orderId} ;
+   alert("yess");
   
+    
+
    
-  
-    if(orderId == radiologyorderId) {
-    alert("NJSDSD " + radiologyorderId);
-  localStorage.setItem("radiologyorderId", radiologyorderId);
+  localStorage.setItem("radiologyorderId", orderId);
     
     
     alert("YYEYYEYYEYEE");
+    
+ 
+    
+jq('#dicomtable').empty();
+jq('#dicomtable').append('<table></table>');
+jq('#dicomtable table').attr('id','dicomtablelistid');
+jq("#dicomtable table").addClass("studyclass");
+var dicomtablelist = jq('#dicomtable').children();
 
   
-  jq('#completedOrderObs').append( '<thead><tr><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th> SendDicomToPAC </th><th>SubmitObs</th></thead>' );
+  dicomtablelist.append( '<thead><tr><th> Dicom Files</th></tr></thead><tbody>' );
+  <% apo.each { apoo -> %>
 
-
-jq('#completedOrderObs').append( '<tbody><tr><td> ${anOrder.creator.username}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td>${anOrder.study.studyname}</td><td><a onclick="contactRadiologist();"> SendDicomToPACs</a></td><td><a href="javascript: void(0)" id="linkActButton" onclick="submitObs(); return false;">Submit</a></td></tr></tbody>' );
+  dicomtablelist.append( '<tr>  <td>${ apoo }</td></tr>' );
   
 
-}
-    
-    
    <% } %>
-    <% } %> 
-    
-    
-    
-    
-    
-      jq('#completedOrderObs').dataTable({
-            "sPaginationType": "full_numbers",
-            "bPaginate": true,
-            "bAutoWidth": false,
-            "bLengthChange": true,
-            "bSort": true,
-            "bJQueryUI": true,
-            
-             "iDisplayLength": 5,
-    
-    
-            
-        });
-    
-    
-    
+ dicomtablelist.append( '<tr>  <td> <a href="javascript: void(0)" id="linkActButton" onclick="submitObs(); return false;">Send</a></td></tr>' );
+     dicomtablelist.append("</tbody>");
+
 
     });
     
@@ -125,17 +110,9 @@ jq("#somediv").load('/openmrs/radiology/radiologistActiveOrders.page').dialog({m
     });
 
     
-  function contactRadiologist() {
-  alert("run my contactRadiologist");
- 
-  jq("#ContactRadiologist").show();
- 
- 
-}
+  
     function submitObs() {
-    
-   
- 
+
     alert("YESS");
    var radiologyorderId = localStorage.getItem("radiologyorderId");
    
@@ -147,7 +124,7 @@ jq("#somediv").load('/openmrs/radiology/radiologistActiveOrders.page').dialog({m
     data : { 'radiologyorderId': radiologyorderId},
     cache: false,
     success: function(data){
-    
+    location.reload();
 alert("COOL");
     }
     });
@@ -281,36 +258,16 @@ function contactRadiologist() {
 </div>
 
 
-<div id = "performedStatusInProgressOrderDetail">
-    
-  <h1>RADIOLOGY ORDER DETAILS</h1>
-  
-<table id="completedOrderObs">
-  
+<div id = "dicomtable">
     
 
-</table>
+  
+
 
 </div>
 
 
 
-
-   <div id="ContactRadiologist" width="50%">
-        ${ ui.includeFragment("radiology", "sendDicomToPAC") }
-    </div>
-
-
-
-<div id="somedivreport" title="Fill Report" style="display:none;">
-    <iframe id="thedialogreport" width="550" height="350"></iframe>
-</div>
-
-
-
-<div id="somediv" title="View Study Image" style="display:none;">
-    <iframe id="thedialog" width="550" height="350"></iframe>
-</div>
 
 
 

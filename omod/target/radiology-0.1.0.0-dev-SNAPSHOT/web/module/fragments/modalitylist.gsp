@@ -2,10 +2,9 @@
 
 <% ui.includeJavascript("uicommons", "datatables/jquery.dataTables.min.js") %>
 
-<% ui.includeCss("radiology", "jquery.dataTables.css") %>
   
-  <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
 
+  <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
 
 
 <script>
@@ -15,27 +14,17 @@
     jq(document).ready(function() {
     
  
-jq('#tableformodality').dataTable({
+jq('#tableformodality').DataTable({
            "sPaginationType": "full_numbers",
             "bPaginate": true,
             "bAutoWidth": false,
             "bLengthChange": true,
             "bSort": true,
-            "bJQueryUI": true,
+            //"bJQueryUI": true,
              "iDisplayLength": 5,   
         });
     
-   
-       jq('#example').DataTable( {
-          "bPaginate": false,
-    "sScrollY": "250px",
-    "bAutoWidth": false,
-    "bScrollCollapse": true,
-    "fnInitComplete": function() {
-      this.css("visibility", "visible");
-    },
-    "bLengthChange": false
-    } );
+
 
     jq(".studygroup").hide();
   jq(".studybtn").hide();
@@ -163,12 +152,10 @@ jq("#deletebtn").live ('click', function ()
  });
 
   jq("#studyrefresh").click(function() { 
-  
+  jq("#studytable").hide();
   jq(this).data('clicked', true);
   alert("zzzzzzz");
-  jq("#dynamictable").hide();
- 
-  jq("#dynamictable").show();
+ jq("#continuebtn").click();
    //myFunctionT(selected);
  
   });
@@ -186,6 +173,11 @@ jq("#deletebtn").live ('click', function ()
    //myFunctionT(selected);
  //jq("#reporttable").show();
   });
+  
+  
+  
+  
+  
   
  jq("#continuebtn").click(function() {
   
@@ -256,7 +248,7 @@ jq(".studybtn").hide();
   
    jq("#studytable").hide();
   
-  
+   
   
 
    jq("#managestudy").html("<li><i ></i><a href='javascript:void(0);' onClick='a_onClick()'> Manage Studies</li>");
@@ -392,19 +384,26 @@ a_onClick.called = true;
   
     jq("#managereport").empty();
  
-   jq("#dynamictable").show();
+
 
 jq(".studygroup").show();
 
 
 
 jq(".studybtn").show();
+
+
+ 
+
+
 jq("#reporttable").hide();
 
-
+//jq("#studytable").show();
+  
+  myFunctionStudyList();
   
   
-
+ //jq("#studycontinuebtn").click();
 
 
 //myFunctionT(someVarName);
@@ -531,8 +530,14 @@ table.append( '<tbody><tr><td>' +  conName + '</td> </tr></tbody>' );
  function myFunctionStudyList() {
 
   //myFunctionT.called = true;
-  
   jq("#studytable").show();
+    jq('#studytable').empty();
+jq('#studytable').append('<table></table>');
+jq('#studytable table').attr('id','studytablelistid');
+jq("#studytable table").addClass("studyclass");
+var studytablelist = jq('#studytable').children();
+  
+  
   
   jq.getJSON('${ ui.actionLink("getStudyConceptsAnswerFromModality") }',
            {
@@ -543,7 +548,14 @@ table.append( '<tbody><tr><td>' +  conName + '</td> </tr></tbody>' );
         })
         .success(function(ret) {
                   alert("goog"); 
-jq('#studytablelist').append( '<thead><tr><th> Studies Available</th></thead><tbody>' );
+                  
+                  
+                  
+               
+                  
+                  
+                  
+studytablelist.append( '<thead><tr><th> Studies Available</th></thead><tbody>' );
 
 
           
@@ -556,19 +568,19 @@ alert("ret.length" + ret.length);
             var conId = ret[i].conceptId;
             var conName = ret[i].displayString;
  
- jq('#studytablelist').append( '<tr><td>' +  conName + '</td> </tr>' );
+studytablelist.append( '<tr><td>' +  conName + '</td> </tr>' );
 
 
 }
 
-jq('#studytablelist').append( '</tbody>' );
-jq('#studytablelist').dataTable({
+studytablelist.append( '</tbody>' );
+jq('#studytablelistid').dataTable({
             "sPaginationType": "full_numbers",
             "bPaginate": true,
             "bAutoWidth": false,
             "bLengthChange": true,
             "bSort": true,
-            "bJQueryUI": true,
+            //"bJQueryUI": true,
              "iDisplayLength": 5,   
         });
  
@@ -605,7 +617,7 @@ jq('#studytablelist').dataTable({
                   for (var i = 0; i < ret.length; i++) {
             var conId = ret[i].conceptId;
             var conNamed = ret[i].displayString;
-            alert("conName" +conNamed);
+            //alert("conName" +conNamed);
             
           //localStorage.setItem("reportfirstmodalitystudylist", JSON.stringify(conName));
             
@@ -667,8 +679,8 @@ alert("ret.length KKKKKK" + ret.length);
              var conName = ret[i].studyName;
             var conNameReporturl = ret[i].studyReporturl;
             
-            alert("conId" + conId);
-             alert("conName" + conName);
+           // alert("conId" + conId);
+            // alert("conName" + conName);
             
       
 if(conNameReporturl) {
@@ -709,7 +721,13 @@ table.append( '<tr><td>'+ conName +'</td><td>'+ conNameReporturl +' </td> <td><a
  
   function functionreportlist() {
 
- 
+   
+                                
+    jq('#reporttable').empty();
+jq('#reporttable').append('<table></table>');
+jq('#reporttable table').attr('id','reporttablelistid');
+jq("#reporttable table").addClass("reportclass");
+var reporttablelist = jq('#reporttable').children();
   
   
 alert("report ");
@@ -725,8 +743,9 @@ alert("report ");
         .success(function(ret) {
                   alert("report goog"); 
 
- 
-     jq('#reporttablelist').append("<thead><tr><td>Studies</td><td>Report Available</td><td>Action</td></tr></thead><tbody>");
+
+                  
+     reporttablelist.append("<thead><tr><td>Studies</td><td>Report Available</td><td>Action</td></tr></thead><tbody>");
     
 
 alert("ret.length" + ret.length);
@@ -735,14 +754,14 @@ alert("ret.length" + ret.length);
              var conName = ret[i].studyName;
             var conNameReporturl = ret[i].studyReporturl;
             
-            alert("conId" + conId);
-             alert("conName" + conName);
+            //alert("conId" + conId);
+            // alert("conName" + conName);
 
       
 if(conNameReporturl) {
 
             
- jq('#reporttablelist').append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'>'+ conName +'</a> </td> <td><a id="editbtn" href='+ conNameReporturl +'><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a>  </td></tr>' );
+ reporttablelist.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'>'+ conName +'</a> </td> <td><a id="editbtn" href='+ conNameReporturl +'><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a>  </td></tr>' );
 
    
   }
@@ -777,22 +796,24 @@ alert("ret.length" + ret.length);
             var conId = ret[i].id;
             var conName = ret[i].name;
             
+          
             
-            alert("conId study" + conId);
-            alert("conId conName" + conName);
- jq('#reporttablelist').append( '<tr><td> '+ conName +' </td><td> </td> <td><a id="addbtn" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a><a id<img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a>  </td></tr>' );
+           // alert("conId study" + conId);
+            //alert("conId conName" + conName);
+ reporttablelist.append( '<tr><td> '+ conName +' </td><td> </td> <td><a id="addbtn" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a><a id<img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a>  </td></tr>' );
 
       
 }
     
   jq('#reporttablelist').append("</tbody>");
- jq('#reporttablelist').dataTable({
+ jq('#reporttablelistid').dataTable({
+ destroy: true,
             "sPaginationType": "full_numbers",
             "bPaginate": true,
             "bAutoWidth": false,
             "bLengthChange": true,
             "bSort": true,
-            "bJQueryUI": true,
+            //"bJQueryUI": true,
              "iDisplayLength": 5,   
         });
  
@@ -929,10 +950,7 @@ ${ ui.includeFragment("radiology", "modalitySoftware") }
 
  <div id="studytable" >  
  
-<table id ="studytablelist">
-    
-    
-    </table>
+
 
        
  </div>
@@ -940,10 +958,7 @@ ${ ui.includeFragment("radiology", "modalitySoftware") }
  
   <div id="reporttable" >  
   
-      <table id ="reporttablelist">
     
-    
-    </table> 
  </div>
 
  
@@ -984,236 +999,3 @@ ${ ui.includeFragment("radiology", "modalitySoftware") }
 <div id="reportsaved" title="Continue">  Report Saved </div>
 
 
-
-<table id="example" class="display" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Position</th>
-                <th>Office</th>
-                <th>Age</th>
-                <th>Start date</th>
-                <th>Salary</th>
-            </tr>
-        </thead>
- 
-        <tfoot>
-            <tr>
-                <th>Name</th>
-                <th>Position</th>
-                <th>Office</th>
-                <th>Age</th>
-                <th>Start date</th>
-                <th>Salary</th>
-            </tr>
-        </tfoot>
- 
-        <tbody>
-            <tr>
-                <td>Tiger Nixon</td>
-                <td>System Architect</td>
-                <td>Edinburgh</td>
-                <td>61</td>
-                <td>2011/04/25</td>
-                <td>320,800</td>
-            </tr>
-            <tr>
-                <td>Garrett Winters</td>
-                <td>Accountant</td>
-                <td>Tokyo</td>
-                <td>63</td>
-                <td>2011/07/25</td>
-                <td>170,750</td>
-            </tr>
-            <tr>
-                <td>Ashton Cox</td>
-                <td>Junior Technical Author</td>
-                <td>San Francisco</td>
-                <td>66</td>
-                <td>2009/01/12</td>
-                <td>86,000</td>
-            </tr>
-            <tr>
-                <td>Cedric Kelly</td>
-                <td>Senior Javascript Developer</td>
-                <td>Edinburgh</td>
-                <td>22</td>
-                <td>2012/03/29</td>
-                <td>433,060</td>
-            </tr>
-            <tr>
-                <td>Airi Satou</td>
-                <td>Accountant</td>
-                <td>Tokyo</td>
-                <td>33</td>
-                <td>2008/11/28</td>
-                <td>162,700</td>
-            </tr>
-         
-            <tr>
-                <td>Rhona Davidson</td>
-                <td>Integration Specialist</td>
-                <td>Tokyo</td>
-                <td>55</td>
-                <td>2010/10/14</td>
-                <td>327,900</td>
-            </tr>
-           
-          
-            <tr>
-                <td>Charde Marshall</td>
-                <td>Regional Director</td>
-                <td>San Francisco</td>
-                <td>36</td>
-                <td>2008/10/16</td>
-                <td>470,600</td>
-            </tr>
-            <tr>
-                <td>Haley Kennedy</td>
-                <td>Senior Marketing Designer</td>
-                <td>London</td>
-                <td>43</td>
-                <td>2012/12/18</td>
-                <td>313,500</td>
-            </tr>
-            <tr>
-                <td>Tatyana Fitzpatrick</td>
-                <td>Regional Director</td>
-                <td>London</td>
-                <td>19</td>
-                <td>2010/03/17</td>
-                <td>385,750</td>
-            </tr>
-            <tr>
-                <td>Michael Silva</td>
-                <td>Marketing Designer</td>
-                <td>London</td>
-                <td>66</td>
-                <td>2012/11/27</td>
-                <td>198,500</td>
-            </tr>
-            <tr>
-                <td>Paul Byrd</td>
-                <td>Chief Financial Officer (CFO)</td>
-                <td>New York</td>
-                <td>64</td>
-                <td>2010/06/09</td>
-                <td>725,000</td>
-            </tr>
-            <tr>
-                <td>Gloria Little</td>
-                <td>Systems Administrator</td>
-                <td>New York</td>
-                <td>59</td>
-                <td>2009/04/10</td>
-                <td>237,500</td>
-            </tr>
-            <tr>
-                <td>Bradley Greer</td>
-                <td>Software Engineer</td>
-                <td>London</td>
-                <td>41</td>
-                <td>2012/10/13</td>
-                <td>132,000</td>
-            </tr>
-            <tr>
-                <td>Dai Rios</td>
-                <td>Personnel Lead</td>
-                <td>Edinburgh</td>
-                <td>35</td>
-                <td>2012/09/26</td>
-                <td>217,500</td>
-            </tr>
-            <tr>
-                <td>Jenette Caldwell</td>
-                <td>Development Lead</td>
-                <td>New York</td>
-                <td>30</td>
-                <td>2011/09/03</td>
-                <td>345,000</td>
-            </tr>
-            <tr>
-                <td>Yuri Berry</td>
-                <td>Chief Marketing Officer (CMO)</td>
-                <td>New York</td>
-                <td>40</td>
-                <td>2009/06/25</td>
-                <td>675,000</td>
-            </tr>
-            <tr>
-                <td>Caesar Vance</td>
-                <td>Pre-Sales Support</td>
-                <td>New York</td>
-                <td>21</td>
-                <td>2011/12/12</td>
-                <td>106,450</td>
-            </tr>
-            <tr>
-                <td>Doris Wilder</td>
-                <td>Sales Assistant</td>
-                <td>Sidney</td>
-                <td>23</td>
-                <td>2010/09/20</td>
-                <td>85,600</td>
-            </tr>
-         
-            <tr>
-                <td>Fiona Green</td>
-                <td>Chief Operating Officer (COO)</td>
-                <td>San Francisco</td>
-                <td>48</td>
-                <td>2010/03/11</td>
-                <td>850,000</td>
-            </tr>
-            <tr>
-                <td>Shou Itou</td>
-                <td>Regional Marketing</td>
-                <td>Tokyo</td>
-                <td>20</td>
-                <td>2011/08/14</td>
-                <td>163,000</td>
-            </tr>
-            <tr>
-                <td>Michelle House</td>
-                <td>Integration Specialist</td>
-                <td>Sidney</td>
-                <td>37</td>
-                <td>2011/06/02</td>
-                <td>95,400</td>
-            </tr>
-            <tr>
-                <td>Suki Burks</td>
-                <td>Developer</td>
-                <td>London</td>
-                <td>53</td>
-                <td>2009/10/22</td>
-                <td>114,500</td>
-            </tr>
-            <tr>
-                <td>Prescott Bartlett</td>
-                <td>Technical Author</td>
-                <td>London</td>
-                <td>27</td>
-                <td>2011/05/07</td>
-                <td>145,000</td>
-            </tr>
-            <tr>
-                <td>Gavin Cortez</td>
-                <td>Team Leader</td>
-                <td>San Francisco</td>
-                <td>22</td>
-                <td>2008/10/26</td>
-                <td>235,500</td>
-            </tr>
-            <tr>
-                <td>Martena Mccray</td>
-                <td>Post-Sales support</td>
-                <td>Edinburgh</td>
-                <td>46</td>
-                <td>2011/03/09</td>
-                <td>324,050</td>
-            </tr>
-        
-            
-        </tbody>
-    </table>

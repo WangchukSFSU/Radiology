@@ -5,11 +5,14 @@
  */
 package org.openmrs.module.radiology.fragment.controller;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 import org.openmrs.Encounter;
 import org.openmrs.Order;
+import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.radiology.PerformedProcedureStepStatus;
 import org.openmrs.module.radiology.RadiologyOrder;
@@ -18,7 +21,9 @@ import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.RadiologyService;
 import org.openmrs.module.radiology.RadiologyStudyList;
 import org.openmrs.module.radiology.Study;
-
+import org.openmrs.ui.framework.SimpleObject;
+import org.openmrs.ui.framework.UiUtils;
+import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.fragment.FragmentModel;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -39,11 +44,37 @@ public class TechnicianInProgressOrderFragmentController {
 		System.out.println("length LLLLLLLLLLLLL " + inProgressRadiologyOrders.size());
 		
 		String aap = getDicomViewerUrladdress();
+		System.out.println("22222222222222 ");
+		
+		ArrayList<String> apo = listFiles("/home/youdon/Desktop/aaa");
+		
+		// radiologyservice.placeDicomInPacs("/home/youdon/Downloads/dicomImage/FluroWithDisplayShutter.dcm");
+		System.out.println("444444444 ");
+		model.addAttribute("apo", apo);
 		
 		model.addAttribute("dicomViewerUrladdress", aap);
 		model.put("inProgressRadiologyOrders", inProgressRadiologyOrders);
 		model.put("studyListFromDb", studyListFromDb);
 		
+	}
+	
+	public ArrayList listFiles(String directoryName) {
+		ArrayList<String> aa = new ArrayList();
+		File directory = new File(directoryName);
+		// get all the files from a directory
+		File[] fList = directory.listFiles();
+		for (File file : fList) {
+			if (file.isFile()) {
+				if (file.getName()
+						.equals(".DS_Store")) {
+					
+				} else {
+					System.out.println("DSDSDSDDSSD " + file.getName());
+					aa.add(file.getName());
+				}
+			}
+		}
+		return aa;
 	}
 	
 	private String getDicomViewerUrladdress() {
@@ -69,6 +100,27 @@ public class TechnicianInProgressOrderFragmentController {
 		
 	}
 	
+	public ArrayList getdicom() {
+		// public List<SimpleObject> getdicom(@SpringBean("conceptService") ConceptService service, UiUtils ui) {
+		ArrayList<String> aa = new ArrayList();
+		File directory = new File("/home/youdon/Desktop/aaa");
+		// get all the files from a directory
+		File[] fList = directory.listFiles();
+		for (File file : fList) {
+			if (file.isFile()) {
+				if (file.getName()
+						.equals(".DS_Store")) {
+					
+				} else {
+					System.out.println("88888888888888 " + file.getName());
+					aa.add(file.getName());
+				}
+			}
+		}
+		
+		return aa;
+	}
+	
 	public List<RadiologyOrder> getInProgressRadiologyOrdersByPatient() {
 		System.out.println("getLabOrdersByPatient");
 		Vector<RadiologyOrder> radiologyOrders = new Vector<RadiologyOrder>();
@@ -89,7 +141,8 @@ public class TechnicianInProgressOrderFragmentController {
 				radiologyOrder = Context.getService(RadiologyService.class)
 						.getRadiologyOrderByOrderId(order.getOrderId());
 				
-				if (radiologyOrder.isCompleted()) {
+				if (radiologyOrder.isInProgress()) {
+					System.out.println("222222 " + radiologyOrder.getInstructions());
 					radiologyOrders.add(radiologyOrder);
 					
 				}
@@ -103,6 +156,13 @@ public class TechnicianInProgressOrderFragmentController {
 		
 		System.out.println("radiologyorderId");
 		System.out.println("radiologyorderId" + radiologyorderId);
+		
+		System.out.println("333333333333333 ");
+		RadiologyService radiologyservice = Context.getService(RadiologyService.class);
+		// ArrayList<String> apo = listFiles("/home/youdon/Desktop/aaa");
+		
+		radiologyservice.placeDicomInPacs("/home/youdon/Desktop/aaa");
+		System.out.println("4444477777777777777 ");
 		
 		List<RadiologyOrder> orders = Context.getService(RadiologyService.class)
 				.getAllRadiologyOrder();
@@ -123,33 +183,7 @@ public class TechnicianInProgressOrderFragmentController {
 				
 				Context.getService(RadiologyService.class)
 						.updateStudyPerformedStatus(radiologyOrder.getStudy()
-								.getStudyInstanceUid(), PerformedProcedureStepStatus.DONE);
-				
-				Context.getService(RadiologyService.class)
-						.updateRadiologyStatusOrder(radiologyOrder.getStudy()
-								.getStudyInstanceUid(), RadiologyOrderStatus.COMPLETED);
-				
-				Context.getService(RadiologyService.class)
-						.updateObsCompletedDate(radiologyOrder.getStudy()
-								.getStudyInstanceUid(), new Date().toString());
-				
-				List<Encounter> ampt = Context.getEncounterService()
-						.getEncountersByPatient(order.getPatient());
-				
-				System.out.println("Jytryrtryryr enc.size() " + ampt.size());
-				int encou = 0;
-				int max = 0;
-				for (Encounter ep : ampt) {
-					if (ep.getEncounterId() > max) {
-						max = ep.getEncounterId();
-					}
-					System.out.println("MKMK@#@#@##2412443424 encounter max " + max);
-					
-				}
-				
-				Context.getService(RadiologyService.class)
-						.updateStudyEncounterId(radiologyOrder.getStudy()
-								.getStudyInstanceUid(), max);
+								.getStudyInstanceUid(), PerformedProcedureStepStatus.COMPLETED);
 				
 			}
 			
