@@ -33,11 +33,11 @@
    
    
    
-    jq("#activeorders").html("<li><i ></i><a href='/openmrs/radiology/radiologistActiveOrders.page'> Radiology Active Orders</li>");
+    jq("#activeorders").html("<li><i ></i><a href='/openmrs/radiology/radiologistActiveOrders.page'> RadiologyOrdersToSendImageToPAC</li>");
 jq("#activeorders li i").addClass("icon-chevron-right link");
 
 
-jq("#orderdetails").html("<li><i ></i> Send Dicom to PACS</li>");
+jq("#orderdetails").html("<li><i ></i> SendDicomToPAC</li>");
 jq("#orderdetails li i").addClass("icon-chevron-right link");
 
 
@@ -218,7 +218,7 @@ function contactRadiologist() {
     <li id="activeorders">
        <i class="icon-chevron-right link"></i>
         
-        Active Radiology Orders
+        RadiologyOrdersToSendImageToPAC
          
     </li>
     <li id="orderdetails">  
@@ -234,7 +234,7 @@ function contactRadiologist() {
 
     <div id="performedStatusInProgressOrder">
   
-        <h1>ACTIVE RADIOLOGY ORDERS</h1>
+        <h1>CLICK RADIOLOGY ORDER TO SEND IMAGE TO PAC</h1>
 <table id="performedStatusInProgressOrderTable">
     <thead>
         <tr>

@@ -20,7 +20,7 @@ jq('#tableformodality').DataTable({
             "bAutoWidth": false,
             "bLengthChange": true,
             "bSort": true,
-            //"bJQueryUI": true,
+            "bJQueryUI": true,
              "iDisplayLength": 5,   
         });
     
@@ -199,7 +199,7 @@ jq(".studybtn").show();
   
   
 
- jq("#manageradiology").html("<li><i ></i><a href='/openmrs/radiology/adminInitialize.page'> Manage Radiology Module</li>");
+ jq("#manageradiology").html("<li><i ></i><a href='/openmrs/radiology/adminInitialize.page'> Manage Modalities</li>");
 jq("#manageradiology li i").addClass("icon-chevron-right link");
 
 
@@ -580,7 +580,7 @@ jq('#studytablelistid').dataTable({
             "bAutoWidth": false,
             "bLengthChange": true,
             "bSort": true,
-            //"bJQueryUI": true,
+            "bJQueryUI": true,
              "iDisplayLength": 5,   
         });
  
@@ -686,13 +686,13 @@ alert("ret.length KKKKKK" + ret.length);
 if(conNameReporturl) {
 
             
-table.append( '<tr><td>'+ conName +'</td><td> <a href='+ conNameReporturl +'> '+ conName +'</a> </td> <td> <a id="editbtn" href='+ conNameReporturl +'><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a> <a id="deletebtn" ><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/></a> </td></tr>' );
+table.append( '<tr><td>'+ conName +'</td><td> <a href='+ conNameReporturl +'> '+ conName +'</a> </td> <td> <a id="editbtn" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForms.list"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a> <a id="deletebtn" ><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/></a> </td></tr>' );
 
    
   }
 else {
 
-table.append( '<tr><td>'+ conName +'</td><td>'+ conNameReporturl +' </td> <td><a id="addbtn" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a> <a id="editbtn" href='+ conNameReporturl +'><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a> <a id="deletebtn" ><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/></a> </td></tr>' );
+table.append( '<tr><td>'+ conName +'</td><td>'+ conNameReporturl +' </td> <td><a id="addbtn" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a> <a id="editbtn" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForms.list"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a> <a id="deletebtn" ><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/></a> </td></tr>' );
 
 
 }
@@ -761,7 +761,7 @@ alert("ret.length" + ret.length);
 if(conNameReporturl) {
 
             
- reporttablelist.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'>'+ conName +'</a> </td> <td><a id="editbtn" href='+ conNameReporturl +'><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a>  </td></tr>' );
+ reporttablelist.append( '<tr><td>'+ conName +'</td><td><a href='+ conNameReporturl +'>'+ conName +'</a> </td> <td><a id="editbtn" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForms.list"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a>  </td></tr>' );
 
    
   }
@@ -813,7 +813,7 @@ alert("ret.length" + ret.length);
             "bAutoWidth": false,
             "bLengthChange": true,
             "bSort": true,
-            //"bJQueryUI": true,
+            "bJQueryUI": true,
              "iDisplayLength": 5,   
         });
  
@@ -846,7 +846,7 @@ alert("ret.length" + ret.length);
     </li>
     <li id="manageradiology">  
         <i class="icon-chevron-right link"></i>
-        Manage Radiology Module   
+        Manage Modalities   
     </li>
      <li id="managestudy"> 
          </li>
