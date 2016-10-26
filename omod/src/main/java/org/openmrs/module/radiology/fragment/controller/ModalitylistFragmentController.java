@@ -15,6 +15,9 @@ import org.openmrs.Form;
 import org.openmrs.Patient;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.htmlformentry.FormEntrySession;
+import org.openmrs.module.htmlformentry.HtmlForm;
+import org.openmrs.module.htmlformentry.HtmlFormEntryUtil;
 import org.openmrs.module.radiology.RadiologyService;
 import org.openmrs.module.radiology.RadiologyStudyList;
 
@@ -26,8 +29,42 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 public class ModalitylistFragmentController {
 	
-	public void controller(FragmentModel model) {
-		// get list of modality based on the modality class
+	public void controller(FragmentModel model) throws Exception {
+		
+		Patient patient = null;
+		Form form = null;
+		HtmlForm htmlForm = null;
+		
+		form = Context.getFormService()
+				.getForm(7);
+		htmlForm = HtmlFormEntryUtil.getService()
+				.getHtmlFormByForm(form);
+		
+		patient = Context.getPatientService()
+				.getPatient(2);
+		
+		FormEntrySession session = new FormEntrySession(patient, htmlForm);
+		
+		// ensure we've generated the form's HTML (and thus set up the submission actions, etc) before we do anything
+		session.getHtmlToDisplay();
+		
+		model.addAttribute("session", session);
+		
+		List<Form> mod = new ArrayList();
+		List<Form> studyreport = Context.getFormService()
+				.getAllForms();
+		
+		for (Form searchform : studyreport) {
+			// System.out.println("GOOD ************************************ " + searchform.getName());
+			// System.out.println("GOOD **************************************" + searchform.getFormId());
+			if (searchform.getFormId()
+					.equals(7)) {
+				System.out.println("GOOD ************************************ " + searchform.getName());
+				System.out.println("GOOD **************************************" + searchform.getUuid());
+				mod.add(searchform);
+			}
+			
+		}
 		
 		ArrayList<ConceptName> modalityconceptnamelist = new ArrayList();
 		List<ConceptSet> moset = Context.getConceptService()
@@ -45,6 +82,7 @@ public class ModalitylistFragmentController {
 		}
 		
 		model.addAttribute("mmm", modalityconceptnamelist);
+		model.addAttribute("mod", mod);
 		
 	}
 	

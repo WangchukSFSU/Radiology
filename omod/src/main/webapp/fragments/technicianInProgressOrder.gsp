@@ -6,7 +6,7 @@
     jq = jQuery;
     jq(document).ready(function() {
     
-   
+      jq('#dicomSendMessage').hide();
 
     
       jq('#performedStatusInProgressOrderTable').dataTable({
@@ -59,8 +59,11 @@ jq("#orderdetails li i").addClass("icon-chevron-right link");
     
    alert("yess");
   
+    <% inProgressRadiologyOrders.each { anOrder -> %>
     
+    var radiologyorderId = ${anOrder.orderId} ;
 
+     if(orderId == radiologyorderId) {
    
   localStorage.setItem("radiologyorderId", orderId);
     
@@ -76,10 +79,10 @@ jq("#dicomtable table").addClass("studyclass");
 var dicomtablelist = jq('#dicomtable').children();
 
   
-  dicomtablelist.append( '<thead><tr><th> Dicom Files</th></tr></thead><tbody>' );
+  dicomtablelist.append( '<thead><tr><th>Study</th><th>Diagnosis</th><th>Instructions</th><th> Dicom Files</th></tr></thead><tbody>' );
   <% apo.each { apoo -> %>
 
-  dicomtablelist.append( '<tr>  <td>${ apoo }</td></tr>' );
+  dicomtablelist.append( '<tr> <td>${anOrder.study.studyname}</td> <td> ${anOrder.orderdiagnosis}</td><td> ${anOrder.instructions} </td><td>${ apoo }</td></tr>' );
   
 
    <% } %>
@@ -87,6 +90,14 @@ var dicomtablelist = jq('#dicomtable').children();
      dicomtablelist.append("</tbody>");
 
 
+     
+     }
+    
+    
+   <% } %>
+  
+     
+     
     });
     
     
@@ -124,8 +135,10 @@ jq("#somediv").load('/openmrs/radiology/radiologistActiveOrders.page').dialog({m
     data : { 'radiologyorderId': radiologyorderId},
     cache: false,
     success: function(data){
-    location.reload();
+    
 alert("COOL");
+     jq('#dicomSendMessage').show();
+ //location.reload();
     }
     });
    
@@ -229,7 +242,10 @@ function contactRadiologist() {
 </ul>
 </div>
     
- 
+ <div id = "dicomSendMessage">
+    <h1> dicom files(s) sent successfully</h1>
+
+</div>
 
 
     <div id="performedStatusInProgressOrder">
@@ -259,10 +275,6 @@ function contactRadiologist() {
 
 
 <div id = "dicomtable">
-    
-
-  
-
 
 </div>
 
