@@ -43,7 +43,8 @@ public class ModalitylistFragmentController {
 		patient = Context.getPatientService()
 				.getPatient(2);
 		
-		FormEntrySession session = new FormEntrySession(patient, htmlForm);
+		FormEntrySession session = null;
+		session = new FormEntrySession(patient, htmlForm, null, null);
 		
 		// ensure we've generated the form's HTML (and thus set up the submission actions, etc) before we do anything
 		session.getHtmlToDisplay();
