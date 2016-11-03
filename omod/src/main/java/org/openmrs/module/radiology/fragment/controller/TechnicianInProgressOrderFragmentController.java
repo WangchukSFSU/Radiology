@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import org.openmrs.Order;
+import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.radiology.PerformedProcedureStepStatus;
 import org.openmrs.module.radiology.RadiologyOrder;
@@ -17,6 +18,9 @@ import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.RadiologyService;
 import org.openmrs.module.radiology.RadiologyStudyList;
 import org.openmrs.module.radiology.Study;
+import org.openmrs.ui.framework.SimpleObject;
+import org.openmrs.ui.framework.UiUtils;
+import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.fragment.FragmentModel;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -145,7 +149,8 @@ public class TechnicianInProgressOrderFragmentController {
 		return radiologyOrders;
 	}
 	
-	public void updateActiveOrders(FragmentModel model, @RequestParam(value = "radiologyorderId") String radiologyorderId) {
+	public List<SimpleObject> updateActiveOrders(@SpringBean("conceptService") ConceptService service, FragmentModel model,
+			@RequestParam(value = "radiologyorderId") String radiologyorderId, UiUtils ui) {
 		
 		System.out.println("radiologyorderId");
 		System.out.println("radiologyorderId" + radiologyorderId);
@@ -156,31 +161,38 @@ public class TechnicianInProgressOrderFragmentController {
 		
 		radiologyservice.placeDicomInPacs("/home/youdon/Desktop/aaa");
 		System.out.println("4444477777777777777 ");
-		
 		List<RadiologyOrder> orders = Context.getService(RadiologyService.class)
 				.getAllRadiologyOrder();
-		
 		int result = Integer.parseInt(radiologyorderId);
-		
 		List<Study> orderst = Context.getService(RadiologyService.class)
 				.getAllStudyRadiologyOrder();
-		
 		RadiologyOrder radiologyOrder;
-		
 		for (Order order : orders) {
-			
 			if ((order.getOrderId()
 					.toString().trim()).equals(radiologyorderId.trim())) {
 				radiologyOrder = Context.getService(RadiologyService.class)
 						.getRadiologyOrderByOrderId(order.getOrderId());
-				
 				Context.getService(RadiologyService.class)
 						.updateStudyPerformedStatus(radiologyOrder.getStudy()
 								.getStudyInstanceUid(), PerformedProcedureStepStatus.COMPLETED);
-				
 			}
-			
 		}
 		
+		ArrayList<RadiologyOrder> getRadiologyOrder = new ArrayList<RadiologyOrder>();
+		List<RadiologyStudyList> studyListFromDb = radiologyservice.getAllStudy();
+		
+		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrdersByPatient();
+		
+		for (RadiologyOrder updateActiveOrder : inProgressRadiologyOrders) {
+			getRadiologyOrder.add(updateActiveOrder);
+		}
+		String[] properties = new String[4];
+		properties[0] = "orderId";
+		properties[1] = "study.studyname";
+		properties[2] = "dateCreated";
+		properties[3] = "urgency";
+		
+		return SimpleObject.fromCollection(getRadiologyOrder, ui, properties);
 	}
+	
 }

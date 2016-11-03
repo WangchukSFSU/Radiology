@@ -15,6 +15,7 @@ import org.openmrs.Form;
 import org.openmrs.Patient;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.htmlformentry.FormEntryContext.Mode;
 import org.openmrs.module.htmlformentry.FormEntrySession;
 import org.openmrs.module.htmlformentry.HtmlForm;
 import org.openmrs.module.htmlformentry.HtmlFormEntryUtil;
@@ -30,26 +31,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ModalitylistFragmentController {
 	
 	public void controller(FragmentModel model) throws Exception {
-		
-		Patient patient = null;
-		Form form = null;
-		HtmlForm htmlForm = null;
-		
-		form = Context.getFormService()
-				.getForm(7);
-		htmlForm = HtmlFormEntryUtil.getService()
-				.getHtmlFormByForm(form);
-		
-		patient = Context.getPatientService()
-				.getPatient(2);
-		
-		FormEntrySession session = null;
-		session = new FormEntrySession(patient, htmlForm, null, null);
-		
-		// ensure we've generated the form's HTML (and thus set up the submission actions, etc) before we do anything
-		session.getHtmlToDisplay();
-		
-		model.addAttribute("session", session);
 		
 		List<Form> mod = new ArrayList();
 		List<Form> studyreport = Context.getFormService()
@@ -115,28 +96,85 @@ public class ModalitylistFragmentController {
 	}
 	
 	public List<SimpleObject> getReportConcepts(FragmentModel model, @SpringBean("conceptService") ConceptService service,
-			UiUtils ui) {
+			UiUtils ui) throws Exception {
 		
-		ArrayList<RadiologyStudyList> studylistmember = new ArrayList<RadiologyStudyList>();
-		List<RadiologyStudyList> liststudystudy = Context.getService(RadiologyService.class)
-				.getAllStudy();
+		ArrayList<FormEntrySession> fff = new ArrayList<FormEntrySession>();
 		
-		for (RadiologyStudyList getstudyselected : liststudystudy) {
+		List<Form> getAllForms = Context.getFormService()
+				.getAllForms();
+		ConceptClass getConceptClassByName = Context.getConceptService()
+				.getConceptClassByName("Radiology/Imaging Procedure");
+		List<Concept> getConceptsByClass = Context.getConceptService()
+				.getConceptsByClass(getConceptClassByName);
+		
+		for (Form searchform : getAllForms) {
 			
-			System.out.println("selectedstudy same ");
-			studylistmember.add(getstudyselected);
+			String searchformName = searchform.getName()
+					.trim();
+			if (searchform.getFormId()
+					.equals(7)) {
+				
+				Mode mode = Mode.ENTER;
+				HtmlForm htmlForm = HtmlFormEntryUtil.getService()
+						.getHtmlFormByForm(searchform);
+				Patient patient = HtmlFormEntryUtil.getFakePerson();
+				FormEntrySession FormEntrySessionNew = null;
+				FormEntrySessionNew = new FormEntrySession(patient, htmlForm, mode, null);
+				FormEntrySessionNew.getHtmlToDisplay();
+				fff.add(FormEntrySessionNew);
+			}
 			
 		}
 		
-		String[] properties = new String[3];
-		properties[0] = "id";
-		properties[1] = "studyName";
-		properties[2] = "studyReporturl";
-		return SimpleObject.fromCollection(studylistmember, ui, properties);
+		String[] FormEntryProperties = new String[3];
+		FormEntryProperties[0] = "FormName";
+		FormEntryProperties[1] = "Form";
+		FormEntryProperties[2] = "HtmlToDisplay";
+		
+		return SimpleObject.fromCollection(fff, ui, FormEntryProperties);
 	}
 	
 	public List<SimpleObject> getStudyConcepts(FragmentModel model, @SpringBean("conceptService") ConceptService service,
 			UiUtils ui) {
+		
+		List<RadiologyStudyList> liststudystudy = Context.getService(RadiologyService.class)
+				.getAllStudy();
+		
+		ArrayList<ConceptName> studySetMembers = new ArrayList<ConceptName>();
+		
+		ConceptClass mot = Context.getConceptService()
+				.getConceptClassByName("Radiology/Imaging Procedure");
+		
+		List<Concept> mot_list = Context.getConceptService()
+				.getConceptsByClass(mot);
+		
+		for (Concept ccc : mot_list) {
+			for (RadiologyStudyList getstudyselected : liststudystudy) {
+				if (ccc.getDisplayString()
+						.endsWith("modality")) {
+					
+				} else if (ccc.getDisplayString()
+						.equals(getstudyselected.getStudyName())) {
+					
+				}
+				
+				else {
+					studySetMembers.add(ccc.getName());
+				}
+			}
+		}
+		
+		String[] properties = new String[2];
+		properties[0] = "id";
+		properties[1] = "name";
+		
+		return SimpleObject.fromCollection(studySetMembers, ui, properties);
+	}
+	
+	public List<SimpleObject> manageReport(FragmentModel model, @SpringBean("conceptService") ConceptService service,
+			UiUtils ui) {
+		
+		ArrayList<FormEntrySession> fff = new ArrayList<FormEntrySession>();
 		
 		List<RadiologyStudyList> liststudystudy = Context.getService(RadiologyService.class)
 				.getAllStudy();
@@ -289,6 +327,62 @@ public class ModalitylistFragmentController {
 			}
 		}
 		
+	}
+	
+	public List<SimpleObject> getReport(FragmentModel model, @SpringBean("conceptService") ConceptService service, UiUtils ui)
+			throws Exception {
+		
+		// list of Study Forms avaialble
+		ArrayList<FormEntrySession> getStudyHTMLCreated = new ArrayList<FormEntrySession>();
+		
+		// Get All HTMLForms
+		List<Form> getAllHTMLForms = Context.getFormService()
+				.getAllForms();
+		
+		// Study Concept Class
+		ConceptClass studyConceptClass = Context.getConceptService()
+				.getConceptClassByName("Radiology/Imaging Procedure");
+		
+		// Get all Study Concept
+		List<Concept> listOfStudyConcept = Context.getConceptService()
+				.getConceptsByClass(studyConceptClass);
+		
+		for (Concept eachStudyConcept : listOfStudyConcept) {
+			
+			for (Form eachHTMLForms : getAllHTMLForms) {
+				
+				// study name
+				String studyDisplayString = eachStudyConcept.getDisplayString();
+				// htmlform name
+				String htmlFormName = eachHTMLForms.getName()
+						.trim();
+				
+				// check if study htmlform is available
+				if (studyDisplayString.equals(htmlFormName)) {
+					
+					Mode mode = Mode.ENTER;
+					
+					HtmlForm htmlForm = HtmlFormEntryUtil.getService()
+							.getHtmlFormByForm(eachHTMLForms);
+					
+					Patient patient = HtmlFormEntryUtil.getFakePerson();
+					
+					FormEntrySession session = null;
+					session = new FormEntrySession(patient, htmlForm, mode, null);
+					
+					session.getHtmlToDisplay();
+					session.getFormName();
+					
+					getStudyHTMLCreated.add(session);
+					
+				}
+			}
+		}
+		
+		String[] properties = new String[2];
+		properties[0] = "FormName";
+		properties[1] = "HtmlToDisplay";
+		return SimpleObject.fromCollection(getStudyHTMLCreated, ui, properties);
 	}
 	
 }

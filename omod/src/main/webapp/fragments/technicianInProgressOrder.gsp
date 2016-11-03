@@ -6,7 +6,7 @@
     jq = jQuery;
     jq(document).ready(function() {
     
-      jq('#dicomSendMessage').hide();
+     
 
     
       jq('#performedStatusInProgressOrderTable').dataTable({
@@ -25,14 +25,37 @@
 
  jq("#performedStatusInProgressOrderDetail").hide(); 
  
-  
 
+ 
+ 
+ 
+  
     
-   jq("#performedStatusInProgressOrderTable tr").click(function(){
-   
-   
-   
-   
+    
+  
+    
+    jq("#dicomtable table tbody").delegate("tr", "click", function(e) {
+     
+
+ alert("lpo");
+ });
+ 
+
+
+jq("#test").click(function() {
+alert("dsdads");
+jq("#somediv").load('/openmrs/radiology/radiologistActiveOrders.page').dialog({modal:true}); 
+    });  
+    
+    
+    });
+
+  
+  function displayReport(el) {
+   jq(el).addClass("highlight").css("background-color","#CCCCCC");
+   alert("33333");
+ 
+   jq('#orderdetails').show();
     jq("#activeorders").html("<li><i ></i><a href='/openmrs/radiology/radiologistActiveOrders.page'> RadiologyOrdersToSendImageToPAC</li>");
 jq("#activeorders li i").addClass("icon-chevron-right link");
 
@@ -40,21 +63,24 @@ jq("#activeorders li i").addClass("icon-chevron-right link");
 jq("#orderdetails").html("<li><i ></i> SendDicomToPAC</li>");
 jq("#orderdetails li i").addClass("icon-chevron-right link");
 
-
+alert("11111");
    
-    jq(this).addClass('selected').siblings().removeClass('selected');    
-    var value=jq(this).find('td:first').html();
+    jq(el).addClass('selected').siblings().removeClass('selected');  
+var value= jq(el).closest('tr').find('td:first').text();
+   // var value=jq(el).find('td:first').html();
     
     alert(value); 
+    var orderId = parseInt(value, 10);
+alert(orderId);
     jq("#performedStatusInProgressOrderDetail").show();
       jq("#performedStatusInProgressOrder").hide();
-    var splitvalue = value.split('>');
-    
+    var splitvalue = value.split('');
+    alert("otertertetete " +splitvalue);
     ordervalue = splitvalue[1];
     alert("ordervalue" +ordervalue);
    //var orderId = ordervalue.substr(0, 2);
       //alert("orderId" +orderId);
-      var orderId= ordervalue.substr(0, ordervalue.indexOf('<'));
+      //var orderId= ordervalue.substr(0, ordervalue.indexOf('<'));
       alert("orderId" +orderId);
     
    alert("yess");
@@ -79,11 +105,16 @@ jq("#dicomtable table").addClass("studyclass");
 var dicomtablelist = jq('#dicomtable').children();
 
   
-  dicomtablelist.append( '<thead><tr><th>Study</th><th>Diagnosis</th><th>Instructions</th><th> Dicom Files</th></tr></thead><tbody>' );
+  dicomtablelist.append( '<thead><tr><th>Study/Associated Files</th><th>Start Date</th></tr></thead><tbody>' );
+  dicomtablelist.append( '<tr><td>${anOrder.study.studyname}</td><td>${anOrder.dateCreated}</td></tr>' );
+ 
+  
+  
+  
   <% apo.each { apoo -> %>
 
-  dicomtablelist.append( '<tr> <td>${anOrder.study.studyname}</td> <td> ${anOrder.orderdiagnosis}</td><td> ${anOrder.instructions} </td><td>${ apoo }</td></tr>' );
-  
+
+  dicomtablelist.append( '<tr><td style="text-indent: 50px;">    ${ apoo }</td></tr>' );
 
    <% } %>
  dicomtablelist.append( '<tr>  <td> <a href="javascript: void(0)" id="linkActButton" onclick="submitObs(); return false;">Send</a></td></tr>' );
@@ -98,28 +129,9 @@ var dicomtablelist = jq('#dicomtable').children();
   
      
      
-    });
+    }
     
     
-    
-    
-    
-  
-    
-    
-     
-    
- 
-
-
-jq("#test").click(function() {
-alert("dsdads");
-jq("#somediv").load('/openmrs/radiology/radiologistActiveOrders.page').dialog({modal:true}); 
-    });  
-    
-    
-    });
-
     
   
     function submitObs() {
@@ -129,18 +141,58 @@ jq("#somediv").load('/openmrs/radiology/radiologistActiveOrders.page').dialog({m
    
    alert("radiologyorderId " + radiologyorderId);
    
-   jq.ajax({
-    type: "POST",
-    url: "${ ui.actionLink('updateActiveOrders') }",
-    data : { 'radiologyorderId': radiologyorderId},
-    cache: false,
-    success: function(data){
+   
+    jq.getJSON('${ ui.actionLink("updateActiveOrders") }',
+    { 'radiologyorderId': radiologyorderId
+    })
+    .error(function(xhr, status, err) {
+    alert('AJAX error ' + err);
+    })
+    .success(function(ret) {
     
-alert("COOL");
-     jq('#dicomSendMessage').show();
- //location.reload();
+       jq('#orderdetails').hide();
+    jq('#dicomtable').empty();
+    jq("<h1></h1>").text("dicom files(s) sent successfully").appendTo('#dicomtable');
+    jq("<h1></h1>").text("CLICK RADIOLOGY ORDER TO SEND IMAGE TO PAC").appendTo('#dicomtable');
+ 
+     jq('#dicomtable').append('<table></table>');
+    jq('#dicomtable table').attr('id','updateActiveOrderDatatable');
+    jq("#dicomtable table").addClass("reporttableclass");
+var dicomtablelist = jq('#dicomtable table');
+    dicomtablelist.append( '<thead><tr><th>Order</th><th>OrderStartDate</th><th>OrderPriority</th></tr></thead><tbody>' );
+     alert("COOL");
+    for (var i = 0; i < ret.length; i++) {
+    var anOrderId = ret[i].orderId;
+    var studyname = ret[i].study.studyname;
+    var dateCreated = ret[i].dateCreated;
+    var urgency = ret[i].urgency;
+
+ dicomtablelist.append( '<tr><td><a id="fillreport" href='+ studyname +' class="fillreport" onclick="displayReport(this); return false;" ><p style="display:none;">'+ anOrderId +'</p>'+ studyname +' </a></td><td>'+ dateCreated +'</td><td>'+ urgency +'</td></tr>' );
+ 
+
+
     }
-    });
+    
+    
+      dicomtablelist.append("</tbody>");
+       jq('#updateActiveOrderDatatable').dataTable({
+            "sPaginationType": "full_numbers",
+            "bPaginate": true,
+            "bAutoWidth": false,
+            "bLengthChange": true,
+            "bSort": true,
+            "bJQueryUI": true,
+            
+             "iDisplayLength": 5,
+    "aaSorting": [[ 1, "desc" ]] // Sort by first column descending,
+    
+            
+        });
+    
+    })
+   
+   
+    
    
     }
     
@@ -242,10 +294,7 @@ function contactRadiologist() {
 </ul>
 </div>
     
- <div id = "dicomSendMessage">
-    <h1> dicom files(s) sent successfully</h1>
 
-</div>
 
 
     <div id="performedStatusInProgressOrder">
@@ -262,8 +311,8 @@ function contactRadiologist() {
     <tbody>
     <% inProgressRadiologyOrders.each { anOrder -> %>
     <tr>
-        <td><p style="display:none;">${ anOrder.orderId }</p>
-            ${anOrder.study.studyname}</td>
+        <td><a id="fillreport" href='+ studyname +' class="fillreport" onclick="displayReport(this); return false;"><p style="display:none;">${ anOrder.orderId }</p>
+                ${anOrder.study.studyname}</a></td>
         <td>${ anOrder.dateCreated } </td>
         <td>${ anOrder.urgency }</td>
 
