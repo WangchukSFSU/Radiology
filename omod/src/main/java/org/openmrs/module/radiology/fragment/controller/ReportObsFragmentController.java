@@ -35,7 +35,7 @@ public class ReportObsFragmentController {
 			// System.out.println("MKMKMKMKMK PPPPP " + Context.getConceptService()
 			// .getConcept(162836)
 			// .getName());
-			System.out.println("MKMKMKMKMK MMMMMMM " + diagnosisConceptName);
+			// System.out.println("MKMKMKMKMK MMMMMMM " + diagnosisConceptName);
 			// System.out.println("MKMKMKMKMK NNNNNNN " + printobservation.getConcept()
 			// .getFullySpecifiedName(Locale.ENGLISH));
 			// getObs.add(printobservation);

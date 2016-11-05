@@ -315,12 +315,12 @@ public class RadiologyProperties extends ModuleProperties {
 		}
 		result = result.substring(0, result.length() - 1);
 		
-		System.out.println("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK" + result);
+		// System.out.println("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK" + result);
 		return result;
 	}
 	
 	public String getServersAddress() {
-		System.out.println("NKNKNKNKKNKNKNNKNKNNKKN ");
+		
 		return "http://" + Context.getAdministrationService()
 				.getGlobalProperty(RadiologyConstants.GP_DICOM_WEB_VIEWER_ADDRESS);
 	}

@@ -52,7 +52,7 @@ jq("#somediv").load('/openmrs/radiology/radiologistActiveOrders.page').dialog({m
 
   
   function displayReport(el) {
-   
+   jq(el).addClass("highlight").css("background-color","#CCCCCC");
    alert("33333");
  
    jq('#orderdetails').show();
@@ -105,16 +105,16 @@ jq("#dicomtable table").addClass("studyclass");
 var dicomtablelist = jq('#dicomtable').children();
 
   
-  dicomtablelist.append( '<thead><tr><th></th></tr></thead><tbody>' );
-  dicomtablelist.append( '<tr><td><b>Study</b></td></tr><tr><td>${anOrder.study.studyname}</td></tr>' );
-dicomtablelist.append( '<tr><td><b>Start Date</b></td></tr><tr><td>${anOrder.dateCreated}</td></tr>' );
-  dicomtablelist.append( '<tr><td><b>Dicom Files</b></td></tr>' );
+  dicomtablelist.append( '<thead><tr><th>Study/Associated Files</th><th>Start Date</th></tr></thead><tbody>' );
+  dicomtablelist.append( '<tr><td>${anOrder.study.studyname}</td><td>${anOrder.dateCreated}</td></tr>' );
+ 
+  
   
   
   <% apo.each { apoo -> %>
 
 
-  dicomtablelist.append( '<tr><td>${ apoo }</td></tr>' );
+  dicomtablelist.append( '<tr><td style="text-indent: 50px;">    ${ apoo }</td></tr>' );
 
    <% } %>
  dicomtablelist.append( '<tr>  <td> <a href="javascript: void(0)" id="linkActButton" onclick="submitObs(); return false;">Send</a></td></tr>' );

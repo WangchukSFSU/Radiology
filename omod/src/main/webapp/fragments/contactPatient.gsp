@@ -32,7 +32,7 @@ var  message = jq("#message").val();
 
 <center>
         <h1>CONTACT PATIENT</h1>
-        <form method = "POST" >
+        
             <table border="0" width="80%">
                 <tr>
                     <td>To:</td>
@@ -57,5 +57,5 @@ var  message = jq("#message").val();
                     </td>
                 </tr>
             </table>
-        </form>
+       
     </center>
