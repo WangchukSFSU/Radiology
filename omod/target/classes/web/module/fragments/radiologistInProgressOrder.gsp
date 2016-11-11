@@ -100,7 +100,7 @@ var dicomtablelist = jq('#performedStatusInProgressOrder table');
             "bJQueryUI": true,
             
              "iDisplayLength": 5,
-    "aaSorting": [[ 1, "desc" ]] // Sort by first column descending,
+    "aaSorting": [[ 2, "desc" ]] // Sort by first column descending,
     
             
         });

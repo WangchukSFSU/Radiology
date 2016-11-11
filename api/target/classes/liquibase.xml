@@ -482,7 +482,23 @@
         <column name="orderencounterId" type="int"/>
     </addColumn>
 </changeSet>
-<changeSet author="tenzin" id="radiology-79">
+
+<changeSet id="radiology-80" author="tenzin">
+		
+		<dropColumn columnName="radiologyOrderstatus" tableName="radiology_study" />
+		
+	</changeSet>
+        <changeSet id="radiology-81" author="tenzin">
+		
+		<dropColumn columnName="studyPatientName" tableName="radiology_study" />
+		
+	</changeSet>
+         <changeSet id="radiology-82" author="tenzin">
+		
+		<dropColumn columnName="patientName" tableName="radiology_study" />
+		
+	</changeSet>
+        <changeSet author="tenzin" id="radiology-83">
     <addColumn tableName="radiology_study">
         <column name="patientName" type="varchar(255)"/>
     </addColumn>
