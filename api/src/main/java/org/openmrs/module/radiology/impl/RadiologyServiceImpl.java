@@ -19,6 +19,7 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Encounter;
+import org.openmrs.Form;
 import org.openmrs.Order;
 import org.openmrs.Patient;
 import org.openmrs.Provider;

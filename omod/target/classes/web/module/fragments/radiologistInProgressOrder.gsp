@@ -83,9 +83,9 @@ var dicomtablelist = jq('#performedStatusInProgressOrder table');
     var studyname = ret[i].study.studyname;
     var dateCreated = ret[i].dateCreated;
     var urgency = ret[i].urgency;
-    var patientName = ret[i].study.patientName;
+    var patientName = ret[i].patient.personName;
     
-     dicomtablelist.append( '<tr><td><a id="fillreport" href='+ studyname +' class="fillreport" onclick="displayReport(this); return false;"><p style="display:none;">'+ anOrderId +'</p>'+ studyname +' </a></td><td> '+ patientName +' </td><td>'+ dateCreated +'</td><td>'+ urgency +'</td></tr>' );
+     dicomtablelist.append( '<tr><td><a id="fillreport" href='+ studyname +' class="fillreport" onclick="displayReport(this); return false;"><p style="display:none;">'+ anOrderId +'</p>'+ studyname +' </a></td><td>'+ patientName +'</td><td>'+ dateCreated +'</td><td>'+ urgency +'</td></tr>' );
  
 
 
@@ -229,7 +229,7 @@ alert(orderId);
   localStorage.setItem("radiologyorderId", radiologyorderId);
 
   jq('#completedOrderObs').append( '<thead><tr><th> Report</th><th>Patient Name</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th>ViewStudy</th><th>SubmitObs</th></thead>' );
-jq('#completedOrderObs').append( '<tbody><tr><td><a id="fillreportTT" class="fillreportTT" href="${anOrder.study.studyreporturl  }" onclick="fillReport(); return false;" >Obs </a></td><td>${ anOrder.study.patientName } </td><td> ${anOrder.creator.username}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td>${anOrder.study.studyname}</td><td id="dogdog" href="ddasdas"><a id="tiger" class="tiger" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + anOrder.patient.patientIdentifier }" onclick="loadImages(); return false;" >ViewStudy</a></td><td><a href="javascript: void(0)" id="linkActButton" onclick="submitObs(); return false;">Submit</a></td></tr></tbody>' );
+jq('#completedOrderObs').append( '<tbody><tr><td><a id="fillreportTT" class="fillreportTT" href="${anOrder.study.studyreporturl  }" onclick="fillReport(); return false;" >Obs </a></td><td>${ anOrder.patient.personName } </td><td> ${anOrder.creator.username}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td>${anOrder.study.studyname}</td><td id="dogdog" href="ddasdas"><a id="tiger" class="tiger" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + anOrder.patient.patientIdentifier }" onclick="loadImages(); return false;" >ViewStudy</a></td><td><a href="javascript: void(0)" id="linkActButton" onclick="submitObs(); return false;">Submit</a></td></tr></tbody>' );
   
 }
     
@@ -311,7 +311,7 @@ jq('#completedOrderObs').append( '<tbody><tr><td><a id="fillreportTT" class="fil
     <tr>
         <td><a id="fillreport" href='+ studyname +' class="fillreport" onclick="displayReport(this); return false;"><p style="display:none;">${ anOrder.orderId }</p>
                 ${anOrder.study.studyname}</a></td>
-         <td>${ anOrder.study.patientName } </td>
+         <td>${ anOrder.patient.personName } </td>
         <td>${ anOrder.dateCreated } </td>
         <td>${ anOrder.urgency }</td>
 

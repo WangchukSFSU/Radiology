@@ -291,7 +291,7 @@ public class ReferringPhysicianFragmentController {
 		System.out.println("PAPAPAPAPAPAPATITNTBET " + patient.getGivenName());
 		System.out.println("PAPAPAPAPAPAPATITNTBET " + patient.getUuid());
 		System.out.println("PAPAPAPAPAPAPATITNTBET " + patient.toString());
-		System.out.println("PAPAPAPAPAPAPATITNTBET " + patient.getNames());
+		System.out.println("PAPAPAPAPAPAPATITNTBET " + patient.getPersonName());
 		RadiologyOrder radiologyOrder = new RadiologyOrder();
 		
 		User authenticatedUser = Context.getAuthenticatedUser();
@@ -317,6 +317,8 @@ public class ReferringPhysicianFragmentController {
 		radiologyOrder.setCreator(authenticatedUser);
 		radiologyOrder.setOrderer(provider);
 		// Encounter ee = new Encounter();
+		radiologyOrder.setConcept(Context.getConceptService()
+				.getConcept(studyname));
 		
 		radiologyOrder.setPatient(patient);
 		// radiologyOrder.getEncounter().getEncounterId();
@@ -326,16 +328,17 @@ public class ReferringPhysicianFragmentController {
 		radiologyOrder.setOrderdiagnosis(diagnosisname);
 		
 		RadiologyService radiologyservice = Context.getService(RadiologyService.class);
-		List<RadiologyStudyList> studyListSaved = radiologyservice.getAllStudy();
+		
 		Study study = new Study();
 		
 		study.setModality(studyname);
 		study.setStudyname(studyname);
-		study.setPatientName(patient.getPersonName()
-				.toString());
 		
 		List<Form> studyreport = Context.getFormService()
 				.getAllForms();
+		
+		Form formname = null;
+		
 		System.out.println("1111");
 		for (Form searchform : studyreport) {
 			
@@ -347,6 +350,8 @@ public class ReferringPhysicianFragmentController {
 			
 			if (study.getStudyname()
 					.equals(podspdoas)) {
+				study.setStudyHtmlFormUUID(searchform.getUuid());
+				formname = searchform;
 				System.out.println(" 6546546 " + patient.getGivenName());
 				System.out.println("P 6576575675" + patient.getUuid());
 				

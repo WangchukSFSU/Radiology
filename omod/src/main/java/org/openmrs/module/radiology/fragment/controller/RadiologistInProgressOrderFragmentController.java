@@ -174,7 +174,7 @@ public class RadiologistInProgressOrderFragmentController {
 		properties[1] = "study.studyname";
 		properties[2] = "dateCreated";
 		properties[3] = "urgency";
-		properties[4] = "study.patientName";
+		properties[4] = "patient.personName";
 		
 		return SimpleObject.fromCollection(getRadiologyOrder, ui, properties);
 	}

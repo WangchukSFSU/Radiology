@@ -21,16 +21,6 @@ public class Study {
 	
 	private String studyInstanceUid;
 	
-	private String patientName;
-	
-	public String getPatientName() {
-		return patientName;
-	}
-	
-	public void setPatientName(String patientName) {
-		this.patientName = patientName;
-	}
-	
 	private Integer orderencounterId;
 	
 	public Integer getOrderencounterId() {
