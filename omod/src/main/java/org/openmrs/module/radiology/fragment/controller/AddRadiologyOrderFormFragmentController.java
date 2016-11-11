@@ -195,59 +195,15 @@ public class AddRadiologyOrderFormFragmentController {
 		radiologyOrder.setOrderdiagnosis(diagnosisname);
 		
 		RadiologyService radiologyservice = Context.getService(RadiologyService.class);
-		List<RadiologyStudyList> studyListSaved = radiologyservice.getAllStudy();
+		
 		Study study = new Study();
 		
 		// study.setModality(modalityname);
 		study.setStudyname(studyname);
 		
-		List<Form> studyreport = Context.getFormService()
-				.getAllForms();
-		
-		for (Form searchform : studyreport) {
-			
-			String podspdoas = searchform.getName()
-					.trim();
-			
-			if (study.getStudyname()
-					.equals(podspdoas)) {
-				System.out.println("PAPAPAPAPAPAPATITNTBET 6546546 " + patient.getGivenName());
-				System.out.println("PAPAPAPAPAPAPATITNTBET 6576575675" + patient.getUuid());
-				
-				String domain = "http://localhost:8080/openmrs/htmlformentryui/htmlform/enterHtmlFormWithStandardUi.page?patientId=";
-				String patientidurl = patient.getUuid();
-				
-				String visitform = "&visitId=&formUuid=";
-				String formuuidurl = searchform.getUuid();
-				String returnurl = "&returnUrl=";
-				// String returnurl = "&returnUrl=/openmrs/radiology/radiologistActiveOrders.page";
-				
-				String url = domain.concat(patientidurl)
-						.concat(visitform)
-						.concat(formuuidurl)
-						.concat(returnurl);
-				
-				System.out.println("HYYEYYEYEYYEYEYEYE SAME SAM");
-				study.setStudyreporturl(url);
-				
-				System.out.println("URL URL URL URL URL URL URL " + url);
-				System.out.println("URL URL URL URL URL URL URL " + study.getStudyreporturl());
-				
-			}
-			
-		}
-		
 		study.setPerformedStatus(PerformedProcedureStepStatus.IN_PROGRESS);
 		study.setScheduledStatus(ScheduledProcedureStepStatus.SCHEDULED);
 		study.setRadiologyStatusOrder(RadiologyOrderStatus.INPROGRESS);
-		
-		List<RadiologyReportList> reportListFromDb = radiologyservice.getAllReport();
-		for (RadiologyReportList rr : reportListFromDb) {
-			
-			if (studyname == rr.getStudyConceptName()) {
-				study.setStudyHtmlFormUUID(rr.getHtmlformuuid());
-			}
-		}
 		
 		radiologyOrder.setStudy(study);
 		
@@ -261,9 +217,11 @@ public class AddRadiologyOrderFormFragmentController {
 				.getId());
 		RadiologyOrder saveOrder = radiologyservice.placeRadiologyOrder(radiologyOrder);
 		
-		if (radiologyservice.placeRadiologyOrderInPacs(saveOrder)) {
-			System.out.println("PACS PACS PACS PACS PACS");
-		}
+		/*
+		 * if (radiologyservice.placeRadiologyOrderInPacs(saveOrder)) {
+		 * System.out.println("PACS PACS PACS PACS PACS");
+		 * }
+		 */
 		
 		System.out.println("JJJJJJJJJJJJJJJJJJJJ done");
 		
@@ -295,7 +253,7 @@ public class AddRadiologyOrderFormFragmentController {
 		List<Concept> names = new ArrayList<Concept>();
 		for (ConceptSearchResult con : results) {
 			names.add(con.getConcept()); // con.getConcept().getName().getName()
-			System.out.println("Concept: " + con.getConceptName());
+			// System.out.println("Concept: " + con.getConceptName());
 		}
 		/*
 		 * The Ajax call requires a json result;
@@ -332,7 +290,7 @@ public class AddRadiologyOrderFormFragmentController {
 		List<Concept> names = new ArrayList<Concept>();
 		for (ConceptSearchResult con : results) {
 			names.add(con.getConcept()); // con.getConcept().getName().getName()
-			System.out.println("Concept: " + con.getConceptName());
+			// System.out.println("Concept: " + con.getConceptName());
 		}
 		/*
 		 * The Ajax call requires a json result;

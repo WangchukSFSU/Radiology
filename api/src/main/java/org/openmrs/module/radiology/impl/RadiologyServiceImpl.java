@@ -469,6 +469,8 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 		}
 		
 		System.out.println("RRRRRRRRRRRRRRRRRRRRRRRRRRR");
+		System.out.println("RRRRRRRRRRRRRRRRRRRRRRRRRRR" + radiologyOrder);
+		System.out.println("RRRRRRRRRRRRRRRRRRRRRRRRRRR" + CommonOrderOrderControl.NEW_ORDER);
 		
 		final String hl7message = DicomUtils.createHL7Message(radiologyOrder, CommonOrderOrderControl.NEW_ORDER);
 		final boolean result = DicomUtils.sendHL7Message(hl7message);

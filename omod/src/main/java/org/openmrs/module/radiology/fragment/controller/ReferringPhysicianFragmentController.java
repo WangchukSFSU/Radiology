@@ -27,6 +27,7 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptClass;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptSearchResult;
+import org.openmrs.Form;
 import org.openmrs.Obs;
 import org.openmrs.Order;
 import org.openmrs.Patient;
@@ -289,7 +290,8 @@ public class ReferringPhysicianFragmentController {
 		
 		System.out.println("PAPAPAPAPAPAPATITNTBET " + patient.getGivenName());
 		System.out.println("PAPAPAPAPAPAPATITNTBET " + patient.getUuid());
-		
+		System.out.println("PAPAPAPAPAPAPATITNTBET " + patient.toString());
+		System.out.println("PAPAPAPAPAPAPATITNTBET " + patient.getNames());
 		RadiologyOrder radiologyOrder = new RadiologyOrder();
 		
 		User authenticatedUser = Context.getAuthenticatedUser();
@@ -327,20 +329,53 @@ public class ReferringPhysicianFragmentController {
 		List<RadiologyStudyList> studyListSaved = radiologyservice.getAllStudy();
 		Study study = new Study();
 		
-		// study.setModality(modalityname);
+		study.setModality(studyname);
 		study.setStudyname(studyname);
+		study.setPatientName(patient.getPersonName()
+				.toString());
+		
+		List<Form> studyreport = Context.getFormService()
+				.getAllForms();
+		System.out.println("1111");
+		for (Form searchform : studyreport) {
+			
+			String podspdoas = searchform.getName()
+					.trim();
+			System.out.println("2222");
+			System.out.println(" Form name " + podspdoas);
+			System.out.println(" Study name " + study.getStudyname());
+			
+			if (study.getStudyname()
+					.equals(podspdoas)) {
+				System.out.println(" 6546546 " + patient.getGivenName());
+				System.out.println("P 6576575675" + patient.getUuid());
+				
+				String domain = "http://localhost:8080/openmrs/htmlformentryui/htmlform/enterHtmlFormWithStandardUi.page?patientId=";
+				String patientidurl = patient.getUuid();
+				
+				String visitform = "&visitId=&formUuid=";
+				String formuuidurl = searchform.getUuid();
+				// String returnurl = "&returnUrl=";
+				String returnurl = "&returnUrl=/openmrs/radiology/sendFormMessage.page";
+				
+				String url = domain.concat(patientidurl)
+						.concat(visitform)
+						.concat(formuuidurl)
+						.concat(returnurl);
+				
+				System.out.println("HYYEYYEYEYYEYEYEYE SAME SAM");
+				study.setStudyreporturl(url);
+				
+				System.out.println("URL URL URL URL URL URL URL " + url);
+				System.out.println("URL URL URL URL URL URL URL " + study.getStudyreporturl());
+				
+			}
+			
+		}
 		
 		study.setPerformedStatus(PerformedProcedureStepStatus.IN_PROGRESS);
 		study.setScheduledStatus(ScheduledProcedureStepStatus.SCHEDULED);
 		study.setRadiologyStatusOrder(RadiologyOrderStatus.INPROGRESS);
-		
-		List<RadiologyReportList> reportListFromDb = radiologyservice.getAllReport();
-		for (RadiologyReportList rr : reportListFromDb) {
-			
-			if (studyname == rr.getStudyConceptName()) {
-				study.setStudyHtmlFormUUID(rr.getHtmlformuuid());
-			}
-		}
 		
 		radiologyOrder.setStudy(study);
 		

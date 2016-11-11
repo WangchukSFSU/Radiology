@@ -45,6 +45,7 @@
     
     
     jq("#addRadiologyOrderBtn").click(function(){
+  
         jq("#performedStatusesDropdown").hide();
     jq("#performedStatusCompletedOrder").hide();
     jq("#EmailForm").hide();
@@ -55,7 +56,7 @@
     jq("#AddRadiologyOrderForm").show();
     jq("#performedStatusCompletedReport").hide();
     
-
+jq("#cancelForm").click();
      
     jq("#ordernolink").hide();
     jq("#orders").show();
@@ -191,8 +192,8 @@ alert(message);
     jq("#performedStatusCompletedReport").hide();
    
     jq("#performedStatusesDropdown").show();
-    
-    jq("<h1></h1>").text("Radiology order sent successfully").appendTo('#performedStatusesDropdown');
+    jq("#performedStatusesDropdown").children("h1").remove();
+    jq("<h1></h1>").text("Radiologist email sent successfully").appendTo('#performedStatusesDropdown');
     jq("#AddRadiologyOrderForm").hide();
     jq("#EmailForm").hide();
     jq("#performedStatusInProgressOrder").hide();
@@ -351,6 +352,7 @@ function contactRadiologist() {
     jq("#AddRadiologyOrderForm").hide();
     jq("#performedStatusCompletedObsSelect").hide();
     
+     jq("#performedStatusesDropdown").children("h1").remove();
     jq("#ordernolink").show();
     jq("#orders").hide();
     jq("#messagepatient").hide();
@@ -572,6 +574,27 @@ var  message = jq("#message").val();
     success: function(data){
     
     alert("Sent email");
+    
+     //jq("#orders").hide();
+    jq("#messagepatient").hide();
+    jq("#orders").show();
+    jq("#orderlink").hide();
+    
+   
+    alert("000000000");
+    
+    jq("#EmailForm").hide();
+   
+    jq("#performedStatusesDropdown").show();
+    jq("#performedStatusesDropdown").children("h1").remove();
+    jq("<h1></h1>").text("Email sent successfully").appendTo('#performedStatusesDropdown');
+    jq("#AddRadiologyOrderForm").hide();
+   
+    jq("#performedStatusInProgressOrder").hide();
+    jq("#performedStatusCompletedObsSelect").hide();
+    
+    jq("#ContactRadiologist").hide();
+    jq("#performedStatusCompletedOrder").show();
   
     }
    });
@@ -621,7 +644,7 @@ jq.getJSON('${ ui.actionLink("placeRadiologyOrder") }',
     jq("#performedStatusCompletedReport").hide();
    
     jq("#performedStatusesDropdown").show();
-    
+    jq("#performedStatusesDropdown").children("h1").remove();
     jq("<h1></h1>").text("Radiology order sent successfully").appendTo('#performedStatusesDropdown');
     jq("#AddRadiologyOrderForm").hide();
     jq("#EmailForm").hide();
@@ -810,7 +833,7 @@ jq.getJSON('${ ui.actionLink("placeRadiologyOrder") }',
        <div id="ContactRadiologist" width="50%">
            <center>
         <h1>CONTACT RADIOLOGIST</h1>
-        <form method = "POST" >
+       
             <table border="0" width="80%">
                 <tr>
                     <td>To:</td>
@@ -833,7 +856,7 @@ jq.getJSON('${ ui.actionLink("placeRadiologyOrder") }',
                     </td>
                 </tr>
             </table>
-        </form>
+     
     </center>
     </div>
     

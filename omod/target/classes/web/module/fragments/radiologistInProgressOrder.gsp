@@ -1,4 +1,3 @@
-
 <% ui.includeCss("radiology", "radiologistInProgressOrder.css") %>
 
 
@@ -6,10 +5,93 @@
     jq = jQuery;
     jq(document).ready(function() {
     
-   
-
+    jq('#activeorderswithLink').hide();
+    jq("#orderdetails").hide();
     
       jq('#performedStatusInProgressOrderTable').dataTable({
+            "sPaginationType": "full_numbers",
+            "bPaginate": true,
+            "bAutoWidth": false,
+            "bLengthChange": true,
+            "bSort": true,
+            "bJQueryUI": true,
+            
+             "iDisplayLength": 5,
+    "aaSorting": [[ 2, "desc" ]] // Sort by first column descending,
+    
+            
+        });
+ jq("#performedStatusInProgressOrderDetail").hide(); 
+ 
+ 
+    
+
+    
+    
+    
+    
+    
+  
+    
+    
+     
+    
+ 
+jq("#test").click(function() {
+alert("dsdads");
+jq("#somediv").load('/openmrs/radiology/radiologistActiveOrders.page').dialog({modal:true}); 
+    });  
+    
+    
+    });
+    
+  
+    function submitObs() {
+    alert("YESS");
+   var radiologyorderId = localStorage.getItem("radiologyorderId");
+   
+   alert("radiologyorderId " + radiologyorderId);
+   
+    jq.getJSON('${ ui.actionLink("updateActiveOrders") }',
+    { 'radiologyorderId': radiologyorderId
+    })
+    .error(function(xhr, status, err) {
+    alert('AJAX error ' + err);
+    })
+    .success(function(ret) {
+    alert("COOL");
+ jq('#orderdetails').hide();
+ jq('#activeorderswithLink').hide();
+ jq('#activeorders').show();
+  
+  
+ jq("#performedStatusInProgressOrderDetail").hide();
+ jq('#performedStatusInProgressOrder').show();
+   jq('#performedStatusInProgressOrder').empty();
+    jq("<h1></h1>").text("Report sent successfully").appendTo('#performedStatusInProgressOrder');
+    jq("<h1></h1>").text("ACTIVE RADIOLOGY ORDERS").appendTo('#performedStatusInProgressOrder');
+    
+      jq('#performedStatusInProgressOrder').append('<table></table>');
+    jq('#performedStatusInProgressOrder table').attr('id','updateActiveOrderDatatable');
+    jq("#performedStatusInProgressOrder table").addClass("reporttableclass");
+var dicomtablelist = jq('#performedStatusInProgressOrder table');
+    dicomtablelist.append( '<thead><tr><th>Order</th><th>Patient Name</th><th>OrderStartDate</th><th>OrderPriority</th></tr></thead><tbody>' );
+     alert("COOL");
+     
+     for (var i = 0; i < ret.length; i++) {
+    var anOrderId = ret[i].orderId;
+    var studyname = ret[i].study.studyname;
+    var dateCreated = ret[i].dateCreated;
+    var urgency = ret[i].urgency;
+    var patientName = ret[i].study.patientName;
+    
+     dicomtablelist.append( '<tr><td><a id="fillreport" href='+ studyname +' class="fillreport" onclick="displayReport(this); return false;"><p style="display:none;">'+ anOrderId +'</p>'+ studyname +' </a></td><td> '+ patientName +' </td><td>'+ dateCreated +'</td><td>'+ urgency +'</td></tr>' );
+ 
+
+
+    }
+     dicomtablelist.append("</tbody>");
+       jq('#updateActiveOrderDatatable').dataTable({
             "sPaginationType": "full_numbers",
             "bPaginate": true,
             "bAutoWidth": false,
@@ -22,135 +104,9 @@
     
             
         });
-
- jq("#performedStatusInProgressOrderDetail").hide(); 
- 
-  
-
-    
-   jq("#performedStatusInProgressOrderTable tr").click(function(){
-   
-   
-   
-   
-    jq("#activeorders").html("<li><i ></i><a href='/openmrs/radiology/radiologistActiveOrders.page'> Radiology Active Orders</li>");
-jq("#activeorders li i").addClass("icon-chevron-right link");
-
-
-jq("#orderdetails").html("<li><i ></i> Radiology Order Detail</li>");
-jq("#orderdetails li i").addClass("icon-chevron-right link");
-
-
-   
-    jq(this).addClass('selected').siblings().removeClass('selected');    
-    var value=jq(this).find('td:first').html();
-    
-    alert(value); 
-    jq("#performedStatusInProgressOrderDetail").show();
-      jq("#performedStatusInProgressOrder").hide();
-    var splitvalue = value.split('>');
-    
-    ordervalue = splitvalue[1];
-    alert("ordervalue" +ordervalue);
-   //var orderId = ordervalue.substr(0, 2);
-      //alert("orderId" +orderId);
-      var orderId= ordervalue.substr(0, ordervalue.indexOf('<'));
-      alert("orderId" +orderId);
-     <% if (inProgressRadiologyOrders) { %>
-   alert("yess");
-    <% inProgressRadiologyOrders.each { anOrder -> %>
-    
-    var radiologyorderId = ${anOrder.orderId} ;
-  
-   
-  alert("444444");
-  alert("orderId");
-  alert(orderId);
-  alert("radiologyorderId");
-  alert(radiologyorderId);
-  
-    if(orderId == radiologyorderId) {
-    alert("NJSDSD " + radiologyorderId);
-  localStorage.setItem("radiologyorderId", radiologyorderId);
-    
-    
-    alert("YYEYYEYYEYEE");
-
-  
-  jq('#completedOrderObs').append( '<thead><tr><th> Report</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th>ViewStudy</th><th>SubmitObs</th></thead>' );
-
-
-jq('#completedOrderObs').append( '<tbody><tr><td><a id="fillreport" class="fillreport" href="${anOrder.study.studyreporturl  }" onclick="fillReport(); return false;" >Obs </a></td><td> ${anOrder.creator.username}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td>${anOrder.study.studyname}</td><td id="dogdog" href="ddasdas"><a id="tiger" class="tiger" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + anOrder.patient.patientIdentifier }" onclick="loadImages(); return false;" >ViewStudy</a></td><td><a href="javascript: void(0)" id="linkActButton" onclick="submitObs(); return false;">Submit</a></td></tr></tbody>' );
-  
-
-}
-    
-    
-   <% } %>
-    <% } %> 
-    
-    
-    
-    
-    
-      jq('#completedOrderObs').dataTable({
-            "sPaginationType": "full_numbers",
-            "bPaginate": true,
-            "bAutoWidth": false,
-            "bLengthChange": true,
-            "bSort": true,
-            "bJQueryUI": true,
-            
-             "iDisplayLength": 5,
-    
-    
-            
-        });
-    
-    
-    
-
-    });
-    
-    
-    
-    
-    
-  
-    
-    
      
-    
- 
-
-
-jq("#test").click(function() {
-alert("dsdads");
-jq("#somediv").load('/openmrs/radiology/radiologistActiveOrders.page').dialog({modal:true}); 
-    });  
-    
-    
-    });
-
-    
-  
-    function submitObs() {
-
-    alert("YESS");
-   var radiologyorderId = localStorage.getItem("radiologyorderId");
    
-   alert("radiologyorderId " + radiologyorderId);
-   
-   jq.ajax({
-    type: "POST",
-    url: "${ ui.actionLink('updateActiveOrders') }",
-    data : { 'radiologyorderId': radiologyorderId},
-    cache: false,
-    success: function(data){
-    location.reload();
-alert("COOL");
-    }
-    });
+ })
    
     }
     
@@ -158,10 +114,10 @@ alert("COOL");
     
        function fillReport() {
  
-        var addressValue = jq('.fillreport').attr("href");
-        alert(addressValue );
+        var addressValue = jq('#fillreportTT').attr("href");
+        alert("addressValue"  + addressValue);
         
-         jq("#thedialogreport").attr('src', jq('.fillreport').attr("href"));
+         jq("#thedialogreport").attr('src', jq('.fillreportTT').attr("href"));
         jq("#somedivreport").dialog({
             width: 600,
             height: 450,
@@ -201,7 +157,6 @@ function runMyFunction() {
  
  
 }
-
   
 function contactRadiologist() {
   alert("run my contactRadiologist");
@@ -210,7 +165,6 @@ function contactRadiologist() {
  
  
 }
-
  function openDialog(url)    {
  jq('#breadcrumbs').remove();
         jq('<div/>').dialog({
@@ -228,6 +182,82 @@ function contactRadiologist() {
         
         
     }
+    
+    
+    function displayReport(el) {
+   jq(el).addClass("highlight").css("background-color","#CCCCCC");
+   alert("33333");
+   
+jq("#activeorders").hide();
+   jq("#activeorderswithLink").show();
+   jq("#orderdetails").show();
+   
+ 
+   
+    jq(el).addClass('selected').siblings().removeClass('selected');  
+var value= jq(el).closest('tr').find('td:first').text();
+   // var value=jq(el).find('td:first').html();
+    
+    alert(value); 
+    var orderId = parseInt(value, 10);
+alert(orderId);
+    jq("#performedStatusInProgressOrderDetail").show();
+      jq("#performedStatusInProgressOrder").hide();
+    var splitvalue = value.split('');
+    alert("otertertetete " +splitvalue);
+    ordervalue = splitvalue[1];
+    alert("ordervalue" +ordervalue);
+   //var orderId = ordervalue.substr(0, 2);
+      //alert("orderId" +orderId);
+      //var orderId= ordervalue.substr(0, ordervalue.indexOf('<'));
+      alert("orderId" +orderId);
+      
+      jq('#completedOrderObs').empty();
+      
+     <% if (inProgressRadiologyOrders) { %>
+   alert("yess");
+    <% inProgressRadiologyOrders.each { anOrder -> %>
+    
+    var radiologyorderId = ${anOrder.orderId} ;
+  
+
+  
+    if(orderId == radiologyorderId) {
+    
+    alert("orderId" +orderId);
+    
+  localStorage.setItem("radiologyorderId", radiologyorderId);
+
+  jq('#completedOrderObs').append( '<thead><tr><th> Report</th><th>Patient Name</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th>ViewStudy</th><th>SubmitObs</th></thead>' );
+jq('#completedOrderObs').append( '<tbody><tr><td><a id="fillreportTT" class="fillreportTT" href="${anOrder.study.studyreporturl  }" onclick="fillReport(); return false;" >Obs </a></td><td>${ anOrder.study.patientName } </td><td> ${anOrder.creator.username}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td>${anOrder.study.studyname}</td><td id="dogdog" href="ddasdas"><a id="tiger" class="tiger" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + anOrder.patient.patientIdentifier }" onclick="loadImages(); return false;" >ViewStudy</a></td><td><a href="javascript: void(0)" id="linkActButton" onclick="submitObs(); return false;">Submit</a></td></tr></tbody>' );
+  
+}
+    
+    
+   <% } %>
+    <% } %> 
+    
+    
+    
+    
+    
+      jq('#completedOrderObs').dataTable({
+            "sPaginationType": "full_numbers",
+            "bPaginate": true,
+            "bAutoWidth": false,
+            "bLengthChange": true,
+            "bSort": true,
+            "bJQueryUI": true,
+            
+             "iDisplayLength": 5,
+    
+    
+            
+        });
+    
+    
+    
+    }
    
 </script>
 
@@ -240,13 +270,21 @@ function contactRadiologist() {
     </li>
     <li id="activeorders">
        <i class="icon-chevron-right link"></i>
-        
-        Active Radiology Orders
-         
-    </li>
-    <li id="orderdetails">  
+        Radiology Active Orders
        
          
+    </li>
+     <li id="activeorderswithLink">
+       <i class="icon-chevron-right link"></i>
+        
+       <a href='/openmrs/radiology/radiologistActiveOrders.page'> Radiology Active Orders
+       </a>
+         
+    </li>
+    
+    <li id="orderdetails">  
+       <i class="icon-chevron-right link"></i>
+         Radiology Order Detail
     </li>
    
 </ul>
@@ -261,7 +299,9 @@ function contactRadiologist() {
 <table id="performedStatusInProgressOrderTable">
     <thead>
         <tr>
+            
             <th>Order</th>
+            <th>Patient Name</th>
             <th>OrderStartDate</th>
             <th>OrderPriority</th>
         </tr>
@@ -269,8 +309,9 @@ function contactRadiologist() {
     <tbody>
     <% inProgressRadiologyOrders.each { anOrder -> %>
     <tr>
-        <td><p style="display:none;">${ anOrder.orderId }</p>
-            ${anOrder.study.studyname}</td>
+        <td><a id="fillreport" href='+ studyname +' class="fillreport" onclick="displayReport(this); return false;"><p style="display:none;">${ anOrder.orderId }</p>
+                ${anOrder.study.studyname}</a></td>
+         <td>${ anOrder.study.patientName } </td>
         <td>${ anOrder.dateCreated } </td>
         <td>${ anOrder.urgency }</td>
 
@@ -303,17 +344,6 @@ function contactRadiologist() {
 <div id="somediv" title="View Study Image" style="display:none;">
     <iframe id="thedialog" width="550" height="350"></iframe>
 </div>
-
-
-
-
-
-
-
-
-
-
-
 
 
 

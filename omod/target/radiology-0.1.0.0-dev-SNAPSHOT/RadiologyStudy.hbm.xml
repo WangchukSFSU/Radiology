@@ -28,6 +28,9 @@
                 <property name="studyname" column="studyname"
                           length="255">
                 </property>
+                <property name="patientName" column="patientName"
+                          length="255">
+                </property>
                 <property name="obsCompletedDate" column="obsCompletedDate"
                           length="255">
                 </property>

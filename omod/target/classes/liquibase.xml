@@ -482,5 +482,10 @@
         <column name="orderencounterId" type="int"/>
     </addColumn>
 </changeSet>
+<changeSet author="tenzin" id="radiology-79">
+    <addColumn tableName="radiology_study">
+        <column name="patientName" type="varchar(255)"/>
+    </addColumn>
+</changeSet>
 </databaseChangeLog>
 

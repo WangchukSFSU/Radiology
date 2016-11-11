@@ -9,23 +9,6 @@
     jq(document).ready(function() {
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     jq('#modalitytable').DataTable({
     "sPaginationType": "full_numbers",
     "bPaginate": true,

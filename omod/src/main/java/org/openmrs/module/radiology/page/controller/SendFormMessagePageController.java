@@ -11,14 +11,10 @@ import org.openmrs.module.htmlformentryui.page.controller.htmlform.BaseEnterHtml
 import org.openmrs.ui.framework.page.PageModel;
 import org.springframework.web.bind.annotation.RequestParam;
 
-public class RadiologistActiveOrdersPageController {
+public class SendFormMessagePageController {
 	
 	public void controller(PageModel model, @RequestParam(value = "returnUrl", required = false) String returnUrl,
 			@RequestParam(value = "patientId", required = false) Patient patient) throws ParseException {
-		
-		model.addAttribute("patient", patient);
-		model.addAttribute("returnUrl", returnUrl);
-		model.addAttribute("message", "HelloFramework Active Orders!");
 		
 	}
 	

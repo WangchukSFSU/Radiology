@@ -88,6 +88,18 @@
 	  <type>jar</type>
           <scope>provided</scope>
 	 </dependency>
+	 <dependency>
+	  <groupId>org.openmrs.module</groupId>
+	  <artifactId>htmlformentryui-api</artifactId>
+	  <version>1.6.2-SNAPSHOT</version>
+	  <type>jar</type>
+	 </dependency>
+	 <dependency>
+	  <groupId>org.openmrs.module</groupId>
+	  <artifactId>htmlformentryui-omod</artifactId>
+	  <version>1.6.2-SNAPSHOT</version>
+	  <type>jar</type>
+	 </dependency>
 	</dependencies>
 
 	<build>

@@ -45,6 +45,7 @@
     
     
     jq("#addRadiologyOrderBtn").click(function(){
+  
         jq("#performedStatusesDropdown").hide();
     jq("#performedStatusCompletedOrder").hide();
     jq("#EmailForm").hide();
@@ -55,7 +56,7 @@
     jq("#AddRadiologyOrderForm").show();
     jq("#performedStatusCompletedReport").hide();
     
-
+jq("#cancelForm").click();
      
     jq("#ordernolink").hide();
     jq("#orders").show();
@@ -351,6 +352,7 @@ function contactRadiologist() {
     jq("#AddRadiologyOrderForm").hide();
     jq("#performedStatusCompletedObsSelect").hide();
     
+     jq("#performedStatusesDropdown").children("h1").remove();
     jq("#ordernolink").show();
     jq("#orders").hide();
     jq("#messagepatient").hide();
