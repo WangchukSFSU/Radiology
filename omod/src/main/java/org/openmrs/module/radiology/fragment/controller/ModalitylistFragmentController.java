@@ -371,6 +371,7 @@ public class ModalitylistFragmentController {
 					session = new FormEntrySession(patient, htmlForm, mode, null);
 					
 					session.getHtmlToDisplay();
+                                      
 					session.getFormName();
 					
 					getStudyHTMLCreated.add(session);
