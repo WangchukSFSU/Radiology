@@ -59,6 +59,16 @@ public class Study {
 	
 	private String modality;
 	
+	private String studyGenericHTMLFormUUID;
+	
+	public String getStudyGenericHTMLFormUUID() {
+		return studyGenericHTMLFormUUID;
+	}
+	
+	public void setStudyGenericHTMLFormUUID(String studyGenericHTMLFormUUID) {
+		this.studyGenericHTMLFormUUID = studyGenericHTMLFormUUID;
+	}
+	
 	private String studyHtmlFormUUID;
 	
 	public String getStudyHtmlFormUUID() {

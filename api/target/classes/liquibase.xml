@@ -498,7 +498,11 @@
 		<dropColumn columnName="patientName" tableName="radiology_study" />
 		
 	</changeSet>
-        
+          <changeSet author="tenzin" id="radiology-85">
+    <addColumn tableName="radiology_study">
+        <column name="studyGenericHTMLFormUUID" type="varchar(255)"/>
+    </addColumn>
+</changeSet>
        
 </databaseChangeLog>
 
