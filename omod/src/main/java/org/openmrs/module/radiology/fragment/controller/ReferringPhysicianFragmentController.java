@@ -65,6 +65,7 @@ public class ReferringPhysicianFragmentController {
 		System.out.println("AddRadiologyOrderFormFragmentController" + patient.getFamilyName());
 		System.out.println("AddRadiologyOrderFormFragmentController" + patient);
 		System.out.println("AddRadiologyOrderFormFragmentController" + patient.getPerson());
+		
 		final List<String> urgencies = new LinkedList<String>();
 		
 		for (Order.Urgency urgency : Order.Urgency.values()) {
@@ -288,31 +289,13 @@ public class ReferringPhysicianFragmentController {
 			@RequestParam(value = "instructionname") String instructionname,
 			@RequestParam(value = "priorityname") String priorityname, UiUtils ui) throws ParseException {
 		
-		System.out.println("PAPAPAPAPAPAPATITNTBET " + patient.getGivenName());
-		System.out.println("PAPAPAPAPAPAPATITNTBET " + patient.getUuid());
-		System.out.println("PAPAPAPAPAPAPATITNTBET " + patient.toString());
 		System.out.println("PAPAPAPAPAPAPATITNTBET " + patient.getPersonName());
 		RadiologyOrder radiologyOrder = new RadiologyOrder();
 		
 		User authenticatedUser = Context.getAuthenticatedUser();
 		
-		System.out.println("SSSSS TTTTT UUUUU DDDDD YYYYYYY " + studyname);
-		System.out.println("USer  PPPPPPPPP " + authenticatedUser.getUsername());
-		
-		// Provider provider = new Provider();
-		// provider.setProviderId(++count);
-		// provider.setName(authenticatedUser.getUsername());
-		// Provider provider =
-		
 		Provider provider = Context.getProviderService()
 				.getProvider(authenticatedUser.getId());
-		// .saveProvider(pp);
-		// radiologyOrder.setOrderer(Context.getProviderService());
-		System.out.println("KKKKKKKKKKKKK PPPPPPPPPPPPPP " + provider.getCreator());
-		System.out.println("KKKKKKKKKKKKK PPPPPPPPPPPPPP " + provider.getCreator()
-				.getName());
-		System.out.println("KKKKKKKKKKKKK PPPPPPPPPPPPPP " + provider.getCreator()
-				.getUsername());
 		
 		radiologyOrder.setCreator(authenticatedUser);
 		radiologyOrder.setOrderer(provider);
@@ -344,16 +327,21 @@ public class ReferringPhysicianFragmentController {
 			
 			String podspdoas = searchform.getName()
 					.trim();
-			System.out.println("2222");
-			System.out.println(" Form name " + podspdoas);
-			System.out.println(" Study name " + study.getStudyname());
+			
+			if (podspdoas.startsWith("Generic")) {
+				String arr[] = podspdoas.split(" ", 2);
+				String genericWord = arr[0];
+				String studyName = arr[1];
+				if (study.getStudyname()
+						.equals(studyName)) {
+					study.setStudyGenericHTMLFormUUID(searchform.getUuid());
+				}
+			}
 			
 			if (study.getStudyname()
 					.equals(podspdoas)) {
 				study.setStudyHtmlFormUUID(searchform.getUuid());
 				formname = searchform;
-				System.out.println(" 6546546 " + patient.getGivenName());
-				System.out.println("P 6576575675" + patient.getUuid());
 				
 				String domain = "http://localhost:8080/openmrs/htmlformentryui/htmlform/enterHtmlFormWithStandardUi.page?patientId=";
 				String patientidurl = patient.getUuid();

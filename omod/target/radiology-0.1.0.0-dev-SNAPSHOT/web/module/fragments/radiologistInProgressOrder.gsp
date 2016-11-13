@@ -1,4 +1,8 @@
 <% ui.includeCss("radiology", "radiologistInProgressOrder.css") %>
+<% ui.includeCss("radiology", "jquery-ui.css") %>
+<% ui.includeCss("radiology", "jquery.dataTables.min.css") %>
+<% ui.includeCss("radiology", "jquery.mobiledataTables.min.css") %>
+<% ui.includeJavascript("uicommons", "datatables/jquery.dataTables.min.js") %>
 
 
 <script>
@@ -45,7 +49,9 @@ jq("#somediv").load('/openmrs/radiology/radiologistActiveOrders.page').dialog({m
     
     });
     
-  
+ 
+    
+    
     function submitObs() {
     alert("YESS");
    var radiologyorderId = localStorage.getItem("radiologyorderId");
@@ -60,9 +66,11 @@ jq("#somediv").load('/openmrs/radiology/radiologistActiveOrders.page').dialog({m
     })
     .success(function(ret) {
     alert("COOL");
+    
  jq('#orderdetails').hide();
  jq('#activeorderswithLink').hide();
  jq('#activeorders').show();
+ jq('#showReportsDiv').hide();
   
   
  jq("#performedStatusInProgressOrderDetail").hide();
@@ -109,15 +117,18 @@ var dicomtablelist = jq('#performedStatusInProgressOrder table');
  })
    
     }
+   
     
     
-    
-       function fillReport() {
- 
-        var addressValue = jq('#fillreportTT').attr("href");
-        alert("addressValue"  + addressValue);
+       function fillReport(selected) {
+      
+
+      //var addressValue = selected.attr("href");
+       // var addressValue = jq('#listreport').attr("href");
+       // alert("addressValue"  + addressValue);
         
-         jq("#thedialogreport").attr('src', jq('.fillreportTT').attr("href"));
+       jq("#thedialogreport").attr('src', selected);
+        // jq("#thedialogreport").attr('src', jq('.listreport').attr("href"));
         jq("#somedivreport").dialog({
             width: 600,
             height: 450,
@@ -207,9 +218,7 @@ alert(orderId);
     alert("otertertetete " +splitvalue);
     ordervalue = splitvalue[1];
     alert("ordervalue" +ordervalue);
-   //var orderId = ordervalue.substr(0, 2);
-      //alert("orderId" +orderId);
-      //var orderId= ordervalue.substr(0, ordervalue.indexOf('<'));
+ 
       alert("orderId" +orderId);
       
       jq('#completedOrderObs').empty();
@@ -219,9 +228,7 @@ alert(orderId);
     <% inProgressRadiologyOrders.each { anOrder -> %>
     
     var radiologyorderId = ${anOrder.orderId} ;
-  
 
-  
     if(orderId == radiologyorderId) {
     
     alert("orderId" +orderId);
@@ -229,10 +236,12 @@ alert(orderId);
   localStorage.setItem("radiologyorderId", radiologyorderId);
 
   jq('#completedOrderObs').append( '<thead><tr><th> Report</th><th>Patient Name</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th>ViewStudy</th><th>SubmitObs</th></thead>' );
-jq('#completedOrderObs').append( '<tbody><tr><td><a id="fillreportTT" class="fillreportTT" href="${anOrder.study.studyreporturl  }" onclick="fillReport(); return false;" >Obs </a></td><td>${ anOrder.patient.personName } </td><td> ${anOrder.creator.username}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td>${anOrder.study.studyname}</td><td id="dogdog" href="ddasdas"><a id="tiger" class="tiger" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + anOrder.patient.patientIdentifier }" onclick="loadImages(); return false;" >ViewStudy</a></td><td><a href="javascript: void(0)" id="linkActButton" onclick="submitObs(); return false;">Submit</a></td></tr></tbody>' );
+jq('#completedOrderObs').append( '<tbody><tr><td><a id="fillreportTT" class="fillreportTT"  onclick="showReports(); return false;" >Obs </a></td><td>${ anOrder.patient.personName } </td><td> ${anOrder.creator.username}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td>${anOrder.study.studyname}</td><td id="dogdog" href="ddasdas"><a id="tiger" class="tiger" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + anOrder.patient.patientIdentifier }" onclick="loadImages(); return false;" >ViewStudy</a></td><td><a href="javascript: void(0)" id="linkActButton" onclick="submitObs(); return false;">Submit</a></td></tr></tbody>' );
   
+
 }
-    
+  
+
     
    <% } %>
     <% } %> 
@@ -256,6 +265,41 @@ jq('#completedOrderObs').append( '<tbody><tr><td><a id="fillreportTT" class="fil
         });
     
     
+    
+    }
+    
+    function showReports() {
+    alert("show report");
+    jq('#showReportsDiv').show();
+    var radiologyorderId = localStorage.getItem("radiologyorderId");
+    jq('#showReportsDiv').empty();
+       jq('#showReportsDiv').append('<table></table>');
+    jq('#showReportsDiv table').attr('id','listReportstable');
+    jq("#showReportsDiv table").addClass("reporttable");
+    var reporttablelistchild = jq('#showReportsDiv table');
+    reporttablelistchild.append( '<thead><tr><th>Form</th></tr></thead><tbody>' );
+     alert("COOL");
+     
+       <% if (inProgressRadiologyOrders) { %>
+   alert("yess");
+    <% inProgressRadiologyOrders.each { anOrder -> %>
+    
+    var orderId = ${anOrder.orderId} ;
+
+    if(orderId == radiologyorderId) {
+    
+    alert("orderId" +orderId);
+    
+     reporttablelistchild.append( '<tr><td><a id="listreport" class="listreport" href="${ domain + anOrder.patient.uuid + visitform + anOrder.study.studyHtmlFormUUID + returnurl }" onclick="fillReport(this.href); return false;" > ${anOrder.study.studyname} </a></td> </tr>' );
+  reporttablelistchild.append( '<tr><td><a id="listreportgeneric" class="listreportgeneric" href="${ domain + anOrder.patient.uuid + visitform + anOrder.study.studyGenericHTMLFormUUID + returnurl }" onclick="fillReport(this.href); return false;" > Generic ${anOrder.study.studyname} </a></td> </tr>' );
+ 
+     
+     }
+     <% } %>
+    <% } %> 
+     
+reporttablelistchild.append("</tbody>");
+
     
     }
    
@@ -304,6 +348,7 @@ jq('#completedOrderObs').append( '<tbody><tr><td><a id="fillreportTT" class="fil
             <th>Patient Name</th>
             <th>OrderStartDate</th>
             <th>OrderPriority</th>
+           
         </tr>
     </thead>
     <tbody>
@@ -314,12 +359,14 @@ jq('#completedOrderObs').append( '<tbody><tr><td><a id="fillreportTT" class="fil
          <td>${ anOrder.patient.personName } </td>
         <td>${ anOrder.dateCreated } </td>
         <td>${ anOrder.urgency }</td>
-
+       
     </tr>
     <% } %>  
 </tbody>
 </table>
 </div>
+
+
 
 
 <div id = "performedStatusInProgressOrderDetail">
@@ -334,7 +381,10 @@ jq('#completedOrderObs').append( '<tbody><tr><td><a id="fillreportTT" class="fil
 
 </div>
 
+<div id = "showReportsDiv">
+    
 
+</div>
 <div id="somedivreport" title="Fill Report" style="display:none;">
     <iframe id="thedialogreport" width="1250" height="550"></iframe>
 </div>

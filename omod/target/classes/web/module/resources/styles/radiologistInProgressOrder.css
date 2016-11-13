@@ -25,4 +25,24 @@
         -o-user-select: none;
          }
          
-        
+         #showReportsDiv {
+             margin-top: -50px;
+         }
+         
+         .ui-dialog .ui-dialog-titlebar-close {
+   
+    border-color: red;
+    icon: url("/images/ic_cancel_2x.png");
+   background-image: url("/images/ic_cancel_2x.png") no-repeat scroll center center / 100% auto rgba(0, 0, 0, 0);
+    content: "";
+    display: inline-block;
+    color: red;
+    height: 30px;
+    margin-right: 13px;
+    position: relative;
+    top: -2px;
+    vertical-align: middle;
+    width: 30px;
+
+    
+}

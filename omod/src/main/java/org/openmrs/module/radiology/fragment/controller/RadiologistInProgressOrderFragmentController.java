@@ -43,6 +43,13 @@ public class RadiologistInProgressOrderFragmentController {
 		System.out.println("length LLLLLLLLLLLLL " + inProgressRadiologyOrders.size());
 		
 		String aap = getDicomViewerUrladdress();
+		String domain = "http://localhost:8080/openmrs/htmlformentryui/htmlform/enterHtmlFormWithStandardUi.page?patientId=";
+		String visitform = "&visitId=&formUuid=";
+		String returnurl = "&returnUrl=/openmrs/radiology/sendFormMessage.page";
+		
+		model.addAttribute("domain", domain);
+		model.addAttribute("visitform", visitform);
+		model.addAttribute("returnurl", returnurl);
 		
 		model.addAttribute("dicomViewerUrladdress", aap);
 		model.put("inProgressRadiologyOrders", inProgressRadiologyOrders);

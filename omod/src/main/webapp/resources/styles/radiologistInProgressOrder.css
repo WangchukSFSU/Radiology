@@ -3,11 +3,11 @@
 .ui-widget-header{
             background:#b9cd6d;
             border: 1px solid #b9cd6d;
-            color: #FFFFFF;
+            color: red;
             font-weight: bold;
          }
          
-         
+ 
          #completedOrderObs {
              margin-left: 0px;
          }
@@ -25,4 +25,26 @@
         -o-user-select: none;
          }
          
-        
+         #showReportsDiv {
+             margin-top: -50px;
+         }
+         
+ 
+
+
+
+.fg-toolbar.ui-toolbar.ui-widget-header.ui-corner-tl.ui-corner-tr.ui-helper-clearfix {
+    background-color: #b9cd6d;
+}
+
+.fg-toolbar.ui-toolbar.ui-widget-header.ui-corner-bl.ui-corner-br.ui-helper-clearfix {
+    
+    background-color: #b9cd6d;
+}
+
+
+
+.ui-dialog-titlebar.ui-widget-header.ui-corner-all.ui-helper-clearfix {
+    
+    background-color: #b9cd6d;
+}

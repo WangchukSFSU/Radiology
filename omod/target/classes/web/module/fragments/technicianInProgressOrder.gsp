@@ -9,7 +9,7 @@
      
 
     
-      jq('#performedStatusInProgressOrderTable').dataTable({
+      jq('#technicianInProgressOrderTable').dataTable({
             "sPaginationType": "full_numbers",
             "bPaginate": true,
             "bAutoWidth": false,
@@ -51,7 +51,7 @@ jq("#somediv").load('/openmrs/radiology/radiologistActiveOrders.page').dialog({m
     });
 
   
-  function displayReport(el) {
+  function tecdisplayReport(el) {
    jq(el).addClass("highlight").css("background-color","#CCCCCC");
    alert("33333");
  
@@ -73,7 +73,7 @@ var value= jq(el).closest('tr').find('td:first').text();
     var orderId = parseInt(value, 10);
 alert(orderId);
     jq("#performedStatusInProgressOrderDetail").show();
-      jq("#performedStatusInProgressOrder").hide();
+      jq("#technicianInProgressOrder").hide();
     var splitvalue = value.split('');
     alert("otertertetete " +splitvalue);
     ordervalue = splitvalue[1];
@@ -167,7 +167,7 @@ var dicomtablelist = jq('#dicomtable table');
     var dateCreated = ret[i].dateCreated;
     var urgency = ret[i].urgency;
 
- dicomtablelist.append( '<tr><td><a id="fillreport" href='+ studyname +' class="fillreport" onclick="displayReport(this); return false;" ><p style="display:none;">'+ anOrderId +'</p>'+ studyname +' </a></td><td>'+ dateCreated +'</td><td>'+ urgency +'</td></tr>' );
+ dicomtablelist.append( '<tr><td><a id="fillreport" href='+ studyname +' class="fillreport" onclick="tecdisplayReport(this); return false;" ><p style="display:none;">'+ anOrderId +'</p>'+ studyname +' </a></td><td>'+ dateCreated +'</td><td>'+ urgency +'</td></tr>' );
  
 
 
@@ -297,10 +297,10 @@ function contactRadiologist() {
 
 
 
-    <div id="performedStatusInProgressOrder">
+    <div id="technicianInProgressOrder">
   
         <h1>CLICK RADIOLOGY ORDER TO SEND IMAGE TO PAC</h1>
-<table id="performedStatusInProgressOrderTable">
+<table id="technicianInProgressOrderTable">
     <thead>
         <tr>
             <th>Order</th>
@@ -311,7 +311,7 @@ function contactRadiologist() {
     <tbody>
     <% inProgressRadiologyOrders.each { anOrder -> %>
     <tr>
-        <td><a id="fillreport" href='+ studyname +' class="fillreport" onclick="displayReport(this); return false;"><p style="display:none;">${ anOrder.orderId }</p>
+        <td><a id="fillreport" href='+ studyname +' class="fillreport" onclick="tecdisplayReport(this); return false;"><p style="display:none;">${ anOrder.orderId }</p>
                 ${anOrder.study.studyname}</a></td>
         <td>${ anOrder.dateCreated } </td>
         <td>${ anOrder.urgency }</td>
