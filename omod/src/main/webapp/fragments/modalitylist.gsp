@@ -1,7 +1,8 @@
 <% ui.includeCss("radiology", "modalitylist.css") %>
 
 <% ui.includeJavascript("uicommons", "datatables/jquery.dataTables.min.js") %>
-
+<% ui.includeCss("radiology", "jquery-ui.css") %>
+<% ui.includeCss("radiology", "jquery.dataTables.min.css") %>
 
 
 <script>

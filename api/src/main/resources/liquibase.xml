@@ -223,30 +223,9 @@
 			<column name="uuid" value="fe898a34-1ade-11e1-9c71-00248140a5eb" />
 		</insert>
 	</changeSet>
-        <changeSet id="radiology-27" author="cortex">
-		<sql>
-			drop table if exists RadiologyModalityList;
-		</sql>
-	</changeSet>
-        <changeSet author="juanp" id="radiology-28">
-		<preConditions onFail="WARN" onError="WARN">
-			<not>
-				<tableExists tableName="RadiologyModalityList" />
-			</not>
-		</preConditions>
-		<createTable tableName="RadiologyModalityList">
-                    <column name="id" type="int" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-			<column name="modalityId" type="int">	<constraints unique="true" />
-			</column>
-		</createTable>
-	</changeSet>
-           <changeSet id="radiology-36" author="tenzin">
-		<sql>
-			drop table if exists RadiologyStudyList
-		</sql>
-	</changeSet>
+        
+      
+           
         
         <changeSet id="radiology-30" author="teleivo">
 		<comment>column mwl status is now mapped to by enum MwlStatus. Max
@@ -259,20 +238,7 @@
 		<addNotNullConstraint tableName="radiology_study"
 			columnName="mwlstatus" columnDataType="varchar(17)" />
 	</changeSet>
-        <changeSet author="tenzin" id="radiology-37">
-		<preConditions onFail="WARN" onError="WARN">
-			<not>
-				<tableExists tableName="RadiologyStudyList" />
-			</not>
-		</preConditions>
-		<createTable tableName="RadiologyStudyList">
-                    <column name="id" type="int" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-			<column name="studyConceptId" type="int"> <constraints unique="true" />
-			 </column>	
-		</createTable>
-	</changeSet>
+    
         	<changeSet id="radiology-38" author="teleivo">
 		<comment>rename column scheduledStatus</comment>
 		<renameColumn columnDataType="varchar(255)"
@@ -330,12 +296,7 @@
         <column name="rml" type="varchar(255)"/>
     </addColumn>
 </changeSet>
- <changeSet id="radiology-47" author="tenzin">
-		<comment>add column modalityname</comment>
-                 <addColumn tableName="RadiologyModalityList">
-        <column name="modalityname" type="varchar(255)"/>
-    </addColumn>
-	</changeSet>
+
          <changeSet id="radiology-48" author="tenzin">
 		<comment>rename column rml</comment>
 		<renameColumn columnDataType="varchar(255)"
@@ -385,57 +346,16 @@
 			newDataType="varchar(255)" />
 		
 	</changeSet>
-        <changeSet id="radiology-56" author="tenzin">
-		<sql>
-			drop table if exists RadiologyReportList;
-		</sql>
-	</changeSet>
-        <changeSet author="tenzin" id="radiology-57">
-		<preConditions onFail="WARN" onError="WARN">
-			<not>
-				<tableExists tableName="RadiologyReportList" />
-			</not>
-		</preConditions>
-		<createTable tableName="RadiologyReportList">
-                    <column name="id" type="int" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-			<column name="studyConceptName" type="varchar(255)">	
-			</column>
-                        <column name="htmlformuuid" type="varchar(255)">	
-			</column>
-		</createTable>
-	</changeSet>
+       
+      
            <changeSet author="tenzin" id="radiology-58">
     <addColumn tableName="radiology_study">
         <column name="studyHtmlFormUUID" type="varchar(255)"/>
     </addColumn>
 </changeSet>
-     <changeSet author="tenzin" id="radiology-59">
-    <addColumn tableName="RadiologyModalityList">
-        <column name="modalitydescription" type="varchar(255)"/>
-    </addColumn>
-</changeSet>
-<changeSet author="tenzin" id="radiology-60">
-    <addColumn tableName="RadiologyStudyList">
-        <column name="studyReporturl" type="varchar(255)"/>
-    </addColumn>
-</changeSet>
-<changeSet author="tenzin" id="radiology-61">
-    <addColumn tableName="RadiologyStudyList">
-        <column name="studyName" type="varchar(255)"/>
-    </addColumn>
-</changeSet>
-<changeSet author="tenzin" id="radiology-62">
-    <addColumn tableName="RadiologyStudyList">
-        <column name="formreportuuid" type="varchar(255)"/>
-    </addColumn>
-</changeSet>
-<changeSet author="tenzin" id="radiology-63">
-    <addColumn tableName="RadiologyStudyList">
-        <column name="modalityNameSaved" type="varchar(255)"/>
-    </addColumn>
-</changeSet>
+    
+
+
 <changeSet author="tenzin" id="radiology-64">
     <addColumn tableName="radiology_study">
         <column name="studyreporturl" type="varchar(255)"/>
@@ -503,6 +423,20 @@
         <column name="studyGenericHTMLFormUUID" type="varchar(255)"/>
     </addColumn>
 </changeSet>
-       
+      <changeSet id="radiology-86" author="tenzin">
+		<sql>
+			drop table if exists RadiologyStudyList;
+		</sql>
+	</changeSet> 
+          <changeSet id="radiology-87" author="tenzin">
+		<sql>
+			drop table if exists RadiologyModalityList;
+		</sql>
+	</changeSet> 
+         <changeSet id="radiology-88" author="tenzin">
+		<sql>
+			drop table if exists RadiologyReportList;
+		</sql>
+	</changeSet>
 </databaseChangeLog>
 

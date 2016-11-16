@@ -5,12 +5,26 @@
  */
 package org.openmrs.module.radiology.fragment.controller;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateMidnight;
+import org.openmrs.Concept;
+import org.openmrs.ConceptClass;
+import org.openmrs.ConceptName;
+import org.openmrs.ConceptSet;
 import org.openmrs.Encounter;
 import org.openmrs.Form;
 import org.openmrs.Patient;
 import org.openmrs.Visit;
+import org.openmrs.api.ConceptService;
 import org.openmrs.api.FormService;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.context.ContextAuthenticationException;
@@ -23,13 +37,17 @@ import org.openmrs.module.emrapi.adt.exception.EncounterDateBeforeVisitStartDate
 import org.openmrs.module.emrapi.encounter.EncounterDomainWrapper;
 import org.openmrs.module.emrapi.visit.VisitDomainWrapper;
 import org.openmrs.module.htmlformentry.FormEntryContext;
+import org.openmrs.module.htmlformentry.FormEntryContext.Mode;
 import org.openmrs.module.htmlformentry.FormEntrySession;
 import org.openmrs.module.htmlformentry.FormSubmissionError;
 import org.openmrs.module.htmlformentry.HtmlForm;
 import org.openmrs.module.htmlformentry.HtmlFormEntryService;
 import org.openmrs.module.htmlformentry.HtmlFormEntryUtil;
 import org.openmrs.module.htmlformentryui.HtmlFormUtil;
+import org.openmrs.module.radiology.RadiologyService;
+
 import org.openmrs.module.uicommons.UiCommonsConstants;
+
 import org.openmrs.ui.framework.SimpleObject;
 import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.annotation.FragmentParam;
@@ -40,19 +58,6 @@ import org.openmrs.ui.framework.resource.ResourceFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import org.openmrs.module.htmlformentryui.fragment.controller.htmlform.BaseHtmlFormFragmentController;
-
-/**
- *
- */
 public class TestFragmentController extends BaseHtmlFormFragmentController {
 	
 	/**
@@ -91,7 +96,18 @@ public class TestFragmentController extends BaseHtmlFormFragmentController {
 			@FragmentParam(value = "automaticValidation", defaultValue = "true") boolean automaticValidation,
 			FragmentModel model, HttpSession httpSession) throws Exception {
 		
+		form = Context.getFormService()
+				.getForm(7);
+		hf = HtmlFormEntryUtil.getService()
+				.getHtmlFormByForm(form);
+		patient = Context.getPatientService()
+				.getPatient(7);
+		// encounter = Context.getEncounterService()
+		// .getEncounter(202);
+		System.out.println("1111111 " + patient);
 		config.require("patient", "htmlForm | htmlFormId | formId | formUuid | definitionUiResource | encounter");
+		
+		System.out.println("0000000" + hf);
 		
 		if (hf == null) {
 			if (htmlFormId != null) {
@@ -126,9 +142,13 @@ public class TestFragmentController extends BaseHtmlFormFragmentController {
 			fes = new FormEntrySession(patient, encounter, FormEntryContext.Mode.EDIT, hf, null, httpSession,
 					automaticValidation, !automaticValidation);
 		} else {
+			System.out.println("88888888");
 			fes = new FormEntrySession(patient, hf, FormEntryContext.Mode.ENTER, null, httpSession, automaticValidation,
 					!automaticValidation);
 		}
+		
+		System.out.println("56565656565 ooo " + fes.getPatient());
+		// fes.getPatient().setPersonId(htmlFormId);
 		
 		VisitDomainWrapper visitDomainWrapper = getVisitDomainWrapper(visit, encounter, adtService);
 		setupVelocityContext(fes, visitDomainWrapper, ui, sessionContext, featureToggles);
@@ -332,6 +352,9 @@ public class TestFragmentController extends BaseHtmlFormFragmentController {
 			Boolean createVisit) {
 		
 		model.addAttribute("currentDate", (new DateMidnight()).toDate());
+		System.out.println("56565656565 " + fes.getPatient());
+		// System.out.println("56565656565 " + fes.getPatient()
+		// .getPersonId());
 		model.addAttribute("command", fes);
 		model.addAttribute("visit", visitDomainWrapper);
 		if (createVisit != null) {

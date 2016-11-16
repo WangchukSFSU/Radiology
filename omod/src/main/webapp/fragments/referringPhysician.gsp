@@ -2,7 +2,9 @@
 
 
 <% ui.includeCss("radiology", "radiologyOrder.css") %>
- <% ui.includeCss("radiology", "addRadiologyOrderForm.css") %>
+ <% ui.includeCss("radiology", "referringphysician.css") %>
+ <% ui.includeCss("radiology", "jquery-ui.css") %>
+<% ui.includeCss("radiology", "jquery.dataTables.min.css") %>
 <%
  
     def conceptStudyClass = config.requireStudyClass
@@ -146,16 +148,7 @@ jq('#completedOrderObs').append( '<tbody><tr><td><a onclick="runMyFunction();"> 
    <% } %>
     <% } %> 
     
- jq('#completedOrderObs').dataTable({
-            "sPaginationType": "full_numbers",
-            "bPaginate": true,
-            "bAutoWidth": false,
-            "bLengthChange": true,
-            "bSort": true,
-            "bJQueryUI": true,
-             "iDisplayLength": 5,
-    
-        });
+
     
     });
     

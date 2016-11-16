@@ -16,7 +16,7 @@ import org.openmrs.module.radiology.PerformedProcedureStepStatus;
 import org.openmrs.module.radiology.RadiologyOrder;
 import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.RadiologyService;
-import org.openmrs.module.radiology.RadiologyStudyList;
+
 import org.openmrs.module.radiology.Study;
 import org.openmrs.ui.framework.SimpleObject;
 import org.openmrs.ui.framework.UiUtils;
@@ -34,7 +34,6 @@ public class TechnicianInProgressOrderFragmentController {
 		// System.out.println("PPPPPPPPP active " + patient);
 		
 		RadiologyService radiologyservice = Context.getService(RadiologyService.class);
-		List<RadiologyStudyList> studyListFromDb = radiologyservice.getAllStudy();
 		
 		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrdersByPatient();
 		
@@ -51,7 +50,6 @@ public class TechnicianInProgressOrderFragmentController {
 		
 		model.addAttribute("dicomViewerUrladdress", aap);
 		model.put("inProgressRadiologyOrders", inProgressRadiologyOrders);
-		model.put("studyListFromDb", studyListFromDb);
 		
 	}
 	
@@ -179,7 +177,6 @@ public class TechnicianInProgressOrderFragmentController {
 		}
 		
 		ArrayList<RadiologyOrder> getRadiologyOrder = new ArrayList<RadiologyOrder>();
-		List<RadiologyStudyList> studyListFromDb = radiologyservice.getAllStudy();
 		
 		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrdersByPatient();
 		

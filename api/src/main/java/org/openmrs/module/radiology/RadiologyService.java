@@ -34,32 +34,7 @@ public interface RadiologyService extends OpenmrsService {
 	
 	public void setStudyDAO(StudyDAO studyDAO);
 	
-	public RadiologyReportList saveReportList(RadiologyReportList report);
-	
-	List<RadiologyReportList> getAllReport();
-	
-	RadiologyReportList getReport(Integer id);
-	
-	RadiologyReportList getReportUUID(String reportuuid);
-	
-	public RadiologyModalityList saveModalityList(RadiologyModalityList modalityList);
-	
-	public RadiologyStudyList saveStudyList(RadiologyStudyList studyList);
-	
-	List<RadiologyModalityList> getAllModality();
-	
-	List<RadiologyStudyList> getAllStudy();
-	
 	List<Study> getAllStudyRadiologyOrder();
-	
-	@Transactional(readOnly = true)
-	RadiologyModalityList getModality(Integer id);
-	
-	@Transactional(readOnly = true)
-	RadiologyModalityList getModalityName(String modalityname);
-	
-	@Transactional(readOnly = true)
-	RadiologyStudyList getStudy(Integer id);
 	
 	@Transactional(readOnly = true)
 	List<RadiologyOrder> getAllRadiologyOrder();

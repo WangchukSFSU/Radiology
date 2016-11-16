@@ -9,7 +9,6 @@
  */
 package org.openmrs.module.radiology.impl;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -19,7 +18,6 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Encounter;
-import org.openmrs.Form;
 import org.openmrs.Order;
 import org.openmrs.Patient;
 import org.openmrs.Provider;
@@ -32,20 +30,16 @@ import org.openmrs.module.emrapi.encounter.domain.EncounterTransaction;
 import org.openmrs.module.radiology.DicomUtils;
 import org.openmrs.module.radiology.MwlStatus;
 import org.openmrs.module.radiology.PerformedProcedureStepStatus;
-import org.openmrs.module.radiology.RadiologyModalityList;
 import org.openmrs.module.radiology.RadiologyOrder;
 import org.openmrs.module.radiology.RadiologyOrderStatus;
 import org.openmrs.module.radiology.RadiologyProperties;
-import org.openmrs.module.radiology.RadiologyReportList;
 import org.openmrs.module.radiology.RadiologyService;
-import org.openmrs.module.radiology.RadiologyStudyList;
 import org.openmrs.module.radiology.ScheduledProcedureStepStatus;
 import org.openmrs.module.radiology.Study;
-import org.openmrs.module.radiology.db.RadiologyModalityListDAO;
+
 import org.openmrs.module.radiology.db.RadiologyOrderDAO;
 import org.openmrs.module.radiology.db.RadiologyReportDAO;
-import org.openmrs.module.radiology.db.RadiologyReportListDAO;
-import org.openmrs.module.radiology.db.RadiologyStudyListDAO;
+
 import org.openmrs.module.radiology.db.StudyDAO;
 import org.openmrs.module.radiology.hl7.CommonOrderOrderControl;
 import org.openmrs.module.radiology.report.RadiologyReport;
@@ -70,99 +64,14 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	
 	private RadiologyReportDAO radiologyReportDAO;
 	
-	private RadiologyModalityListDAO modalitylistdao;
-	
-	private RadiologyReportListDAO reportlistdao;
-	
-	public void setReportlistdao(RadiologyReportListDAO reportlistdao) {
-		this.reportlistdao = reportlistdao;
-	}
-	
-	public RadiologyReportListDAO getReportlistdao() {
-		return reportlistdao;
-	}
-	
-	public RadiologyModalityListDAO getModalitylistdao() {
-		return modalitylistdao;
-	}
-	
-	public RadiologyStudyListDAO getStudylistdao() {
-		return studylistdao;
-	}
-	
-	private RadiologyStudyListDAO studylistdao;
-	
-	public void setStudylistdao(RadiologyStudyListDAO studylistdao) {
-		this.studylistdao = studylistdao;
-	}
-	
-	public void setModalitylistdao(RadiologyModalityListDAO modalitylistdao) {
-		this.modalitylistdao = modalitylistdao;
-	}
-	
-	@Override
-	public RadiologyReportList saveReportList(RadiologyReportList report) {
-		return reportlistdao.saveReportList(report);
-	}
-	
-	@Override
-	public List<RadiologyReportList> getAllReport() {
-		return reportlistdao.getAllReport();
-	}
-	
 	@Override
 	public List<RadiologyOrder> getAllRadiologyOrder() {
 		return radiologyOrderDAO.getAllRadiologyOrder();
 	}
 	
 	@Override
-	public RadiologyReportList getReport(Integer id) {
-		return reportlistdao.getReport(id);
-	}
-	
-	@Override
-	public RadiologyReportList getReportUUID(String reportuuid) {
-		return reportlistdao.getReportUUID(reportuuid);
-	}
-	
-	@Override
-	public RadiologyModalityList saveModalityList(RadiologyModalityList modalitylist) {
-		return modalitylistdao.saveModalityList(modalitylist);
-	}
-	
-	@Override
-	public List<RadiologyModalityList> getAllModality() {
-		return modalitylistdao.getAllModality();
-	}
-	
-	@Override
-	public List<RadiologyStudyList> getAllStudy() {
-		return studylistdao.getAllStudy();
-	}
-	
-	@Override
 	public List<Study> getAllStudyRadiologyOrder() {
 		return studyDAO.getAllStudyRadiologyOrder();
-	}
-	
-	@Override
-	public RadiologyStudyList saveStudyList(RadiologyStudyList studylist) {
-		return studylistdao.saveStudyList(studylist);
-	}
-	
-	@Override
-	public RadiologyModalityList getModality(Integer id) {
-		return modalitylistdao.getModality(id);
-	}
-	
-	@Override
-	public RadiologyModalityList getModalityName(String modalityname) {
-		return modalitylistdao.getModalityName(modalityname);
-	}
-	
-	@Override
-	public RadiologyStudyList getStudy(Integer id) {
-		return studylistdao.getStudy(id);
 	}
 	
 	@Override

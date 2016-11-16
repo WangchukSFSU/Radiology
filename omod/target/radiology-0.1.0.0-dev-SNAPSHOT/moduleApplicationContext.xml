@@ -45,20 +45,7 @@
 						</property>
 					</bean>
 				</property>
-                                <property name="modalitylistdao">
-					<bean class="org.openmrs.module.radiology.db.hibernate.RadiologyModalityListDAOImpl">
-						<property name="sessionFactory">
-							<ref bean="sessionFactory" />
-						</property>
-					</bean>
-				</property>
-                                <property name="reportlistdao">
-					<bean class="org.openmrs.module.radiology.db.hibernate.RadiologyReportListDAOImpl">
-						<property name="sessionFactory">
-							<ref bean="sessionFactory" />
-						</property>
-					</bean>
-				</property>
+                                
 				<property name="radiologyReportDAO">
 					<bean
 						class="org.openmrs.module.radiology.db.hibernate.RadiologyReportDAOImpl">
@@ -67,13 +54,7 @@
 						</property>
 					</bean>
 				</property>  
-                                 <property name="studylistdao">
-					<bean class="org.openmrs.module.radiology.db.hibernate.RadiologyStudyListDAOImpl">
-						<property name="sessionFactory">
-							<ref bean="sessionFactory" />
-						</property>
-					</bean>
-				</property>                                           
+                                                                           
 				<property name="orderService" ref="orderService"></property>
 				<property name="encounterService" ref="encounterService"></property>
 				<property name="radiologyProperties" ref="radiologyProperties"></property>

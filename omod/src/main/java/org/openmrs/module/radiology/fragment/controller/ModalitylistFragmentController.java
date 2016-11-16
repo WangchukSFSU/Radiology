@@ -20,7 +20,6 @@ import org.openmrs.module.htmlformentry.FormEntrySession;
 import org.openmrs.module.htmlformentry.HtmlForm;
 import org.openmrs.module.htmlformentry.HtmlFormEntryUtil;
 import org.openmrs.module.radiology.RadiologyService;
-import org.openmrs.module.radiology.RadiologyStudyList;
 
 import org.openmrs.ui.framework.SimpleObject;
 import org.openmrs.ui.framework.UiUtils;
@@ -88,7 +87,6 @@ public class ModalitylistFragmentController {
 			}
 		}
 		
-		saveStudy(studySetMembers);
 		String[] properties = new String[2];
 		properties[0] = "conceptId";
 		properties[1] = "displayString";
@@ -137,9 +135,6 @@ public class ModalitylistFragmentController {
 	public List<SimpleObject> getStudyConcepts(FragmentModel model, @SpringBean("conceptService") ConceptService service,
 			UiUtils ui) {
 		
-		List<RadiologyStudyList> liststudystudy = Context.getService(RadiologyService.class)
-				.getAllStudy();
-		
 		ArrayList<ConceptName> studySetMembers = new ArrayList<ConceptName>();
 		
 		ConceptClass mot = Context.getConceptService()
@@ -149,18 +144,14 @@ public class ModalitylistFragmentController {
 				.getConceptsByClass(mot);
 		
 		for (Concept ccc : mot_list) {
-			for (RadiologyStudyList getstudyselected : liststudystudy) {
-				if (ccc.getDisplayString()
-						.endsWith("modality")) {
-					
-				} else if (ccc.getDisplayString()
-						.equals(getstudyselected.getStudyName())) {
-					
-				}
+			
+			if (ccc.getDisplayString()
+					.endsWith("modality")) {
 				
-				else {
-					studySetMembers.add(ccc.getName());
-				}
+			}
+			
+			else {
+				studySetMembers.add(ccc.getName());
 			}
 		}
 		
@@ -176,9 +167,6 @@ public class ModalitylistFragmentController {
 		
 		ArrayList<FormEntrySession> fff = new ArrayList<FormEntrySession>();
 		
-		List<RadiologyStudyList> liststudystudy = Context.getService(RadiologyService.class)
-				.getAllStudy();
-		
 		ArrayList<ConceptName> studySetMembers = new ArrayList<ConceptName>();
 		
 		ConceptClass mot = Context.getConceptService()
@@ -188,19 +176,16 @@ public class ModalitylistFragmentController {
 				.getConceptsByClass(mot);
 		
 		for (Concept ccc : mot_list) {
-			for (RadiologyStudyList getstudyselected : liststudystudy) {
-				if (ccc.getDisplayString()
-						.endsWith("modality")) {
-					
-				} else if (ccc.getDisplayString()
-						.equals(getstudyselected.getStudyName())) {
-					
-				}
+			
+			if (ccc.getDisplayString()
+					.endsWith("modality")) {
 				
-				else {
-					studySetMembers.add(ccc.getName());
-				}
 			}
+			
+			else {
+				studySetMembers.add(ccc.getName());
+			}
+			
 		}
 		
 		String[] properties = new String[2];
@@ -208,125 +193,6 @@ public class ModalitylistFragmentController {
 		properties[1] = "name";
 		
 		return SimpleObject.fromCollection(studySetMembers, ui, properties);
-	}
-	
-	public void saveStudy(@RequestParam(value = "studyList[]") ArrayList<Concept> studyList) {
-		
-		List<Form> studyreport = Context.getFormService()
-				.getAllForms();
-		
-		List<Patient> personrowuuid = Context.getPatientService()
-				.getAllPatients(true);
-		Integer patientid = personrowuuid.size();
-		
-		System.out.println("Length of patient " + personrowuuid.get(patientid - 1)
-				.getUuid());
-		RadiologyStudyList studyName = new RadiologyStudyList();
-		List<RadiologyStudyList> liststudysaved = Context.getService(RadiologyService.class)
-				.getAllStudy();
-		
-		if (liststudysaved.isEmpty()) {
-			
-			for (Concept studylist : studyList) {
-				
-				for (Form searchform : studyreport) {
-					
-					String noopa = studylist.getDisplayString();
-					String podspdoas = searchform.getName()
-							.trim();
-					
-					if (noopa.equals(podspdoas)) {
-						
-						int studyConceptid = studylist.getConceptId();
-						
-						studyName.setStudyConceptId(studyConceptid);
-						
-						studyName.setStudyName(studylist.getDisplayString());
-						
-						System.out.println("SSSSSSSSSSSSS noopa" + noopa);
-						System.out.println("SSSSSSSSSSSSS podspdoas" + podspdoas);
-						
-						String domain = "http://localhost:8080/openmrs/htmlformentryui/htmlform/enterHtmlFormWithStandardUi.page?patientId=";
-						String patientidurl = personrowuuid.get(patientid - 1)
-								.getUuid();
-						String visitform = "&visitId=&formUuid=";
-						String formuuidurl = searchform.getUuid();
-						String returnurl = "&returnUrl=/openmrs/radiology/adminInitialize.page";
-						
-						String url = domain.concat(patientidurl)
-								.concat(visitform)
-								.concat(formuuidurl)
-								.concat(returnurl);
-						
-						System.out.println("HYYEYYEYEYYEYEYEYE SAME SAM");
-						studyName.setStudyReporturl(url);
-						
-						Context.getService(RadiologyService.class)
-								.saveStudyList(studyName);
-						
-					}
-					
-				}
-				
-			}
-			
-		} else {
-			System.out.println("Not Empty");
-			
-			for (Concept studylist : studyList) {
-				
-				for (Form searchform : studyreport) {
-					
-					String noopa = studylist.getDisplayString();
-					String podspdoas = searchform.getName()
-							.trim();
-					
-					if (noopa.equals(podspdoas)) {
-						
-						System.out.println("SSSSSSSSSSSSS noopa" + noopa);
-						System.out.println("SSSSSSSSSSSSS podspdoas" + podspdoas);
-						for (RadiologyStudyList comparestudy : liststudysaved) {
-							System.out.println("MKOKDOSDSDDD comparestudy.getStudyName()" + comparestudy.getStudyName());
-							System.out.println("MKOKDOSDSDDD comparnoopa  )" + noopa);
-							
-							if (comparestudy.getStudyName()
-									.equals(noopa)) {
-								return;
-							} else {
-								int studyConceptid = studylist.getConceptId();
-								
-								studyName.setStudyConceptId(studyConceptid);
-								
-								studyName.setStudyName(studylist.getDisplayString());
-								
-								String domain = "http://localhost:8080/openmrs/htmlformentryui/htmlform/enterHtmlFormWithStandardUi.page?patientId=";
-								String patientidurl = personrowuuid.get(patientid - 1)
-										.getUuid();
-								String visitform = "&visitId=&formUuid=";
-								String formuuidurl = searchform.getUuid();
-								String returnurl = "&returnUrl=/openmrs/radiology/adminInitialize.page";
-								
-								String url = domain.concat(patientidurl)
-										.concat(visitform)
-										.concat(formuuidurl)
-										.concat(returnurl);
-								
-								System.out.println("HYYEYYEYEYYEYEYEYE SAME SAM");
-								studyName.setStudyReporturl(url);
-								
-								Context.getService(RadiologyService.class)
-										.saveStudyList(studyName);
-								
-							}
-						}
-						
-					}
-					
-				}
-				
-			}
-		}
-		
 	}
 	
 	public List<SimpleObject> getReport(FragmentModel model, @SpringBean("conceptService") ConceptService service, UiUtils ui)

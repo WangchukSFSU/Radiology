@@ -2,7 +2,9 @@
 
 
 <% ui.includeCss("radiology", "radiologyOrder.css") %>
- <% ui.includeCss("radiology", "addRadiologyOrderForm.css") %>
+ <% ui.includeCss("radiology", "referringphysician.css") %>
+ <% ui.includeCss("radiology", "jquery-ui.css") %>
+<% ui.includeCss("radiology", "jquery.dataTables.min.css") %>
 <%
  
     def conceptStudyClass = config.requireStudyClass

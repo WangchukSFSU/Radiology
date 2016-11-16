@@ -1,8 +1,7 @@
 <% ui.includeCss("radiology", "radiologistInProgressOrder.css") %>
 <% ui.includeCss("radiology", "jquery-ui.css") %>
 <% ui.includeCss("radiology", "jquery.dataTables.min.css") %>
-<% ui.includeCss("radiology", "jquery.mobiledataTables.min.css") %>
-<% ui.includeJavascript("uicommons", "datatables/jquery.dataTables.min.js") %>
+
 
 
 <script>
@@ -18,6 +17,7 @@
             "bAutoWidth": false,
             "bLengthChange": true,
             "bSort": true,
+           
             "bJQueryUI": true,
             
              "iDisplayLength": 5,

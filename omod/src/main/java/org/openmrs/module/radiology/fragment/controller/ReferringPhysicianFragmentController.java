@@ -40,9 +40,9 @@ import org.openmrs.module.radiology.RadiologyConstants;
 import org.openmrs.module.radiology.RadiologyOrder;
 import org.openmrs.module.radiology.RadiologyOrderStatus;
 import org.openmrs.module.radiology.RadiologyProperties;
-import org.openmrs.module.radiology.RadiologyReportList;
+
 import org.openmrs.module.radiology.RadiologyService;
-import org.openmrs.module.radiology.RadiologyStudyList;
+
 import org.openmrs.module.radiology.ScheduledProcedureStepStatus;
 import org.openmrs.module.radiology.Study;
 import org.openmrs.ui.framework.SimpleObject;
@@ -250,38 +250,6 @@ public class ReferringPhysicianFragmentController {
 	
 	// from addradiologyform
 	
-	public List<SimpleObject> getStudyConceptsAnswerFromModality(FragmentModel model,
-			@RequestParam(value = "modalityselected", required = false) String studyConceptone,
-			@SpringBean("conceptService") ConceptService service, UiUtils ui) {
-		
-		System.out.println("0000000000000 PPPPPPPP " + studyConceptone);
-		final List<RadiologyStudyList> studyListFromDb = Context.getService(RadiologyService.class)
-				.getAllStudy();
-		ArrayList<RadiologyStudyList> studyConceptNameList = new ArrayList();
-		for (RadiologyStudyList studyConceptId : studyListFromDb) {
-			int studyConceptIdInteger = studyConceptId.getStudyConceptId();
-			ConceptName studyConceptName = Context.getConceptService()
-					.getConcept(studyConceptIdInteger)
-					.getName();
-			System.out.println("3333333333333333333333  " + studyConceptName);
-			String aop = studyConceptId.getModalityNameSaved();
-			System.out.println("CN45454565665 PPPPPPPP " + studyConceptId.getModalityNameSaved());
-			if ((studyConceptone).equals(studyConceptId.getModalityNameSaved())) {
-				System.out.println("ZZZZZZZZZZZZZZZZZZZZZ MMMMMMM  ");
-				studyConceptNameList.add(studyConceptId);
-			}
-			
-			System.out.println("Study name LLLLLLLLL" + studyConceptName);
-			
-		}
-		
-		String[] properties = new String[3];
-		properties[0] = "id";
-		properties[1] = "studyName";
-		properties[2] = "studyReporturl";
-		return SimpleObject.fromCollection(studyConceptNameList, ui, properties);
-	}
-	
 	public List<SimpleObject> placeRadiologyOrder(@SpringBean("conceptService") ConceptService service, FragmentModel model,
 			@RequestParam("patient") Patient patient, @RequestParam(value = "returnUrl", required = false) String returnUrl,
 			@RequestParam(value = "studyname") String studyname,
@@ -389,7 +357,6 @@ public class ReferringPhysicianFragmentController {
 		System.out.println("JJJJJJJJJJJJJJJJJJJJ done");
 		
 		ArrayList<RadiologyOrder> getRadiologyOrder = new ArrayList<RadiologyOrder>();
-		List<RadiologyStudyList> studyListFromDb = radiologyservice.getAllStudy();
 		
 		List<RadiologyOrder> inProgressRadiologyOrders = getCompletedRadiologyOrdersByPatient(patient);
 		
