@@ -24,14 +24,14 @@ and open the template in the editor.
 
 
 #performedStatusCompletedObsSelect {
-    margin-top: -52px;
+    margin-top: 12px;
 }
 #HTMLFORM {
     margin-top: -162px;
 }
 
 #ContactRadiologist {
-    margin-top: -154px;
+    margin-top: 16px;
 }
 
 #performedStatusInProgressOrder {
@@ -39,7 +39,7 @@ and open the template in the editor.
 }
 
 #performedStatusCompletedReport {
-    margin-top: -93px;
+    margin-top: 17px;
 }
 
 #AddRadiologyOrderForm {

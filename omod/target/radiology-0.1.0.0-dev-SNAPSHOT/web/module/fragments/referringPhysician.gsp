@@ -148,16 +148,7 @@ jq('#completedOrderObs').append( '<tbody><tr><td><a onclick="runMyFunction();"> 
    <% } %>
     <% } %> 
     
- jq('#completedOrderObs').dataTable({
-            "sPaginationType": "full_numbers",
-            "bPaginate": true,
-            "bAutoWidth": false,
-            "bLengthChange": true,
-            "bSort": true,
-            "bJQueryUI": true,
-             "iDisplayLength": 5,
-    
-        });
+
     
     });
     

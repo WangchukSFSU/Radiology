@@ -79,33 +79,46 @@ public class TestFragmentController extends BaseHtmlFormFragmentController {
 	 * @param httpSession
 	 * @throws Exception
 	 */
-	public void controller(FragmentConfiguration config, UiSessionContext sessionContext, UiUtils ui,
+	public void controller(
+			FragmentConfiguration config,
+			UiSessionContext sessionContext,
+			UiUtils ui,
 			@SpringBean("htmlFormEntryService") HtmlFormEntryService htmlFormEntryService,
-			@SpringBean("adtService") AdtService adtService, @SpringBean("formService") FormService formService,
+			@SpringBean("adtService") AdtService adtService,
+			@SpringBean("formService") FormService formService,
 			@SpringBean("coreResourceFactory") ResourceFactory resourceFactory,
-			@SpringBean("featureToggles") FeatureToggleProperties featureToggles, @FragmentParam("patient") Patient patient,
-			@FragmentParam(value = "htmlForm", required = false) HtmlForm hf,
-			@FragmentParam(value = "htmlFormId", required = false) Integer htmlFormId,
-			@FragmentParam(value = "formId", required = false) Form form,
-			@FragmentParam(value = "formUuid", required = false) String formUuid,
+			@SpringBean("featureToggles") FeatureToggleProperties featureToggles,
+			@FragmentParam("patient") Patient patient,
+			// @FragmentParam(value = "htmlForm", required = false) HtmlForm hf,
+			// @FragmentParam(value = "htmlFormId", required = false) Integer htmlFormId,
+			// @FragmentParam(value = "formId", required = false) Form form,
+			// @FragmentParam(value = "formUuid", required = false) String formUuid,
 			@FragmentParam(value = "definitionUiResource", required = false) String definitionUiResource,
 			@FragmentParam(value = "encounter", required = false) Encounter encounter,
 			@FragmentParam(value = "visit", required = false) Visit visit,
 			@FragmentParam(value = "createVisit", required = false) Boolean createVisit,
-			@FragmentParam(value = "returnUrl", required = false) String returnUrl,
+			// @FragmentParam(value = "returnUrl", required = false) String returnUrl,
 			@FragmentParam(value = "automaticValidation", defaultValue = "true") boolean automaticValidation,
 			FragmentModel model, HttpSession httpSession) throws Exception {
 		
-		form = Context.getFormService()
+		System.out.println("aaaaaa definitionUiResource" + definitionUiResource);
+		System.out.println("aaaaaa visit" + visit);
+		System.out.println("aaaaaa createVisit" + createVisit);
+		System.out.println("aaaaaa automaticValidation" + automaticValidation);
+		
+		String returnUrl = "/openmrs/radiology/sendFormMessage.page";
+		Form form = Context.getFormService()
 				.getForm(7);
-		hf = HtmlFormEntryUtil.getService()
+		HtmlForm hf = HtmlFormEntryUtil.getService()
 				.getHtmlFormByForm(form);
-		patient = Context.getPatientService()
-				.getPatient(7);
+		// Patient patient = Context.getPatientService()
+		// .getPatient(7);
+		Integer htmlFormId = null;
+		String formUuid = "";
 		// encounter = Context.getEncounterService()
 		// .getEncounter(202);
 		System.out.println("1111111 " + patient);
-		config.require("patient", "htmlForm | htmlFormId | formId | formUuid | definitionUiResource | encounter");
+		// config.require("patient", "htmlForm | htmlFormId | formId | formUuid | definitionUiResource | encounter");
 		
 		System.out.println("0000000" + hf);
 		
@@ -210,13 +223,17 @@ public class TestFragmentController extends BaseHtmlFormFragmentController {
 			throws Exception {
 		
 		// TODO formModifiedTimestamp and encounterModifiedTimestamp
-		
+		System.out.println("2222222 patient" + patient);
+		System.out.println("2222222 encounter" + encounter);
+		System.out.println("2222222 hf" + hf);
 		boolean editMode = encounter != null;
 		
 		FormEntrySession fes;
 		if (encounter != null) {
+			System.out.println("44444");
 			fes = new FormEntrySession(patient, encounter, FormEntryContext.Mode.EDIT, hf, request.getSession());
 		} else {
+			System.out.println("555555");
 			fes = new FormEntrySession(patient, hf, FormEntryContext.Mode.ENTER, request.getSession());
 		}
 		
@@ -224,15 +241,18 @@ public class TestFragmentController extends BaseHtmlFormFragmentController {
 		setupVelocityContext(fes, visitDomainWrapper, ui, sessionContext, featureToggles);
 		setupFormEntrySession(fes, visitDomainWrapper, ui, sessionContext, returnUrl);
 		fes.getHtmlToDisplay(); // needs to happen before we validate or process a form
-		
+		System.out.println("666663");
 		// Validate and return with errors if any are found
 		List<FormSubmissionError> validationErrors = fes.getSubmissionController()
 				.validateSubmission(fes.getContext(), request);
 		if (validationErrors.size() > 0) {
+			System.out.println("777777");
 			return returnHelper(validationErrors, fes, null);
 		}
 		
 		try {
+			
+			System.out.println("333333");
 			// No validation errors found so process form submission
 			fes.prepareForSubmit();
 			fes.getSubmissionController()
@@ -329,6 +349,8 @@ public class TestFragmentController extends BaseHtmlFormFragmentController {
 							.getErrorFieldId(err.getSourceWidget()), err.getError());
 				else
 					errors.put(err.getId(), err.getError());
+				System.out.println("EEEE " + err.getId());
+				System.out.println("EEEE " + err.getError());
 			}
 			return SimpleObject.create("success", false, "errors", errors);
 		}

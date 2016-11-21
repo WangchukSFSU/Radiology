@@ -3,13 +3,89 @@
 <% ui.includeCss("radiology", "jquery.dataTables.min.css") %>
 
 
+<%
+    // config supports style (css style on div around form)
+    // config supports cssClass (css class on div around form)
+
+    // assumes jquery and jquery-ui from emr module
+    ui.includeJavascript("uicommons", "handlebars/handlebars.min.js", Integer.MAX_VALUE - 1);
+    ui.includeJavascript("htmlformentryui", "dwr-util.js")
+    ui.includeJavascript("htmlformentryui", "htmlForm.js")
+    ui.includeJavascript("uicommons", "emr.js")
+    ui.includeJavascript("uicommons", "moment.js")
+    // TODO setup "confirm before navigating" functionality
+%>
+
+<script type="text/javascript" src="/${ contextPath }/moduleResources/htmlformentry/htmlFormEntry.js"></script>
+<script type="text/javascript" src="/${ contextPath }/moduleResources/htmlformentry/htmlForm.js"></script>
+<link href="/${ contextPath }/moduleResources/htmlformentry/htmlFormEntry.css" type="text/css" rel="stylesheet" />
+
+<script type="text/javascript">
+
+    // for now we just expose these in the global scope for compatibility with htmlFormEntry.js and legacy forms
+    function submitHtmlForm() {
+    alert("0000000");
+        htmlForm.submitHtmlForm();
+        return false;
+    }
+
+    
+    
+    
+    
+    function showDiv(id) {
+        htmlForm.showDiv(id);
+    }
+
+    function hideDiv(id) {
+        htmlForm.hideDiv(id);
+    }
+
+    function getValueIfLegal(idAndProperty) {
+        htmlForm.getValueIfLegal(idAndProperty);
+    }
+
+    function loginThenSubmitHtmlForm() {
+        htmlForm.loginThenSubmitHtmlForm();
+    }
+
+    var beforeSubmit = htmlForm.getBeforeSubmit();
+    var beforeValidation = htmlForm.getBeforeValidation();
+    var propertyAccessorInfo = htmlForm.getPropertyAccessorInfo();
+
+  
+        htmlForm.setReturnUrl('${ returnUrl }');
+ 
+
+  
+
+	jq(document).ready(function() {
+		jQuery.each(jq("htmlform").find('input'), function(){
+		    jq(this).bind('keypress', function(e){
+		       if (e.keyCode == 13) {
+		       		if (!jq(this).hasClass("submitButton")) {
+		       			e.preventDefault(); 
+		       		}
+		       }
+		    });
+		});
+    });
+    
+</script>
+
+
 
 <script>
     jq = jQuery;
     jq(document).ready(function() {
     
+
+        
     jq('#activeorderswithLink').hide();
     jq("#orderdetails").hide();
+
+    
+    
     
       jq('#performedStatusInProgressOrderTable').dataTable({
             "sPaginationType": "full_numbers",
@@ -21,25 +97,12 @@
             "bJQueryUI": true,
             
              "iDisplayLength": 5,
-    "aaSorting": [[ 2, "desc" ]] // Sort by first column descending,
+    "aaSorting": [[ 3, "desc" ]] // Sort by first column descending,
     
             
         });
  jq("#performedStatusInProgressOrderDetail").hide(); 
  
- 
-    
-
-    
-    
-    
-    
-    
-  
-    
-    
-     
-    
  
 jq("#test").click(function() {
 alert("dsdads");
@@ -202,6 +265,7 @@ function contactRadiologist() {
 jq("#activeorders").hide();
    jq("#activeorderswithLink").show();
    jq("#orderdetails").show();
+   jq('#eee').show();
    
  
    
@@ -221,7 +285,7 @@ alert(orderId);
  
       alert("orderId" +orderId);
       
-      jq('#completedOrderObs').empty();
+      
       
      <% if (inProgressRadiologyOrders) { %>
    alert("yess");
@@ -235,9 +299,71 @@ alert(orderId);
     
   localStorage.setItem("radiologyorderId", radiologyorderId);
 
-  jq('#completedOrderObs').append( '<thead><tr><th> Report</th><th>Patient Name</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th>ViewStudy</th><th>SubmitObs</th></thead>' );
-jq('#completedOrderObs').append( '<tbody><tr><td><a id="fillreportTT" class="fillreportTT"  onclick="showReports(); return false;" >Obs </a></td><td>${ anOrder.patient.personName } </td><td> ${anOrder.creator.username}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td>${anOrder.study.studyname}</td><td id="dogdog" href="ddasdas"><a id="tiger" class="tiger" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + anOrder.patient.patientIdentifier }" onclick="loadImages(); return false;" >ViewStudy</a></td><td><a href="javascript: void(0)" id="linkActButton" onclick="submitObs(); return false;">Submit</a></td></tr></tbody>' );
+
+ jq('#performedStatusInProgressOrderDetail').append("<div class='newbox'  id= 'viewstudyid'>RADIOLOGY ORDER DETAILS  :   ${ anOrder.patient.personName }, ${ anOrder.patient.patientIdentifier }, ${anOrder.study.studyname} </div>");
+jq('#performedStatusInProgressOrderDetail').append("<div class='nnn'  id= 'nnn'>Provider  :  ${anOrder.creator.username} ,  StartDate  : ${ anOrder.dateCreated } </div>");
+ jq('#performedStatusInProgressOrderDetail').append("<div class='newbox'  id= 'viewstudyid'>Diagnosis  : ${anOrder.orderdiagnosis} </div>");
+jq('#performedStatusInProgressOrderDetail').append("<div class='nnn'  id= 'nnn'>Instructions  : ${anOrder.instructions} </div>");
+
+
+
+jq('#performedStatusInProgressOrderDetail').append("<div class='nnn'  id= 'viewstudyid'><a id = 'tiger' class='tiger' href=${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + anOrder.patient.patientIdentifier } onclick='loadImages(); return false;'>ViewStudy</a> </div>");
+
+
+<% if (anOrder.study.orderencounterId) { %>
+alert("yess");
+
+<% } else { %>
+alert("noooo");
+
+
+    jq.getJSON('${ ui.actionLink("getForm") }',
+    { 'radiologyorderId': radiologyorderId
+    })
+    .error(function(xhr, status, err) {
+    alert('AJAX error ' + err);
+    })
+    .success(function(ret) {
+    alert("succsss");
+    for (var i = 0; i < ret.length; i++) {
+
+    var formNameHtmlToDisplay = ret[i].HtmlToDisplay;
+    var patientId = ret[i].Patient.PatientId;
+    var HtmlFormId = ret[i].HtmlFormId;
+    var FormModifiedTimestamp = ret[i].FormModifiedTimestamp;
+    var ReturnUrl = ret[i].ReturnUrl;
+    
+     localStorage.setItem("patientId", patientId);
+     localStorage.setItem("HtmlFormId", HtmlFormId);
+      localStorage.setItem("FormModifiedTimestamp", FormModifiedTimestamp);
+     localStorage.setItem("formNameHtmlToDisplay", formNameHtmlToDisplay);
+     
   
+
+
+     
+     
+     
+
+    }
+    
+    
+ 
+    
+    
+    })
+     jq('#performedStatusInProgressOrderDetail').append("<div class='bbb'  id= 'bbb'><a id = 'ttt' class='ttt'  onclick='loadttt(); return false;'>Vttt</a> </div>");
+
+     jq('#linkForForm').text("tsooot");
+   jq('#performedStatusInProgressOrderDetail').append(jq('#linkForForm'));
+
+//jq('#performedStatusInProgressOrderDetail').append('<h1>hi</hi>');
+     
+
+   
+   
+<% }  %>
+
 
 }
   
@@ -250,24 +376,15 @@ jq('#completedOrderObs').append( '<tbody><tr><td><a id="fillreportTT" class="fil
     
     
     
-      jq('#completedOrderObs').dataTable({
-            "sPaginationType": "full_numbers",
-            "bPaginate": true,
-            "bAutoWidth": false,
-            "bLengthChange": true,
-            "bSort": true,
-            "bJQueryUI": true,
-            
-             "iDisplayLength": 5,
-    
-    
-            
-        });
+     
     
     
     
     }
     
+ 
+   
+  
     function showReports() {
     alert("show report");
     jq('#showReportsDiv').show();
@@ -304,6 +421,56 @@ reporttablelistchild.append("</tbody>");
     }
    
 </script>
+<script>
+     jq = jQuery;
+       jq(document).ready(function() {
+       
+       jq("#dialog-message").dialog({
+       autoOpen: false,
+    modal: false,
+    draggable: true,
+    resizable: true,
+    position: ['center', 'top'],
+    show: 'blind',
+    hide: 'blind',
+    width: 900,
+    dialogClass: 'ui-dialog-osx',
+    buttons: {
+        "I've read and understand this": function() {
+            jq(this).dialog("close");
+        }
+    }
+});
+
+
+
+  jq(".linkForForm").click(function() {
+  alert("jiiji");
+
+ 
+    });
+
+       
+       });
+       
+         function loadttt() {
+    alert("ttt");
+      var patientId = localStorage.getItem("patientId");
+ var returnUrl = localStorage.getItem("returnUrl");
+  var HtmlFormId = localStorage.getItem("HtmlFormId");
+   var formModifiedTimestamp = localStorage.getItem("formModifiedTimestamp");
+  var formNameHtmlToDisplay = localStorage.getItem("formNameHtmlToDisplay");
+  
+  alert(formNameHtmlToDisplay);
+  jq( "#dialog-message" ).dialog( "open" );
+      jq('#personId').val(patientId);
+       jq('#htmlFormId').val(HtmlFormId);
+       jq('#returnUrl').val(ReturnUrl);
+       
+      
+  jq('input#closeAfterSubmission').after(formNameHtmlToDisplay);
+    }
+    </script>
 
    <div class="breadcrumbsactiveorders">
  <ul id="breadcrumbs" class="apple">
@@ -340,12 +507,14 @@ reporttablelistchild.append("</tbody>");
     <div id="performedStatusInProgressOrder">
   
         <h1>ACTIVE RADIOLOGY ORDERS</h1>
+        
 <table id="performedStatusInProgressOrderTable">
     <thead>
         <tr>
             
             <th>Order</th>
             <th>Patient Name</th>
+            <th>Medical Record Number</th>
             <th>OrderStartDate</th>
             <th>OrderPriority</th>
            
@@ -357,6 +526,7 @@ reporttablelistchild.append("</tbody>");
         <td><a id="fillreport" href='+ studyname +' class="fillreport" onclick="displayReport(this); return false;"><p style="display:none;">${ anOrder.orderId }</p>
                 ${anOrder.study.studyname}</a></td>
          <td>${ anOrder.patient.personName } </td>
+         <td>${ anOrder.patient.patientIdentifier } </td>
         <td>${ anOrder.dateCreated } </td>
         <td>${ anOrder.urgency }</td>
        
@@ -369,25 +539,19 @@ reporttablelistchild.append("</tbody>");
 
 
 
-<div id = "performedStatusInProgressOrderDetail">
-    
-  <h1>RADIOLOGY ORDER DETAILS</h1>
-  
-<table id="completedOrderObs">
-  
-    
 
-</table>
+<div id = "performedStatusInProgressOrderDetail">
+
 
 </div>
+
+
 
 <div id = "showReportsDiv">
     
 
 </div>
-<div id="somedivreport" title="Fill Report" style="display:none;">
-    <iframe id="thedialogreport" width="1250" height="550"></iframe>
-</div>
+
 
 
 
@@ -395,8 +559,51 @@ reporttablelistchild.append("</tbody>");
     <iframe id="thedialog" width="550" height="350"></iframe>
 </div>
 
+<a id="linkForForm" class="linkForForm" value = "?" onclick="loadttt(); return false;"></a>
 
+<div id="dialog-message" title="Important information">
 
+        <span class="error" style="display: none" id="general-form-error"></span>
+       <form id="htmlform" method="post" action="${ ui.actionLink("submit") }" onSubmit="submitHtmlForm(); return false;">
+        <input type="hidden" id = "personId" name="personId" value=""/>
+        <input type="hidden" id = "htmlFormId" name="htmlFormId" value=""/>
+        <input type="hidden" id = "createVisit" name="createVisit" value=""/>
+        <input type="hidden" id = "formModifiedTimestamp" name="formModifiedTimestamp" value=""/>
+        <input type="hidden" id = "encounterModifiedTimestamp" name="encounterModifiedTimestamp" value=""/>
+       
+        <input type="hidden" id = "encounterId" name="encounterId" value=""/>
+     
+      
+        <input type="hidden" id = "visitId" name="visitId" value=""/>
+      
+     
+        <input type="hidden" id = "returnUrl" name="returnUrl" value=""/>
+       
+        <input type="hidden" id = "closeAfterSubmission" name="closeAfterSubmission" value=""/>
 
+       
+
+        <div id="passwordPopup" style="position: absolute; z-axis: 1; bottom: 25px; background-color: #ffff00; border: 2px black solid; display: none; padding: 10px">
+            <center>
+                <table>
+                    <tr>
+                        <td colspan="2"><b>${ ui.message("htmlformentry.loginAgainMessage") }</b></td>
+                    </tr>
+                    <tr>
+                        <td align="right"><b>${ ui.message("coreapps.user.username") }:</b></td>
+                        <td><input type="text" id="passwordPopupUsername"/></td>
+                    </tr>
+                    <tr>
+                        <td align="right"><b>${ ui.message("coreapps.user.password") }:</b></td>
+                        <td><input type="password" id="passwordPopupPassword"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center"><input type="button" value="Submit" onClick="loginThenSubmitHtmlForm()"/></td>
+                    </tr>
+                </table>
+            </center>
+        </div>
+    </form>
+</div>
 
 

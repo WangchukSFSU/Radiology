@@ -1,6 +1,7 @@
 
 <% ui.includeCss("radiology", "radiologistInProgressOrder.css") %>
-
+<% ui.includeCss("radiology", "jquery-ui.css") %>
+<% ui.includeCss("radiology", "jquery.dataTables.min.css") %>
 
 <script>
     jq = jQuery;

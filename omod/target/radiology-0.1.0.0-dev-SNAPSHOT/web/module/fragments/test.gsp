@@ -22,10 +22,15 @@
 
     // for now we just expose these in the global scope for compatibility with htmlFormEntry.js and legacy forms
     function submitHtmlForm() {
+    alert("0000000");
         htmlForm.submitHtmlForm();
         return false;
     }
 
+    
+    
+    
+    
     function showDiv(id) {
         htmlForm.showDiv(id);
     }
@@ -96,11 +101,46 @@
     
 </script>
 
-<div id="${ config.id }" <% if (config.style) { %>style="${ config.style }"<% } %> <% if (config.cssClass) { %>class="${config.cssClass}"<% } %>>
+<script>
+     jq = jQuery;
+       jq(document).ready(function() {
+       
+       jq("#dialog-message").dialog({
+       autoOpen: false,
+    modal: true,
+    draggable: true,
+    resizable: true,
+    position: ['center', 'top'],
+    show: 'blind',
+    hide: 'blind',
+    width: 900,
+    dialogClass: 'ui-dialog-osx',
+    buttons: {
+        "I've read and understand this": function() {
+            jq(this).dialog("close");
+        }
+    }
+});
 
-    <span class="error" style="display: none" id="general-form-error"></span>
+  jq("#studyConceptDictionary").click(function() {
+    jq( "#dialog-message" ).dialog( "open" );
+    });
 
-    <form id="htmlform" method="post" action="${ ui.actionLink("htmlformentryui", "htmlform/enterHtmlForm", "submit") }" onSubmit="submitHtmlForm(); return false;">
+       
+       });
+    </script>
+
+
+     
+    <input type="button" id="studyConceptDictionary" class="studyConceptDictionary" value = "?" >
+ 
+
+
+
+<div id="dialog-message" title="Important information">
+
+        <span class="error" style="display: none" id="general-form-error"></span>
+       <form id="htmlform" method="post" action="${ ui.actionLink("submit") }" onSubmit="submitHtmlForm(); return false;">
         <input type="hidden" name="personId" value="${ command.patient.personId }"/>
         <input type="hidden" name="htmlFormId" value="${ command.htmlFormId }"/>
         <input type="hidden" name="createVisit" value="${ createVisit }"/>
@@ -147,6 +187,17 @@
     ${ command.fieldAccessorJavascript }
 </script>
 <% } %>
+    
+
+
+
+
+
+
+
+
+
+
 
 
 
