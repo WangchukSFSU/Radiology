@@ -79,7 +79,25 @@ ui.includeJavascript("uicommons", "moment.js")
 
 
 
+jq("#ReportDeletelDialog").dialog({
+autoOpen: false,
+              modal: true,
+             title: 'Delete Report',
+             width: 400,
+            buttons : {
+                  "Yes": function () { 
+            continuecancelReport();
+            jq(this).dialog('close'); 
+         },
+        "No": function () { 
+           
+            jq(this).dialog('close'); 
+         }
+            },
 
+        });
+        
+        
     jq("#dialog-message").dialog({
     autoOpen: false,
     modal: false,
@@ -334,6 +352,13 @@ jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'vie
 
     function cancelReport() {
     alert("cancelReport");
+
+
+jq( "#ReportDeletelDialog" ).dialog( "open" );
+
+}
+
+function continuecancelReport() {
 
     var radiologyorderId = localStorage.getItem("radiologyorderId");
        jq.getJSON('${ ui.actionLink("CancelReportUpdate") }',
@@ -805,3 +830,5 @@ jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'vie
 </div>
 
 
+
+<div id="ReportDeletelDialog" style="width:430px" title="reportHTMLForm"> Are you sure you want to delete Report </div>
