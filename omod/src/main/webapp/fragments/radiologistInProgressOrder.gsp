@@ -102,6 +102,7 @@ ui.includeJavascript("uicommons", "moment.js")
     });
 
     function displayReport(el) {
+    localStorage.clear();
     jq(el).addClass("highlight").css("background-color","#CCCCCC");
     alert("33333");
     jq('#patientCompletedOrders').show();
@@ -138,6 +139,26 @@ ui.includeJavascript("uicommons", "moment.js")
    
 
     localStorage.setItem("radiologyorderId", radiologyorderId);
+ 
+       
+        jq.getJSON('${ ui.actionLink("getUpdatedEncounterId") }',
+    { 'radiologyorderId': radiologyorderId
+    })
+    .error(function(xhr, status, err) {
+    alert('AJAX error ' + err);
+    })
+    .success(function(ret) {
+    alert("encounter id  " + ret.length);
+    alert("bbbb");
+      for (var i = 0; i < ret.length; i++) {
+      var updatedOrderencounterId = ret[i].study.OrderencounterId;
+      alert("updatedOrderencounterId   iiiiiiii");
+      alert(updatedOrderencounterId);
+      localStorage.setItem("updatedOrderencounterId", updatedOrderencounterId);
+    }
+
+
+    })
 
 
  jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'orderDetailHeading'>RADIOLOGY ORDER DETAILS  :   ${ anOrder.patient.personName }, ${ anOrder.patient.patientIdentifier }, ${anOrder.study.studyname} </div>");
@@ -182,20 +203,30 @@ jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'vie
     formNameArray[i] = FormName;
 
     alert(FormName);
-alert("111111");
+
     localStorage.setItem("patientIdForCompletedOrderList", patientId);
 
     var radiologyorderId = localStorage.getItem("radiologyorderId");
 
-    var radiologyOrderencounterIdDDD = localStorage.getItem("radiologyOrderencounterIdDDD");
-
    
-     if( ${anOrder.study.orderencounterId} != null) {
-     jq("#performedStatusInProgressOrderDetail").append('<a> SavedReport : '+ FormName +' Report Form </a>');
-    } else {
-     jq("#performedStatusInProgressOrderDetail").append('<a>'+ FormName +' Report Form  </a>');
-    }
+    var updatedOrderencounterId = localStorage.getItem("updatedOrderencounterId");
+    
+    alert("updatedOrderencounterId oooooooooo");
+      alert(updatedOrderencounterId);
+      
+      if(updatedOrderencounterId == "null") {
+      alert(" null  "  );
+ jq("#performedStatusInProgressOrderDetail").append('<a>'+ FormName +' Report Form  </a>');
+       
+      } else {
+      alert(" not null");
+      jq("#performedStatusInProgressOrderDetail").append('<a> SavedReport : '+ FormName +' Report Form </a>');
+     
+      }
+      
+      
 
+    
     jq('#performedStatusInProgressOrderDetail #viewstudyid').next().attr('id', 'formid');
     jq('#performedStatusInProgressOrderDetail a').next().attr('id', 'formid');
     jq('#performedStatusInProgressOrderDetail #viewstudyid').next().addClass("order");
@@ -207,7 +238,7 @@ alert("111111");
 
     }
 
-  if( ${anOrder.study.orderencounterId}) {
+ if(updatedOrderencounterId != "null") {
   jq("#performedStatusInProgressOrderDetail").append('<a><img id="reportCancelId" class = "reportCancelClass" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }" /></a>');
     jq('#performedStatusInProgressOrderDetail #formid').next().attr('id', 'reportCancelIcon');
     jq('#performedStatusInProgressOrderDetail #formid').next().addClass("order");
@@ -235,7 +266,7 @@ alert("111111");
     alert('AJAX error ' + err);
     })
     .success(function(ret) {
-   
+    jq('#CancepReportUpdatedDiv').hide();
     jq('#patientCompletedOrders').empty();
     jq("<h1></h1>").text("PREVIOUS RADIOLOGY ORDERS").appendTo('#patientCompletedOrders');
          jq('#patientCompletedOrders').append('<table></table>');
@@ -293,6 +324,13 @@ alert("111111");
     }
 
 
+    
+    function UpdatedEncounter() {
+      alert("bbbb  start");
+
+    
+    
+    }
 
     function cancelReport() {
     alert("cancelReport");
