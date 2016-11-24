@@ -1,4 +1,19 @@
+table#completedOrderTable {
+    margin-left: 0cm;
+}
 
+#cancelbtnDivId {
+    margin-top: 10px;
+}
+
+table#updateActiveOrderDatatable {
+    margin-left: 0cm;
+}
+#reportCancelId {
+   height: 20px;
+   width: 20px;
+   padding-bottom: -15px;
+}
 .ui-widget-header{
             background:#b9cd6d;
             border: 1px solid #b9cd6d;

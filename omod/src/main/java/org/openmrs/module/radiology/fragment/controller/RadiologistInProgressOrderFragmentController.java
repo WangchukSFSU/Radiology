@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateMidnight;
 import org.openmrs.Encounter;
 import org.openmrs.Form;
+import org.openmrs.Obs;
 import org.openmrs.Order;
 import org.openmrs.Patient;
 import org.openmrs.Visit;
@@ -112,6 +113,131 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		
 	}
 	
+	public List<SimpleObject> getPatientCompletedOrder(@SpringBean("conceptService") ConceptService service,
+			FragmentModel model, @RequestParam(value = "patientId") Patient patientId, UiUtils ui) {
+		
+		System.out.println("getLabOrdersByPatient");
+		ArrayList<RadiologyOrder> radiologyOrders = new ArrayList<RadiologyOrder>();
+		
+		List<Order> orders = Context.getOrderService()
+				.getAllOrdersByPatient(patientId);
+		
+		int testOrderTypeId = Context.getOrderService()
+				.getOrderTypeByName("Radiology Order")
+				.getOrderTypeId();
+		
+		RadiologyOrder radiologyOrder;
+		for (Order order : orders) {
+			// if (order.getOrderType().getOrderTypeId() == 3) { OrderType ot = new OrderType();
+			if (order.getOrderType()
+					.getOrderTypeId() == testOrderTypeId) {
+				
+				radiologyOrder = Context.getService(RadiologyService.class)
+						.getRadiologyOrderByOrderId(order.getOrderId());
+				
+				if (radiologyOrder.isOrderCompleted()) {
+					radiologyOrders.add(radiologyOrder);
+					
+				}
+				
+			}
+		}
+		String[] properties = new String[8];
+		properties[0] = "orderer.name";
+		properties[1] = "instructions";
+		properties[2] = "Patient.PatientId";
+		properties[3] = "orderdiagnosis";
+		properties[4] = "study.studyname";
+		properties[5] = "study.studyInstanceUid";
+		properties[6] = "DateCreated";
+		properties[7] = "study.OrderencounterId";
+		
+		return SimpleObject.fromCollection(radiologyOrders, ui, properties);
+	}
+	
+	public List<SimpleObject> getUpdatedEncounterId(@SpringBean("conceptService") ConceptService service,
+			FragmentModel model, @RequestParam(value = "radiologyorderId") Integer radiologyorderId, UiUtils ui) {
+		
+		System.out.println("PPPPPPPP");
+		ArrayList<RadiologyOrder> radiologyOrders = new ArrayList<RadiologyOrder>();
+		
+		RadiologyOrder aaa = Context.getService(RadiologyService.class)
+				.getRadiologyOrderByOrderId(radiologyorderId);
+		radiologyOrders.add(aaa);
+		System.out.println("Emncounter Order Id TTTTT " + aaa.getStudy()
+				.getOrderencounterId());
+		
+		String[] properties = new String[1];
+		
+		properties[0] = "study.OrderencounterId";
+		
+		return SimpleObject.fromCollection(radiologyOrders, ui, properties);
+	}
+	
+	public List<SimpleObject> getRadiologyOrderDetail(@SpringBean("conceptService") ConceptService service,
+			FragmentModel model, @RequestParam(value = "radiologyorderId") Integer radiologyorderId, UiUtils ui) {
+		
+		ArrayList<RadiologyOrder> radiologyOrders = new ArrayList<RadiologyOrder>();
+		
+		RadiologyOrder aaa = Context.getService(RadiologyService.class)
+				.getRadiologyOrderByOrderId(radiologyorderId);
+		radiologyOrders.add(aaa);
+		
+		System.out.println("Emncounter Order Id TTTTT " + aaa.getStudy()
+				.getOrderencounterId());
+		aaa.getOrderer();
+		
+		String[] properties = new String[12];
+		
+		properties[0] = "patient.personName";
+		properties[1] = "patient.patientIdentifier";
+		properties[2] = "study.studyname";
+		properties[3] = "dateCreated";
+		properties[4] = "urgency";
+		properties[5] = "patient.patientIdentifier";
+		properties[6] = "orderId";
+		properties[7] = "study.OrderencounterId";
+		properties[8] = "Orderer";
+		properties[9] = "Orderdiagnosis";
+		properties[10] = "Instructions";
+                properties[11] = "study.studyInstanceUid";
+                
+                
+		
+		return SimpleObject.fromCollection(radiologyOrders, ui, properties);
+	}
+	
+	public List<SimpleObject> CancelReportUpdate(@SpringBean("conceptService") ConceptService service, FragmentModel model,
+			@RequestParam(value = "radiologyorderId") Integer radiologyorderId, UiUtils ui) {
+		
+		System.out.println("uuuuu");
+		ArrayList<RadiologyOrder> radiologyOrders = new ArrayList<RadiologyOrder>();
+		
+		RadiologyOrder removeEncounterOnRadiologyOrder = Context.getService(RadiologyService.class)
+				.getRadiologyOrderByOrderId(radiologyorderId);
+		Context.getService(RadiologyService.class)
+				.updateStudyEncounterId(removeEncounterOnRadiologyOrder.getStudy()
+						.getStudyInstanceUid(), null);
+		
+		List<RadiologyOrder> updateInProgressRadiologyOrders = getInProgressRadiologyOrdersByPatient();
+		
+		for (RadiologyOrder updateRadiologyOrder : updateInProgressRadiologyOrders) {
+			radiologyOrders.add(updateRadiologyOrder);
+		}
+		
+		String[] properties = new String[8];
+		properties[0] = "patient.personName";
+		properties[1] = "patient.patientIdentifier";
+		properties[2] = "study.studyname";
+		properties[3] = "dateCreated";
+		properties[4] = "urgency";
+		properties[5] = "patient.patientIdentifier";
+		properties[6] = "orderId";
+		properties[7] = "study.OrderencounterId";
+		
+		return SimpleObject.fromCollection(radiologyOrders, ui, properties);
+	}
+	
 	public List<SimpleObject> getForm(@SpringBean("conceptService") ConceptService service, FragmentModel model,
 			@RequestParam(value = "radiologyorderId") String radiologyorderId,
 			@SpringBean("htmlFormEntryService") HtmlFormEntryService htmlFormEntryService,
@@ -133,81 +259,120 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		Visit visit = null;
 		Boolean createVisit = false;
 		boolean automaticValidation = true;
+		Form form = null;
+		ArrayList<FormEntrySession> command = new ArrayList<FormEntrySession>();
+		ArrayList<Form> formlist = new ArrayList<Form>();
+		
+		int radiologyorderIdInteger = Integer.parseInt(radiologyorderId);
+		
+		System.out.println("radiologyorderId " + radiologyorderIdInteger);
+		RadiologyService radiologyservice = Context.getService(RadiologyService.class);
+		RadiologyOrder getRadiologyOrder = radiologyservice.getRadiologyOrderByOrderId(radiologyorderIdInteger);
+		
+		System.out.println("radiology Order " + getRadiologyOrder);
+		System.out.println("study  " + getRadiologyOrder.getStudy());
+		System.out.println("study form encounter Id " + getRadiologyOrder.getStudy()
+				.getOrderencounterId());
+		
+		if (getRadiologyOrder.getStudy()
+				.getOrderencounterId() == null) {
+			System.out.println("encounter form is null");
+			encounter = null;
+			form = Context.getFormService()
+					.getFormByUuid(getRadiologyOrder.getStudy()
+							.getStudyHtmlFormUUID());
+			Form genericform = Context.getFormService()
+					.getFormByUuid(getRadiologyOrder.getStudy()
+							.getStudyGenericHTMLFormUUID());
+			formlist.add(form);
+			formlist.add(genericform);
+		} else {
+			System.out.println("encounter form not not null");
+			encounter = Context.getEncounterService()
+					.getEncounter(getRadiologyOrder.getStudy()
+							.getOrderencounterId());
+			
+			form = encounter.getForm();
+			
+			formlist.add(form);
+		}
 		
 		String returnUrl = "/openmrs/radiology/sendFormMessage.page";
-		Form form = Context.getFormService()
-				.getForm(7);
-		HtmlForm hf = HtmlFormEntryUtil.getService()
-				.getHtmlFormByForm(form);
-		Patient patient = Context.getPatientService()
-				.getPatient(7);
-		Integer htmlFormId = null;
-		String formUuid = "";
-		// encounter = Context.getEncounterService()
-		// .getEncounter(202);
-		System.out.println("form " + patient);
-		// config.require("patient", "htmlForm | htmlFormId | formId | formUuid | definitionUiResource | encounter");
 		
-		System.out.println("form 11" + hf);
-		
-		if (hf == null) {
-			if (htmlFormId != null) {
-				hf = htmlFormEntryService.getHtmlForm(htmlFormId);
-			} else if (form != null) {
-				hf = htmlFormEntryService.getHtmlFormByForm(form);
-			} else if (formUuid != null) {
-				form = formService.getFormByUuid(formUuid);
-				hf = htmlFormEntryService.getHtmlFormByForm(form);
-			} else if (StringUtils.isNotBlank(definitionUiResource)) {
-				hf = HtmlFormUtil.getHtmlFormFromUiResource(resourceFactory, formService, htmlFormEntryService,
-					definitionUiResource);
+		for (Form eachform : formlist) {
+			
+			HtmlForm hf = HtmlFormEntryUtil.getService()
+					.getHtmlFormByForm(eachform);
+			Patient patient = getRadiologyOrder.getPatient();
+			Integer htmlFormId = eachform.getFormId();
+			String formUuid = eachform.getUuid();
+			
+			System.out.println("form " + patient);
+			// config.require("patient", "htmlForm | htmlFormId | formId | formUuid | definitionUiResource | encounter");
+			
+			System.out.println("form 11" + hf);
+			
+			if (hf == null) {
+				if (htmlFormId != null) {
+					hf = htmlFormEntryService.getHtmlForm(htmlFormId);
+				} else if (eachform != null) {
+					hf = htmlFormEntryService.getHtmlFormByForm(eachform);
+				} else if (formUuid != null) {
+					eachform = formService.getFormByUuid(formUuid);
+					hf = htmlFormEntryService.getHtmlFormByForm(eachform);
+				} else if (StringUtils.isNotBlank(definitionUiResource)) {
+					hf = HtmlFormUtil.getHtmlFormFromUiResource(resourceFactory, formService, htmlFormEntryService,
+						definitionUiResource);
+				}
 			}
-		}
-		if (hf == null && encounter != null) {
-			form = encounter.getForm();
-			if (form == null) {
-				throw new IllegalArgumentException("Cannot view a form-less encounter unless you specify which form to use");
+			if (hf == null && encounter != null) {
+				eachform = encounter.getForm();
+				if (form == null) {
+					throw new IllegalArgumentException(
+							"Cannot view a form-less encounter unless you specify which form to use");
+				}
+				hf = HtmlFormEntryUtil.getService()
+						.getHtmlFormByForm(encounter.getForm());
+				if (hf == null)
+					throw new IllegalArgumentException("The form for the specified encounter (" + encounter.getForm()
+							+ ") does not have an HtmlForm associated with it");
 			}
-			hf = HtmlFormEntryUtil.getService()
-					.getHtmlFormByForm(encounter.getForm());
 			if (hf == null)
-				throw new IllegalArgumentException("The form for the specified encounter (" + encounter.getForm()
-						+ ") does not have an HtmlForm associated with it");
+				throw new RuntimeException("Could not find HTML Form");
+			
+			// the code below doesn't handle the HFFS case where you might want to _add_ data to an existing encounter
+			FormEntrySession fes;
+			if (encounter != null) {
+				fes = new FormEntrySession(patient, encounter, FormEntryContext.Mode.EDIT, hf, null, httpSession,
+						automaticValidation, !automaticValidation);
+			} else {
+				System.out.println("forrrrrr");
+				fes = new FormEntrySession(patient, hf, FormEntryContext.Mode.ENTER, null, httpSession, automaticValidation,
+						!automaticValidation);
+			}
+			
+			System.out.println("form ooo " + fes.getPatient());
+			// fes.getPatient().setPersonId(htmlFormId);
+			
+			VisitDomainWrapper visitDomainWrapper = getVisitDomainWrapper(visit, encounter, adtService);
+			setupVelocityContext(fes, visitDomainWrapper, ui, sessionContext, featureToggles);
+			setupFormEntrySession(fes, visitDomainWrapper, ui, sessionContext, returnUrl);
+			// setupModel(model, fes, visitDomainWrapper, createVisit);
+			
+			fes.setReturnUrl(returnUrl);
+			
+			command.add(fes);
+			
 		}
-		if (hf == null)
-			throw new RuntimeException("Could not find HTML Form");
 		
-		// the code below doesn't handle the HFFS case where you might want to _add_ data to an existing encounter
-		FormEntrySession fes;
-		if (encounter != null) {
-			fes = new FormEntrySession(patient, encounter, FormEntryContext.Mode.EDIT, hf, null, httpSession,
-					automaticValidation, !automaticValidation);
-		} else {
-			System.out.println("forrrrrr");
-			fes = new FormEntrySession(patient, hf, FormEntryContext.Mode.ENTER, null, httpSession, automaticValidation,
-					!automaticValidation);
-		}
-		
-		System.out.println("form ooo " + fes.getPatient());
-		// fes.getPatient().setPersonId(htmlFormId);
-		
-		VisitDomainWrapper visitDomainWrapper = getVisitDomainWrapper(visit, encounter, adtService);
-		setupVelocityContext(fes, visitDomainWrapper, ui, sessionContext, featureToggles);
-		setupFormEntrySession(fes, visitDomainWrapper, ui, sessionContext, returnUrl);
-		// setupModel(model, fes, visitDomainWrapper, createVisit);
-		
-		fes.setReturnUrl(returnUrl);
-		ArrayList<FormEntrySession> command = new ArrayList<FormEntrySession>();
-		
-		command.add(fes);
-		
-		String[] properties = new String[6];
+		String[] properties = new String[7];
 		properties[0] = "EncounterModifiedTimestamp";
 		properties[1] = "HtmlToDisplay";
 		properties[2] = "Patient.PatientId";
 		properties[3] = "HtmlFormId";
 		properties[4] = "FormModifiedTimestamp";
 		properties[5] = "ReturnUrl";
+		properties[6] = "FormName";
 		
 		return SimpleObject.fromCollection(command, ui, properties);
 	}
@@ -387,6 +552,7 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 	public SimpleObject submit(UiSessionContext sessionContext, @RequestParam("personId") Patient patient,
 			@RequestParam("htmlFormId") HtmlForm hf,
 			@RequestParam(value = "encounterId", required = false) Encounter encounter,
+			@RequestParam(value = "radiologyOrderId", required = false) Integer radiologyOrderId,
 			@RequestParam(value = "visitId", required = false) Visit visit,
 			@RequestParam(value = "createVisit", required = false) Boolean createVisit,
 			@RequestParam(value = "returnUrl", required = false) String returnUrl,
@@ -395,6 +561,12 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 			throws Exception {
 		
 		// TODO formModifiedTimestamp and encounterModifiedTimestamp
+		System.out.println("2222222 radiologyOrderId" + radiologyOrderId);
+		RadiologyOrder setEncounterToRadiologyOrderOnFormSubmit = Context.getService(RadiologyService.class)
+				.getRadiologyOrderByOrderId(radiologyOrderId);
+		
+		System.out.println("EEEEEEncounter before Form submit " + setEncounterToRadiologyOrderOnFormSubmit.getStudy());
+		
 		System.out.println("2222222 patient" + patient);
 		System.out.println("2222222 encounter" + encounter);
 		System.out.println("2222222 hf" + hf);
@@ -497,6 +669,12 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		request.getSession()
 				.setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_TOAST_MESSAGE, "true");
 		
+		System.out.println("EEEEEEncoformEncounter.getEncounterId() " + formEncounter.getEncounterId());
+		
+		Context.getService(RadiologyService.class)
+				.updateStudyEncounterId(setEncounterToRadiologyOrderOnFormSubmit.getStudy()
+						.getStudyInstanceUid(), formEncounter.getEncounterId());
+		System.out.println("EEEEEEncounter after Form submit " + setEncounterToRadiologyOrderOnFormSubmit.getStudy());
 		return returnHelper(null, fes, formEncounter);
 	}
 	

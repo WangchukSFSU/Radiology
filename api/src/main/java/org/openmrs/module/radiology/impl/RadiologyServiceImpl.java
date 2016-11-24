@@ -135,16 +135,6 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 		orderContext.setCareSetting(radiologyProperties.getRadiologyCareSetting());
 		orderContext.setOrderType(radiologyProperties.getRadiologyTestOrderType());
 		
-		System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-		System.out.println("orderService.saveOrder getUuid " + radiologyOrder.getUuid());
-		System.out.println("orderService.saveOrder getOrderId " + radiologyOrder.getOrderId());
-		System.out.println("orderService.saveOrder getOrderer " + radiologyOrder.getOrderer());
-		System.out.println("orderService.saveOrder getStudy " + radiologyOrder.getStudy());
-		System.out.println("orderService.saveOrder getPatient" + radiologyOrder.getPatient());
-		System.out.println("orderService.saveOrder getCareSetting" + radiologyOrder.getCareSetting());
-		System.out.println("orderService.saveOrder getEncounter" + radiologyOrder.getEncounter());
-		System.out.println("orderService.saveOrder getUrgency" + radiologyOrder.getUrgency());
-		
 		final RadiologyOrder result = (RadiologyOrder) orderService.saveOrder(radiologyOrder, orderContext);
 		saveStudy(result.getStudy());
 		return result;
