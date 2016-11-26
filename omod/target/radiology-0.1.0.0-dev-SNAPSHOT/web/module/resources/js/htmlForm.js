@@ -16,9 +16,9 @@
 
     var successFunction = function(result) {
         if (result.goToUrl) {
-            emr.navigateTo({ applicationUrl: result.goToUrl });
+           // emr.navigateTo({ applicationUrl: result.goToUrl });
         } else {
-            goToReturnUrl(result.encounterId);
+          //  goToReturnUrl(result.encounterId);
         }
     }
 
@@ -175,7 +175,7 @@
                         //ui.closeLoadingDialog();
                         //ui.enableConfirmBeforeNavigating();
 
-                        emr.errorAlert('Unexpected error, please contact your System Administrator: ' + textStatus);
+                       // emr.errorAlert('Unexpected error, please contact your System Administrator: ' + textStatus);
                     });
         }
         else {

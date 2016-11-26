@@ -88,8 +88,8 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 			@FragmentParam(value = "automaticValidation", defaultValue = "true") boolean automaticValidation,
 			FragmentModel model, HttpSession httpSession) throws Exception {
 		
-		String returnUrl = "/openmrs/radiology/sendFormMessage.page";
-		
+		String returnUrl = "";
+		// String returnUrl = "/openmrs/radiology/sendFormMessage.page";
 		model.addAttribute("returnUrl", returnUrl);
 		
 		model.addAttribute("currentDate", (new DateMidnight()).toDate());
@@ -200,9 +200,7 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		properties[8] = "Orderer";
 		properties[9] = "Orderdiagnosis";
 		properties[10] = "Instructions";
-                properties[11] = "study.studyInstanceUid";
-                
-                
+		properties[11] = "study.studyInstanceUid";
 		
 		return SimpleObject.fromCollection(radiologyOrders, ui, properties);
 	}
@@ -296,8 +294,8 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 			
 			formlist.add(form);
 		}
-		
-		String returnUrl = "/openmrs/radiology/sendFormMessage.page";
+		String returnUrl = "";
+		// String returnUrl = "/openmrs/radiology/sendFormMessage.page";
 		
 		for (Form eachform : formlist) {
 			

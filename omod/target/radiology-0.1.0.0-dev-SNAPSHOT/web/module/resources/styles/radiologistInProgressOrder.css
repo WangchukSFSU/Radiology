@@ -9,6 +9,11 @@ table#completedOrderTable {
 table#updateActiveOrderDatatable {
     margin-left: 0cm;
 }
+
+table#patientCompletedOrdersDatatable {
+    
+    margin-left: 0cm;
+}
 #reportCancelId {
    height: 20px;
    width: 20px;
