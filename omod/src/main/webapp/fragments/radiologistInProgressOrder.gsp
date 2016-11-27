@@ -356,7 +356,10 @@
     jq = jQuery;
     jq(document).ready(function() {
 
-
+ jq("#appl").click(function() {
+    alert("appl");
+    
+    });
 
 jq("#ReportDeletelDialog").dialog({
 autoOpen: false,
@@ -547,7 +550,7 @@ jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'vie
 
 
 
-    jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'cancelbtnDivId'> <input type='button' id='cancelbtn' value='Cancel' /> <input type='button' id ='submitbtn' value='Submit' /></div>");
+    jq('#performedStatusInProgressOrderDetail').append(" <input type='button' id='cancelbtn' class='cancelbtn' value='Cancel' /> ");
 
     var patientIdForCompletedOrderList = localStorage.getItem("patientIdForCompletedOrderList");
 
@@ -770,9 +773,10 @@ jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'vie
     localStorage.setItem("patientIdArray", JSON.stringify(patientIdArray));
     localStorage.setItem("HtmlFormIdArray", JSON.stringify(HtmlFormIdArray));
 
+    var cancelsubmitbutton = jq('<div class="order" id= "cancelbtnDivId"><input type="button" id = "cancelbtnId" onclick="cancelBtn();" value="Cancel" /><input type="button" onclick="submitBtn();" value="Submit" /></div>');
+    cancelsubmitbutton.appendTo(jq('#performedStatusInProgressOrderDetail'));
 
-
-    jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'cancelbtnDivId'> <input type='button' id='cancelbtn' value='Cancel' /> <input type='button' id ='submitbtn' value='Submit' /></div>");
+    
 
     var patientIdForCompletedOrderList = localStorage.getItem("patientIdForCompletedOrderList");
 
@@ -841,6 +845,12 @@ jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'vie
     }
 
 
+    function cancelBtn() {
+     alert("Carm");
+     location.reload();
+    }
+    
+   
     
     function CancelForm(){
       alert("CancelForm");
@@ -1025,6 +1035,12 @@ function continuecancelReport() {
     jq("#performedStatusInProgressOrderDetail").hide(); 
 
 
+    
+    
+    
+    
+    
+    
     jq("#test").click(function() {
     alert("dsdads");
     jq("#somediv").load('/openmrs/radiology/radiologistActiveOrders.page').dialog({modal:true}); 
@@ -1036,7 +1052,7 @@ function continuecancelReport() {
 
 
 
-    function submitObs() {
+    function submitBtn() {
     alert("YESS");
     var radiologyorderId = localStorage.getItem("radiologyorderId");
 
@@ -1060,7 +1076,7 @@ function continuecancelReport() {
     jq("#performedStatusInProgressOrderDetail").hide();
     jq('#performedStatusInProgressOrder').show();
     jq('#performedStatusInProgressOrder').empty();
-    jq("<h1></h1>").text("Report sent successfully").appendTo('#performedStatusInProgressOrder');
+    jq("<h1></h1>").text("Report submitted successfully").appendTo('#performedStatusInProgressOrder');
     jq("<h1></h1>").text("ACTIVE RADIOLOGY ORDERS").appendTo('#performedStatusInProgressOrder');
 
       jq('#performedStatusInProgressOrder').append('<table></table>');

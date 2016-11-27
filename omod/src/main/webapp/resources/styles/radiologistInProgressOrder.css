@@ -18,6 +18,10 @@ table#patientCompletedOrdersDatatable {
 table#cancepReportUpdatedDatatable {
      margin-left: 0cm;
 }
+
+#cancelbtnId {
+    margin-right: 10px;
+}
 #reportCancelId {
    height: 20px;
    width: 20px;
