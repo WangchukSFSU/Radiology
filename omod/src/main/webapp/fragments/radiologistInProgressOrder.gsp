@@ -356,10 +356,7 @@
     jq = jQuery;
     jq(document).ready(function() {
 
- jq("#appl").click(function() {
-    alert("appl");
-    
-    });
+ 
 
 jq("#ReportDeletelDialog").dialog({
 autoOpen: false,
@@ -807,7 +804,7 @@ jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'vie
     var DateCreated = ret[i].DateCreated;
     var OrderencounterId = ret[i].study.OrderencounterId;
 
-   patientCompletedOrdersTable.append( '<tr><td><a onclick="runMyFunction();"> Obs</a> </td><td> '+ DateCreated +'</td><td> '+ provider +'</td><td> '+ instructions +' </td><td> '+ orderdiagnosis +'</td><td id="dogdog" href="ddasdas"><a id="tiger" class="tiger" href="${ dicomViewerUrladdress + "studyUID=" + '+ studyInstanceUid +' + "&patientID=" + '+ patientId +' }" onclick="loadImages(); return false;" >'+ studyname +'</a></td></tr>' );
+   patientCompletedOrdersTable.append( '<tr><td><a onclick="runMyFunction('+ OrderencounterId +');"> Obs</a> </td><td> '+ DateCreated +'</td><td> '+ provider +'</td><td> '+ instructions +' </td><td> '+ orderdiagnosis +'</td><td id="dogdog" href="ddasdas"><a id="tiger" class="tiger" href="${ dicomViewerUrladdress + "studyUID=" + '+ studyInstanceUid +' + "&patientID=" + '+ patientId +' }" onclick="loadImages(); return false;" >'+ studyname +'</a></td></tr>' );
 
 
     }
@@ -1015,7 +1012,21 @@ function continuecancelReport() {
     jq('#activeorderswithLink').hide();
     jq("#orderdetails").hide();
 
+jq("#obsDialogBox").dialog({
+autoOpen: false,
+              modal: true,
+             title: 'View Report',
+             width: 550,
+             height: 350,
+            buttons : {
+             
+        "Ok": function () { 
+           
+            jq(this).dialog('close'); 
+         }
+            },
 
+        });
 
 
     jq('#performedStatusInProgressOrderTable').dataTable({
@@ -1161,11 +1172,40 @@ function continuecancelReport() {
 
     }
 
-    function runMyFunction() {
+    function runMyFunction(OrderencounterId) {
     alert("run my function");
+    alert(OrderencounterId);
+    
+jq.getJSON('${ ui.actionLink("getEncounterIdObs") }',
+    { 'encounterId': OrderencounterId
+    })
+    .error(function(xhr, status, err) {
+    alert('AJAX error ' + err);
+    })
+    .success(function(ret) {
+    
+    jq('#obsDialogBoxText').append('<table></table>');
+    jq('#obsDialogBoxText table').attr('id','obsDialogBoxTextDatatable');
+    jq("#obsDialogBoxText table").addClass("obsDialogBoxTextclass");
+    var obsDialogBoxTextTable = jq('#obsDialogBoxText table');
+    obsDialogBoxTextTable.append( '<thead><tr><th>Concept</th><th>Value Text</th></tr></thead><tbody>' );
+   
+for (var i = 0; i < ret.length; i++) {
+    var concept = ret[i].Concept;
+    var valueText = ret[i].valueText;
+    alert("concept");
+    alert(concept);
+    
+    
+    obsDialogBoxTextTable.append( '<tr><td>'+ concept +'</td><td>'+ valueText +'</td></tr>' );
 
+    
+    }
+    obsDialogBoxTextTable.append("</tbody>");
+    jq( "#obsDialogBox" ).dialog( "open" );
 
-
+    })
+    
 
     }
 
@@ -1293,6 +1333,9 @@ function continuecancelReport() {
 
 <div id="somediv" title="View Study Image" style="display:none;">
     <iframe id="thedialog" width="550" height="350"></iframe>
+</div>
+<div id="obsDialogBox" title="View Obs" style="display:none;">
+    <div id="obsDialogBoxText" width="550" height="350"></div>
 </div>
 
 <a id="linkForForm" class="linkForForm" value = "?" onclick="loadttt(); return false;"></a>

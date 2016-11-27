@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
@@ -172,6 +173,23 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		properties[0] = "study.OrderencounterId";
 		
 		return SimpleObject.fromCollection(radiologyOrders, ui, properties);
+	}
+	
+	public List<SimpleObject> getEncounterIdObs(@SpringBean("conceptService") ConceptService service, FragmentModel model,
+			@RequestParam(value = "encounterId") String encounterId, UiUtils ui) {
+		
+		List<Obs> encounterIdObs = Context.getObsService()
+				.getObservations(encounterId);
+		for (Obs oob : encounterIdObs) {
+			oob.getConcept()
+					.getFullySpecifiedName(Locale.ENGLISH);
+		}
+		String[] properties = new String[2];
+		
+		properties[0] = "Concept";
+		properties[1] = "valueText";
+		
+		return SimpleObject.fromCollection(encounterIdObs, ui, properties);
 	}
 	
 	public List<SimpleObject> getRadiologyOrderDetail(@SpringBean("conceptService") ConceptService service,
