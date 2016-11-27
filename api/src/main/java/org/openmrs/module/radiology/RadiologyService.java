@@ -148,6 +148,9 @@ public interface RadiologyService extends OpenmrsService {
 	
 	public Study updateObsCompletedDate(String studyInstanceUid, String obscompleteddate) throws IllegalArgumentException;
 	
+	public Study updateRadiologyOrderRadiologist(String studyInstanceUid, Provider radiologist)
+			throws IllegalArgumentException;
+	
 	public Study updateStudyEncounterId(String studyInstanceUid, Integer studyencounterid) throws IllegalArgumentException;
 	
 	/**

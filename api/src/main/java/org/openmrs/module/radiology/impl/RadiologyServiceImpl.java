@@ -338,6 +338,21 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	
 	@Transactional
 	@Override
+	public Study updateRadiologyOrderRadiologist(String studyInstanceUid, Provider radiologist)
+			throws IllegalArgumentException {
+		
+		if (studyInstanceUid == null) {
+			throw new IllegalArgumentException("studyInstanceUid is required");
+		}
+		
+		final Study studyToBeUpdated = studyDAO.getStudyByStudyInstanceUid(studyInstanceUid);
+		studyToBeUpdated.getRadiologyOrder()
+				.setOrderer(radiologist);
+		return studyDAO.saveStudy(studyToBeUpdated);
+	}
+	
+	@Transactional
+	@Override
 	public Study updateStudyEncounterId(String studyInstanceUid, Integer studyencounterid) throws IllegalArgumentException {
 		
 		if (studyInstanceUid == null) {

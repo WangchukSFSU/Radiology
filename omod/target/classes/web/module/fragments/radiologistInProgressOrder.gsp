@@ -356,14 +356,11 @@
     jq = jQuery;
     jq(document).ready(function() {
 
- jq("#appl").click(function() {
-    alert("appl");
-    
-    });
+ 
 
 jq("#ReportDeletelDialog").dialog({
 autoOpen: false,
-              modal: true,
+              modal: false,
              title: 'Delete Report',
              width: 400,
             buttons : {
@@ -389,14 +386,7 @@ autoOpen: false,
     hide: 'blind',
     width: 900,
     dialogClass: 'ui-dialog-osx',
-    buttons: {
-    "Cancel": function() {
-
-    jq(this).dialog("close");
-
-
-    }
-    }
+    
     });
 
     });
@@ -410,17 +400,12 @@ autoOpen: false,
     jq('#eee').show();
     jq('#performedStatusInProgressOrderDetail').empty();
 
-   
-
-   
-    
     jq("#performedStatusInProgressOrderDetail").show();
     jq("#performedStatusInProgressOrder").hide();
    
+    
  var radiologyorderId = localStorage.getItem("radiologyorderId");
     alert("radiologyorderId before" +radiologyorderId);
-
-
 
     <% if (inProgressRadiologyOrders) { %>
     alert("yess");
@@ -550,8 +535,9 @@ jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'vie
 
 
 
-    jq('#performedStatusInProgressOrderDetail').append(" <input type='button' id='cancelbtn' class='cancelbtn' value='Cancel' /> ");
-
+   var cancelsubmitbutton = jq('<div class="order" id= "cancelbtnDivId"><input type="button" id = "cancelbtnId" onclick="cancelBtn();" value="Cancel" /><input type="button" onclick="submitBtn();" value="Submit" /></div>');
+    cancelsubmitbutton.appendTo(jq('#performedStatusInProgressOrderDetail'));
+    
     var patientIdForCompletedOrderList = localStorage.getItem("patientIdForCompletedOrderList");
 
      jq.getJSON('${ ui.actionLink("getPatientCompletedOrder") }',
@@ -1015,7 +1001,21 @@ function continuecancelReport() {
     jq('#activeorderswithLink').hide();
     jq("#orderdetails").hide();
 
+jq("#obsDialogBox").dialog({
+autoOpen: false,
+              modal: true,
+             title: 'View Report',
+             width: 550,
+             height: 350,
+            buttons : {
+             
+        "Ok": function () { 
+           
+            jq(this).dialog('close'); 
+         }
+            },
 
+        });
 
 
     jq('#performedStatusInProgressOrderTable').dataTable({
@@ -1071,7 +1071,7 @@ function continuecancelReport() {
     jq('#activeorderswithLink').hide();
     jq('#activeorders').show();
     jq('#showReportsDiv').hide();
-
+ jq("#patientCompletedOrders").hide();
 
     jq("#performedStatusInProgressOrderDetail").hide();
     jq('#performedStatusInProgressOrder').show();
@@ -1164,6 +1164,7 @@ function continuecancelReport() {
     function runMyFunction(OrderencounterId) {
     alert("run my function");
     alert(OrderencounterId);
+    
 jq.getJSON('${ ui.actionLink("getEncounterIdObs") }',
     { 'encounterId': OrderencounterId
     })
@@ -1171,13 +1172,26 @@ jq.getJSON('${ ui.actionLink("getEncounterIdObs") }',
     alert('AJAX error ' + err);
     })
     .success(function(ret) {
+    
+    jq('#obsDialogBoxText').append('<table></table>');
+    jq('#obsDialogBoxText table').attr('id','obsDialogBoxTextDatatable');
+    jq("#obsDialogBoxText table").addClass("obsDialogBoxTextclass");
+    var obsDialogBoxTextTable = jq('#obsDialogBoxText table');
+    obsDialogBoxTextTable.append( '<thead><tr><th>Concept</th><th>Value Text</th></tr></thead><tbody>' );
+   
 for (var i = 0; i < ret.length; i++) {
     var concept = ret[i].Concept;
     var valueText = ret[i].valueText;
     alert("concept");
     alert(concept);
     
+    
+    obsDialogBoxTextTable.append( '<tr><td>'+ concept +'</td><td>'+ valueText +'</td></tr>' );
+
+    
     }
+    obsDialogBoxTextTable.append("</tbody>");
+    jq( "#obsDialogBox" ).dialog( "open" );
 
     })
     
@@ -1308,6 +1322,9 @@ for (var i = 0; i < ret.length; i++) {
 
 <div id="somediv" title="View Study Image" style="display:none;">
     <iframe id="thedialog" width="550" height="350"></iframe>
+</div>
+<div id="obsDialogBox" title="View Obs" style="display:none;">
+    <div id="obsDialogBoxText" width="550" height="350"></div>
 </div>
 
 <a id="linkForForm" class="linkForForm" value = "?" onclick="loadttt(); return false;"></a>

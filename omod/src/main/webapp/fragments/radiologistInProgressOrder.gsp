@@ -360,7 +360,7 @@
 
 jq("#ReportDeletelDialog").dialog({
 autoOpen: false,
-              modal: true,
+              modal: false,
              title: 'Delete Report',
              width: 400,
             buttons : {
@@ -386,14 +386,7 @@ autoOpen: false,
     hide: 'blind',
     width: 900,
     dialogClass: 'ui-dialog-osx',
-    buttons: {
-    "Cancel": function() {
-
-    jq(this).dialog("close");
-
-
-    }
-    }
+    
     });
 
     });
@@ -407,17 +400,12 @@ autoOpen: false,
     jq('#eee').show();
     jq('#performedStatusInProgressOrderDetail').empty();
 
-   
-
-   
-    
     jq("#performedStatusInProgressOrderDetail").show();
     jq("#performedStatusInProgressOrder").hide();
    
+    
  var radiologyorderId = localStorage.getItem("radiologyorderId");
     alert("radiologyorderId before" +radiologyorderId);
-
-
 
     <% if (inProgressRadiologyOrders) { %>
     alert("yess");
@@ -547,8 +535,9 @@ jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'vie
 
 
 
-    jq('#performedStatusInProgressOrderDetail').append(" <input type='button' id='cancelbtn' class='cancelbtn' value='Cancel' /> ");
-
+   var cancelsubmitbutton = jq('<div class="order" id= "cancelbtnDivId"><input type="button" id = "cancelbtnId" onclick="cancelBtn();" value="Cancel" /><input type="button" onclick="submitBtn();" value="Submit" /></div>');
+    cancelsubmitbutton.appendTo(jq('#performedStatusInProgressOrderDetail'));
+    
     var patientIdForCompletedOrderList = localStorage.getItem("patientIdForCompletedOrderList");
 
      jq.getJSON('${ ui.actionLink("getPatientCompletedOrder") }',
@@ -1082,7 +1071,7 @@ autoOpen: false,
     jq('#activeorderswithLink').hide();
     jq('#activeorders').show();
     jq('#showReportsDiv').hide();
-
+ jq("#patientCompletedOrders").hide();
 
     jq("#performedStatusInProgressOrderDetail").hide();
     jq('#performedStatusInProgressOrder').show();

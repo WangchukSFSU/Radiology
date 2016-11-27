@@ -24,6 +24,8 @@ import org.openmrs.Form;
 import org.openmrs.Obs;
 import org.openmrs.Order;
 import org.openmrs.Patient;
+import org.openmrs.Provider;
+import org.openmrs.User;
 import org.openmrs.Visit;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.FormService;
@@ -461,6 +463,10 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		
 		List<Study> orderst = Context.getService(RadiologyService.class)
 				.getAllStudyRadiologyOrder();
+		User authenticatedUser = Context.getAuthenticatedUser();
+		
+		Provider provider = Context.getProviderService()
+				.getProvider(authenticatedUser.getId());
 		
 		RadiologyOrder radiologyOrder;
 		
@@ -478,6 +484,10 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 				Context.getService(RadiologyService.class)
 						.updateRadiologyStatusOrder(radiologyOrder.getStudy()
 								.getStudyInstanceUid(), RadiologyOrderStatus.COMPLETED);
+				
+				Context.getService(RadiologyService.class)
+						.updateRadiologyOrderRadiologist(radiologyOrder.getStudy()
+								.getStudyInstanceUid(), provider);
 				
 				Context.getService(RadiologyService.class)
 						.updateObsCompletedDate(radiologyOrder.getStudy()
