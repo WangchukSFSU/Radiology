@@ -1329,7 +1329,7 @@ for (var i = 0; i < ret.length; i++) {
 
 <a id="linkForForm" class="linkForForm" value = "?" onclick="loadttt(); return false;"></a>
 
-<div id="dialog-message" title="Important information">
+<div id="dialog-message" title="Fill Report">
 
     <span class="error" style="display: none" id="general-form-error"></span>
     <form id="htmlform" method="post" action="${ ui.actionLink("submit") }" onSubmit="submitHtmlForm(); return false;">

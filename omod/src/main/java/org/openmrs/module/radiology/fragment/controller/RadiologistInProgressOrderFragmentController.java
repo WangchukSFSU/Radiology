@@ -493,24 +493,6 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 						.updateObsCompletedDate(radiologyOrder.getStudy()
 								.getStudyInstanceUid(), new Date().toString());
 				
-				List<Encounter> ampt = Context.getEncounterService()
-						.getEncountersByPatient(order.getPatient());
-				
-				System.out.println("Jytryrtryryr enc.size() " + ampt.size());
-				int encou = 0;
-				int max = 0;
-				for (Encounter ep : ampt) {
-					if (ep.getEncounterId() > max) {
-						max = ep.getEncounterId();
-					}
-					System.out.println("MKMK@#@#@##2412443424 encounter max " + max);
-					
-				}
-				
-				Context.getService(RadiologyService.class)
-						.updateStudyEncounterId(radiologyOrder.getStudy()
-								.getStudyInstanceUid(), max);
-				
 			}
 			
 		}
@@ -586,24 +568,17 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 			@SpringBean("featureToggles") FeatureToggleProperties featureToggles, UiUtils ui, HttpServletRequest request)
 			throws Exception {
 		
-		// TODO formModifiedTimestamp and encounterModifiedTimestamp
-		System.out.println("2222222 radiologyOrderId" + radiologyOrderId);
 		RadiologyOrder setEncounterToRadiologyOrderOnFormSubmit = Context.getService(RadiologyService.class)
 				.getRadiologyOrderByOrderId(radiologyOrderId);
 		
-		System.out.println("EEEEEEncounter before Form submit " + setEncounterToRadiologyOrderOnFormSubmit.getStudy());
-		
-		System.out.println("2222222 patient" + patient);
-		System.out.println("2222222 encounter" + encounter);
-		System.out.println("2222222 hf" + hf);
 		boolean editMode = encounter != null;
 		
 		FormEntrySession fes;
 		if (encounter != null) {
-			System.out.println("44444");
+			
 			fes = new FormEntrySession(patient, encounter, FormEntryContext.Mode.EDIT, hf, request.getSession());
 		} else {
-			System.out.println("555555");
+			
 			fes = new FormEntrySession(patient, hf, FormEntryContext.Mode.ENTER, request.getSession());
 		}
 		
@@ -611,18 +586,17 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		setupVelocityContext(fes, visitDomainWrapper, ui, sessionContext, featureToggles);
 		setupFormEntrySession(fes, visitDomainWrapper, ui, sessionContext, returnUrl);
 		fes.getHtmlToDisplay(); // needs to happen before we validate or process a form
-		System.out.println("666663");
+		
 		// Validate and return with errors if any are found
 		List<FormSubmissionError> validationErrors = fes.getSubmissionController()
 				.validateSubmission(fes.getContext(), request);
 		if (validationErrors.size() > 0) {
-			System.out.println("777777");
+			
 			return returnHelper(validationErrors, fes, null);
 		}
 		
 		try {
 			
-			System.out.println("333333");
 			// No validation errors found so process form submission
 			fes.prepareForSubmit();
 			fes.getSubmissionController()
@@ -695,12 +669,9 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		request.getSession()
 				.setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_TOAST_MESSAGE, "true");
 		
-		System.out.println("EEEEEEncoformEncounter.getEncounterId() " + formEncounter.getEncounterId());
-		
 		Context.getService(RadiologyService.class)
 				.updateStudyEncounterId(setEncounterToRadiologyOrderOnFormSubmit.getStudy()
 						.getStudyInstanceUid(), formEncounter.getEncounterId());
-		System.out.println("EEEEEEncounter after Form submit " + setEncounterToRadiologyOrderOnFormSubmit.getStudy());
 		return returnHelper(null, fes, formEncounter);
 	}
 	
@@ -725,8 +696,7 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 							.getErrorFieldId(err.getSourceWidget()), err.getError());
 				else
 					errors.put(err.getId(), err.getError());
-				System.out.println("EEEE " + err.getId());
-				System.out.println("EEEE " + err.getError());
+				
 			}
 			return SimpleObject.create("success", false, "errors", errors);
 		}
@@ -750,9 +720,7 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 			Boolean createVisit) {
 		
 		model.addAttribute("currentDate", (new DateMidnight()).toDate());
-		System.out.println("56565656565 " + fes.getFormName());
-		// System.out.println("56565656565 " + fes.getPatient()
-		// .getPersonId());
+		
 		model.addAttribute("command", fes);
 		model.addAttribute("visit", visitDomainWrapper);
 		if (createVisit != null) {

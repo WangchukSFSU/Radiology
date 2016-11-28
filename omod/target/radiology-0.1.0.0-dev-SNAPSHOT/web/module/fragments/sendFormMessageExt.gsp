@@ -1,4 +1,0 @@
-
-
-${ ui.includeFragment("radiology", "radiologistInProgressOrder") }
-

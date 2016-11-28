@@ -5,7 +5,6 @@
  */
 package org.openmrs.module.radiology.fragment.controller;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,7 +35,6 @@ import org.openmrs.User;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.radiology.PerformedProcedureStepStatus;
-import org.openmrs.module.radiology.RadiologyConstants;
 import org.openmrs.module.radiology.RadiologyOrder;
 import org.openmrs.module.radiology.RadiologyOrderStatus;
 import org.openmrs.module.radiology.RadiologyProperties;
@@ -51,63 +49,38 @@ import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.fragment.FragmentModel;
 import org.openmrs.ui.framework.page.PageModel;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 public class ReferringPhysicianFragmentController {
-	
-	static SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-	
-	private static int count = 9;
 	
 	public void controller(PageModel model, @RequestParam(value = "returnUrl", required = false) String returnUrl,
 			@RequestParam(value = "patientId", required = false) Patient patient) throws ParseException {
 		
-		System.out.println("AddRadiologyOrderFormFragmentController" + patient.getFamilyName());
-		System.out.println("AddRadiologyOrderFormFragmentController" + patient);
-		System.out.println("AddRadiologyOrderFormFragmentController" + patient.getPerson());
-		
 		final List<String> urgencies = new LinkedList<String>();
-		
 		for (Order.Urgency urgency : Order.Urgency.values()) {
-			System.out.println("EEEEEEEE" + urgency.name());
 			urgencies.add(urgency.name());
 		}
 		
 		ArrayList<ConceptName> studyConceptNameList = new ArrayList();
 		
-		ConceptClass mot = Context.getConceptService()
+		ConceptClass conceptName = Context.getConceptService()
 				.getConceptClassByName("Radiology/Imaging Procedure");
 		
-		List<Concept> mot_list = Context.getConceptService()
-				.getConceptsByClass(mot);
+		List<Concept> conceptNamelist = Context.getConceptService()
+				.getConceptsByClass(conceptName);
 		
-		for (Concept ccc : mot_list) {
-			if (ccc.getDisplayString()
+		for (Concept eachConceptNamelist : conceptNamelist) {
+			if (eachConceptNamelist.getDisplayString()
 					.endsWith("modality")) {
 				
 			} else {
-				ConceptName studyConceptName = ccc.getName();
+				ConceptName studyConceptName = eachConceptNamelist.getName();
 				studyConceptNameList.add(studyConceptName);
 			}
 		}
 		
 		model.addAttribute("urgencies", urgencies);
-		// model.addAttribute("diagnosislist", modd);
 		model.addAttribute("studyConceptNameList", studyConceptNameList);
-		// model.addAttribute("modalityConceptNameList", modalityConceptNameList);
-		
-		model.addAttribute("patientIDDD", patient);
 		model.addAttribute("returnUrl", returnUrl);
-		
-		String aa = Context.getAdministrationService()
-				.getGlobalProperty(RadiologyConstants.GP_RADIOLOGY_CONCEPT_CLASSES);
-		System.out.println("AAAAA" + aa);
-		
-		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-		Date date = new Date();
-		String dd = dateFormat.format(date);
-		Date sd = dateFormat.parse(dd);
-		System.out.println("DATEETETETTETET " + sd);
 		
 		Map<String, String> performedStatuses = new HashMap<String, String>();
 		for (PerformedProcedureStepStatus performedStatus : PerformedProcedureStepStatus.values()) {
@@ -116,7 +89,6 @@ public class ReferringPhysicianFragmentController {
 				
 			} else {
 				performedStatuses.put(performedStatus.name(), performedStatus.name());
-				System.out.println("list performned status " + performedStatus.name());
 				
 			}
 		}
@@ -125,18 +97,10 @@ public class ReferringPhysicianFragmentController {
 		
 		List<RadiologyOrder> radiologyOrders = getCompletedRadiologyOrdersByPatient(patient);
 		
-		System.out.println("length LLLLLLLLLLLLL " + radiologyOrders.size());
-		System.out.println("patient patient PPPPPP " + patient.getUuid());
-		
 		List<String> urllist = new ArrayList<String>();
-		for (RadiologyOrder ro : radiologyOrders) {
-			Study study = ro.getStudy();
-			// System.out.println("122");
-			urllist.add(getDicomViewerUrl(study, ro.getPatient()));
-		}
-		
-		for (String ds : urllist) {
-			// System.out.println("STRRTRSTRR " + ds);
+		for (RadiologyOrder radiologyOrderDicomViewer : radiologyOrders) {
+			Study study = radiologyOrderDicomViewer.getStudy();
+			urllist.add(getDicomViewerUrl(study, radiologyOrderDicomViewer.getPatient()));
 		}
 		
 		List<Obs> getObs = Context.getObsService()
@@ -144,24 +108,13 @@ public class ReferringPhysicianFragmentController {
 		
 		model.addAttribute("getObs", getObs);
 		
-		String aap = getDicomViewerUrladdress();
-		model.addAttribute("dicomViewerUrl", aap);
-		model.addAttribute("dicomViewerUrladdress", aap);
+		String dicomViewerUrladdress = getDicomViewerUrladdress();
+		model.addAttribute("dicomViewerUrladdress", dicomViewerUrladdress);
 		model.put("radiologyOrders", radiologyOrders);
-		
-		model.addAttribute("patient", patient);
-		// model.addAttribute("patientuuid", patient.getUuid());
-		// model.addAttribute("patientfamilyname", patient.getFamilyName());
-		// model.addAttribute("patientgivenname", patient.getGivenName());
-		model.addAttribute("returnUrl", returnUrl);
 		
 		String PatientName = patient.getNames()
 				.toString();
 		String patientName = PatientName.substring(1, PatientName.length() - 1);
-		
-		// System.out.println("returnUrl  returnUrl " + returnUrl);
-		// System.out.println("patient  patient " + patient);
-		model.addAttribute("returnUrl", returnUrl);
 		model.addAttribute("patient", patient);
 		model.addAttribute("patientID", patient.getPatientId());
 		model.addAttribute("patientname", patientName);
@@ -176,16 +129,7 @@ public class ReferringPhysicianFragmentController {
 	
 	private String getDicomViewerUrladdress() {
 		
-		// System.out.println("333");
 		RadiologyProperties radiologyProperties = new RadiologyProperties();
-		
-		// System.out.println("444");
-		// String studyUidUrl = "studyUID=" + study.getStudyInstanceUid();
-		// String patientIdUrl = "patientID=" + patient.getPatientIdentifier()
-		// .getIdentifier();
-		
-		// System.out.println("12232 studyUidUrl " + studyUidUrl);
-		// System.out.println("12232 patientIdUrl" + patientIdUrl);
 		
 		return radiologyProperties.getServersAddress() + ":" + radiologyProperties.getServersPort()
 				+ radiologyProperties.getDicomViewerUrlBase() + "?" + radiologyProperties.getDicomViewerLocalServerName();
@@ -194,10 +138,9 @@ public class ReferringPhysicianFragmentController {
 	
 	private String getDicomViewerUrl(Study study, Patient patient) {
 		
-		// System.out.println("333");
 		RadiologyProperties radiologyProperties = new RadiologyProperties();
 		if (study.isOrderCompleted()) {
-			// System.out.println("444");
+			
 			String studyUidUrl = "studyUID=" + study.getStudyInstanceUid();
 			String patientIdUrl = "patientID=" + patient.getPatientIdentifier()
 					.getIdentifier();
@@ -210,16 +153,8 @@ public class ReferringPhysicianFragmentController {
 		}
 	}
 	
-	public void getRadiologyOrderForm(FragmentModel model) {
-		
-		System.out.println("FFFFFFFFFFFFFFFFFFFFFFFFFFFFSADADASDASASD");
-		ModelAndView mav = new ModelAndView("radiology/radiologyOrderAll.page");
-		System.out.println("ORDER SAVEDCSDSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
-		
-	}
-	
 	public List<RadiologyOrder> getCompletedRadiologyOrdersByPatient(Patient p) {
-		System.out.println("getLabOrdersByPatient");
+		
 		Vector<RadiologyOrder> radiologyOrders = new Vector<RadiologyOrder>();
 		
 		List<Order> orders = Context.getOrderService()
@@ -231,7 +166,7 @@ public class ReferringPhysicianFragmentController {
 		
 		RadiologyOrder radiologyOrder;
 		for (Order order : orders) {
-			// if (order.getOrderType().getOrderTypeId() == 3) { OrderType ot = new OrderType();
+			
 			if (order.getOrderType()
 					.getOrderTypeId() == testOrderTypeId) {
 				
@@ -249,7 +184,6 @@ public class ReferringPhysicianFragmentController {
 	}
 	
 	// from addradiologyform
-	
 	public List<SimpleObject> placeRadiologyOrder(@SpringBean("conceptService") ConceptService service, FragmentModel model,
 			@RequestParam("patient") Patient patient, @RequestParam(value = "returnUrl", required = false) String returnUrl,
 			@RequestParam(value = "studyname") String studyname,
@@ -257,7 +191,6 @@ public class ReferringPhysicianFragmentController {
 			@RequestParam(value = "instructionname") String instructionname,
 			@RequestParam(value = "priorityname") String priorityname, UiUtils ui) throws ParseException {
 		
-		System.out.println("PAPAPAPAPAPAPATITNTBET " + patient.getPersonName());
 		RadiologyOrder radiologyOrder = new RadiologyOrder();
 		
 		User authenticatedUser = Context.getAuthenticatedUser();
@@ -267,12 +200,12 @@ public class ReferringPhysicianFragmentController {
 		
 		radiologyOrder.setCreator(authenticatedUser);
 		radiologyOrder.setOrderer(provider);
-		// Encounter ee = new Encounter();
+		
 		radiologyOrder.setConcept(Context.getConceptService()
 				.getConcept(studyname));
 		
 		radiologyOrder.setPatient(patient);
-		// radiologyOrder.getEncounter().getEncounterId();
+		
 		radiologyOrder.setDateCreated(new Date());
 		radiologyOrder.setInstructions(instructionname);
 		radiologyOrder.setUrgency(Order.Urgency.valueOf(priorityname));
@@ -288,9 +221,6 @@ public class ReferringPhysicianFragmentController {
 		List<Form> studyreport = Context.getFormService()
 				.getAllForms();
 		
-		Form formname = null;
-		
-		System.out.println("1111");
 		for (Form searchform : studyreport) {
 			
 			String podspdoas = searchform.getName()
@@ -309,26 +239,6 @@ public class ReferringPhysicianFragmentController {
 			if (study.getStudyname()
 					.equals(podspdoas)) {
 				study.setStudyHtmlFormUUID(searchform.getUuid());
-				formname = searchform;
-				
-				String domain = "http://localhost:8080/openmrs/htmlformentryui/htmlform/enterHtmlFormWithStandardUi.page?patientId=";
-				String patientidurl = patient.getUuid();
-				
-				String visitform = "&visitId=&formUuid=";
-				String formuuidurl = searchform.getUuid();
-				// String returnurl = "&returnUrl=";
-				String returnurl = "&returnUrl=/openmrs/radiology/sendFormMessage.page";
-				
-				String url = domain.concat(patientidurl)
-						.concat(visitform)
-						.concat(formuuidurl)
-						.concat(returnurl);
-				
-				System.out.println("HYYEYYEYEYYEYEYEYE SAME SAM");
-				study.setStudyreporturl(url);
-				
-				System.out.println("URL URL URL URL URL URL URL " + url);
-				System.out.println("URL URL URL URL URL URL URL " + study.getStudyreporturl());
 				
 			}
 			
@@ -345,16 +255,9 @@ public class ReferringPhysicianFragmentController {
 						.getConcept(studyname)
 						.getId()));
 		
-		System.out.println("ORder Concept " + Context.getConceptService()
-				.getConcept(studyname)
-				.getId());
 		RadiologyOrder saveOrder = radiologyservice.placeRadiologyOrder(radiologyOrder);
 		
-		if (radiologyservice.placeRadiologyOrderInPacs(saveOrder)) {
-			System.out.println("PACS PACS PACS PACS PACS");
-		}
-		
-		System.out.println("JJJJJJJJJJJJJJJJJJJJ done");
+		if (radiologyservice.placeRadiologyOrderInPacs(saveOrder)) {}
 		
 		ArrayList<RadiologyOrder> getRadiologyOrder = new ArrayList<RadiologyOrder>();
 		
@@ -452,12 +355,6 @@ public class ReferringPhysicianFragmentController {
 			@RequestParam(value = "subject", required = false) String subject,
 			@RequestParam(value = "message", required = false) String message) {
 		
-		System.out.println("POST POST POST POST");
-		System.out.println("POST POST POST POST recipient" + recipient);
-		System.out.println("POST POST POST POST subject" + subject);
-		System.out.println("POST POST POST POST message" + message);
-		// return "redirect:radiology/radiologyOrder.page";
-		
 		final String username = "tibwangchuk@gmail.com";
 		final String password = "TznWangchuk80";
 		
@@ -473,12 +370,10 @@ public class ReferringPhysicianFragmentController {
 				return new PasswordAuthentication(username, password);
 			}
 		});
-		System.out.println("7777777777777777777777777770");
 		try {
 			
 			Message message1 = new MimeMessage(session);
 			message1.setFrom(new InternetAddress("tibwangchuk@gmail.com"));
-			System.out.println("33333333333333333333333");
 			message1.setRecipients(Message.RecipientType.TO, InternetAddress.parse("tenzin.wangchuk@yahoo.com"));
 			message1.setSubject("Testing Subject");
 			message1.setText("Dear Mail Crawler," + "\n\n No spam to my email, please!");
@@ -497,12 +392,6 @@ public class ReferringPhysicianFragmentController {
 	public void sendEmailToPatient(@RequestParam(value = "recipient", required = false) String recipient,
 			@RequestParam(value = "subject", required = false) String subject,
 			@RequestParam(value = "message", required = false) String message) {
-		
-		System.out.println("POST POST POST POST");
-		System.out.println("POST POST POST POST recipient" + recipient);
-		System.out.println("POST POST POST POST subject" + subject);
-		System.out.println("POST POST POST POST message" + message);
-		// return "redirect:radiology/radiologyOrder.page";
 		
 		final String username = "tibwangchuk@gmail.com";
 		final String password = "TznWangchuk80";
