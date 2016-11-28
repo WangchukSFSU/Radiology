@@ -660,15 +660,6 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		// Do actual encounter creation/updating
 		fes.applyActions();
 		
-		request.getSession()
-				.setAttribute(
-					UiCommonsConstants.SESSION_ATTRIBUTE_INFO_MESSAGE,
-					ui.message(editMode ? "htmlformentryui.editHtmlForm.successMessage"
-							: "htmlformentryui.enterHtmlForm.successMessage", ui.format(hf.getForm()),
-						ui.escapeJs(ui.format(patient))));
-		request.getSession()
-				.setAttribute(UiCommonsConstants.SESSION_ATTRIBUTE_TOAST_MESSAGE, "true");
-		
 		Context.getService(RadiologyService.class)
 				.updateStudyEncounterId(setEncounterToRadiologyOrderOnFormSubmit.getStudy()
 						.getStudyInstanceUid(), formEncounter.getEncounterId());
