@@ -500,8 +500,8 @@ jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'vie
        
       } else {
       alert(" not null");
-      jq("#performedStatusInProgressOrderDetail").append('<a> SavedReport : '+ FormName +' Report Form </a>');
-     
+      jq("#performedStatusInProgressOrderDetail").append('<a id="pep"> SavedReport <p style="display:none;"> '+ FormName +' </p> </a>');
+   
       }
       
       
@@ -667,7 +667,7 @@ jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'vie
     })
 
 
- jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'orderDetailHeading'>RADIOLOGY ORDER DETAILS  :   ${ anOrder.patient.personName }, ${ anOrder.patient.patientIdentifier }, ${anOrder.study.studyname} </div>");
+ jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'orderDetailHeading'>RADIOLOGY ORDER DETAILS  :  <a id = 'tet' class='tet' target='_blank' href=${ patientClinicianUrl + anOrder.patient.person.uuid } >${ anOrder.patient.personName }</a>  ${ anOrder.patient.patientIdentifier }, ${anOrder.study.studyname} </div>");
 jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'orderDetailProvider'>Provider  :  ${anOrder.creator.username} ,  StartDate  : ${ anOrder.dateCreated } </div>");
  jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'orderDetailDiagnosis'>Diagnosis  : ${anOrder.orderdiagnosis} </div>");
 jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'orderDetailDiagnosis'>Instructions  : ${anOrder.instructions} </div>");
@@ -726,8 +726,8 @@ jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'vie
        
       } else {
       alert(" not null");
-      jq("#performedStatusInProgressOrderDetail").append('<a> SavedReport : '+ FormName +' Report Form </a>');
-     
+      jq("#performedStatusInProgressOrderDetail").append('<a id="pep"> SavedReport <p style="display:none;"> '+ FormName +' </p> </a>');
+   
       }
       
       
@@ -938,8 +938,8 @@ function continuecancelReport() {
     var text = jq(obj).text();
     alert(text);
 
-    var firstColumnFormName = text.replace('Report Form','');
-    var firstColumnFormName = firstColumnFormName.replace('SavedReport :','');
+   // var firstColumnFormName = text.replace('Report Form','');
+    var firstColumnFormName = text.replace('SavedReport','');
 
     alert(firstColumnFormName);
 
@@ -1277,6 +1277,7 @@ for (var i = 0; i < ret.length; i++) {
                 <th>MRN</th>
                 <th>OrderStartDate</th>
                 <th>OrderPriority</th>
+                <th>SavedReport</th>
 
             </tr>
         </thead>
@@ -1289,7 +1290,11 @@ for (var i = 0; i < ret.length; i++) {
                 <td>${ anOrder.patient.patientIdentifier } </td>
                 <td>${ anOrder.dateCreated } </td>
                 <td>${ anOrder.urgency }</td>
-
+               <% if(anOrder.study.orderencounterId) { %>
+                <td>Yes</td>
+ <% } else { %>
+ <td>No</td>
+ <% } %>
             </tr>
             <% } %>  
         </tbody>

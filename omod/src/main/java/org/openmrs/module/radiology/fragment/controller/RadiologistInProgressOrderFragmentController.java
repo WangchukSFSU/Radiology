@@ -95,6 +95,8 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		// String returnUrl = "/openmrs/radiology/sendFormMessage.page";
 		model.addAttribute("returnUrl", returnUrl);
 		
+		String patientClinicianUrl = "http://localhost:8080/openmrs/coreapps/clinicianfacing/patient.page?patientId=";
+		model.addAttribute("patientClinicianUrl", patientClinicianUrl);
 		model.addAttribute("currentDate", (new DateMidnight()).toDate());
 		
 		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrdersByPatient();
@@ -240,6 +242,7 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		List<RadiologyOrder> updateInProgressRadiologyOrders = getInProgressRadiologyOrdersByPatient();
 		
 		for (RadiologyOrder updateRadiologyOrder : updateInProgressRadiologyOrders) {
+			// updateRadiologyOrder.getPatient().getPatientIdentifier().getIdentifier()
 			radiologyOrders.add(updateRadiologyOrder);
 		}
 		
@@ -249,7 +252,7 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		properties[2] = "study.studyname";
 		properties[3] = "dateCreated";
 		properties[4] = "urgency";
-		properties[5] = "patient.patientIdentifier";
+		properties[5] = "patient.patientIdentifier.Identifier";
 		properties[6] = "orderId";
 		properties[7] = "study.OrderencounterId";
 		
