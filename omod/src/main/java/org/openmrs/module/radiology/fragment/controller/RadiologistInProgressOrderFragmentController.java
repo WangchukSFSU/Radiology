@@ -508,13 +508,14 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 			getRadiologyOrder.add(updateActiveOrder);
 		}
 		
-		String[] properties = new String[5];
+		String[] properties = new String[7];
 		properties[0] = "orderId";
 		properties[1] = "study.studyname";
 		properties[2] = "dateCreated";
 		properties[3] = "urgency";
 		properties[4] = "patient.personName";
-		
+		properties[5] = "study.OrderencounterId";
+		properties[6] = "patient.patientIdentifier.Identifier";
 		return SimpleObject.fromCollection(getRadiologyOrder, ui, properties);
 	}
 	

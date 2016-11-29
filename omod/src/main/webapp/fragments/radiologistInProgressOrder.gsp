@@ -881,7 +881,7 @@ function continuecancelReport() {
     jq('#CancepReportUpdatedDiv table').attr('id','cancepReportUpdatedDatatable');
     jq("#CancepReportUpdatedDiv table").addClass("reporttableclass");
     var cancepReportUpdatedTable = jq('#CancepReportUpdatedDiv table');
-    cancepReportUpdatedTable.append( '<thead><tr><th>Order</th><th>Patient Name</th><th>MRN</th><th>OrderStartDate</th><th>OrderPriority</th></tr></thead><tbody>' );
+    cancepReportUpdatedTable.append( '<thead><tr><th>Order</th><th>Patient Name</th><th>MRN</th><th>OrderStartDate</th><th>OrderPriority</th><th>SavedReport</th></tr></thead><tbody>' );
     alert("COOL");
 
     for (var i = 0; i < ret.length; i++) {
@@ -893,10 +893,15 @@ function continuecancelReport() {
     var patientIdentifier = ret[i].patient.patientIdentifier;
     var anOrderId = ret[i].orderId;
 var patientIdentifier = ret[i].patient.patientIdentifier.Identifier;
+var OrderencounterId = ret[i].study.OrderencounterId;
 
-
-     cancepReportUpdatedTable.append( '<tr><td><a id="fillreport" href='+ studyname +' class="fillreport" onclick="displayReport(this); return false;"><p style="display:none;">'+ anOrderId +'</p>'+ studyname +' </a></td><td>'+ patientName +'</td><td>'+ patientIdentifier +'</td><td>'+ dateCreated +'</td><td>'+ urgency +'</td></tr>' );
-    }
+if(OrderencounterId) {
+     cancepReportUpdatedTable.append( '<tr><td><a id="fillreport" href='+ studyname +' class="fillreport" onclick="displayReport(this); return false;"><p style="display:none;">'+ anOrderId +'</p>'+ studyname +' </a></td><td>'+ patientName +'</td><td>'+ patientIdentifier +'</td><td>'+ dateCreated +'</td><td>'+ urgency +'</td><td>Yes</td></tr>' );
+   } else { 
+      cancepReportUpdatedTable.append( '<tr><td><a id="fillreport" href='+ studyname +' class="fillreport" onclick="displayReport(this); return false;"><p style="display:none;">'+ anOrderId +'</p>'+ studyname +' </a></td><td>'+ patientName +'</td><td>'+ patientIdentifier +'</td><td>'+ dateCreated +'</td><td>'+ urgency +'</td><td>No</td></tr>' );
+   }
+     
+     }
 
    cancepReportUpdatedTable.append("</tbody>");
     jq('#cancepReportUpdatedDatatable').dataTable({
@@ -1083,7 +1088,7 @@ autoOpen: false,
     jq('#performedStatusInProgressOrder table').attr('id','updateActiveOrderDatatable');
     jq("#performedStatusInProgressOrder table").addClass("reporttableclass");
     var dicomtablelist = jq('#performedStatusInProgressOrder table');
-    dicomtablelist.append( '<thead><tr><th>Order</th><th>Patient Name</th><th>OrderStartDate</th><th>OrderPriority</th></tr></thead><tbody>' );
+    dicomtablelist.append( '<thead><tr><th>Order</th><th>Patient Name</th><th>MRN</th><th>OrderStartDate</th><th>OrderPriority</th><th>SavedReport</th></tr></thead><tbody>' );
     alert("COOL");
 
     for (var i = 0; i < ret.length; i++) {
@@ -1092,10 +1097,16 @@ autoOpen: false,
     var dateCreated = ret[i].dateCreated;
     var urgency = ret[i].urgency;
     var patientName = ret[i].patient.personName;
+    var patientIdentifier = ret[i].patient.patientIdentifier.Identifier;
+    var OrderencounterId = ret[i].study.OrderencounterId;
 
-     dicomtablelist.append( '<tr><td><a id="fillreport" href='+ studyname +' class="fillreport" onclick="displayReport(this); return false;"><p style="display:none;">'+ anOrderId +'</p>'+ studyname +' </a></td><td>'+ patientName +'</td><td>'+ dateCreated +'</td><td>'+ urgency +'</td></tr>' );
-
-
+if(OrderencounterId) {
+     dicomtablelist.append( '<tr><td><a id="fillreport" href='+ studyname +' class="fillreport" onclick="displayReport(this); return false;"><p style="display:none;">'+ anOrderId +'</p>'+ studyname +' </a></td><td>'+ patientName +'</td><td>'+ patientIdentifier +'</td><td>'+ dateCreated +'</td><td>'+ urgency +'</td><td>Yes</td></tr>' );
+   } else { 
+      dicomtablelist.append( '<tr><td><a id="fillreport" href='+ studyname +' class="fillreport" onclick="displayReport(this); return false;"><p style="display:none;">'+ anOrderId +'</p>'+ studyname +' </a></td><td>'+ patientName +'</td><td>'+ patientIdentifier +'</td><td>'+ dateCreated +'</td><td>'+ urgency +'</td><td>No</td></tr>' );
+   }
+    
+    
 
     }
      dicomtablelist.append("</tbody>");
@@ -1108,7 +1119,7 @@ autoOpen: false,
     "bJQueryUI": true,
 
     "iDisplayLength": 5,
-    "aaSorting": [[ 2, "desc" ]] // Sort by first column descending,
+    "aaSorting": [[ 3, "desc" ]] // Sort by first column descending,
 
 
     });
