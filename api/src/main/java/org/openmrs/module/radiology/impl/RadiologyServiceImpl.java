@@ -17,6 +17,7 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.FlushMode;
 import org.openmrs.Encounter;
 import org.openmrs.Order;
 import org.openmrs.Patient;
@@ -307,6 +308,19 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	
 	@Transactional
 	@Override
+	public Study updateRadiologyOrderUser(String studyInstanceUid, String user) throws IllegalArgumentException {
+		
+		if (studyInstanceUid == null) {
+			throw new IllegalArgumentException("studyInstanceUid is required");
+		}
+		
+		final Study studyToBeUpdated = studyDAO.getStudyByStudyInstanceUid(studyInstanceUid);
+		studyToBeUpdated.setRadiologistUserName(user);
+		return studyDAO.saveStudy(studyToBeUpdated);
+	}
+	
+	@Transactional
+	@Override
 	public Study updateRadiologyStatusOrder(String studyInstanceUid, RadiologyOrderStatus radiologyOrderStatus)
 			throws IllegalArgumentException {
 		
@@ -333,21 +347,6 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 		
 		final Study studyToBeUpdated = studyDAO.getStudyByStudyInstanceUid(studyInstanceUid);
 		studyToBeUpdated.setObsCompletedDate(obscompleteddate);
-		return studyDAO.saveStudy(studyToBeUpdated);
-	}
-	
-	@Transactional
-	@Override
-	public Study updateRadiologyOrderRadiologist(String studyInstanceUid, Provider radiologist)
-			throws IllegalArgumentException {
-		
-		if (studyInstanceUid == null) {
-			throw new IllegalArgumentException("studyInstanceUid is required");
-		}
-		
-		final Study studyToBeUpdated = studyDAO.getStudyByStudyInstanceUid(studyInstanceUid);
-		studyToBeUpdated.getRadiologyOrder()
-				.setOrderer(radiologist);
 		return studyDAO.saveStudy(studyToBeUpdated);
 	}
 	

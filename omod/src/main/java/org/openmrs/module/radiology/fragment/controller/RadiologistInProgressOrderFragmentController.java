@@ -25,10 +25,12 @@ import org.openmrs.Obs;
 import org.openmrs.Order;
 import org.openmrs.Patient;
 import org.openmrs.Provider;
+import org.openmrs.TestOrder;
 import org.openmrs.User;
 import org.openmrs.Visit;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.FormService;
+import org.openmrs.api.OrderService;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.context.ContextAuthenticationException;
 import org.openmrs.module.appframework.feature.FeatureToggleProperties;
@@ -69,20 +71,11 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFragmentController {
 	
-	public void controller(
-			FragmentConfiguration config,
-			UiSessionContext sessionContext,
-			UiUtils ui,
+	public void controller(FragmentConfiguration config, UiSessionContext sessionContext, UiUtils ui,
 			@SpringBean("htmlFormEntryService") HtmlFormEntryService htmlFormEntryService,
-			@SpringBean("adtService") AdtService adtService,
-			@SpringBean("formService") FormService formService,
+			@SpringBean("adtService") AdtService adtService, @SpringBean("formService") FormService formService,
 			@SpringBean("coreResourceFactory") ResourceFactory resourceFactory,
 			@SpringBean("featureToggles") FeatureToggleProperties featureToggles,
-			// @FragmentParam("patient") Patient patient,
-			// @FragmentParam(value = "htmlForm", required = false) HtmlForm hf,
-			// @FragmentParam(value = "htmlFormId", required = false) Integer htmlFormId,
-			// @FragmentParam(value = "formId", required = false) Form form,
-			// @FragmentParam(value = "formUuid", required = false) String formUuid,
 			@FragmentParam(value = "definitionUiResource", required = false) String definitionUiResource,
 			@FragmentParam(value = "encounter", required = false) Encounter encounter,
 			@FragmentParam(value = "visit", required = false) Visit visit,
@@ -468,15 +461,13 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 				.getAllStudyRadiologyOrder();
 		User authenticatedUser = Context.getAuthenticatedUser();
 		
-		Provider provider = Context.getProviderService()
-				.getProvider(authenticatedUser.getId());
-		
 		RadiologyOrder radiologyOrder;
 		
 		for (Order order : orders) {
 			
 			if ((order.getOrderId()
 					.toString().trim()).equals(radiologyorderId.trim())) {
+				
 				radiologyOrder = Context.getService(RadiologyService.class)
 						.getRadiologyOrderByOrderId(order.getOrderId());
 				
@@ -489,12 +480,12 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 								.getStudyInstanceUid(), RadiologyOrderStatus.COMPLETED);
 				
 				Context.getService(RadiologyService.class)
-						.updateRadiologyOrderRadiologist(radiologyOrder.getStudy()
-								.getStudyInstanceUid(), provider);
-				
-				Context.getService(RadiologyService.class)
 						.updateObsCompletedDate(radiologyOrder.getStudy()
 								.getStudyInstanceUid(), new Date().toString());
+				
+				Context.getService(RadiologyService.class)
+						.updateRadiologyOrderUser(radiologyOrder.getStudy()
+								.getStudyInstanceUid(), authenticatedUser.toString());
 				
 			}
 			

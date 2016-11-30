@@ -16,7 +16,7 @@
     alert("0000000");
     htmlForm.submitHtmlForm();
     jq('#dialog-message').dialog('close');
-    
+     emr.successMessage("Entered Form Successfully");
     return false;
     }
 
@@ -1058,7 +1058,7 @@ autoOpen: false,
 
 
     function submitBtn() {
-    alert("YESS");
+    alert("porto");
     var radiologyorderId = localStorage.getItem("radiologyorderId");
 
     alert("radiologyorderId " + radiologyorderId);

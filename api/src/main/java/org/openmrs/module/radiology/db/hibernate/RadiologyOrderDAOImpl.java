@@ -118,4 +118,5 @@ public class RadiologyOrderDAOImpl implements RadiologyOrderDAO {
 			criteria.add(Restrictions.in("patient", patients));
 		}
 	}
+	
 }

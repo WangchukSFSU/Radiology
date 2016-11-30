@@ -16,6 +16,7 @@ import java.util.List;
 import org.openmrs.Order;
 import org.openmrs.Patient;
 import org.openmrs.Provider;
+import org.openmrs.User;
 import org.openmrs.api.EncounterService;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.api.OrderService;
@@ -148,10 +149,9 @@ public interface RadiologyService extends OpenmrsService {
 	
 	public Study updateObsCompletedDate(String studyInstanceUid, String obscompleteddate) throws IllegalArgumentException;
 	
-	public Study updateRadiologyOrderRadiologist(String studyInstanceUid, Provider radiologist)
-			throws IllegalArgumentException;
-	
 	public Study updateStudyEncounterId(String studyInstanceUid, Integer studyencounterid) throws IllegalArgumentException;
+	
+	public Study updateRadiologyOrderUser(String studyInstanceUid, String user) throws IllegalArgumentException;
 	
 	/**
 	 * Save given <code>RadiologyOrder</code> in the PACS by sending an HL7 order message.

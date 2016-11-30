@@ -23,6 +23,16 @@ public class Study {
 	
 	private Integer orderencounterId;
 	
+	private String radiologistUserName;
+	
+	public String getRadiologistUserName() {
+		return radiologistUserName;
+	}
+	
+	public void setRadiologistUserName(String radiologistUserName) {
+		this.radiologistUserName = radiologistUserName;
+	}
+	
 	public Integer getOrderencounterId() {
 		return orderencounterId;
 	}
@@ -40,16 +50,6 @@ public class Study {
 	}
 	
 	private String obsCompletedDate;
-	
-	private String studyreporturl;
-	
-	public String getStudyreporturl() {
-		return studyreporturl;
-	}
-	
-	public void setStudyreporturl(String studyreporturl) {
-		this.studyreporturl = studyreporturl;
-	}
 	
 	private RadiologyOrder radiologyOrder;
 	

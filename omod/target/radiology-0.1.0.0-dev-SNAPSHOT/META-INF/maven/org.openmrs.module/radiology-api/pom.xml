@@ -93,6 +93,12 @@
     <type>jar</type>
     <scope>provided</scope>
 </dependency>
+	 <dependency>
+	  <groupId>org.openmrs.module</groupId>
+	  <artifactId>emrapi-api</artifactId>
+	  <version>1.20-SNAPSHOT</version>
+	  <type>jar</type>
+	 </dependency>
 	</dependencies>
 	<build>
 		<resources>

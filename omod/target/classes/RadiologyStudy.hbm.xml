@@ -40,7 +40,7 @@
                  <property name="studyGenericHTMLFormUUID" column="studyGenericHTMLFormUUID"
                           length="255">
                 </property>
-                <property name="studyreporturl" column="studyreporturl"
+                <property name="radiologistUserName" column="radiologistUserName"
                           length="255">
                 </property>
 		<property name="modality" column="modality" length="255"

@@ -20,26 +20,6 @@ public class RadiologyOrder extends TestOrder {
 	
 	private String orderdiagnosis;
 	
-	private String orderCompletedDate;
-	
-	public String getOrderCompletedDate() {
-		return orderCompletedDate;
-	}
-	
-	public void setOrderCompletedDate(String orderCompletedDate) {
-		this.orderCompletedDate = orderCompletedDate;
-	}
-	
-	public Integer getEncounterId() {
-		return encounterId;
-	}
-	
-	public void setEncounterId(Integer encounterId) {
-		this.encounterId = encounterId;
-	}
-	
-	private Integer encounterId;
-	
 	public String getOrderdiagnosis() {
 		return orderdiagnosis;
 	}

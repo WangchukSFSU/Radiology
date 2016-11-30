@@ -438,5 +438,26 @@
 			drop table if exists RadiologyReportList;
 		</sql>
 	</changeSet>
+         <changeSet id="radiology-89" author="tenzin">
+		
+		<dropColumn columnName="orderCompletedDate" tableName="radiology_order" />
+		
+	</changeSet>
+       
+        <changeSet id="radiology-90" author="tenzin">
+		
+		<dropColumn columnName="encounterId" tableName="radiology_order" />
+		
+	</changeSet>
+        <changeSet id="radiology-91" author="tenzin">
+		
+		<dropColumn columnName="studyreporturl" tableName="radiology_study" />
+		
+	</changeSet>
+         <changeSet author="tenzin" id="radiology-92">
+    <addColumn tableName="radiology_study">
+        <column name="radiologistUserName" type="varchar(255)"/>
+    </addColumn>
+</changeSet>
 </databaseChangeLog>
 

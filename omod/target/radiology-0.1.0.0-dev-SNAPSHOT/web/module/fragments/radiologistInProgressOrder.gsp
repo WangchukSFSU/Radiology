@@ -16,7 +16,7 @@
     alert("0000000");
     htmlForm.submitHtmlForm();
     jq('#dialog-message').dialog('close');
-    
+     emr.successMessage("Entered Form Successfully");
     return false;
     }
 
@@ -1058,7 +1058,7 @@ autoOpen: false,
 
 
     function submitBtn() {
-    alert("YESS");
+    alert("porto");
     var radiologyorderId = localStorage.getItem("radiologyorderId");
 
     alert("radiologyorderId " + radiologyorderId);
@@ -1097,7 +1097,7 @@ autoOpen: false,
     var dateCreated = ret[i].dateCreated;
     var urgency = ret[i].urgency;
     var patientName = ret[i].patient.personName;
-    var patientIdentifier = "tt";
+    var patientIdentifier = ret[i].patient.patientIdentifier.Identifier;
     var OrderencounterId = ret[i].study.OrderencounterId;
 
 if(OrderencounterId) {
@@ -1119,7 +1119,7 @@ if(OrderencounterId) {
     "bJQueryUI": true,
 
     "iDisplayLength": 5,
-    "aaSorting": [[ 2, "desc" ]] // Sort by first column descending,
+    "aaSorting": [[ 3, "desc" ]] // Sort by first column descending,
 
 
     });

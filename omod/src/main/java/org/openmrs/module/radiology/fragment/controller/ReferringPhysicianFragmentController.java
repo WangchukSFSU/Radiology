@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
@@ -181,6 +182,23 @@ public class ReferringPhysicianFragmentController {
 			}
 		}
 		return radiologyOrders;
+	}
+	
+	public List<SimpleObject> getEncounterIdObs(@SpringBean("conceptService") ConceptService service, FragmentModel model,
+			@RequestParam(value = "encounterId") String encounterId, UiUtils ui) {
+		
+		List<Obs> encounterIdObs = Context.getObsService()
+				.getObservations(encounterId);
+		for (Obs oob : encounterIdObs) {
+			oob.getConcept()
+					.getFullySpecifiedName(Locale.ENGLISH);
+		}
+		String[] properties = new String[2];
+		
+		properties[0] = "Concept";
+		properties[1] = "valueText";
+		
+		return SimpleObject.fromCollection(encounterIdObs, ui, properties);
 	}
 	
 	// from addradiologyform
