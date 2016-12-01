@@ -19,6 +19,7 @@ public enum PerformedProcedureStepStatus {
 	
 	IN_PROGRESS,
 	DONE,
+	REPORT_READY,
 	// DISCONTINUED,
 	COMPLETED;
 	

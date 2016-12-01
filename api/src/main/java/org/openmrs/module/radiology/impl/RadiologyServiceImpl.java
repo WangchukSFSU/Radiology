@@ -308,6 +308,24 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	
 	@Transactional
 	@Override
+	public Study updateScheduledProcedureStepStatus(String studyInstanceUid, ScheduledProcedureStepStatus scheduledstatus)
+			throws IllegalArgumentException {
+		
+		if (studyInstanceUid == null) {
+			throw new IllegalArgumentException("studyInstanceUid is required");
+		}
+		
+		if (scheduledstatus == null) {
+			throw new IllegalArgumentException("scheduledstatus is required");
+		}
+		
+		final Study studyToBeUpdated = studyDAO.getStudyByStudyInstanceUid(studyInstanceUid);
+		studyToBeUpdated.setScheduledStatus(scheduledstatus);
+		return studyDAO.saveStudy(studyToBeUpdated);
+	}
+	
+	@Transactional
+	@Override
 	public Study updateRadiologyOrderUser(String studyInstanceUid, String user) throws IllegalArgumentException {
 		
 		if (studyInstanceUid == null) {

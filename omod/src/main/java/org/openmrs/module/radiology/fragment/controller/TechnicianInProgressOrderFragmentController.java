@@ -16,6 +16,7 @@ import org.openmrs.module.radiology.PerformedProcedureStepStatus;
 import org.openmrs.module.radiology.RadiologyOrder;
 import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.RadiologyService;
+import org.openmrs.module.radiology.ScheduledProcedureStepStatus;
 
 import org.openmrs.module.radiology.Study;
 import org.openmrs.ui.framework.SimpleObject;
@@ -136,8 +137,9 @@ public class TechnicianInProgressOrderFragmentController {
 				radiologyOrder = Context.getService(RadiologyService.class)
 						.getRadiologyOrderByOrderId(order.getOrderId());
 				
-				if (radiologyOrder.isInProgress()) {
-					System.out.println("222222 " + radiologyOrder.getInstructions());
+				if ((radiologyOrder.getStudy()
+						.getScheduledStatus() == radiologyOrder.getStudy()
+						.getScheduledStatus().SCHEDULED)) {
 					radiologyOrders.add(radiologyOrder);
 					
 				}
@@ -173,6 +175,9 @@ public class TechnicianInProgressOrderFragmentController {
 				Context.getService(RadiologyService.class)
 						.updateStudyPerformedStatus(radiologyOrder.getStudy()
 								.getStudyInstanceUid(), PerformedProcedureStepStatus.COMPLETED);
+				Context.getService(RadiologyService.class)
+						.updateScheduledProcedureStepStatus(radiologyOrder.getStudy()
+								.getStudyInstanceUid(), ScheduledProcedureStepStatus.STARTED);
 			}
 		}
 		

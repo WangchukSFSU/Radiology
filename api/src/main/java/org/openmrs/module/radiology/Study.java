@@ -169,6 +169,10 @@ public class Study {
 		return performedStatus == PerformedProcedureStepStatus.COMPLETED;
 	}
 	
+	public boolean isReportReady() {
+		return performedStatus == PerformedProcedureStepStatus.REPORT_READY;
+	}
+	
 	public boolean isOrderCompleted() {
 		return radiologyStatusOrder == RadiologyOrderStatus.COMPLETED;
 	}

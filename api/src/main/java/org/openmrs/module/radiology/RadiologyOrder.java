@@ -65,6 +65,15 @@ public class RadiologyOrder extends TestOrder {
 		}
 	}
 	
+	public boolean isReportReady() {
+		
+		if (this.study == null) {
+			return false;
+		} else {
+			return this.study.isReportReady();
+		}
+	}
+	
 	public boolean isOrderInProgress() {
 		
 		if (this.study == null) {

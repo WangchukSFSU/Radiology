@@ -83,19 +83,6 @@ public class ReferringPhysicianFragmentController {
 		model.addAttribute("studyConceptNameList", studyConceptNameList);
 		model.addAttribute("returnUrl", returnUrl);
 		
-		Map<String, String> performedStatuses = new HashMap<String, String>();
-		for (PerformedProcedureStepStatus performedStatus : PerformedProcedureStepStatus.values()) {
-			if (performedStatus.name()
-					.equals("DONE")) {
-				
-			} else {
-				performedStatuses.put(performedStatus.name(), performedStatus.name());
-				
-			}
-		}
-		
-		model.addAttribute("performedStatuses", performedStatuses);
-		
 		List<RadiologyOrder> radiologyOrders = getCompletedRadiologyOrdersByPatient(patient);
 		
 		List<String> urllist = new ArrayList<String>();
@@ -174,7 +161,7 @@ public class ReferringPhysicianFragmentController {
 				radiologyOrder = Context.getService(RadiologyService.class)
 						.getRadiologyOrderByOrderId(order.getOrderId());
 				
-				if (radiologyOrder.isOrderCompleted()) {
+				if (radiologyOrder.isReportReady()) {
 					radiologyOrders.add(radiologyOrder);
 					
 				}
@@ -262,9 +249,9 @@ public class ReferringPhysicianFragmentController {
 			
 		}
 		
-		study.setPerformedStatus(PerformedProcedureStepStatus.IN_PROGRESS);
+		// study.setPerformedStatus(PerformedProcedureStepStatus.IN_PROGRESS);
 		study.setScheduledStatus(ScheduledProcedureStepStatus.SCHEDULED);
-		study.setRadiologyStatusOrder(RadiologyOrderStatus.INPROGRESS);
+		// study.setRadiologyStatusOrder(RadiologyOrderStatus.INPROGRESS);
 		
 		radiologyOrder.setStudy(study);
 		

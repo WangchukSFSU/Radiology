@@ -133,7 +133,7 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 				radiologyOrder = Context.getService(RadiologyService.class)
 						.getRadiologyOrderByOrderId(order.getOrderId());
 				
-				if (radiologyOrder.isOrderCompleted()) {
+				if (radiologyOrder.isReportReady()) {
 					radiologyOrders.add(radiologyOrder);
 					
 				}
@@ -473,7 +473,7 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 				
 				Context.getService(RadiologyService.class)
 						.updateStudyPerformedStatus(radiologyOrder.getStudy()
-								.getStudyInstanceUid(), PerformedProcedureStepStatus.DONE);
+								.getStudyInstanceUid(), PerformedProcedureStepStatus.REPORT_READY);
 				
 				Context.getService(RadiologyService.class)
 						.updateRadiologyStatusOrder(radiologyOrder.getStudy()
