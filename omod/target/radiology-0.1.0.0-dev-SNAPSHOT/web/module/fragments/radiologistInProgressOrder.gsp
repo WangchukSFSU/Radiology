@@ -431,7 +431,7 @@ autoOpen: false,
     alert("encounter id  " + ret.length);
     alert("bbbb");
       for (var i = 0; i < ret.length; i++) {
-      var updatedOrderencounterId = ret[i].study.OrderencounterId;
+      var updatedOrderencounterId = ret[i].study.studyReportSavedEncounterId;
       alert("updatedOrderencounterId   iiiiiiii");
       alert(updatedOrderencounterId);
       localStorage.setItem("updatedOrderencounterId", updatedOrderencounterId);
@@ -565,7 +565,7 @@ jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'vie
     var studyname = ret[i].study.studyname;
     var studyInstanceUid = ret[i].study.studyInstanceUid;
     var DateCreated = ret[i].DateCreated;
-    var OrderencounterId = ret[i].study.OrderencounterId;
+    var OrderencounterId = ret[i].study.studyReportSavedEncounterId;
 
    patientCompletedOrdersTable.append( '<tr><td><a onclick="runMyFunction();"> Obs</a> </td><td> '+ DateCreated +'</td><td> '+ provider +'</td><td> '+ instructions +' </td><td> '+ orderdiagnosis +'</td><td id="dogdog" href="ddasdas"><a id="tiger" class="tiger" href="${ dicomViewerUrladdress + "studyUID=" + '+ studyInstanceUid +' + "&patientID=" + '+ patientId +' }" onclick="loadImages(); return false;" >'+ studyname +'</a></td></tr>' );
 
@@ -657,7 +657,7 @@ jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'vie
     alert("encounter id  " + ret.length);
     alert("bbbb");
       for (var i = 0; i < ret.length; i++) {
-      var updatedOrderencounterId = ret[i].study.OrderencounterId;
+      var updatedOrderencounterId = ret[i].study.studyReportSavedEncounterId;
       alert("updatedOrderencounterId   iiiiiiii");
       alert(updatedOrderencounterId);
       localStorage.setItem("updatedOrderencounterId", updatedOrderencounterId);
@@ -791,7 +791,7 @@ jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'vie
     var studyname = ret[i].study.studyname;
     var studyInstanceUid = ret[i].study.studyInstanceUid;
     var DateCreated = ret[i].DateCreated;
-    var OrderencounterId = ret[i].study.OrderencounterId;
+    var OrderencounterId = ret[i].study.studyReportSavedEncounterId;
 
    patientCompletedOrdersTable.append( '<tr><td><a onclick="runMyFunction('+ OrderencounterId +');"> Obs</a> </td><td> '+ DateCreated +'</td><td> '+ provider +'</td><td> '+ instructions +' </td><td> '+ orderdiagnosis +'</td><td id="dogdog" href="ddasdas"><a id="tiger" class="tiger" href="${ dicomViewerUrladdress + "studyUID=" + '+ studyInstanceUid +' + "&patientID=" + '+ patientId +' }" onclick="loadImages(); return false;" >'+ studyname +'</a></td></tr>' );
 
@@ -893,7 +893,7 @@ function continuecancelReport() {
     var patientIdentifier = ret[i].patient.patientIdentifier;
     var anOrderId = ret[i].orderId;
 var patientIdentifier = ret[i].patient.patientIdentifier.Identifier;
-var OrderencounterId = ret[i].study.OrderencounterId;
+var OrderencounterId = ret[i].study.studyReportSavedEncounterId;
 
 if(OrderencounterId) {
      cancepReportUpdatedTable.append( '<tr><td><a id="fillreport" href='+ studyname +' class="fillreport" onclick="displayReport(this); return false;"><p style="display:none;">'+ anOrderId +'</p>'+ studyname +' </a></td><td>'+ patientName +'</td><td>'+ patientIdentifier +'</td><td>'+ dateCreated +'</td><td>'+ urgency +'</td><td>Yes</td></tr>' );
@@ -1098,7 +1098,7 @@ autoOpen: false,
     var urgency = ret[i].urgency;
     var patientName = ret[i].patient.personName;
     var patientIdentifier = ret[i].patient.patientIdentifier.Identifier;
-    var OrderencounterId = ret[i].study.OrderencounterId;
+    var OrderencounterId = ret[i].study.studyReportSavedEncounterId;
 
 if(OrderencounterId) {
      dicomtablelist.append( '<tr><td><a id="fillreport" href='+ studyname +' class="fillreport" onclick="displayReport(this); return false;"><p style="display:none;">'+ anOrderId +'</p>'+ studyname +' </a></td><td>'+ patientName +'</td><td>'+ patientIdentifier +'</td><td>'+ dateCreated +'</td><td>'+ urgency +'</td><td>Yes</td></tr>' );
@@ -1301,7 +1301,7 @@ for (var i = 0; i < ret.length; i++) {
                 <td>${ anOrder.patient.patientIdentifier } </td>
                 <td>${ anOrder.dateCreated } </td>
                 <td>${ anOrder.urgency }</td>
-               <% if(anOrder.study.orderencounterId) { %>
+               <% if(anOrder.study.studyReportSavedEncounterId) { %>
                 <td>Yes</td>
  <% } else { %>
  <td>No</td>

@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Properties;
 import java.util.Vector;
 import javax.mail.Message;
@@ -22,7 +21,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import org.openmrs.Concept;
 import org.openmrs.ConceptClass;
-import org.openmrs.ConceptName;
 import org.openmrs.ConceptSearchResult;
 import org.openmrs.Form;
 import org.openmrs.Obs;
@@ -51,47 +49,19 @@ public class ReferringPhysicianFragmentController {
 		
 		final List<String> urgencies = new LinkedList<String>();
 		for (Order.Urgency urgency : Order.Urgency.values()) {
-			urgencies.add(urgency.name());
-		}
-		
-		ArrayList<ConceptName> studyConceptNameList = new ArrayList();
-		
-		ConceptClass conceptName = Context.getConceptService()
-				.getConceptClassByName("Radiology/Imaging Procedure");
-		
-		List<Concept> conceptNamelist = Context.getConceptService()
-				.getConceptsByClass(conceptName);
-		
-		for (Concept eachConceptNamelist : conceptNamelist) {
-			if (eachConceptNamelist.getDisplayString()
-					.endsWith("modality")) {
-				
-			} else {
-				ConceptName studyConceptName = eachConceptNamelist.getName();
-				studyConceptNameList.add(studyConceptName);
+			if (!urgency.equals(Order.Urgency.ON_SCHEDULED_DATE)) {
+				urgencies.add(urgency.name());
 			}
 		}
 		
 		model.addAttribute("urgencies", urgencies);
-		model.addAttribute("studyConceptNameList", studyConceptNameList);
 		model.addAttribute("returnUrl", returnUrl);
 		
-		List<RadiologyOrder> radiologyOrders = getCompletedRadiologyOrdersByPatient(patient);
-		
-		List<String> urllist = new ArrayList<String>();
-		for (RadiologyOrder radiologyOrderDicomViewer : radiologyOrders) {
-			Study study = radiologyOrderDicomViewer.getStudy();
-			urllist.add(getDicomViewerUrl(study, radiologyOrderDicomViewer.getPatient()));
-		}
-		
-		List<Obs> getObs = Context.getObsService()
-				.getObservationsByPerson(patient);
-		
-		model.addAttribute("getObs", getObs);
+		List<RadiologyOrder> radiologyOrdersCompletedReport = getRadiologyOrdersWithCompletedReportByPatient(patient);
 		
 		String dicomViewerUrladdress = getDicomViewerUrladdress();
 		model.addAttribute("dicomViewerUrladdress", dicomViewerUrladdress);
-		model.put("radiologyOrders", radiologyOrders);
+		model.put("radiologyOrders", radiologyOrdersCompletedReport);
 		
 		String PatientName = patient.getNames()
 				.toString();
@@ -109,48 +79,25 @@ public class ReferringPhysicianFragmentController {
 	}
 	
 	private String getDicomViewerUrladdress() {
-		
 		RadiologyProperties radiologyProperties = new RadiologyProperties();
-		
 		return radiologyProperties.getServersAddress() + ":" + radiologyProperties.getServersPort()
 				+ radiologyProperties.getDicomViewerUrlBase() + "?" + radiologyProperties.getDicomViewerLocalServerName();
 		
 	}
 	
-	private String getDicomViewerUrl(Study study, Patient patient) {
-		
-		RadiologyProperties radiologyProperties = new RadiologyProperties();
-		if (study.isOrderCompleted()) {
-			
-			String studyUidUrl = "studyUID=" + study.getStudyInstanceUid();
-			String patientIdUrl = "patientID=" + patient.getPatientIdentifier()
-					.getIdentifier();
-			
-			return radiologyProperties.getServersAddress() + ":" + radiologyProperties.getServersPort()
-					+ radiologyProperties.getDicomViewerUrlBase() + "?"
-					+ radiologyProperties.getDicomViewerLocalServerName();
-		} else {
-			return null;
-		}
-	}
-	
-	public List<RadiologyOrder> getCompletedRadiologyOrdersByPatient(Patient p) {
+	public List<RadiologyOrder> getRadiologyOrdersWithCompletedReportByPatient(Patient p) {
 		
 		Vector<RadiologyOrder> radiologyOrders = new Vector<RadiologyOrder>();
 		
 		List<Order> orders = Context.getOrderService()
 				.getAllOrdersByPatient(p);
-		
 		int testOrderTypeId = Context.getOrderService()
 				.getOrderTypeByName("Radiology Order")
 				.getOrderTypeId();
-		
 		RadiologyOrder radiologyOrder;
 		for (Order order : orders) {
-			
 			if (order.getOrderType()
 					.getOrderTypeId() == testOrderTypeId) {
-				
 				radiologyOrder = Context.getService(RadiologyService.class)
 						.getRadiologyOrderByOrderId(order.getOrderId());
 				
@@ -169,19 +116,53 @@ public class ReferringPhysicianFragmentController {
 		
 		List<Obs> encounterIdObs = Context.getObsService()
 				.getObservations(encounterId);
-		for (Obs oob : encounterIdObs) {
-			oob.getConcept()
-					.getFullySpecifiedName(Locale.ENGLISH);
-		}
 		String[] properties = new String[2];
-		
 		properties[0] = "Concept";
 		properties[1] = "valueText";
 		
 		return SimpleObject.fromCollection(encounterIdObs, ui, properties);
 	}
 	
-	// from addradiologyform
+	public List<SimpleObject> getInProgressRadiologyOrders(@SpringBean("conceptService") ConceptService service,
+			FragmentModel model, UiUtils ui, @RequestParam(value = "patientId", required = false) Patient patient) {
+		
+		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrdersByPatient(patient);
+		String[] properties = new String[3];
+		properties[0] = "study.studyname";
+		properties[1] = "dateCreated";
+		properties[2] = "study.scheduledStatus";
+		
+		return SimpleObject.fromCollection(inProgressRadiologyOrders, ui, properties);
+	}
+	
+	public List<RadiologyOrder> getInProgressRadiologyOrdersByPatient(Patient p) {
+		
+		Vector<RadiologyOrder> radiologyOrders = new Vector<RadiologyOrder>();
+		List<Order> orders = Context.getOrderService()
+				.getAllOrdersByPatient(p);
+		int testOrderTypeId = Context.getOrderService()
+				.getOrderTypeByName("Radiology Order")
+				.getOrderTypeId();
+		
+		RadiologyOrder radiologyOrder;
+		for (Order order : orders) {
+			if (order.getOrderType()
+					.getOrderTypeId() == testOrderTypeId) {
+				radiologyOrder = Context.getService(RadiologyService.class)
+						.getRadiologyOrderByOrderId(order.getOrderId());
+				
+				if (radiologyOrder.isInProgress() || radiologyOrder.isCompleted() || (radiologyOrder.getStudy()
+						.getScheduledStatus() == radiologyOrder.getStudy()
+						.getScheduledStatus().SCHEDULED)) {
+					radiologyOrders.add(radiologyOrder);
+					
+				}
+				
+			}
+		}
+		return radiologyOrders;
+	}
+	
 	public List<SimpleObject> placeRadiologyOrder(@SpringBean("conceptService") ConceptService service, FragmentModel model,
 			@RequestParam("patient") Patient patient, @RequestParam(value = "returnUrl", required = false) String returnUrl,
 			@RequestParam(value = "studyname") String studyname,
@@ -198,70 +179,54 @@ public class ReferringPhysicianFragmentController {
 		
 		radiologyOrder.setCreator(authenticatedUser);
 		radiologyOrder.setOrderer(provider);
-		
 		radiologyOrder.setConcept(Context.getConceptService()
 				.getConcept(studyname));
-		
 		radiologyOrder.setPatient(patient);
-		
 		radiologyOrder.setDateCreated(new Date());
 		radiologyOrder.setInstructions(instructionname);
 		radiologyOrder.setUrgency(Order.Urgency.valueOf(priorityname));
 		radiologyOrder.setOrderdiagnosis(diagnosisname);
-		
 		RadiologyService radiologyservice = Context.getService(RadiologyService.class);
 		
 		Study study = new Study();
-		
 		study.setModality(studyname);
 		study.setStudyname(studyname);
 		
-		List<Form> studyreport = Context.getFormService()
+		List<Form> getAllForm = Context.getFormService()
 				.getAllForms();
-		
-		for (Form searchform : studyreport) {
-			
-			String podspdoas = searchform.getName()
+		for (Form eachForm : getAllForm) {
+			String formName = eachForm.getName()
 					.trim();
-			
-			if (podspdoas.startsWith("Generic")) {
-				String arr[] = podspdoas.split(" ", 2);
-				String genericWord = arr[0];
+			if (formName.startsWith("Generic")) {
+				String arr[] = formName.split(" ", 2);
 				String studyName = arr[1];
 				if (study.getStudyname()
 						.equals(studyName)) {
-					study.setStudyGenericHTMLFormUUID(searchform.getUuid());
+					study.setGenericHtmlFormUid(eachForm.getUuid());
 				}
 			}
 			
 			if (study.getStudyname()
-					.equals(podspdoas)) {
-				study.setStudyHtmlFormUUID(searchform.getUuid());
+					.equals(formName)) {
+				study.setNonGenericHtmlFormUid(eachForm.getUuid());
 				
 			}
 			
 		}
 		
-		// study.setPerformedStatus(PerformedProcedureStepStatus.IN_PROGRESS);
 		study.setScheduledStatus(ScheduledProcedureStepStatus.SCHEDULED);
-		// study.setRadiologyStatusOrder(RadiologyOrderStatus.INPROGRESS);
-		
 		radiologyOrder.setStudy(study);
-		
 		radiologyOrder.setConcept(Context.getConceptService()
 				.getConcept(Context.getConceptService()
 						.getConcept(studyname)
 						.getId()));
 		
 		RadiologyOrder saveOrder = radiologyservice.placeRadiologyOrder(radiologyOrder);
-		
-		if (radiologyservice.placeRadiologyOrderInPacs(saveOrder)) {}
+		radiologyservice.placeRadiologyOrderInPacs(saveOrder);
 		
 		ArrayList<RadiologyOrder> getRadiologyOrder = new ArrayList<RadiologyOrder>();
-		
-		List<RadiologyOrder> inProgressRadiologyOrders = getCompletedRadiologyOrdersByPatient(patient);
-		
-		for (RadiologyOrder updateActiveOrder : inProgressRadiologyOrders) {
+		List<RadiologyOrder> completedReportRadiologyOrders = getRadiologyOrdersWithCompletedReportByPatient(patient);
+		for (RadiologyOrder updateActiveOrder : completedReportRadiologyOrders) {
 			getRadiologyOrder.add(updateActiveOrder);
 		}
 		
@@ -300,8 +265,12 @@ public class ReferringPhysicianFragmentController {
 		
 		List<Concept> names = new ArrayList<Concept>();
 		for (ConceptSearchResult con : results) {
-			names.add(con.getConcept()); // con.getConcept().getName().getName()
-			System.out.println("Concept: " + con.getConceptName());
+			if (!con.getConcept()
+					.getDisplayString()
+					.endsWith("modality")) {
+				names.add(con.getConcept()); // con.getConcept().getName().getName()
+				System.out.println("Concept: " + con.getConceptName());
+			}
 		}
 		/*
 		 * The Ajax call requires a json result;
@@ -349,7 +318,7 @@ public class ReferringPhysicianFragmentController {
 		return SimpleObject.fromCollection(names, ui, properties);
 	}
 	
-	public void sendEmailToRadiologistA(@RequestParam(value = "recipient", required = false) String recipient,
+	public void contactRadiologist(@RequestParam(value = "recipient", required = false) String recipient,
 			@RequestParam(value = "subject", required = false) String subject,
 			@RequestParam(value = "message", required = false) String message) {
 		
@@ -387,7 +356,7 @@ public class ReferringPhysicianFragmentController {
 		
 	}
 	
-	public void sendEmailToPatient(@RequestParam(value = "recipient", required = false) String recipient,
+	public void contactPatient(@RequestParam(value = "recipient", required = false) String recipient,
 			@RequestParam(value = "subject", required = false) String subject,
 			@RequestParam(value = "message", required = false) String message) {
 		

@@ -31,16 +31,16 @@
                 <property name="obsCompletedDate" column="obsCompletedDate"
                           length="255">
                 </property>
-                <property name="orderencounterId" column="orderencounterId"
+                <property name="studyReportSavedEncounterId" column="studyReportSavedEncounterId"
                           type="int">
                 </property>
-                <property name="studyHtmlFormUUID" column="studyHtmlFormUUID"
+                <property name="nonGenericHtmlFormUid" column="nonGenericHtmlFormUid"
                           length="255">
                 </property>
-                 <property name="studyGenericHTMLFormUUID" column="studyGenericHTMLFormUUID"
+                 <property name="genericHtmlFormUid" column="genericHtmlFormUid"
                           length="255">
                 </property>
-                <property name="radiologistUserName" column="radiologistUserName"
+                <property name="studyReportRadiologist" column="studyReportRadiologist"
                           length="255">
                 </property>
 		<property name="modality" column="modality" length="255"
@@ -52,12 +52,7 @@
 				<param name="enumClassName">org.openmrs.module.radiology.MwlStatus</param>
 			</type>
 		</property>
-              <property name="radiologyStatusOrder" column="radiologyStatusOrder" length="255"
-			not-null="true">
-			<type name="org.openmrs.util.HibernateEnumType">
-				<param name="enumClassName">org.openmrs.module.radiology.RadiologyOrderStatus</param>
-			</type>
-		</property>
-                
+             
+               
 	</class>
 </hibernate-mapping>

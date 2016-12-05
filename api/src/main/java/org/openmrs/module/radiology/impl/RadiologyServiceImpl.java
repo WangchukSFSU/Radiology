@@ -32,7 +32,7 @@ import org.openmrs.module.radiology.DicomUtils;
 import org.openmrs.module.radiology.MwlStatus;
 import org.openmrs.module.radiology.PerformedProcedureStepStatus;
 import org.openmrs.module.radiology.RadiologyOrder;
-import org.openmrs.module.radiology.RadiologyOrderStatus;
+
 import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.RadiologyService;
 import org.openmrs.module.radiology.ScheduledProcedureStepStatus;
@@ -333,25 +333,7 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 		}
 		
 		final Study studyToBeUpdated = studyDAO.getStudyByStudyInstanceUid(studyInstanceUid);
-		studyToBeUpdated.setRadiologistUserName(user);
-		return studyDAO.saveStudy(studyToBeUpdated);
-	}
-	
-	@Transactional
-	@Override
-	public Study updateRadiologyStatusOrder(String studyInstanceUid, RadiologyOrderStatus radiologyOrderStatus)
-			throws IllegalArgumentException {
-		
-		if (studyInstanceUid == null) {
-			throw new IllegalArgumentException("studyInstanceUid is required");
-		}
-		
-		if (radiologyOrderStatus == null) {
-			throw new IllegalArgumentException("performedStatus is required");
-		}
-		
-		final Study studyToBeUpdated = studyDAO.getStudyByStudyInstanceUid(studyInstanceUid);
-		studyToBeUpdated.setRadiologyStatusOrder(radiologyOrderStatus);
+		studyToBeUpdated.setStudyReportRadiologist(user);
 		return studyDAO.saveStudy(studyToBeUpdated);
 	}
 	
@@ -377,7 +359,7 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 		}
 		
 		final Study studyToBeUpdated = studyDAO.getStudyByStudyInstanceUid(studyInstanceUid);
-		studyToBeUpdated.setOrderencounterId(studyencounterid);
+		studyToBeUpdated.setStudyReportSavedEncounterId(studyencounterid);
 		return studyDAO.saveStudy(studyToBeUpdated);
 	}
 	

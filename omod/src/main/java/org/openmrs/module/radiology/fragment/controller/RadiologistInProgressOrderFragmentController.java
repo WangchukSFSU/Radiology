@@ -50,7 +50,7 @@ import org.openmrs.module.htmlformentry.HtmlFormEntryUtil;
 import org.openmrs.module.htmlformentryui.HtmlFormUtil;
 import org.openmrs.module.radiology.PerformedProcedureStepStatus;
 import org.openmrs.module.radiology.RadiologyOrder;
-import org.openmrs.module.radiology.RadiologyOrderStatus;
+
 import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.RadiologyService;
 
@@ -148,7 +148,7 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		properties[4] = "study.studyname";
 		properties[5] = "study.studyInstanceUid";
 		properties[6] = "DateCreated";
-		properties[7] = "study.OrderencounterId";
+		properties[7] = "study.studyReportSavedEncounterId";
 		
 		return SimpleObject.fromCollection(radiologyOrders, ui, properties);
 	}
@@ -162,12 +162,10 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		RadiologyOrder aaa = Context.getService(RadiologyService.class)
 				.getRadiologyOrderByOrderId(radiologyorderId);
 		radiologyOrders.add(aaa);
-		System.out.println("Emncounter Order Id TTTTT " + aaa.getStudy()
-				.getOrderencounterId());
 		
 		String[] properties = new String[1];
 		
-		properties[0] = "study.OrderencounterId";
+		properties[0] = "study.studyReportSavedEncounterId";
 		
 		return SimpleObject.fromCollection(radiologyOrders, ui, properties);
 	}
@@ -198,8 +196,6 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 				.getRadiologyOrderByOrderId(radiologyorderId);
 		radiologyOrders.add(aaa);
 		
-		System.out.println("Emncounter Order Id TTTTT " + aaa.getStudy()
-				.getOrderencounterId());
 		aaa.getOrderer();
 		
 		String[] properties = new String[12];
@@ -211,7 +207,7 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		properties[4] = "urgency";
 		properties[5] = "patient.patientIdentifier";
 		properties[6] = "orderId";
-		properties[7] = "study.OrderencounterId";
+		properties[7] = "study.studyReportSavedEncounterId";
 		properties[8] = "Orderer";
 		properties[9] = "Orderdiagnosis";
 		properties[10] = "Instructions";
@@ -247,7 +243,7 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		properties[4] = "urgency";
 		properties[5] = "patient.patientIdentifier.Identifier";
 		properties[6] = "orderId";
-		properties[7] = "study.OrderencounterId";
+		properties[7] = "study.studyReportSavedEncounterId";
 		
 		return SimpleObject.fromCollection(radiologyOrders, ui, properties);
 	}
@@ -285,26 +281,24 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		
 		System.out.println("radiology Order " + getRadiologyOrder);
 		System.out.println("study  " + getRadiologyOrder.getStudy());
-		System.out.println("study form encounter Id " + getRadiologyOrder.getStudy()
-				.getOrderencounterId());
 		
 		if (getRadiologyOrder.getStudy()
-				.getOrderencounterId() == null) {
+				.getStudyReportSavedEncounterId() == null) {
 			System.out.println("encounter form is null");
 			encounter = null;
 			form = Context.getFormService()
 					.getFormByUuid(getRadiologyOrder.getStudy()
-							.getStudyHtmlFormUUID());
+							.getNonGenericHtmlFormUid());
 			Form genericform = Context.getFormService()
 					.getFormByUuid(getRadiologyOrder.getStudy()
-							.getStudyGenericHTMLFormUUID());
+							.getGenericHtmlFormUid());
 			formlist.add(form);
 			formlist.add(genericform);
 		} else {
 			System.out.println("encounter form not not null");
 			encounter = Context.getEncounterService()
 					.getEncounter(getRadiologyOrder.getStudy()
-							.getOrderencounterId());
+							.getStudyReportSavedEncounterId());
 			
 			form = encounter.getForm();
 			
@@ -476,10 +470,6 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 								.getStudyInstanceUid(), PerformedProcedureStepStatus.REPORT_READY);
 				
 				Context.getService(RadiologyService.class)
-						.updateRadiologyStatusOrder(radiologyOrder.getStudy()
-								.getStudyInstanceUid(), RadiologyOrderStatus.COMPLETED);
-				
-				Context.getService(RadiologyService.class)
 						.updateObsCompletedDate(radiologyOrder.getStudy()
 								.getStudyInstanceUid(), new Date().toString());
 				
@@ -505,7 +495,7 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		properties[2] = "dateCreated";
 		properties[3] = "urgency";
 		properties[4] = "patient.personName";
-		properties[5] = "study.OrderencounterId";
+		properties[5] = "study.studyReportSavedEncounterId";
 		properties[6] = "patient.patientIdentifier.Identifier";
 		return SimpleObject.fromCollection(getRadiologyOrder, ui, properties);
 	}

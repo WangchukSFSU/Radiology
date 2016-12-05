@@ -144,9 +144,6 @@ public interface RadiologyService extends OpenmrsService {
 	public Study updateStudyPerformedStatus(String studyInstanceUid, PerformedProcedureStepStatus performedStatus)
 			throws IllegalArgumentException;
 	
-	public Study updateRadiologyStatusOrder(String studyInstanceUid, RadiologyOrderStatus radiologyOrderStatus)
-			throws IllegalArgumentException;
-	
 	public Study updateScheduledProcedureStepStatus(String studyInstanceUid, ScheduledProcedureStepStatus scheduledstatus)
 			throws IllegalArgumentException;
 	

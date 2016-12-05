@@ -21,24 +21,24 @@ public class Study {
 	
 	private String studyInstanceUid;
 	
-	private Integer orderencounterId;
+	private Integer studyReportSavedEncounterId;
 	
-	private String radiologistUserName;
-	
-	public String getRadiologistUserName() {
-		return radiologistUserName;
+	public Integer getStudyReportSavedEncounterId() {
+		return studyReportSavedEncounterId;
 	}
 	
-	public void setRadiologistUserName(String radiologistUserName) {
-		this.radiologistUserName = radiologistUserName;
+	public void setStudyReportSavedEncounterId(Integer studyReportSavedEncounterId) {
+		this.studyReportSavedEncounterId = studyReportSavedEncounterId;
 	}
 	
-	public Integer getOrderencounterId() {
-		return orderencounterId;
+	private String studyReportRadiologist;
+	
+	public String getStudyReportRadiologist() {
+		return studyReportRadiologist;
 	}
 	
-	public void setOrderencounterId(Integer orderencounterId) {
-		this.orderencounterId = orderencounterId;
+	public void setStudyReportRadiologist(String studyReportRadiologist) {
+		this.studyReportRadiologist = studyReportRadiologist;
 	}
 	
 	public String getObsCompletedDate() {
@@ -59,24 +59,24 @@ public class Study {
 	
 	private String modality;
 	
-	private String studyGenericHTMLFormUUID;
+	private String genericHtmlFormUid;
 	
-	public String getStudyGenericHTMLFormUUID() {
-		return studyGenericHTMLFormUUID;
+	public String getGenericHtmlFormUid() {
+		return genericHtmlFormUid;
 	}
 	
-	public void setStudyGenericHTMLFormUUID(String studyGenericHTMLFormUUID) {
-		this.studyGenericHTMLFormUUID = studyGenericHTMLFormUUID;
+	public void setGenericHtmlFormUid(String genericHtmlFormUid) {
+		this.genericHtmlFormUid = genericHtmlFormUid;
 	}
 	
-	private String studyHtmlFormUUID;
+	private String nonGenericHtmlFormUid;
 	
-	public String getStudyHtmlFormUUID() {
-		return studyHtmlFormUUID;
+	public String getNonGenericHtmlFormUid() {
+		return nonGenericHtmlFormUid;
 	}
 	
-	public void setStudyHtmlFormUUID(String studyHtmlFormUUID) {
-		this.studyHtmlFormUUID = studyHtmlFormUUID;
+	public void setNonGenericHtmlFormUid(String nonGenericHtmlFormUid) {
+		this.nonGenericHtmlFormUid = nonGenericHtmlFormUid;
 	}
 	
 	public void setModality(String modality) {
@@ -98,24 +98,6 @@ public class Study {
 	}
 	
 	private MwlStatus mwlStatus;
-	
-	private RadiologyOrderStatus radiologyStatusOrder;
-	
-	public RadiologyOrderStatus getRadiologyStatusOrder() {
-		return radiologyStatusOrder;
-	}
-	
-	public void setRadiologyStatusOrder(RadiologyOrderStatus radiologyStatusOrder) {
-		this.radiologyStatusOrder = radiologyStatusOrder;
-	}
-	
-	public RadiologyOrderStatus getRadiologyorderstatus() {
-		return radiologyStatusOrder;
-	}
-	
-	public void setRadiologyorderstatus(RadiologyOrderStatus radiologyorderstatus) {
-		this.radiologyStatusOrder = radiologyorderstatus;
-	}
 	
 	public Integer getStudyId() {
 		return studyId;
@@ -153,10 +135,6 @@ public class Study {
 		return performedStatus == PerformedProcedureStepStatus.IN_PROGRESS;
 	}
 	
-	public boolean isOrderInProgress() {
-		return radiologyStatusOrder == RadiologyOrderStatus.INPROGRESS;
-	}
-	
 	/**
 	 * Returns true when this Study's performedStatus is completed and false otherwise.
 	 * 
@@ -171,10 +149,6 @@ public class Study {
 	
 	public boolean isReportReady() {
 		return performedStatus == PerformedProcedureStepStatus.REPORT_READY;
-	}
-	
-	public boolean isOrderCompleted() {
-		return radiologyStatusOrder == RadiologyOrderStatus.COMPLETED;
 	}
 	
 	public boolean isScheduleable() {

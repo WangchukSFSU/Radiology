@@ -459,5 +459,31 @@
         <column name="radiologistUserName" type="varchar(255)"/>
     </addColumn>
 </changeSet>
+    <changeSet author="tenzin" id="radiology-93">
+    <addColumn tableName="radiology_study">
+        <column name="priority" type="varchar(255)"/>
+    </addColumn>
+</changeSet>
+<changeSet id="radiology-94" author="tenzin">
+		
+		<dropColumn columnName="priority" tableName="radiology_study" />
+		
+	</changeSet>
+        <changeSet author="tenzin" id="radiology-95">
+            <renameColumn columnDataType="int"
+			newColumnName="studyReportSavedEncounterId" oldColumnName="orderencounterId" tableName="radiology_study" />
+</changeSet>
+        <changeSet author="tenzin" id="radiology-96">
+            <renameColumn columnDataType="varchar(255)"
+			newColumnName="studyReportRadiologist" oldColumnName="radiologistUserName" tableName="radiology_study" />
+</changeSet>
+<changeSet author="tenzin" id="radiology-97">
+            <renameColumn columnDataType="varchar(255)"
+			newColumnName="genericHtmlFormUid" oldColumnName="studyGenericHTMLFormUUID" tableName="radiology_study" />
+</changeSet>
+<changeSet author="tenzin" id="radiology-98">
+            <renameColumn columnDataType="varchar(255)"
+			newColumnName="nonGenericHtmlFormUid" oldColumnName="studyHtmlFormUUID" tableName="radiology_study" />
+</changeSet>
 </databaseChangeLog>
 
