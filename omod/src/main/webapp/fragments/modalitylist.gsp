@@ -231,14 +231,14 @@ studyTableRow.append( '</tbody>' );
     localStorage.setItem("formNameHtmlToDisplayArray", JSON.stringify(formNameHtmlToDisplayArray));
 
 
-    jq.getJSON('${ ui.actionLink("getStudyConceptsAnswerFromModality") }',
+    jq.getJSON('${ ui.actionLink("getStudyWithNoFormName") }',
     {
     })
     .error(function(xhr, status, err) {
     alert('AJAX error ' + err);
     })
     .success(function(ret) {
-    alert("report goog"); 
+    alert("report goog " +ret.length); 
     jq('#report-table-div').show();
     // jq("#rrr").show();
     alert("ret.length" + ret.length);

@@ -115,7 +115,7 @@
     jq("#manage-radiology-breadcrumb li i").addClass("icon-chevron-right link");
     jq("#manage-study-breadcrumb").html("<li><i ></i> Manage Studies</li>");
     jq("#manage-study-breadcrumb li i").addClass("icon-chevron-right link");
-    myFunctionStudyList();
+    manageStudiesBreadCrumbClickGetStudy();
     });
 
     jq("#study-continue-btn").click(function() {
@@ -128,12 +128,12 @@
     jq(".modality-continue-btn-div").hide();
     jq(".report-header-div").show();
     jq("#study-table-div").hide();
-   jq("#manage-study-breadcrumb").html("<li><i ></i><a href='javascript:void(0);' onClick='manageStudiesBreadCrumb()'> Manage Studies</li>");
+   jq("#manage-study-breadcrumb").html("<li><i ></i><a href='javascript:void(0);' onClick='manageStudiesBreadCrumbClick()'> Manage Studies</li>");
     jq("#manage-study-breadcrumb li i").addClass("icon-chevron-right link");
     jq("#manage-study-breadcrumb li a").addClass("addstudylink");
     jq("#manage-report-breadcrumb").html("<li><i ></i> Manage Reports</li>");
     jq("#manage-report-breadcrumb li i").addClass("icon-chevron-right link");
-    functionreportlist();
+    manageReportBreadCrumbClick();
     });
 
     jq("#report-dialog-btn").click(function() {
@@ -148,26 +148,26 @@
     });
 
 
-    function manageStudiesBreadCrumb() {
-    manageStudiesBreadCrumb.called = true;
-    alert('manageStudiesBreadCrumb');
+    function manageStudiesBreadCrumbClick() {
+    manageStudiesBreadCrumbClick.called = true;
+    alert('manageStudiesBreadCrumbClick');
     jq('#studysavebtn').data('clicked', false);
     jq(".report-header-div").hide();
     jq("#manage-report-breadcrumb").empty();
     jq(".study-header-div").show();
     jq(".study-continue-btn-div").show();
     jq("#report-table-div").hide();
-    myFunctionStudyList();
+    manageStudiesBreadCrumbClickGetStudy();
     }
 
-    function myFunctionStudyList() {
+    function manageStudiesBreadCrumbClickGetStudy() {
     //myFunctionT.called = true;
     jq("#study-table-div").show();
     jq('#study-table-div').empty();
     jq('#study-table-div').append('<table></table>');
-    jq('#study-table-div table').attr('id','studytablelistid');
-    jq("#study-table-div table").addClass("studyclass");
-    var studytablelist = jq('#study-table-div').children();
+    jq('#study-table-div table').attr('id','studyTableId');
+    jq("#study-table-div table").addClass("studyTableClass");
+    var studyTableRow = jq('#study-table-div').children();
     jq.getJSON('${ ui.actionLink("getStudyConceptsAnswerFromModality") }',
     {
     })
@@ -176,15 +176,15 @@
     })
     .success(function(ret) {
     alert("goog"); 
-studytablelist.append( '<thead><tr><th> Studies Available</th></thead><tbody>' );
+studyTableRow.append( '<thead><tr><th> Studies Available</th></thead><tbody>' );
     alert("ret.length" + ret.length);
     for (var i = 0; i < ret.length; i++) {
-    var conId = ret[i].conceptId;
-    var conName = ret[i].displayString;
-studytablelist.append( '<tr><td>' +  conName + '</td> </tr>' );
+    var studyConceptId = ret[i].conceptId;
+    var studyName = ret[i].displayString;
+studyTableRow.append( '<tr><td>' +  studyName + '</td> </tr>' );
     }
-studytablelist.append( '</tbody>' );
-    jq('#studytablelistid').dataTable({
+studyTableRow.append( '</tbody>' );
+    jq('#studyTableId').dataTable({
     "sPaginationType": "full_numbers",
     "bPaginate": true,
     "bAutoWidth": false,
@@ -195,13 +195,13 @@ studytablelist.append( '</tbody>' );
     });
     })
     }
-    function functionreportlist() {
+    function manageReportBreadCrumbClick() {
 
     jq('#report-table-div').empty();
     jq('#report-table-div').append('<table></table>');
-    jq('#report-table-div table').attr('id','reporttableid');
-    jq("#report-table-div table").addClass("reporttableclass");
-    var reporttablechildren = jq('#report-table-div').children();
+    jq('#report-table-div table').attr('id','reportTableId');
+    jq("#report-table-div table").addClass("reportTableClass");
+    var reportTableRow = jq('#report-table-div').children();
 
     //get report available
     jq.getJSON('${ ui.actionLink("getReport") }',
@@ -212,7 +212,7 @@ studytablelist.append( '</tbody>' );
     })
     .success(function(ret) {
 
-    reporttablechildren.append("<thead><tr><td>Studies</td><td>Report Available</td><td>Action</td></tr></thead><tbody>");
+    reportTableRow.append("<thead><tr><td>Studies</td><td>Report Available</td><td>Action</td></tr></thead><tbody>");
 
     var formNameArray = [];
     var formNameHtmlToDisplayArray = [];
@@ -223,7 +223,7 @@ studytablelist.append( '</tbody>' );
     var formNameHtmlToDisplay = ret[i].HtmlToDisplay;
     formNameHtmlToDisplayArray[i] = formNameHtmlToDisplay;
 
- reporttablechildren.append( '<tr><td>'+ FormName +'</td><td> <a id="fillreport" href='+ FormName +' class="fillreport" onclick="displayReport(this); return false;" >'+ FormName +' </a> </td> <td><a id="editbtn" target="_blank" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForms.list"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a>  </td></tr>' );
+ reportTableRow.append( '<tr><td>'+ FormName +'</td><td> <a id="viewReportLink" href='+ FormName +' class="viewReportLink" onclick="displayReport(this); return false;" >'+ FormName +' </a> </td> <td><a id="editFormLink" target="_blank" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForms.list"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a>  </td></tr>' );
 
     }
 
@@ -231,25 +231,25 @@ studytablelist.append( '</tbody>' );
     localStorage.setItem("formNameHtmlToDisplayArray", JSON.stringify(formNameHtmlToDisplayArray));
 
 
-    jq.getJSON('${ ui.actionLink("getStudyConceptsAnswerFromModality") }',
+    jq.getJSON('${ ui.actionLink("getStudyWithNoFormName") }',
     {
     })
     .error(function(xhr, status, err) {
     alert('AJAX error ' + err);
     })
     .success(function(ret) {
-    alert("report goog"); 
+    alert("report goog " +ret.length); 
     jq('#report-table-div').show();
     // jq("#rrr").show();
     alert("ret.length" + ret.length);
     for (var i = 0; i < ret.length; i++) {
-    var conId = ret[i].id;
-    var conName = ret[i].name;
- reporttablechildren.append( '<tr><td> '+ conName +' </td><td> </td> <td><a id="addbtn" target="_blank" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a><a id<img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a>  </td></tr>' );
+    var studyId = ret[i].id;
+    var studyName = ret[i].name;
+ reportTableRow.append( '<tr><td> '+ studyName +' </td><td> </td> <td><a id="addStudyIconLink" target="_blank" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a><a id<img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a>  </td></tr>' );
     }
 
-      jq('#reporttablechildren').append("</tbody>");
-    jq('#reporttableid').DataTable({
+      jq('#reportTableRow').append("</tbody>");
+    jq('#reportTableId').DataTable({
     destroy: true,
     "sPaginationType": "full_numbers",
     "bPaginate": true,
@@ -270,6 +270,9 @@ studytablelist.append( '</tbody>' );
     jq("#view-report-dialog").dialog({
     width: 600,
     height: 450,
+    buttons: {
+    OK: function() {jq(this).dialog("close");}
+    },
     });
 
     //get the form name, arrays of the each rows information

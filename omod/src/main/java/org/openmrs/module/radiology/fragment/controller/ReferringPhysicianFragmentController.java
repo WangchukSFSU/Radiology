@@ -6,14 +6,11 @@
 package org.openmrs.module.radiology.fragment.controller;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
 import javax.mail.Message;
@@ -35,13 +32,9 @@ import org.openmrs.Provider;
 import org.openmrs.User;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.radiology.PerformedProcedureStepStatus;
 import org.openmrs.module.radiology.RadiologyOrder;
-import org.openmrs.module.radiology.RadiologyOrderStatus;
 import org.openmrs.module.radiology.RadiologyProperties;
-
 import org.openmrs.module.radiology.RadiologyService;
-
 import org.openmrs.module.radiology.ScheduledProcedureStepStatus;
 import org.openmrs.module.radiology.Study;
 import org.openmrs.ui.framework.SimpleObject;

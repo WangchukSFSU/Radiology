@@ -128,4 +128,55 @@ public class ModalitylistFragmentController {
 		return SimpleObject.fromCollection(getStudyHTMLCreated, ui, properties);
 	}
 	
+	public List<SimpleObject> getStudyWithNoFormName(@SpringBean("conceptService") ConceptService service, UiUtils ui) {
+		
+		ArrayList<Concept> studySetMembers = new ArrayList<Concept>();
+		ArrayList<Concept> studyConceptToBeRemoved = new ArrayList<Concept>();
+		
+		// Get All HTMLForms
+		List<Form> getAllHTMLForms = Context.getFormService()
+				.getAllForms();
+		
+		// Study Concept Class
+		ConceptClass studyConceptClass = Context.getConceptService()
+				.getConceptClassByName("Radiology/Imaging Procedure");
+		
+		// Get all Study Concept
+		List<Concept> listOfStudyConcept = Context.getConceptService()
+				.getConceptsByClass(studyConceptClass);
+		
+		for (Concept eachStudyConcept : listOfStudyConcept) {
+			
+			for (Form eachHTMLForms : getAllHTMLForms) {
+				
+				// study name
+				String studyDisplayString = eachStudyConcept.getDisplayString();
+				// htmlform name
+				String htmlFormName = eachHTMLForms.getName()
+						.trim();
+				
+				// check if study htmlform is available
+				if (studyDisplayString.equals(htmlFormName)) {
+					studyConceptToBeRemoved.add(eachStudyConcept);
+					
+				}
+				if (studyDisplayString.endsWith("modality")) {
+					studyConceptToBeRemoved.add(eachStudyConcept);
+					
+				}
+				
+			}
+		}
+		
+		listOfStudyConcept.removeAll(studyConceptToBeRemoved);
+		
+		studySetMembers.addAll(listOfStudyConcept);
+		
+		String[] properties = new String[4];
+		properties[0] = "conceptId";
+		properties[1] = "displayString";
+		properties[2] = "id";
+		properties[3] = "name";
+		return SimpleObject.fromCollection(studySetMembers, ui, properties);
+	}
 }

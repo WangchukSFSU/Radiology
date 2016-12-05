@@ -1,9 +1,10 @@
-.modality {
+.modality-header-div {
     border-style: solid;
     border-color: gainsboro;
     padding-left: 3%;
     padding-top: 5px;
     padding-bottom: 5px;
+    margin-top: -15px;
 
 }
 
@@ -11,7 +12,7 @@ div#modality-table_wrapper {
     min-height: 260px;
 }
 
-div#studytablelistid_wrapper {
+div#studyTableId_wrapper {
     min-height: 300px;
 }
 .study-header-div {
