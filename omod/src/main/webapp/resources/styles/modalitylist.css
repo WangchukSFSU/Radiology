@@ -1,30 +1,33 @@
-.modality {
+.modality-header-div {
     border-style: solid;
     border-color: gainsboro;
     padding-left: 3%;
-   
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: -15px;
+
+}
+
+div#modality-table_wrapper {
+    min-height: 260px;
+}
+
+div#studyTableId_wrapper {
+    min-height: 300px;
+}
+.study-header-div {
+    border-style: solid;
+    border-color: gainsboro;
+    padding-left: 3%;
     padding-top: 5px;
     padding-bottom: 5px;
 
 }
 
- 
-        
-.studygroup {
+.report-header-div {
     border-style: solid;
     border-color: gainsboro;
     padding-left: 3%;
-   
-    padding-top: 5px;
-    padding-bottom: 5px;
-
-}
-
-.reportgroup {
-    border-style: solid;
-    border-color: gainsboro;
-    padding-left: 3%;
-   
     padding-top: 5px;
     padding-bottom: 5px;
 
@@ -35,116 +38,94 @@
 }
 
 #modality-list {
-
-
-float: left;
-
-
-
-font: bold 26px Arial;
-  text-decoration: none;
-  background-color: #EEEEEE;
-  color: #333333;
-  padding: 2px 6px 2px 6px;
-  border-top: 1px solid #CCCCCC;
-  border-right: 1px solid #333333;
-  border-bottom: 1px solid #333333;
-  border-left: 1px solid #CCCCCC;
+    float: left;
+    font: bold 26px Arial;
+    text-decoration: none;
+    background-color: #EEEEEE;
+    color: #333333;
+    padding: 2px 6px 2px 6px;
+    border-top: 1px solid #CCCCCC;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #CCCCCC;
 
 }
 
-#modality-concept-message {
-
+#modality-dialog-message {
     width: 550px;
     height: 40px;
-   
- 
     margin-left: 16px;  
     font: bold 15px Arial;
-  text-decoration: none;
-  background-color: #EEEEEE;
-  color: #333333;
-  padding: 2px 6px 2px 6px;
-  border-top: 1px solid #CCCCCC;
-  border-right: 1px solid #333333;
-  border-bottom: 1px solid #333333;
-  border-left: 1px solid #CCCCCC;
-  
+    text-decoration: none;
+    background-color: #EEEEEE;
+    color: #333333;
+    padding: 2px 6px 2px 6px;
+    border-top: 1px solid #CCCCCC;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #CCCCCC;
 
 }
 
-#study-concept-message {
-
+#study-dialog-message {
     width: 550px;
     height: 60px;
-   
- 
     margin-left: 16px;  
     font: bold 15px Arial;
-  text-decoration: none;
-  background-color: #EEEEEE;
-  color: #333333;
-  padding: 2px 6px 2px 6px;
-  border-top: 1px solid #CCCCCC;
-  border-right: 1px solid #333333;
-  border-bottom: 1px solid #333333;
-  border-left: 1px solid #CCCCCC;
-  
-
+    text-decoration: none;
+    background-color: #EEEEEE;
+    color: #333333;
+    padding: 2px 6px 2px 6px;
+    border-top: 1px solid #CCCCCC;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #CCCCCC;
 }
 
 
-#report-concept-message {
-
+#report-dialog-message {
     width: 550px;
     height: 60px;
-   
- 
     margin-left: 16px;  
     font: bold 15px Arial;
-  text-decoration: none;
-  background-color: #EEEEEE;
-  color: #333333;
-  padding: 2px 6px 2px 6px;
-  border-top: 1px solid #CCCCCC;
-  border-right: 1px solid #333333;
-  border-bottom: 1px solid #333333;
-  border-left: 1px solid #CCCCCC;
-  
+    text-decoration: none;
+    background-color: #EEEEEE;
+    color: #333333;
+    padding: 2px 6px 2px 6px;
+    border-top: 1px solid #CCCCCC;
+    border-right: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    border-left: 1px solid #CCCCCC;
+
 
 }
 
 
 label {
     margin-left: 5px;    
-     display: inline-block;
-     
-   
+    display: inline-block;
 }
 
-#studyrefresh {
-
+#study-refresh-btn {
     float: right;
-   margin-right: 145px;
+    margin-right: 145px;
 }
 
-#modality-refresh {
-
+#modality-refresh-btn {
     float: right;
-   margin-right: 25px;
+    margin-right: 25px;
 }
 
-#reportrefresh {
-
+#report-refresh-btn {
     float: right;
-   margin-right: 45px;
+    margin-right: 45px;
 }
+
 .modality-list-btn {
     margin-top: 84px;
     padding-bottom: 13px;
-   
-}
 
+}
 
 #select-modality {
     width: 240px;
@@ -154,16 +135,8 @@ label {
     list-style-type: none;
 }
 
-#modalitySoftware {
+#modality-software-availability-fragment {
     text-align:center
-}
-
-
-
-
-
-#modalitytable {
-    margin-top: 23px;
 }
 
 
@@ -176,45 +149,40 @@ label {
     margin-top: -634px;
 }
 
-.modalitybtn {
-    margin-top: 7px;
+.modality-continue-btn-div {
+    margin-top: 27px;
 }
 
- .ui-widget-header {
-            background:#b9cd6d;
-            border: 1px solid #b9cd6d;
-            color: red;
-            font-weight: bold;
-         }
-         
-         #tableformodality{
-             margin-top: 12px;
-         }
-      
-         #reportstudyselectdropdown {
-                 margin-left: -32px;
-         }
-         
-         
-       
 
-         img.img-circle {
-             width: 22px;
-             
-         }
 
-         #tablesecondcolumn {
-             width: 223px;
-         }
-         
-         #performedStatusInProgressOrder {
-             margin-bottom: -25px;
-             //margin-top: 25px;
-           
-         }
-         
-     
-         
-         #reporttablelistid thead {
-             font-weight: bold;
-         }
+#tableformodality{
+    margin-top: 12px;
+}
+
+#reportstudyselectdropdown {
+    margin-left: -32px;
+}
+
+
+
+
+img.img-circle {
+    width: 22px;
+
+}
+
+#tablesecondcolumn {
+    width: 223px;
+}
+
+#modality-table-div {
+    margin-bottom: -25px;
+    //margin-top: 25px;
+
+}
+
+
+
+#reporttablelistid thead {
+    font-weight: bold;
+}

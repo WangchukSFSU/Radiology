@@ -1,16 +1,14 @@
 <% ui.includeCss("radiology", "modalitylist.css") %>
-
 <% ui.includeJavascript("uicommons", "datatables/jquery.dataTables.min.js") %>
 <% ui.includeCss("radiology", "jquery-ui.css") %>
 <% ui.includeCss("radiology", "jquery.dataTables.min.css") %>
-
+<% ui.includeJavascript("radiology", "moreInfo.js") %>
 
 <script>
     jq = jQuery;
     jq(document).ready(function() {
 
-
-    jq('#modalitytable').DataTable({
+    jq('#modality-table').DataTable({
     "sPaginationType": "full_numbers",
     "bPaginate": true,
     "bAutoWidth": false,
@@ -19,13 +17,15 @@
     "bJQueryUI": true,
     "iDisplayLength": 5,   
     });
-    jq(".studygroup").hide();
-    jq(".studybtn").hide();
+
+    jq(".study-header-div").hide();
+    jq(".study-continue-btn-div").hide();
     jq(".breadcrumbs").show();
-    jq(".reportgroup").hide();
-    jq("#reporttable").hide();
-    jq("#studytable").hide();
-    jq( "#modalityConceptDictionaryNotes" ).dialog({
+    jq(".report-header-div").hide();
+    jq("#report-table-div").hide();
+    jq("#study-table-div").hide();
+
+    jq( "#create-modality-concept-message" ).dialog({
     autoOpen: false, 
     buttons: {
     OK: function() {jq(this).dialog("close");}
@@ -36,10 +36,12 @@
     at: "left center"
     }
     });
-    jq( "#modalityConceptDictionary" ).click(function() {
-    jq( "#modalityConceptDictionaryNotes" ).dialog( "open" );
+
+    jq( "#modality-dialog-btn" ).click(function() {
+    jq( "#create-modality-concept-message" ).dialog( "open" );
     });
-    jq( "#continuetext" ).dialog({
+
+    jq( "#modality-continue-dialog-message" ).dialog({
     autoOpen: false, 
     buttons: {
     OK: function() {jq(this).dialog("close");}
@@ -50,7 +52,8 @@
     at: "left center"
     }
     });
-    jq( "#studycontinuetext" ).dialog({
+
+    jq( "#study-continue-dialog-message" ).dialog({
     autoOpen: false, 
     buttons: {
     OK: function() {jq(this).dialog("close");}
@@ -61,7 +64,8 @@
     at: "left center"
     }
     });
-    jq( "#studyconceptmessage" ).dialog({
+
+    jq( "#create-study-concept-message" ).dialog({
     autoOpen: false, 
     buttons: {
     OK: function() {jq(this).dialog("close");}
@@ -72,7 +76,8 @@
     at: "left center"
     }
     });
-    jq( "#reportHTMLFormMessage" ).dialog({
+
+    jq( "#create-report-dialog-message" ).dialog({
     autoOpen: false, 
     buttons: {
     OK: function() {jq(this).dialog("close");}
@@ -82,78 +87,87 @@
     my: "left center",
     at: "left center"
     }
-    });       
-    jq("#studyrefresh").click(function() { 
-    jq("#studytable").hide();
+    }); 
+
+    jq("#study-refresh-btn").click(function() { 
+    jq("#study-table-div").hide();
     jq(this).data('clicked', true);
     alert("zzzzzzz");
-    jq("#continuebtn").click();
-    //myFunctionT(selected);
+    jq("#modality-continue-btn").click();
     });
-    jq("#reportrefresh").click(function() { 
-    jq("#reporttable").hide();
+
+    jq("#report-refresh-btn").click(function() { 
+    jq("#report-table-div").hide();
     jq(this).data('clicked', true);
-    jq("#studycontinuebtn").click();
+    jq("#study-continue-btn").click();
     });
-    jq("#continuebtn").click(function() {
+
+    jq("#modality-continue-btn").click(function() {
     jq(this).data('clicked', true);
     alert("CLCICLCLCLCLCCLC");
-    jq("#modalitySoftware").hide();
-    jq(".studygroup").show();
-    jq(".modality").hide();
-    jq(".studybtn").show(); 
-    jq(".modalitybtn").hide();
-    jq("#performedStatusInProgressOrder").hide();
-    jq("#manageradiology").html("<li><i ></i><a href='/openmrs/radiology/adminInitialize.page'> Manage Radiology Module</li>");
-    jq("#manageradiology li i").addClass("icon-chevron-right link");
-    jq("#managestudy").html("<li><i ></i> Manage Studies</li>");
-    jq("#managestudy li i").addClass("icon-chevron-right link");
+    jq("#modality-software-availability-fragment").hide();
+    jq(".study-header-div").show();
+    jq(".modality-header-div").hide();
+    jq(".study-continue-btn-div").show(); 
+    jq(".modality-continue-btn-div").hide();
+    jq("#modality-table-div").hide();
+    jq("#manage-radiology-breadcrumb").html("<li><i ></i><a href='/openmrs/radiology/adminInitialize.page'> Manage Radiology Module</li>");
+    jq("#manage-radiology-breadcrumb li i").addClass("icon-chevron-right link");
+    jq("#manage-study-breadcrumb").html("<li><i ></i> Manage Studies</li>");
+    jq("#manage-study-breadcrumb li i").addClass("icon-chevron-right link");
     myFunctionStudyList();
     });
-    jq("#studycontinuebtn").click(function() {
+
+    jq("#study-continue-btn").click(function() {
     jq(this).data('clicked', true);
     alert("YES");
-    jq("#modalitySoftware").hide();
-    jq(".studygroup").hide();
-    jq(".modality").hide();
-    jq(".studybtn").hide(); 
-    jq(".modalitybtn").hide();
-    jq(".reportgroup").show();
-    jq("#studytable").hide();
-   jq("#managestudy").html("<li><i ></i><a href='javascript:void(0);' onClick='manageStudiesBreadCrumb()'> Manage Studies</li>");
-    jq("#managestudy li i").addClass("icon-chevron-right link");
-    jq("#managestudy li a").addClass("addstudylink");
-    jq("#managereport").html("<li><i ></i> Manage Reports</li>");
-    jq("#managereport li i").addClass("icon-chevron-right link");
+    jq("#modality-software-availability-fragment").hide();
+    jq(".study-header-div").hide();
+    jq(".modality-header-div").hide();
+    jq(".study-continue-btn-div").hide(); 
+    jq(".modality-continue-btn-div").hide();
+    jq(".report-header-div").show();
+    jq("#study-table-div").hide();
+   jq("#manage-study-breadcrumb").html("<li><i ></i><a href='javascript:void(0);' onClick='manageStudiesBreadCrumb()'> Manage Studies</li>");
+    jq("#manage-study-breadcrumb li i").addClass("icon-chevron-right link");
+    jq("#manage-study-breadcrumb li a").addClass("addstudylink");
+    jq("#manage-report-breadcrumb").html("<li><i ></i> Manage Reports</li>");
+    jq("#manage-report-breadcrumb li i").addClass("icon-chevron-right link");
     functionreportlist();
     });
-    jq("#reportHTMLForm").click(function() {
-    jq("#reportHTMLFormMessage").dialog( "option", "width", 460 );
-    jq( "#reportHTMLFormMessage" ).dialog( "open" );
+
+    jq("#report-dialog-btn").click(function() {
+    jq("#create-report-dialog-message").dialog( "option", "width", 460 );
+    jq( "#create-report-dialog-message" ).dialog( "open" );
     });
-    jq("#studyConceptDictionary").click(function() {
-    jq( "#studyconceptmessage" ).dialog( "open" );
+
+    jq("#study-dialog-btn").click(function() {
+    jq( "#create-study-concept-message" ).dialog( "open" );
     });
+
     });
+
+
     function manageStudiesBreadCrumb() {
     manageStudiesBreadCrumb.called = true;
     alert('manageStudiesBreadCrumb');
     jq('#studysavebtn').data('clicked', false);
-    jq(".reportgroup").hide();
-    jq("#managereport").empty();
-    jq(".studygroup").show();
-    jq(".studybtn").show();
-    jq("#reporttable").hide();
+    jq(".report-header-div").hide();
+    jq("#manage-report-breadcrumb").empty();
+    jq(".study-header-div").show();
+    jq(".study-continue-btn-div").show();
+    jq("#report-table-div").hide();
     myFunctionStudyList();
     }
+
     function myFunctionStudyList() {
     //myFunctionT.called = true;
-    jq("#studytable").show();
-    jq('#studytable').empty();
-    jq('#studytable').append('<table></table>');
-    jq('#studytable table').attr('id','studytablelistid');
-    jq("#studytable table").addClass("studyclass");
-    var studytablelist = jq('#studytable').children();
+    jq("#study-table-div").show();
+    jq('#study-table-div').empty();
+    jq('#study-table-div').append('<table></table>');
+    jq('#study-table-div table').attr('id','studytablelistid');
+    jq("#study-table-div table").addClass("studyclass");
+    var studytablelist = jq('#study-table-div').children();
     jq.getJSON('${ ui.actionLink("getStudyConceptsAnswerFromModality") }',
     {
     })
@@ -182,12 +196,12 @@ studytablelist.append( '</tbody>' );
     })
     }
     function functionreportlist() {
-    jq('#reporttable').show();
-    jq('#reporttable').empty();
-    jq('#reporttable').append('<table></table>');
-    jq('#reporttable table').attr('id','reporttableid');
-    jq("#reporttable table").addClass("reporttableclass");
-    var reporttablechildren = jq('#reporttable').children();
+
+    jq('#report-table-div').empty();
+    jq('#report-table-div').append('<table></table>');
+    jq('#report-table-div table').attr('id','reporttableid');
+    jq("#report-table-div table").addClass("reporttableclass");
+    var reporttablechildren = jq('#report-table-div').children();
 
     //get report available
     jq.getJSON('${ ui.actionLink("getReport") }',
@@ -215,9 +229,9 @@ studytablelist.append( '</tbody>' );
 
     localStorage.setItem("formNameArray", JSON.stringify(formNameArray));
     localStorage.setItem("formNameHtmlToDisplayArray", JSON.stringify(formNameHtmlToDisplayArray));
-   
-    
-    jq.getJSON('${ ui.actionLink("getStudyConcepts") }',
+
+
+    jq.getJSON('${ ui.actionLink("getStudyConceptsAnswerFromModality") }',
     {
     })
     .error(function(xhr, status, err) {
@@ -225,6 +239,7 @@ studytablelist.append( '</tbody>' );
     })
     .success(function(ret) {
     alert("report goog"); 
+    jq('#report-table-div').show();
     // jq("#rrr").show();
     alert("ret.length" + ret.length);
     for (var i = 0; i < ret.length; i++) {
@@ -250,9 +265,9 @@ studytablelist.append( '</tbody>' );
 
 
     function displayReport(el){
-    
+
     //dialog box
-    jq("#somedivreport").dialog({
+    jq("#view-report-dialog").dialog({
     width: 600,
     height: 450,
     });
@@ -272,7 +287,7 @@ studytablelist.append( '</tbody>' );
     }
 
     //disply form in iframe
-    var iframe = document.getElementById('thedialogreport');
+    var iframe = document.getElementById('view-report-iframe');
     var html_string = '<html><head></head><body>'+ formNameHtmlToDisplay +'</body></html>';
     var iframedoc = iframe.document;
     iframedoc = iframe.contentWindow.document;
@@ -297,56 +312,51 @@ studytablelist.append( '</tbody>' );
                 System Administration
             </a>   
         </li>
-        <li id="manageradiology">  
+        <li id="manage-radiology-breadcrumb">  
             <i class="icon-chevron-right link"></i>
             Manage Radiology Module   
         </li>
-        <li id="managestudy"> 
+        <li id="manage-study-breadcrumb"> 
         </li>
-        <li id="managereport"> 
+        <li id="manage-report-breadcrumb"> 
         </li>
     </ul>
 </div>
 
-<div id ="modalitySoftware"  >
+
+
+<div id ="modality-software-availability-fragment"  >
     ${ ui.includeFragment("radiology", "modalitySoftware") }
 </div>
 
-<div class="modality">
-    <div class="form-group">
-        <label id="modality-concept-message" for modality-concept-label> Please Add Modality not appearing in list to Concept Dictionary and Refresh: <a id="modalityconceptmessage" href="http://localhost:8080/openmrs/dictionary/concept.form"> Click here to Concept Dictionary </a></label>
-        <input type="button" id="modalityConceptDictionary" class="modalityConceptDictionary" value = "?" >
-        <input type="button" name="modality-refresh" onclick="location.href='/openmrs/pages/radiology/adminInitialize.page'" id="modality-refresh" value="Refresh">
-    </div>
+<div class="modality-header-div">
+    <label id="modality-dialog-message" for modality-dialog-label> Please Add Modality not appearing in list to Concept Dictionary and Refresh: <a id="modalityconceptmessage" target='_blank' href="http://localhost:8080/openmrs/dictionary/concept.form"> Click here to Concept Dictionary </a></label>
+    <input type="button" id="modality-dialog-btn" value = "?" >
+    <input type="button" onclick="location.href='/openmrs/pages/radiology/adminInitialize.page'" id="modality-refresh-btn" value="Refresh">
 </div>
 
 
-<div class="studygroup">
-    <div class="form-group">
-        <label id="study-concept-message" for modality-concept-label> Please Add Study not appearing in list to Concept Dictionary and Refresh: <a id="modalityconceptmessage" href="http://localhost:8080/openmrs/dictionary/concept.form"> Click here to Concept Dictionary </a></label>
-        <input type="button" id="studyConceptDictionary" class="studyConceptDictionary" value = "?" >
-        <input type="button" name="studyrefresh" id="studyrefresh" value="Refresh">
-    </div>
+<div class="study-header-div">
+    <label id="study-dialog-message" for modality-dialog-label> Please Add Study not appearing in list to Concept Dictionary and Refresh: <a id="modalityconceptmessage" target='_blank' href="http://localhost:8080/openmrs/dictionary/concept.form"> Click here to Concept Dictionary </a></label>
+    <input type="button" id="study-dialog-btn" value = "?" >
+    <input type="button" id="study-refresh-btn" value="Refresh">
 </div>
 
-<div class="reportgroup">
-    <div class="form-group">
-        <label id="report-concept-message" for report-concept-label>  Please Create Report not appearing in list and Refresh: <a id="modalityconceptmessage" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"> Click here to create HTMLForm  </a></label>
-        <input type="button" id="reportHTMLForm" class="reportHTMLForm" value = "?" >
-        <input type="button" name="reportrefresh" id="reportrefresh" value="Refresh">
-
-    </div>
+<div class="report-header-div">
+    <label id="report-dialog-message" for report-dialog-label>  Please Create Report not appearing in list and Refresh: <a id="modalityconceptmessage" target='_blank' href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"> Click here to create HTMLForm  </a></label>
+    <input type="button" id="report-dialog-btn" value = "?" >
+    <input type="button" id="report-refresh-btn" value="Refresh">
 </div>
 
-<div id="performedStatusInProgressOrder">
-    <table id="modalitytable">
+<div id="modality-table-div">
+    <table id="modality-table">
         <thead>
             <tr>
                 <th>Modality Available</th>
             </tr>
         </thead>
         <tbody>
-            <% mmm.each { modalityname -> %>
+            <% modalityConcept.each { modalityname -> %>
             <tr>
                 <td>
                     ${modalityname}</td>
@@ -357,29 +367,29 @@ studytablelist.append( '</tbody>' );
 </div>
 
 
-<div id="studytable" >  
+<div id="study-table-div" >  
 </div>
 
-<div id="reporttable" >  
+<div id="report-table-div" >  
 </div>
 
-<div class="modalitybtn">
-    <input type="button" id="continuebtn" class="continuebtn" value="Continue" >
+<div class="modality-continue-btn-div">
+    <input type="button" id="modality-continue-btn" value="Continue" >
 </div>
 
-<div class="studybtn">
-    <input type="button" id="studycontinuebtn" class="studycontinuebtn" value="Continue" >
+<div class="study-continue-btn-div">
+    <input type="button" id="study-continue-btn" value="Continue" >
 </div>
 
-<div id="modalityConceptDictionaryNotes" title="Modality Concept Dictionary Notes">IMPORTANT NOTES FOR CREATING MODALITY CONCEPT: <br> 1) Select Radiology Imaging/Procedure as class from the dropdown menu.<br> 2) Select N/A as datatype from the dropdown menu.<br> 3) Add newly created modality concept to Imaging modalitites ConvSet in the concept dictionary." </div>
-<div id="continuetext" title="Continue">  Please Click Save to save the modality before continue </div>
-<div id="studyconceptmessage" title="studyconceptmessage"> IMPORTANT NOTES FOR CREATING STUDY CONCEPT: <br> 1) Select Radiology Imaging/Procedure  as class from the dropdown menu. <br> 2) Select N/A as datatype from the dropdown menu. <br> 3)  Include the newly created study concept to modality set using concept dictionary.  " </div>
-<div id="studycontinuetext" title="Continue">  Please Click Save to save the study before continue </div>
-<div id="reportHTMLFormMessage" style="width:430px" title="reportHTMLForm"> See radiology user guide for directions on creating report </div>
+<div id="create-modality-concept-message" title="Create Modality Concept">IMPORTANT NOTES FOR CREATING MODALITY CONCEPT: <br> 1) Select Radiology Imaging/Procedure as class from the dropdown menu.<br> 2) Select N/A as datatype from the dropdown menu.<br> 3) Add newly created modality concept to Imaging modalitites ConvSet in the concept dictionary. </div>
+<div id="modality-continue-dialog-message" title="Click Save">  Please Click Save to save the modality before continue </div>
+<div id="create-study-concept-message" title="Create Study Concept"> IMPORTANT NOTES FOR CREATING STUDY CONCEPT: <br> 1) Select Radiology Imaging/Procedure  as class from the dropdown menu. <br> 2) Select N/A as datatype from the dropdown menu. <br> 3)  Include the newly created study concept to modality set using concept dictionary.  </div>
+<div id="study-continue-dialog-message" title="Click Save">  Please Click Save to save the study before continue </div>
+<div id="create-report-dialog-message" style="width:430px" title="Create Report"> See radiology user guide for directions on creating report </div>
 
 
-<div id="somedivreport" title="Report" style="display:none;">
-    <iframe id="thedialogreport" width="1250" height="550"></iframe>
+<div id="view-report-dialog" title="View Report" style="display:none;">
+    <iframe id="view-report-iframe" width="1250" height="550"></iframe>
 </div>
 
 

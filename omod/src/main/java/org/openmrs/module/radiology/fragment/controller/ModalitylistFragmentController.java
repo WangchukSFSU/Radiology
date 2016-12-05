@@ -19,51 +19,29 @@ import org.openmrs.module.htmlformentry.FormEntryContext.Mode;
 import org.openmrs.module.htmlformentry.FormEntrySession;
 import org.openmrs.module.htmlformentry.HtmlForm;
 import org.openmrs.module.htmlformentry.HtmlFormEntryUtil;
-import org.openmrs.module.radiology.RadiologyService;
-
 import org.openmrs.ui.framework.SimpleObject;
 import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.fragment.FragmentModel;
-import org.springframework.web.bind.annotation.RequestParam;
 
 public class ModalitylistFragmentController {
 	
 	public void controller(FragmentModel model) throws Exception {
 		
-		List<Form> mod = new ArrayList();
-		List<Form> studyreport = Context.getFormService()
-				.getAllForms();
-		
-		for (Form searchform : studyreport) {
-			// System.out.println("GOOD ************************************ " + searchform.getName());
-			// System.out.println("GOOD **************************************" + searchform.getFormId());
-			if (searchform.getFormId()
-					.equals(7)) {
-				System.out.println("GOOD ************************************ " + searchform.getName());
-				System.out.println("GOOD **************************************" + searchform.getUuid());
-				mod.add(searchform);
-			}
-			
-		}
-		
-		ArrayList<ConceptName> modalityconceptnamelist = new ArrayList();
-		List<ConceptSet> moset = Context.getConceptService()
+		ArrayList<ConceptName> modalityConcept = new ArrayList();
+		List<ConceptSet> modalityConceptSet = Context.getConceptService()
 				.getConceptSetsByConcept(Context.getConceptService()
 						.getConcept(164068));
 		
-		for (ConceptSet abd : moset) {
+		for (ConceptSet addModalityConceptSet : modalityConceptSet) {
 			
-			ConceptName modalityConceptName = abd.getConcept()
+			ConceptName modalityConceptName = addModalityConceptSet.getConcept()
 					.getName();
 			
-			System.out.println("Cocnept Set " + abd.getConceptSet());
-			System.out.println("Cocnept Set cc " + abd.getConcept());
-			modalityconceptnamelist.add(modalityConceptName);
+			modalityConcept.add(modalityConceptName);
 		}
 		
-		model.addAttribute("mmm", modalityconceptnamelist);
-		model.addAttribute("mod", mod);
+		model.addAttribute("modalityConcept", modalityConcept);
 		
 	}
 	
@@ -72,126 +50,24 @@ public class ModalitylistFragmentController {
 		
 		ArrayList<Concept> studySetMembers = new ArrayList<Concept>();
 		
-		ConceptClass mot = Context.getConceptService()
+		ConceptClass studyClassName = Context.getConceptService()
 				.getConceptClassByName("Radiology/Imaging Procedure");
 		
-		List<Concept> mot_list = Context.getConceptService()
-				.getConceptsByClass(mot);
+		List<Concept> studyClassNameConcept = Context.getConceptService()
+				.getConceptsByClass(studyClassName);
 		
-		for (Concept ccc : mot_list) {
-			if (ccc.getDisplayString()
+		for (Concept filterStudyClassNameConcept : studyClassNameConcept) {
+			if (!filterStudyClassNameConcept.getDisplayString()
 					.endsWith("modality")) {
-				
-			} else {
-				studySetMembers.add(ccc);
+				studySetMembers.add(filterStudyClassNameConcept);
 			}
 		}
 		
-		String[] properties = new String[2];
+		String[] properties = new String[4];
 		properties[0] = "conceptId";
 		properties[1] = "displayString";
-		return SimpleObject.fromCollection(studySetMembers, ui, properties);
-	}
-	
-	public List<SimpleObject> getReportConcepts(FragmentModel model, @SpringBean("conceptService") ConceptService service,
-			UiUtils ui) throws Exception {
-		
-		ArrayList<FormEntrySession> fff = new ArrayList<FormEntrySession>();
-		
-		List<Form> getAllForms = Context.getFormService()
-				.getAllForms();
-		ConceptClass getConceptClassByName = Context.getConceptService()
-				.getConceptClassByName("Radiology/Imaging Procedure");
-		List<Concept> getConceptsByClass = Context.getConceptService()
-				.getConceptsByClass(getConceptClassByName);
-		
-		for (Form searchform : getAllForms) {
-			
-			String searchformName = searchform.getName()
-					.trim();
-			if (searchform.getFormId()
-					.equals(7)) {
-				
-				Mode mode = Mode.ENTER;
-				HtmlForm htmlForm = HtmlFormEntryUtil.getService()
-						.getHtmlFormByForm(searchform);
-				Patient patient = HtmlFormEntryUtil.getFakePerson();
-				FormEntrySession FormEntrySessionNew = null;
-				FormEntrySessionNew = new FormEntrySession(patient, htmlForm, mode, null);
-				FormEntrySessionNew.getHtmlToDisplay();
-				fff.add(FormEntrySessionNew);
-			}
-			
-		}
-		
-		String[] FormEntryProperties = new String[3];
-		FormEntryProperties[0] = "FormName";
-		FormEntryProperties[1] = "Form";
-		FormEntryProperties[2] = "HtmlToDisplay";
-		
-		return SimpleObject.fromCollection(fff, ui, FormEntryProperties);
-	}
-	
-	public List<SimpleObject> getStudyConcepts(FragmentModel model, @SpringBean("conceptService") ConceptService service,
-			UiUtils ui) {
-		
-		ArrayList<ConceptName> studySetMembers = new ArrayList<ConceptName>();
-		
-		ConceptClass mot = Context.getConceptService()
-				.getConceptClassByName("Radiology/Imaging Procedure");
-		
-		List<Concept> mot_list = Context.getConceptService()
-				.getConceptsByClass(mot);
-		
-		for (Concept ccc : mot_list) {
-			
-			if (ccc.getDisplayString()
-					.endsWith("modality")) {
-				
-			}
-			
-			else {
-				studySetMembers.add(ccc.getName());
-			}
-		}
-		
-		String[] properties = new String[2];
-		properties[0] = "id";
-		properties[1] = "name";
-		
-		return SimpleObject.fromCollection(studySetMembers, ui, properties);
-	}
-	
-	public List<SimpleObject> manageReport(FragmentModel model, @SpringBean("conceptService") ConceptService service,
-			UiUtils ui) {
-		
-		ArrayList<FormEntrySession> fff = new ArrayList<FormEntrySession>();
-		
-		ArrayList<ConceptName> studySetMembers = new ArrayList<ConceptName>();
-		
-		ConceptClass mot = Context.getConceptService()
-				.getConceptClassByName("Radiology/Imaging Procedure");
-		
-		List<Concept> mot_list = Context.getConceptService()
-				.getConceptsByClass(mot);
-		
-		for (Concept ccc : mot_list) {
-			
-			if (ccc.getDisplayString()
-					.endsWith("modality")) {
-				
-			}
-			
-			else {
-				studySetMembers.add(ccc.getName());
-			}
-			
-		}
-		
-		String[] properties = new String[2];
-		properties[0] = "id";
-		properties[1] = "name";
-		
+		properties[2] = "id";
+		properties[3] = "name";
 		return SimpleObject.fromCollection(studySetMembers, ui, properties);
 	}
 	

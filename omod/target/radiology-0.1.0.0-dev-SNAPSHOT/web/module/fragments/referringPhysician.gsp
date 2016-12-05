@@ -137,7 +137,7 @@
     
     var orderencounterId = ${anOrder.study.orderencounterId} ;
     
-    jq('#performedStatusCompletedObsSelect').append("<h1 class='order'  id= 'orderDetailHeading'>RADIOLOGY ORDER DETAILS - CompletedDate :   ${ anOrder.dateCreated }  </h1>");
+    jq('#performedStatusCompletedObsSelect').append("<h1 class='order'  id= 'orderDetailHeading'>RADIOLOGY ORDER DETAILS - CompletedDate :   ${ anOrder.study.obsCompletedDate }  </h1>");
      jq('#performedStatusCompletedObsSelect').append( jq('#completedOrderObs'));
     alert("orderencounterId" + orderencounterId);
 localStorage.setItem("orderencounterId", orderencounterId);
@@ -613,7 +613,8 @@ autoOpen: false,
      jq("#performedStatusCompletedOrder").show();
      jq("#performedStatusInProgressOrder").hide();
      jq("#performedStatusesDropdown").children("h1").remove();
-    
+     jq('#performedStatusCompletedObsSelect').children("h1").remove();
+     jq('#performedStatusCompletedObsSelect').children("h1").remove();
      jq("#performedStatusCompletedObsSelect").hide();
      
     });
@@ -748,7 +749,7 @@ jq.getJSON('${ ui.actionLink("placeRadiologyOrder") }',
         <td> <p style="display:none;">${ anOrder.orderId }</p>
             ${anOrder.study.studyname}</td>
         <td> ${anOrder.study.radiologistUserName}</td>
-        <td>${ anOrder.dateCreated } </td>
+        <td>${ anOrder.study.obsCompletedDate } </td>
         
 
     </tr>
