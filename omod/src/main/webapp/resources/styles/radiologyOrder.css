@@ -9,7 +9,7 @@ and open the template in the editor.
 */
 
 
-#performedStatusesDropdown {
+#completedOrderHeader {
     padding-bottom: 50px;
     margin-top: 17px;
 }
@@ -18,30 +18,30 @@ and open the template in the editor.
     height: 36px;
 }
 
-#performedStatusCompletedOrder {
-    margin-top: -42px;
-}
 
 
-#performedStatusCompletedObsSelect {
+
+#radiologyOrderDetailsDiv {
     margin-top: 12px;
 }
-#HTMLFORM {
-    margin-top: -162px;
-}
+
 
 #ContactRadiologist {
     margin-top: 16px;
 }
 
-#performedStatusInProgressOrder {
+#inProgressOrderDiv {
     margin-top: -23px;
 }
 
-#performedStatusCompletedReport {
+#performedStatusReportReadyDiv {
     margin-top: 17px;
 }
 
-#AddRadiologyOrderForm {
+#addRadiologyOrderForm {
     margin-top: 36px;
+}
+
+div#performedStatusCompletedOrder {
+    margin-top: -57px;
 }

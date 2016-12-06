@@ -30,20 +30,16 @@ def conceptDiagnosisClass = config.requireDiagnosisClass
     jq("#addorder").hide();
     jq("#orderdetail").hide();
 
-    jq("#performedStatusCompletedReport").hide();
+ 
     jq("#SentConfirmation").hide();
 
-    jq("#AddRadiologyOrderForm").hide();
+    jq("#addRadiologyOrderForm").hide();
     jq("#EmailForm").hide();
     jq("#performedStatusInProgressOrder").hide();
-    jq("#performedStatusCompletedObsSelect").hide();
-    jq("#HTMLFORM").hide();
-    jq("#ContactRadiologist").hide();
+    jq("#radiologyOrderDetailsDiv").hide();
+   
+    jq("#contactRadiologist").hide();
     jq("#performedStatusCompletedOrder").show();
-
-
-
-
 
 
     jq("#addRadiologyOrderBtn").click(function(){
@@ -51,14 +47,14 @@ def conceptDiagnosisClass = config.requireDiagnosisClass
     jq("#performedStatusesDropdown").hide();
     jq("#performedStatusCompletedOrder").hide();
     jq("#EmailForm").hide();
-    jq("#HTMLFORM").hide(); 
+   
     jq("#performedStatusInProgressOrder").hide();
-    jq("#performedStatusCompletedObsSelect").hide();
+    jq("#radiologyOrderDetailsDiv").hide();
 
-    jq("#AddRadiologyOrderForm").show();
-    jq("#performedStatusCompletedReport").hide();
-    jq("#studytags").val(''); 
-    jq("#diagnosistags").val('');
+    jq("#addRadiologyOrderForm").show();
+   
+    jq("#studyTags").val(''); 
+    jq("#diagnosisTags").val('');
     jq("#orderInstruction").val('');
 
 
@@ -76,12 +72,12 @@ def conceptDiagnosisClass = config.requireDiagnosisClass
 
     jq("#performedStatusCompletedOrder").hide();
     jq("#performedStatusInProgressOrder").hide();
-    jq("#performedStatusCompletedObsSelect").hide();
+    jq("#radiologyOrderDetailsDiv").hide();
     jq("#EmailForm").show();
-    jq("#AddRadiologyOrderForm").hide();
-    jq("#ContactRadiologist").hide(); 
-    jq("#HTMLFORM").hide(); 
-    jq("#performedStatusCompletedReport").hide(); 
+    jq("#addRadiologyOrderForm").hide();
+    jq("#contactRadiologist").hide(); 
+  
+ 
 
     jq("#performedStatusesDropdown").hide();
 
@@ -109,13 +105,13 @@ def conceptDiagnosisClass = config.requireDiagnosisClass
     jq("#messagepatient").hide();
     jq("#addorder").hide();
     jq("#orderdetail").show();
-    jq("#HTMLFORM").hide(); 
-    jq("#performedStatusCompletedReport").hide();
+   
+   
     jq(this).addClass('selected').siblings().removeClass('selected');    
     var value=jq(this).find('td:first').html();
     alert(value); 
     var splitvalue = value.split('>');
-    jq("#performedStatusCompletedObsSelect").show();
+    jq("#radiologyOrderDetailsDiv").show();
     jq("#performedStatusCompletedOrder").hide();
 
      jq("#performedStatusesDropdown > h1").remove();
@@ -125,7 +121,7 @@ def conceptDiagnosisClass = config.requireDiagnosisClass
     alert(ordervalue);
     var orderId= ordervalue.substr(0, ordervalue.indexOf('<'));
     //var orderId = ordervalue.substr(0, 2);
-    jq('#completedOrderObs').empty();
+    jq('#radiologyOrderDetailsTableId').empty();
     alert(orderId);
     <% if (radiologyOrders) { %>
 
@@ -137,15 +133,15 @@ def conceptDiagnosisClass = config.requireDiagnosisClass
 
     var orderencounterId = ${anOrder.study.studyReportSavedEncounterId} ;
 
-    jq('#performedStatusCompletedObsSelect').append("<h1 class='order'  id= 'orderDetailHeading'>RADIOLOGY ORDER DETAILS - CompletedDate :   ${ anOrder.study.obsCompletedDate }  </h1>");
-    jq('#performedStatusCompletedObsSelect').append( jq('#completedOrderObs'));
+    jq('#radiologyOrderDetailsDiv').append("<h1 class='order'  id= 'orderDetailHeading'>RADIOLOGY ORDER DETAILS - CompletedDate :   ${ anOrder.study.obsCompletedDate }  </h1>");
+    jq('#radiologyOrderDetailsDiv').append( jq('#radiologyOrderDetailsTableId'));
     alert("orderencounterId" + orderencounterId);
     localStorage.setItem("orderencounterId", orderencounterId);
     localStorage.setItem("orderId", orderId);
-  jq('#completedOrderObs').append( '<thead><tr><th> Report</th><th> Radiologist</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th>ViewStudy</th><th> ContactRadiologist</th></tr></thead>' );
+  jq('#radiologyOrderDetailsTableId').append( '<thead><tr><th> Report</th><th> Radiologist</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th>ViewStudy</th><th> ContactRadiologist</th></tr></thead>' );
 
 
-jq('#completedOrderObs').append( '<tbody><tr><td><a onclick="runMyFunction();"> Obs</a> </td><td> ${anOrder.study.studyReportRadiologist}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td>${anOrder.study.studyname}</td><td id="dogdog" href="ddasdas"><a id="tiger" class="tiger" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + patient.patientIdentifier }" onclick="loadImages(); return false;" >ViewStudy</a></td><td><a onclick="contactRadiologist();"> ContactRadiologist</a></td></tr></tbody>' );
+jq('#radiologyOrderDetailsTableId').append( '<tbody><tr><td><a onclick="runMyFunction();"> Obs</a> </td><td> ${anOrder.study.studyReportRadiologist}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td>${anOrder.study.studyname}</td><td id="dogdog" href="ddasdas"><a id="tiger" class="tiger" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + patient.patientIdentifier }" onclick="loadImages(); return false;" >ViewStudy</a></td><td><a onclick="contactRadiologist();"> ContactRadiologist</a></td></tr></tbody>' );
 
     }
 
@@ -158,7 +154,7 @@ jq('#completedOrderObs').append( '<tbody><tr><td><a onclick="runMyFunction();"> 
     });
 
 
-    jq("#clearmessage").click(function(){
+    jq("#clearMessage").click(function(){
     alert("111111 ");
 
 
@@ -186,7 +182,7 @@ jq('#completedOrderObs').append( '<tbody><tr><td><a onclick="runMyFunction();"> 
 
     alert("999ppp");
     jq('#contactRadiologistDialogBox').dialog('close');
-     jq( "<h1>Email sent successfully</h1>" ).insertBefore( jq('#performedStatusCompletedObsSelect h1') );
+     jq( "<h1>Email sent successfully</h1>" ).insertBefore( jq('#radiologyOrderDetailsDiv h1') );
 
     }
 
@@ -205,13 +201,13 @@ jq('#completedOrderObs').append( '<tbody><tr><td><a onclick="runMyFunction();"> 
     var addressValue = jq('.tiger').attr("href");
     alert(addressValue );
 
-    jq("#thedialog").attr('src', jq('.tiger').attr("href"));
-    jq("#somediv").dialog({
+    jq("#viewStudyImageIframe").attr('src', jq('.tiger').attr("href"));
+    jq("#viewStudyImageDialog").dialog({
     width: 400,
     height: 450,
     modal: true,
     close: function () {
-    jq("#thedialog").attr('src', "about:blank");
+    jq("#viewStudyImageIframe").attr('src', "about:blank");
     }
     });
     return false;
@@ -285,9 +281,9 @@ jq.getJSON('${ ui.actionLink("getEncounterIdObs") }',
 
     function contactRadiologist() {
     alert("run my contactRadiologist");
-    jq("#HTMLFORM").hide(); 
-    jq("#ContactRadiologist").show();
-    jq("#performedStatusCompletedReport").hide();
+   
+    jq("#contactRadiologist").show();
+    
     var orderId = localStorage.getItem("orderId");
     alert("orderId" + orderId);
     jq('#messageRadiologist').val('foobar');
@@ -361,7 +357,7 @@ jq.getJSON('${ ui.actionLink("getEncounterIdObs") }',
    <!-- Javascript -->
 <script>
     jq( function() {
-    jq( "#studytags" ).autocomplete({
+    jq( "#studyTags" ).autocomplete({
     source: function( request, response ) {
     var results = [];
         jq.getJSON('${ ui.actionLink("getStudyAutocomplete") }',
@@ -383,7 +379,7 @@ jq.getJSON('${ ui.actionLink("getEncounterIdObs") }',
     } )
 
 
-    jq( "#diagnosistags" ).autocomplete({
+    jq( "#diagnosisTags" ).autocomplete({
     source: function( request, response ) {
     var results = [];
         jq.getJSON('${ ui.actionLink("getDiagnosisAutocomplete") }',
@@ -412,17 +408,6 @@ jq.getJSON('${ ui.actionLink("getEncounterIdObs") }',
 
 
 
-    jq( "#ordersaved" ).dialog({
-    autoOpen: false, 
-    buttons: {
-    OK: function() {jq(this).dialog("close");}
-    },
-    title: "Important Message",
-    position: {
-    my: "left center",
-    at: "left center"
-    }
-    });
 
 
     jq("#diagnosislistSelect").hide();
@@ -545,12 +530,12 @@ jq.getJSON('${ ui.actionLink("getStudyConceptsAnswerFromModality") }',
     jq("#performedStatusesDropdown").show();
     jq("#performedStatusesDropdown").children("h1").remove();
     jq("<h1></h1>").text("Email sent successfully").appendTo('#performedStatusesDropdown');
-    jq("#AddRadiologyOrderForm").hide();
+    jq("#addRadiologyOrderForm").hide();
 
     jq("#performedStatusInProgressOrder").hide();
-    jq("#performedStatusCompletedObsSelect").hide();
+    jq("#radiologyOrderDetailsDiv").hide();
 
-    jq("#ContactRadiologist").hide();
+    jq("#contactRadiologist").hide();
     jq("#performedStatusCompletedOrder").show();
 
     }
@@ -563,7 +548,6 @@ jq.getJSON('${ ui.actionLink("getStudyConceptsAnswerFromModality") }',
     jq = jQuery;
     jq(document).ready(function() {
 
-    jq("#ordersaved").hide();
     jq("#cancelForm").click(function(){
 
     location.reload();
@@ -576,7 +560,7 @@ jq.getJSON('${ ui.actionLink("getStudyConceptsAnswerFromModality") }',
     jq("#performedStatusInProgressOrder").empty();
     jq("#performedStatusInProgressOrder").show();
     jq("#performedStatusesDropdown").children("h1").remove(); 
-    jq("#performedStatusCompletedObsSelect").hide();
+    jq("#radiologyOrderDetailsDiv").hide();
 
     var patient =  jq("#patientId p").text();
 
@@ -673,9 +657,9 @@ jq.getJSON('${ ui.actionLink("getStudyConceptsAnswerFromModality") }',
     jq("#performedStatusCompletedOrder").show();
     jq("#performedStatusInProgressOrder").hide();
     jq("#performedStatusesDropdown").children("h1").remove();
-    jq('#performedStatusCompletedObsSelect').children("h1").remove();
-    jq('#performedStatusCompletedObsSelect').children("h1").remove();
-    jq("#performedStatusCompletedObsSelect").hide();
+    jq('#radiologyOrderDetailsDiv').children("h1").remove();
+    jq('#radiologyOrderDetailsDiv').children("h1").remove();
+    jq("#radiologyOrderDetailsDiv").hide();
 
     });
 
@@ -685,9 +669,9 @@ jq.getJSON('${ ui.actionLink("getStudyConceptsAnswerFromModality") }',
  var pat = "${patient}".split("#");
     var patient = pat[1];
     //var modalityOrder = jq('select[name=modalityConceptName]').val();
-    var  studyOrder = jq("#studytags").val();
+    var  studyOrder = jq("#studyTags").val();
 
-    var  diagnosisOrder = jq("#diagnosistags").val();
+    var  diagnosisOrder = jq("#diagnosisTags").val();
     var  instructionOrder = jq("#orderInstruction").val();
     var priorityOrder = jq('select[name=priority]').val();
     alert("Sutyd " + studyOrder);
@@ -708,17 +692,17 @@ jq.getJSON('${ ui.actionLink("placeRadiologyOrder") }',
 
     alert("000000000");
 
-    jq("#performedStatusCompletedReport").hide();
+   
 
     jq("#performedStatusesDropdown").show();
     jq("#performedStatusesDropdown").children("h1").remove();
     jq("<h1></h1>").text("Radiology order sent successfully").appendTo('#performedStatusesDropdown');
-    jq("#AddRadiologyOrderForm").hide();
+    jq("#addRadiologyOrderForm").hide();
     jq("#EmailForm").hide();
     jq("#performedStatusInProgressOrder").hide();
-    jq("#performedStatusCompletedObsSelect").hide();
-    jq("#HTMLFORM").hide();
-    jq("#ContactRadiologist").hide();
+    jq("#radiologyOrderDetailsDiv").hide();
+   
+    jq("#contactRadiologist").hide();
     jq("#performedStatusCompletedOrder").show();
 
 
@@ -820,13 +804,7 @@ jq.getJSON('${ ui.actionLink("placeRadiologyOrder") }',
 
 
     <div id="performedStatusInProgressOrder">
-
-
     </div>
-
-
-
-
 
 
     <div id="EmailForm">
@@ -861,57 +839,31 @@ jq.getJSON('${ ui.actionLink("placeRadiologyOrder") }',
         </center>
     </div>
 
-
-
-
-
-    <div id = "performedStatusCompletedObsSelect">
-
-
-        <table id="completedOrderObs">
-
-
-
+    <div id = "radiologyOrderDetailsDiv">
+        <table id="radiologyOrderDetailsTableId">
         </table>
-
-    </div>
-
-    <div id = "performedStatusCompletedReport">
-
-        <h1>RADIOLOGY ORDER REPORT</h1>
-
-        <table id="completedOrderReport">
-
-
-
-        </table>
-
     </div>
 
 </div>
 
-<div id="HTMLFORM" width="50%">
-    ${ ui.includeFragment("radiology", "reportObs",[ returnUrl: '${returnUrl}',
-    patient: '${patient}'
-    ]) }
+
+
+
+<div id="viewStudyImageDialog" title="View Study Image" style="display:none;">
+    <iframe id="viewStudyImageIframe" width="550" height="350"></iframe>
 </div>
 
-
-<div id="somediv" title="View Study Image" style="display:none;">
-    <iframe id="thedialog" width="550" height="350"></iframe>
-</div>
-
-<div id="AddRadiologyOrderForm">
-    <div id="ordersaved" title="Continue">  Order Saved </div>
+<div id="addRadiologyOrderForm">
+   
     <h2> ADD RADIOLOGY ORDER</h2>
     <div class="studyfieldclass">
         <label for="tags">Study </label>
-        <input id="studytags">
+        <input id="studyTags">
     </div>
 
     <div class="fieldclass">
         <label for="tags">Diagnosis </label>
-        <input id="diagnosistags">
+        <input id="diagnosisTags">
     </div>
 
     <div class="fieldclass"><label>Instruction </label>
@@ -934,20 +886,13 @@ jq.getJSON('${ ui.actionLink("placeRadiologyOrder") }',
 
 </div>
 
-
-
-
-
-
-
-
 <div id="obsDialogBox" title="View Obs" style="display:none;">
     <div id="obsDialogBoxText" width="550" height="350"></div>
 </div>
 
 
 <div id="contactRadiologistDialogBox" title="ContactRadiologist" style="display:none;">
-    <div id="ContactRadiologist" width="550" height="350"></div>
+    <div id="contactRadiologist" width="550" height="350"></div>
 
     <center>
         <h1>CONTACT RADIOLOGIST</h1>
@@ -970,7 +915,7 @@ jq.getJSON('${ ui.actionLink("placeRadiologyOrder") }',
             <tr>
                 <td colspan="2" align="center">
                     <input type="submit" id ="sendEmailRadiologist" value="Send E-mail" />
-                    <input class="fields" id="clearmessage" type="button" value="Cancel" />
+                    <input class="fields" id="clearMessage" type="button" value="Cancel" />
                 </td>
             </tr>
         </table>
@@ -981,7 +926,6 @@ jq.getJSON('${ ui.actionLink("placeRadiologyOrder") }',
 
 <div id="patientId">
     <p style="display:none;">${ patient }</p>
-
 </div>
 
 
