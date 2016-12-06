@@ -11,12 +11,12 @@ and open the template in the editor.
 
 
 #diagnosislistSelect {
- 
+
     display: inline;
 }
 
 #studySelect {
- 
+
     display: inline;
 }
 
@@ -37,29 +37,29 @@ and open the template in the editor.
     margin-left: 53px;
 }
 .ui-widget-header {
-            background:#b9cd6d;
-            border: 1px solid #b9cd6d;
-            color: #FFFFFF;
-            font-weight: bold;
-         }
-         
-         
-         .fieldclass {
-             margin-top: 12px;
-         }
-         
-         .fg-toolbar.ui-toolbar.ui-widget-header.ui-corner-tl.ui-corner-tr.ui-helper-clearfix {
+    background:#b9cd6d;
+    border: 1px solid #b9cd6d;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+
+.fieldclass {
+    margin-top: 12px;
+}
+
+.fg-toolbar.ui-toolbar.ui-widget-header.ui-corner-tl.ui-corner-tr.ui-helper-clearfix {
     background-color: #b9cd6d;
 }
 
 .fg-toolbar.ui-toolbar.ui-widget-header.ui-corner-bl.ui-corner-br.ui-helper-clearfix {
-    
+
     background-color: #b9cd6d;
 }
 
 
 
 .ui-dialog-titlebar.ui-widget-header.ui-corner-all.ui-helper-clearfix {
-    
+
     background-color: #b9cd6d;
 }

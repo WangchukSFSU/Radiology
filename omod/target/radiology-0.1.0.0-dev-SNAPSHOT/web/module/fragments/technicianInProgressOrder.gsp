@@ -112,10 +112,10 @@ var dicomtablelist = jq('#dicomtable').children();
   
   
   
-  <% apo.each { apoo -> %>
+  <% dicomeFiles.each { dicomeFiles -> %>
 
 
-  dicomtablelist.append( '<tr><td style="text-indent: 50px;">    ${ apoo }</td></tr>' );
+  dicomtablelist.append( '<tr><td style="text-indent: 50px;">    ${ dicomeFiles }</td></tr>' );
 
    <% } %>
  dicomtablelist.append( '<tr>  <td> <a href="javascript: void(0)" id="linkActButton" onclick="submitObs(); return false;">Send</a></td></tr>' );

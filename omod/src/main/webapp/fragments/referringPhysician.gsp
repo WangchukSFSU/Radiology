@@ -28,14 +28,14 @@ def conceptDiagnosisClass = config.requireDiagnosisClass
     jq("#addOrderBreadCrumb").hide();
     jq("#orderDetailBreadCrumb").hide();
 
- 
-   
+
+
 
     jq("#addRadiologyOrderForm").hide();
     jq("#contactPatientDiv").hide();
     jq("#performedStatusInProgressOrder").hide();
     jq("#radiologyOrderDetailsDiv").hide();
-   
+
     jq("#contactRadiologist").hide();
     jq("#performedStatusCompletedOrder").show();
 
@@ -45,12 +45,12 @@ def conceptDiagnosisClass = config.requireDiagnosisClass
     jq("#completedOrderHeader").hide();
     jq("#performedStatusCompletedOrder").hide();
     jq("#contactPatientDiv").hide();
-   
+
     jq("#performedStatusInProgressOrder").hide();
     jq("#radiologyOrderDetailsDiv").hide();
 
     jq("#addRadiologyOrderForm").show();
-   
+
     jq("#studyTags").val(''); 
     jq("#diagnosisTags").val('');
     jq("#orderInstruction").val('');
@@ -74,8 +74,8 @@ def conceptDiagnosisClass = config.requireDiagnosisClass
     jq("#contactPatientDiv").show();
     jq("#addRadiologyOrderForm").hide();
     jq("#contactRadiologist").hide(); 
-  
- 
+
+
 
     jq("#completedOrderHeader").hide();
 
@@ -103,8 +103,8 @@ def conceptDiagnosisClass = config.requireDiagnosisClass
     jq("#messagePatientBreadCrumb").hide();
     jq("#addOrderBreadCrumb").hide();
     jq("#orderDetailBreadCrumb").show();
-   
-   
+
+
     jq(this).addClass('selected').siblings().removeClass('selected');    
     var value=jq(this).find('td:first').html();
     alert(value); 
@@ -166,9 +166,9 @@ jq('#radiologyOrderDetailsTableId').append( '<tbody><tr><td><a onclick="ViewRepo
     });
     });
 
-    
-    
-    
+
+
+
     function loadImages() {
     alert("addressValue" );
     var addressValue = jq('.tiger').attr("href");
@@ -241,9 +241,9 @@ jq.getJSON('${ ui.actionLink("getEncounterIdObs") }',
 
     function contactRadiologist() {
     alert("run my contactRadiologist");
-   
+
     jq("#contactRadiologist").show();
-    
+
     var orderId = localStorage.getItem("orderId");
     alert("orderId" + orderId);
     jq('#messageRadiologist').val('foobar');
@@ -251,7 +251,7 @@ jq.getJSON('${ ui.actionLink("getEncounterIdObs") }',
     <% radiologyOrders.each { anOrder -> %>
 
     var radiologyorderId = ${anOrder.orderId} ;
- 
+
 
     if(orderId == radiologyorderId) {
 
@@ -530,7 +530,7 @@ jq.getJSON('${ ui.actionLink("placeRadiologyOrder") }',
 
     alert("000000000");
 
-   
+
 
     jq("#completedOrderHeader").show();
     jq("#completedOrderHeader").children("h1").remove();
@@ -668,7 +668,7 @@ jq.getJSON('${ ui.actionLink("placeRadiologyOrder") }',
         <label for="tags">Study </label>
         <input id="studyTags">
     </div>
-    
+
     <div class="fieldclass">
         <label for="tags">Diagnosis </label>
         <input id="diagnosisTags">

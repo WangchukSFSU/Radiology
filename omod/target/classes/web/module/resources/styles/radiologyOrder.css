@@ -9,7 +9,7 @@ and open the template in the editor.
 */
 
 
-#performedStatusesDropdown {
+#completedOrderHeader {
     padding-bottom: 50px;
     margin-top: 17px;
 }
@@ -18,9 +18,7 @@ and open the template in the editor.
     height: 36px;
 }
 
-#performedStatusCompletedOrder {
-    margin-top: -42px;
-}
+
 
 
 #radiologyOrderDetailsDiv {
@@ -32,7 +30,7 @@ and open the template in the editor.
     margin-top: 16px;
 }
 
-#performedStatusInProgressOrder {
+#inProgressOrderDiv {
     margin-top: -23px;
 }
 
@@ -42,4 +40,8 @@ and open the template in the editor.
 
 #addRadiologyOrderForm {
     margin-top: 36px;
+}
+
+div#performedStatusCompletedOrder {
+    margin-top: -57px;
 }
