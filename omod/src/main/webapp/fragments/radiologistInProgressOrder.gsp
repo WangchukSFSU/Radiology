@@ -15,7 +15,7 @@
     function submitHtmlForm() {
     alert("0000000");
     htmlForm.submitHtmlForm();
-    jq('#dialog-message').dialog('close');
+    jq('#formDialogDiv').dialog('close');
      emr.successMessage("Entered Form Successfully");
     return false;
     }
@@ -43,12 +43,6 @@
     var beforeSubmit = htmlForm.getBeforeSubmit();
     var beforeValidation = htmlForm.getBeforeValidation();
     var propertyAccessorInfo = htmlForm.getPropertyAccessorInfo();
-
-
-       htmlForm.setReturnUrl('${ returnUrl }');
-
-
-
 
     jq(document).ready(function() {
     jQuery.each(jq("htmlform").find('input'), function(){
@@ -358,7 +352,7 @@
 
  
 
-jq("#ReportDeletelDialog").dialog({
+jq("#reportDeletelDialogMessage").dialog({
 autoOpen: false,
               modal: false,
              title: 'Delete Report',
@@ -377,7 +371,7 @@ autoOpen: false,
         });
         
         
-    jq("#dialog-message").dialog({
+    jq("#formDialogDiv").dialog({
     autoOpen: false,
     modal: false,
     draggable: true,
@@ -407,9 +401,9 @@ autoOpen: false,
  var radiologyorderId = localStorage.getItem("radiologyorderId");
     alert("radiologyorderId before" +radiologyorderId);
 
-    <% if (inProgressRadiologyOrders) { %>
+    <% if (performedStatusCompletedOrders) { %>
     alert("yess");
-    <% inProgressRadiologyOrders.each { anOrder -> %>
+    <% performedStatusCompletedOrders.each { anOrder -> %>
 
     var orderId = ${anOrder.orderId} ;
 
@@ -421,7 +415,7 @@ autoOpen: false,
     localStorage.setItem("radiologyorderId", radiologyorderId);
  
        
-        jq.getJSON('${ ui.actionLink("getUpdatedEncounterId") }',
+        jq.getJSON('${ ui.actionLink("getReportSavedEncounterId") }',
     { 'radiologyorderId': radiologyorderId
     })
     .error(function(xhr, status, err) {
@@ -540,7 +534,7 @@ jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'vie
     
     var patientIdForCompletedOrderList = localStorage.getItem("patientIdForCompletedOrderList");
 
-     jq.getJSON('${ ui.actionLink("getPatientCompletedOrder") }',
+     jq.getJSON('${ ui.actionLink("getPatientReportReadyOrder") }',
     { 'patientId': patientIdForCompletedOrderList
     })
     .error(function(xhr, status, err) {
@@ -633,9 +627,9 @@ jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'vie
 
 
 
-    <% if (inProgressRadiologyOrders) { %>
+    <% if (performedStatusCompletedOrders) { %>
     alert("yess");
-    <% inProgressRadiologyOrders.each { anOrder -> %>
+    <% performedStatusCompletedOrders.each { anOrder -> %>
 
     var radiologyorderId = ${anOrder.orderId} ;
 
@@ -647,7 +641,7 @@ jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'vie
     localStorage.setItem("radiologyorderId", radiologyorderId);
  
        
-        jq.getJSON('${ ui.actionLink("getUpdatedEncounterId") }',
+        jq.getJSON('${ ui.actionLink("getReportSavedEncounterId") }',
     { 'radiologyorderId': radiologyorderId
     })
     .error(function(xhr, status, err) {
@@ -766,7 +760,7 @@ jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'vie
 
     var patientIdForCompletedOrderList = localStorage.getItem("patientIdForCompletedOrderList");
 
-     jq.getJSON('${ ui.actionLink("getPatientCompletedOrder") }',
+     jq.getJSON('${ ui.actionLink("getPatientReportReadyOrder") }',
     { 'patientId': patientIdForCompletedOrderList
     })
     .error(function(xhr, status, err) {
@@ -840,7 +834,7 @@ jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'vie
     
     function CancelForm(){
       alert("CancelForm");
-      jq('#dialog-message').dialog('close');
+      jq('#formDialogDiv').dialog('close');
 
     }
 
@@ -848,7 +842,7 @@ jq('#performedStatusInProgressOrderDetail').append("<div class='order'  id= 'vie
     alert("cancelReport");
 
 
-jq( "#ReportDeletelDialog" ).dialog( "open" );
+jq( "#reportDeletelDialogMessage" ).dialog( "open" );
 
 }
 
@@ -971,7 +965,7 @@ if(OrderencounterId) {
 
     var formModifiedTimestamp = localStorage.getItem("formModifiedTimestamp");
 
-    jq( "#dialog-message" ).dialog( "open" );
+    jq( "#formDialogDiv" ).dialog( "open" );
     jq('#personId').val(patientIdt);
     jq('#htmlFormId').val(HtmlFormIdt);
     jq('#returnUrl').val(returnUrl);
@@ -1293,7 +1287,7 @@ for (var i = 0; i < ret.length; i++) {
             </tr>
         </thead>
         <tbody>
-            <% inProgressRadiologyOrders.each { anOrder -> %>
+            <% performedStatusCompletedOrders.each { anOrder -> %>
             <tr>
                 <td><a id="fillreport" href='+ studyname +' class="fillreport" onclick="displayReport(this); return false;"><p style="display:none;">${ anOrder.orderId }</p>
                         ${anOrder.study.studyname}</a></td>
@@ -1345,8 +1339,7 @@ for (var i = 0; i < ret.length; i++) {
 
 <a id="linkForForm" class="linkForForm" value = "?" onclick="loadttt(); return false;"></a>
 
-<div id="dialog-message" title="Fill Report">
-
+<div id="formDialogDiv" title="Fill Report">
     <span class="error" style="display: none" id="general-form-error"></span>
     <form id="htmlform" method="post" action="${ ui.actionLink("submit") }" onSubmit="submitHtmlForm(); return false;">
         <input type="hidden" id = "personId" name="personId" value=""/>
@@ -1355,19 +1348,10 @@ for (var i = 0; i < ret.length; i++) {
         <input type="hidden" id = "radiologyOrderId" name="radiologyOrderId" value=""/>
         <input type="hidden" id = "formModifiedTimestamp" name="formModifiedTimestamp" value=""/>
         <input type="hidden" id = "encounterModifiedTimestamp" name="encounterModifiedTimestamp" value=""/>
-
         <input type="hidden" id = "encounterId" name="encounterId" value=""/>
-
-
         <input type="hidden" id = "visitId" name="visitId" value=""/>
-
-
         <input type="hidden" id = "returnUrl" name="returnUrl" value=""/>
-
         <input type="hidden" id = "closeAfterSubmission" name="closeAfterSubmission" value=""/>
-
-
-
         <div id="passwordPopup" style="position: absolute; z-axis: 1; bottom: 25px; background-color: #ffff00; border: 2px black solid; display: none; padding: 10px">
             <center>
                 <table>
@@ -1393,4 +1377,4 @@ for (var i = 0; i < ret.length; i++) {
 
 
 
-<div id="ReportDeletelDialog" style="width:430px" title="reportHTMLForm"> Are you sure you want to delete Report </div>
+<div id="reportDeletelDialogMessage" style="width:430px" title="Delete Report"> Are you sure you want to delete Report </div>

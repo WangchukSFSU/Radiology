@@ -24,13 +24,10 @@ import org.openmrs.Form;
 import org.openmrs.Obs;
 import org.openmrs.Order;
 import org.openmrs.Patient;
-import org.openmrs.Provider;
-import org.openmrs.TestOrder;
 import org.openmrs.User;
 import org.openmrs.Visit;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.FormService;
-import org.openmrs.api.OrderService;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.context.ContextAuthenticationException;
 import org.openmrs.module.appframework.feature.FeatureToggleProperties;
@@ -50,12 +47,9 @@ import org.openmrs.module.htmlformentry.HtmlFormEntryUtil;
 import org.openmrs.module.htmlformentryui.HtmlFormUtil;
 import org.openmrs.module.radiology.PerformedProcedureStepStatus;
 import org.openmrs.module.radiology.RadiologyOrder;
-
 import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.RadiologyService;
-
 import org.openmrs.module.radiology.Study;
-import org.openmrs.module.uicommons.UiCommonsConstants;
 import org.openmrs.ui.framework.SimpleObject;
 import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.annotation.FragmentParam;
@@ -80,44 +74,26 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 			@FragmentParam(value = "encounter", required = false) Encounter encounter,
 			@FragmentParam(value = "visit", required = false) Visit visit,
 			@FragmentParam(value = "createVisit", required = false) Boolean createVisit,
-			// @FragmentParam(value = "returnUrl", required = false) String returnUrl,
 			@FragmentParam(value = "automaticValidation", defaultValue = "true") boolean automaticValidation,
 			FragmentModel model, HttpSession httpSession) throws Exception {
 		
 		String returnUrl = "";
-		// String returnUrl = "/openmrs/radiology/sendFormMessage.page";
 		model.addAttribute("returnUrl", returnUrl);
-		
 		String patientClinicianUrl = "http://localhost:8080/openmrs/coreapps/clinicianfacing/patient.page?patientId=";
 		model.addAttribute("patientClinicianUrl", patientClinicianUrl);
-		model.addAttribute("currentDate", (new DateMidnight()).toDate());
-		
-		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrdersByPatient();
-		
-		System.out.println("length LLLLLLLLLLLLL " + inProgressRadiologyOrders.size());
-		
-		String aap = getDicomViewerUrladdress();
-		String domain = "http://localhost:8080/openmrs/htmlformentryui/htmlform/enterHtmlFormWithStandardUi.page?patientId=";
-		String visitform = "&visitId=&formUuid=";
-		String returnurl = "&returnUrl=/openmrs/radiology/sendFormMessage.page";
-		
-		model.addAttribute("dicomViewerUrladdress", aap);
-		model.put("inProgressRadiologyOrders", inProgressRadiologyOrders);
-		model.addAttribute("domain", domain);
-		model.addAttribute("visitform", visitform);
-		model.addAttribute("returnurl", returnurl);
-		
-		// form section
+		List<RadiologyOrder> performedStatusCompletedOrders = getPerformedStatusCompletedRadiologyOrders();
+		String dicomViewerUrladdress = getDicomViewerUrladdress();
+		model.addAttribute("dicomViewerUrladdress", dicomViewerUrladdress);
+		model.put("performedStatusCompletedOrders", performedStatusCompletedOrders);
 		
 	}
 	
-	public List<SimpleObject> getPatientCompletedOrder(@SpringBean("conceptService") ConceptService service,
+	public List<SimpleObject> getPatientReportReadyOrder(@SpringBean("conceptService") ConceptService service,
 			FragmentModel model, @RequestParam(value = "patientId") Patient patientId, UiUtils ui) {
 		
-		System.out.println("getLabOrdersByPatient");
-		ArrayList<RadiologyOrder> radiologyOrders = new ArrayList<RadiologyOrder>();
+		ArrayList<RadiologyOrder> reportReadyRadiologyOrders = new ArrayList<RadiologyOrder>();
 		
-		List<Order> orders = Context.getOrderService()
+		List<Order> allPatientOrders = Context.getOrderService()
 				.getAllOrdersByPatient(patientId);
 		
 		int testOrderTypeId = Context.getOrderService()
@@ -125,19 +101,15 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 				.getOrderTypeId();
 		
 		RadiologyOrder radiologyOrder;
-		for (Order order : orders) {
-			// if (order.getOrderType().getOrderTypeId() == 3) { OrderType ot = new OrderType();
+		for (Order order : allPatientOrders) {
 			if (order.getOrderType()
 					.getOrderTypeId() == testOrderTypeId) {
 				
 				radiologyOrder = Context.getService(RadiologyService.class)
 						.getRadiologyOrderByOrderId(order.getOrderId());
-				
 				if (radiologyOrder.isReportReady()) {
-					radiologyOrders.add(radiologyOrder);
-					
+					reportReadyRadiologyOrders.add(radiologyOrder);
 				}
-				
 			}
 		}
 		String[] properties = new String[8];
@@ -150,24 +122,20 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		properties[6] = "DateCreated";
 		properties[7] = "study.studyReportSavedEncounterId";
 		
-		return SimpleObject.fromCollection(radiologyOrders, ui, properties);
+		return SimpleObject.fromCollection(reportReadyRadiologyOrders, ui, properties);
 	}
 	
-	public List<SimpleObject> getUpdatedEncounterId(@SpringBean("conceptService") ConceptService service,
+	public List<SimpleObject> getReportSavedEncounterId(@SpringBean("conceptService") ConceptService service,
 			FragmentModel model, @RequestParam(value = "radiologyorderId") Integer radiologyorderId, UiUtils ui) {
 		
-		System.out.println("PPPPPPPP");
-		ArrayList<RadiologyOrder> radiologyOrders = new ArrayList<RadiologyOrder>();
+		ArrayList<RadiologyOrder> reportSavedStudy = new ArrayList<RadiologyOrder>();
 		
-		RadiologyOrder aaa = Context.getService(RadiologyService.class)
+		RadiologyOrder radiologyOrderByOrderId = Context.getService(RadiologyService.class)
 				.getRadiologyOrderByOrderId(radiologyorderId);
-		radiologyOrders.add(aaa);
-		
+		reportSavedStudy.add(radiologyOrderByOrderId);
 		String[] properties = new String[1];
-		
 		properties[0] = "study.studyReportSavedEncounterId";
-		
-		return SimpleObject.fromCollection(radiologyOrders, ui, properties);
+		return SimpleObject.fromCollection(reportSavedStudy, ui, properties);
 	}
 	
 	public List<SimpleObject> getEncounterIdObs(@SpringBean("conceptService") ConceptService service, FragmentModel model,
@@ -175,12 +143,8 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		
 		List<Obs> encounterIdObs = Context.getObsService()
 				.getObservations(encounterId);
-		for (Obs oob : encounterIdObs) {
-			oob.getConcept()
-					.getFullySpecifiedName(Locale.ENGLISH);
-		}
-		String[] properties = new String[2];
 		
+		String[] properties = new String[2];
 		properties[0] = "Concept";
 		properties[1] = "valueText";
 		
@@ -190,16 +154,12 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 	public List<SimpleObject> getRadiologyOrderDetail(@SpringBean("conceptService") ConceptService service,
 			FragmentModel model, @RequestParam(value = "radiologyorderId") Integer radiologyorderId, UiUtils ui) {
 		
-		ArrayList<RadiologyOrder> radiologyOrders = new ArrayList<RadiologyOrder>();
-		
-		RadiologyOrder aaa = Context.getService(RadiologyService.class)
+		ArrayList<RadiologyOrder> radiologyOrdersDetail = new ArrayList<RadiologyOrder>();
+		RadiologyOrder radiologyOrderByOrderId = Context.getService(RadiologyService.class)
 				.getRadiologyOrderByOrderId(radiologyorderId);
-		radiologyOrders.add(aaa);
-		
-		aaa.getOrderer();
+		radiologyOrdersDetail.add(radiologyOrderByOrderId);
 		
 		String[] properties = new String[12];
-		
 		properties[0] = "patient.personName";
 		properties[1] = "patient.patientIdentifier";
 		properties[2] = "study.studyname";
@@ -213,26 +173,24 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		properties[10] = "Instructions";
 		properties[11] = "study.studyInstanceUid";
 		
-		return SimpleObject.fromCollection(radiologyOrders, ui, properties);
+		return SimpleObject.fromCollection(radiologyOrdersDetail, ui, properties);
 	}
 	
 	public List<SimpleObject> CancelReportUpdate(@SpringBean("conceptService") ConceptService service, FragmentModel model,
 			@RequestParam(value = "radiologyorderId") Integer radiologyorderId, UiUtils ui) {
 		
-		System.out.println("uuuuu");
-		ArrayList<RadiologyOrder> radiologyOrders = new ArrayList<RadiologyOrder>();
+		ArrayList<RadiologyOrder> radiologyOrdersReportUpdate = new ArrayList<RadiologyOrder>();
 		
-		RadiologyOrder removeEncounterOnRadiologyOrder = Context.getService(RadiologyService.class)
+		RadiologyOrder reportEncounterIdToBeRemoved = Context.getService(RadiologyService.class)
 				.getRadiologyOrderByOrderId(radiologyorderId);
 		Context.getService(RadiologyService.class)
-				.updateStudyEncounterId(removeEncounterOnRadiologyOrder.getStudy()
+				.updateStudyEncounterId(reportEncounterIdToBeRemoved.getStudy()
 						.getStudyInstanceUid(), null);
 		
-		List<RadiologyOrder> updateInProgressRadiologyOrders = getInProgressRadiologyOrdersByPatient();
+		List<RadiologyOrder> updatePerformedStatusCompletedRadiologyOrders = getPerformedStatusCompletedRadiologyOrders();
 		
-		for (RadiologyOrder updateRadiologyOrder : updateInProgressRadiologyOrders) {
-			// updateRadiologyOrder.getPatient().getPatientIdentifier().getIdentifier()
-			radiologyOrders.add(updateRadiologyOrder);
+		for (RadiologyOrder updateRadiologyOrder : updatePerformedStatusCompletedRadiologyOrders) {
+			radiologyOrdersReportUpdate.add(updateRadiologyOrder);
 		}
 		
 		String[] properties = new String[8];
@@ -245,7 +203,7 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		properties[6] = "orderId";
 		properties[7] = "study.studyReportSavedEncounterId";
 		
-		return SimpleObject.fromCollection(radiologyOrders, ui, properties);
+		return SimpleObject.fromCollection(radiologyOrdersReportUpdate, ui, properties);
 	}
 	
 	public List<SimpleObject> getForm(@SpringBean("conceptService") ConceptService service, FragmentModel model,
@@ -266,17 +224,10 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		ArrayList<Form> formlist = new ArrayList<Form>();
 		
 		int radiologyorderIdInteger = Integer.parseInt(radiologyorderId);
-		
-		System.out.println("radiologyorderId " + radiologyorderIdInteger);
 		RadiologyService radiologyservice = Context.getService(RadiologyService.class);
 		RadiologyOrder getRadiologyOrder = radiologyservice.getRadiologyOrderByOrderId(radiologyorderIdInteger);
-		
-		System.out.println("radiology Order " + getRadiologyOrder);
-		System.out.println("study  " + getRadiologyOrder.getStudy());
-		
 		if (getRadiologyOrder.getStudy()
 				.getStudyReportSavedEncounterId() == null) {
-			System.out.println("encounter form is null");
 			encounter = null;
 			form = Context.getFormService()
 					.getFormByUuid(getRadiologyOrder.getStudy()
@@ -287,7 +238,6 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 			formlist.add(form);
 			formlist.add(genericform);
 		} else {
-			System.out.println("encounter form not not null");
 			encounter = Context.getEncounterService()
 					.getEncounter(getRadiologyOrder.getStudy()
 							.getStudyReportSavedEncounterId());
@@ -297,7 +247,6 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 			formlist.add(form);
 		}
 		String returnUrl = "";
-		// String returnUrl = "/openmrs/radiology/sendFormMessage.page";
 		
 		for (Form eachform : formlist) {
 			
@@ -306,11 +255,6 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 			Patient patient = getRadiologyOrder.getPatient();
 			Integer htmlFormId = eachform.getFormId();
 			String formUuid = eachform.getUuid();
-			
-			System.out.println("form " + patient);
-			// config.require("patient", "htmlForm | htmlFormId | formId | formUuid | definitionUiResource | encounter");
-			
-			System.out.println("form 11" + hf);
 			
 			if (hf == null) {
 				if (htmlFormId != null) {
@@ -346,18 +290,13 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 				fes = new FormEntrySession(patient, encounter, FormEntryContext.Mode.EDIT, hf, null, httpSession,
 						automaticValidation, !automaticValidation);
 			} else {
-				System.out.println("forrrrrr");
 				fes = new FormEntrySession(patient, hf, FormEntryContext.Mode.ENTER, null, httpSession, automaticValidation,
 						!automaticValidation);
 			}
 			
-			System.out.println("form ooo " + fes.getPatient());
-			// fes.getPatient().setPersonId(htmlFormId);
-			
 			VisitDomainWrapper visitDomainWrapper = getVisitDomainWrapper(visit, encounter, adtService);
 			setupVelocityContext(fes, visitDomainWrapper, ui, sessionContext, featureToggles);
 			setupFormEntrySession(fes, visitDomainWrapper, ui, sessionContext, returnUrl);
-			// setupModel(model, fes, visitDomainWrapper, createVisit);
 			
 			fes.setReturnUrl(returnUrl);
 			
@@ -378,31 +317,15 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 	}
 	
 	private String getDicomViewerUrladdress() {
-		
-		System.out.println("333");
 		RadiologyProperties radiologyProperties = new RadiologyProperties();
-		
-		System.out.println("444");
-		// String studyUidUrl = "studyUID=" + study.getStudyInstanceUid();
-		// String patientIdUrl = "patientID=" + patient.getPatientIdentifier()
-		// .getIdentifier();
-		
-		System.out.println("12232 radiologyProperties.getServersAddress()" + radiologyProperties.getServersAddress());
-		System.out.println("12232 radiologyProperties.getServersPort()" + radiologyProperties.getServersPort());
-		System.out.println("12232 radiologyProperties.getDicomViewerUrlBase()" + radiologyProperties.getDicomViewerUrlBase());
-		System.out.println("12232 radiologyProperties.getDicomViewerLocalServerName()"
-				+ radiologyProperties.getDicomViewerLocalServerName());
-		// System.out.println("12232 studyUidUrl " + studyUidUrl);
-		// System.out.println("12232 patientIdUrl" + patientIdUrl);
 		
 		return radiologyProperties.getServersAddress() + ":" + radiologyProperties.getServersPort()
 				+ radiologyProperties.getDicomViewerUrlBase() + "?" + radiologyProperties.getDicomViewerLocalServerName();
 		
 	}
 	
-	public List<RadiologyOrder> getInProgressRadiologyOrdersByPatient() {
-		System.out.println("getLabOrdersByPatient");
-		Vector<RadiologyOrder> radiologyOrders = new Vector<RadiologyOrder>();
+	public List<RadiologyOrder> getPerformedStatusCompletedRadiologyOrders() {
+		Vector<RadiologyOrder> completedRadiologyOrders = new Vector<RadiologyOrder>();
 		
 		List<RadiologyOrder> orders = Context.getService(RadiologyService.class)
 				.getAllRadiologyOrder();
@@ -413,7 +336,6 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		
 		RadiologyOrder radiologyOrder;
 		for (Order order : orders) {
-			// if (order.getOrderType().getOrderTypeId() == 3) { OrderType ot = new OrderType();
 			if (order.getOrderType()
 					.getOrderTypeId() == testOrderTypeId) {
 				
@@ -421,35 +343,26 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 						.getRadiologyOrderByOrderId(order.getOrderId());
 				
 				if (radiologyOrder.isCompleted()) {
-					
-					System.out.println("222222 " + radiologyOrder.getInstructions());
-					radiologyOrders.add(radiologyOrder);
+					completedRadiologyOrders.add(radiologyOrder);
 					
 				}
 				
 			}
 		}
-		return radiologyOrders;
+		return completedRadiologyOrders;
 	}
 	
 	public List<SimpleObject> updateActiveOrders(@SpringBean("conceptService") ConceptService service, FragmentModel model,
 			@RequestParam(value = "radiologyorderId") String radiologyorderId, UiUtils ui) {
 		
-		System.out.println("radiologyorderId");
-		System.out.println("radiologyorderId" + radiologyorderId);
-		
-		List<RadiologyOrder> orders = Context.getService(RadiologyService.class)
+		List<RadiologyOrder> allOrders = Context.getService(RadiologyService.class)
 				.getAllRadiologyOrder();
 		
-		int result = Integer.parseInt(radiologyorderId);
-		
-		List<Study> orderst = Context.getService(RadiologyService.class)
-				.getAllStudyRadiologyOrder();
 		User authenticatedUser = Context.getAuthenticatedUser();
 		
 		RadiologyOrder radiologyOrder;
 		
-		for (Order order : orders) {
+		for (Order order : allOrders) {
 			
 			if ((order.getOrderId()
 					.toString().trim()).equals(radiologyorderId.trim())) {
@@ -473,12 +386,12 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 			
 		}
 		
-		ArrayList<RadiologyOrder> getRadiologyOrder = new ArrayList<RadiologyOrder>();
+		ArrayList<RadiologyOrder> updateRadiologyOrder = new ArrayList<RadiologyOrder>();
 		
-		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrdersByPatient();
+		List<RadiologyOrder> performedStatusCompletedOrders = getPerformedStatusCompletedRadiologyOrders();
 		
-		for (RadiologyOrder updateActiveOrder : inProgressRadiologyOrders) {
-			getRadiologyOrder.add(updateActiveOrder);
+		for (RadiologyOrder updateActiveOrder : performedStatusCompletedOrders) {
+			updateRadiologyOrder.add(updateActiveOrder);
 		}
 		
 		String[] properties = new String[7];
@@ -489,7 +402,7 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		properties[4] = "patient.personName";
 		properties[5] = "study.studyReportSavedEncounterId";
 		properties[6] = "patient.patientIdentifier.Identifier";
-		return SimpleObject.fromCollection(getRadiologyOrder, ui, properties);
+		return SimpleObject.fromCollection(updateRadiologyOrder, ui, properties);
 	}
 	
 	/**
@@ -545,7 +458,7 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 			@SpringBean("featureToggles") FeatureToggleProperties featureToggles, UiUtils ui, HttpServletRequest request)
 			throws Exception {
 		
-		RadiologyOrder setEncounterToRadiologyOrderOnFormSubmit = Context.getService(RadiologyService.class)
+		RadiologyOrder radiologyOrderByOrderId = Context.getService(RadiologyService.class)
 				.getRadiologyOrderByOrderId(radiologyOrderId);
 		
 		boolean editMode = encounter != null;
@@ -638,7 +551,7 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 		fes.applyActions();
 		
 		Context.getService(RadiologyService.class)
-				.updateStudyEncounterId(setEncounterToRadiologyOrderOnFormSubmit.getStudy()
+				.updateStudyEncounterId(radiologyOrderByOrderId.getStudy()
 						.getStudyInstanceUid(), formEncounter.getEncounterId());
 		return returnHelper(null, fes, formEncounter);
 	}

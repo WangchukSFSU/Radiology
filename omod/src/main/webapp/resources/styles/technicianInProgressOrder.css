@@ -1,0 +1,38 @@
+
+.ui-widget-header{
+    background:#b9cd6d;
+    border: 1px solid #b9cd6d;
+    color: black;
+    font-weight: bold;
+}
+
+
+#linkActButton {
+    color: black;
+    appearance:button;
+    -moz-appearance:button; /* Firefox */
+    -webkit-appearance:button; /* Safari and Chrome */
+    cursor:pointer;
+    padding:10px;
+    -moz-user-select: none; 
+    -khtml-user-select: none; 
+    -webkit-user-select: none; 
+    -o-user-select: none;
+}
+
+
+.fg-toolbar.ui-toolbar.ui-widget-header.ui-corner-tl.ui-corner-tr.ui-helper-clearfix {
+    background-color: #b9cd6d;
+}
+
+.fg-toolbar.ui-toolbar.ui-widget-header.ui-corner-bl.ui-corner-br.ui-helper-clearfix {
+
+    background-color: #b9cd6d;
+}
+
+
+
+.ui-dialog-titlebar.ui-widget-header.ui-corner-all.ui-helper-clearfix {
+
+    background-color: #b9cd6d;
+}
