@@ -253,15 +253,7 @@ public class RadiologistInProgressOrderFragmentController extends BaseHtmlFormFr
 			@SpringBean("htmlFormEntryService") HtmlFormEntryService htmlFormEntryService,
 			@SpringBean("adtService") AdtService adtService, @SpringBean("formService") FormService formService,
 			@SpringBean("coreResourceFactory") ResourceFactory resourceFactory,
-			@SpringBean("featureToggles") FeatureToggleProperties featureToggles,
-			// @FragmentParam(value = "definitionUiResource", required = false) String definitionUiResource,
-			// @FragmentParam(value = "encounter", required = false) Encounter encounter,
-			// @FragmentParam(value = "visit", required = false) Visit visit,
-			// @FragmentParam(value = "createVisit", required = false) Boolean createVisit,
-			// FragmentConfiguration config,
-			UiSessionContext sessionContext,
-			// @FragmentParam(value = "returnUrl", required = false) String returnUrl,
-			// @FragmentParam(value = "automaticValidation", defaultValue = "true") boolean automaticValidation,
+			@SpringBean("featureToggles") FeatureToggleProperties featureToggles, UiSessionContext sessionContext,
 			HttpSession httpSession, UiUtils ui) throws IOException, Exception {
 		
 		String definitionUiResource = null;

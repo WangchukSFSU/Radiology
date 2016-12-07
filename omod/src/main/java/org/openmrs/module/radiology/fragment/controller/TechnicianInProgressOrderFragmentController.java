@@ -57,7 +57,7 @@ public class TechnicianInProgressOrderFragmentController {
 	}
 	
 	public List<RadiologyOrder> getInProgressRadiologyOrders() {
-	
+		
 		Vector<RadiologyOrder> inProgressRadiologyOrders = new Vector<RadiologyOrder>();
 		
 		List<RadiologyOrder> allRadiologyOrders = Context.getService(RadiologyService.class)
@@ -88,7 +88,7 @@ public class TechnicianInProgressOrderFragmentController {
 	
 	public List<SimpleObject> updateActiveOrders(@SpringBean("conceptService") ConceptService service, FragmentModel model,
 			@RequestParam(value = "radiologyorderId") String radiologyorderId, UiUtils ui) {
-
+		
 		RadiologyService radiologyService = Context.getService(RadiologyService.class);
 		radiologyService.placeDicomInPacs("/home/youdon/Desktop/aaa");
 		
@@ -109,8 +109,8 @@ public class TechnicianInProgressOrderFragmentController {
 			}
 		}
 		
-		ArrayList<RadiologyOrder> getRadiologyOrder = new ArrayList<RadiologyOrder>();	
-		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrders();	
+		ArrayList<RadiologyOrder> getRadiologyOrder = new ArrayList<RadiologyOrder>();
+		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrders();
 		for (RadiologyOrder updateActiveOrder : inProgressRadiologyOrders) {
 			getRadiologyOrder.add(updateActiveOrder);
 		}
