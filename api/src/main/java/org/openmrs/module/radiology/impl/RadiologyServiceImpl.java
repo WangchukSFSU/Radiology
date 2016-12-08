@@ -9,17 +9,13 @@
  */
 package org.openmrs.module.radiology.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.FlushMode;
 import org.openmrs.Encounter;
-import org.openmrs.Order;
 import org.openmrs.Patient;
 import org.openmrs.Provider;
 import org.openmrs.api.EncounterService;
@@ -200,44 +196,6 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	}
 	
 	/**
-	 * @see RadiologyService#discontinueRadiologyOrder(RadiologyOrder, Provider, String)
-	 */
-	@Transactional
-	@Override
-	public Order discontinueRadiologyOrder(RadiologyOrder radiologyOrderToDiscontinue, Provider orderer,
-			String nonCodedDiscontinueReason) throws Exception {
-		
-		if (radiologyOrderToDiscontinue == null) {
-			throw new IllegalArgumentException("radiologyOrder is required");
-		}
-		
-		if (radiologyOrderToDiscontinue.getOrderId() == null) {
-			throw new IllegalArgumentException("orderId is null");
-		}
-		
-		if (!radiologyOrderToDiscontinue.isActive()) {
-			throw new IllegalArgumentException("order is not active");
-		}
-		
-		if (radiologyOrderToDiscontinue.isInProgress()) {
-			throw new IllegalArgumentException("radiologyOrder is in progress");
-		}
-		
-		if (radiologyOrderToDiscontinue.isCompleted()) {
-			throw new IllegalArgumentException("radiologyOrder is completed");
-		}
-		
-		if (orderer == null) {
-			throw new IllegalArgumentException("provider is required");
-		}
-		
-		final Encounter encounter = this.saveRadiologyOrderEncounter(radiologyOrderToDiscontinue.getPatient(), orderer, null);
-		
-		return this.orderService.discontinueOrder(radiologyOrderToDiscontinue, nonCodedDiscontinueReason, null, orderer,
-			encounter);
-	}
-	
-	/**
 	 * @see RadiologyService#getRadiologyOrderByOrderId(Integer)
 	 */
 	@Transactional(readOnly = true)
@@ -386,28 +344,6 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 		
 		DicomUtils.sendDicomToPACs(arrays);
 		
-	}
-	
-	/**
-	 * @see RadiologyService#discontinueRadiologyOrderInPacs(RadiologyOrder)
-	 */
-	@Transactional
-	@Override
-	public boolean discontinueRadiologyOrderInPacs(RadiologyOrder radiologyOrder) {
-		
-		if (radiologyOrder == null) {
-			throw new IllegalArgumentException("radiologyOrder is required");
-		}
-		
-		if (radiologyOrder.getOrderId() == null) {
-			throw new IllegalArgumentException("radiologyOrder is not persisted");
-		}
-		
-		final String hl7message = DicomUtils.createHL7Message(radiologyOrder, CommonOrderOrderControl.CANCEL_ORDER);
-		final boolean result = DicomUtils.sendHL7Message(hl7message);
-		
-		updateStudyMwlStatus(radiologyOrder, result);
-		return result;
 	}
 	
 	/**

@@ -15,7 +15,7 @@
                 "extensionPointId": "patientDashboard.overallActions",
                 "type": "link",
                 "label": "Radiology Order",
-                "url": "radiology/radiologyOrder.page?patientId={{patient.uuid}}",
+                "url": "radiology/referringPhysician.page?patientId={{patient.uuid}}",
                 "icon": "icon-signin",
                 "order": 23,
                 "requiredPrivilege": "Task: some random privilege"
@@ -26,7 +26,7 @@
                 "type": "link",
                 "order": 10,
                 "label": "Manage Radiology",
-                "url": "radiology/adminInitialize.page",
+                "url": "radiology/admin.page",
                 "icon": "icon-signin",
                 "requiredPrivilege": "App: some random privilege"
             },
@@ -35,7 +35,7 @@
                 "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
                 "type": "link",
                 "label": "RadiologyOrder ToBeRead",
-                "url": "radiology/radiologistActiveOrders.page",
+                "url": "radiology/radiologist.page",
                 "icon": "icon-signin",
                 "requiredPrivilege": "App: some random privilege"
             },
@@ -44,7 +44,7 @@
                 "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
                 "type": "link",
                 "label": "Send RadiologyImage toPACS",
-                "url": "radiology/technicianActiveOrders.page",
+                "url": "radiology/technician.page",
                 "icon": "icon-signin",
                 "requiredPrivilege": "App: some random privilege"
             }
