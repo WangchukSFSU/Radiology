@@ -382,10 +382,6 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 			throw new IllegalArgumentException("radiologyOrder.study is required");
 		}
 		
-		System.out.println("RRRRRRRRRRRRRRRRRRRRRRRRRRR");
-		System.out.println("RRRRRRRRRRRRRRRRRRRRRRRRRRR" + radiologyOrder);
-		System.out.println("RRRRRRRRRRRRRRRRRRRRRRRRRRR" + CommonOrderOrderControl.NEW_ORDER);
-		
 		final String hl7message = DicomUtils.createHL7Message(radiologyOrder, CommonOrderOrderControl.NEW_ORDER);
 		final boolean result = DicomUtils.sendHL7Message(hl7message);
 		
@@ -397,18 +393,8 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	@Override
 	public void placeDicomInPacs(String arrays) {
 		
-		System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-		
-		// for (String arrays : apo) {
-		
-		// final String hl7message = null;
-		System.out.println("POPOPOPOPPOP " + arrays);
 		DicomUtils.sendDicomToPACs(arrays);
-		// sendHL7Message(hl7message);
-		// }
 		
-		// updateStudyMwlStatus(radiologyOrder, result);
-		// return result;
 	}
 	
 	/**
