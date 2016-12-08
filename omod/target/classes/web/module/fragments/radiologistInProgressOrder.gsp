@@ -1,13 +1,10 @@
 <% ui.includeCss("radiology", "radiologistInProgressOrder.css") %>
 <% ui.includeCss("radiology", "jquery-ui.css") %>
 <% ui.includeCss("radiology", "jquery.dataTables.min.css") %>
-
 <script type="text/javascript" src="/${ contextPath }/moduleResources/htmlformentry/htmlFormEntry.js"></script>
-
 <link href="/${ contextPath }/moduleResources/htmlformentry/htmlFormEntry.css" type="text/css" rel="stylesheet" />
 
 <script type="text/javascript">
-
     // for now we just expose these in the global scope for compatibility with htmlFormEntry.js and legacy forms
     function submitHtmlForm() {
     alert("0000000");
@@ -16,10 +13,6 @@
     emr.successMessage("Entered Form Successfully");
     return false;
     }
-
-
-
-
 
     function showDiv(id) {
     htmlForm.showDiv(id);
@@ -1010,6 +1003,13 @@ jq('#orderDetailDiv').append("<div class='order'  id= 'viewStudyId'><a id = 'vie
     width: 400,
     height: 450,
     modal: false,
+      buttons : {
+
+    "Close": function () { 
+
+    jq(this).dialog('close'); 
+    }
+    },
     close: function () {
     jq("#viewStudyImageIframe").attr('src', "about:blank");
     }

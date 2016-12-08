@@ -45,17 +45,8 @@
 						</property>
 					</bean>
 				</property>
-                                
-				<property name="radiologyReportDAO">
-					<bean
-						class="org.openmrs.module.radiology.db.hibernate.RadiologyReportDAOImpl">
-						<property name="sessionFactory">
-							<ref bean="sessionFactory" />
-						</property>
-					</bean>
-				</property>  
-                                                                           
-				<property name="orderService" ref="orderService"></property>
+                         
+                                <property name="orderService" ref="orderService"></property>
 				<property name="encounterService" ref="encounterService"></property>
 				<property name="radiologyProperties" ref="radiologyProperties"></property>
 				<property name="emrEncounterService" ref="emrEncounterService"></property>

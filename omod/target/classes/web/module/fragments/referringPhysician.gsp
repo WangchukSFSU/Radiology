@@ -179,6 +179,13 @@ jq('#radiologyOrderDetailsTableId').append( '<tbody><tr><td><a onclick="ViewRepo
     width: 400,
     height: 450,
     modal: true,
+      buttons : {
+
+    "Close": function () { 
+
+    jq(this).dialog('close'); 
+    }
+    },
     close: function () {
     jq("#viewStudyImageIframe").attr('src', "about:blank");
     }

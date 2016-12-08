@@ -485,5 +485,12 @@
             <renameColumn columnDataType="varchar(255)"
 			newColumnName="nonGenericHtmlFormUid" oldColumnName="studyHtmlFormUUID" tableName="radiology_study" />
 </changeSet>
+<changeSet id="radiology-99" author="tenzin">
+		<sql>
+			drop table if exists radiology_report;
+		</sql>
+	</changeSet>
 </databaseChangeLog>
+
+
 
