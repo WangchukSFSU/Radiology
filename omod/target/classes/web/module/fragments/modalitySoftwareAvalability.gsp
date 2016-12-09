@@ -6,6 +6,7 @@
     jq = jQuery;
     jq(document).ready(function() {
 
+    //modality Available DialogBox
     jq( "#modalityAvailableDialogBox" ).dialog({
     autoOpen: false, 
     buttons: {
@@ -18,14 +19,14 @@
     }
     });
 
-
+    //open Dialogbox
     jq( "#modalityAvailableInstruction" ).click(function() {
     jq( "#modalityAvailableDialogBox" ).dialog( "open" );
     });
 
 
     jq( "input" ).click(function() {
-
+    //get the selected radio message
     var inputvalue = jq(this).val();
     if(inputvalue == "Modality Software Available" || inputvalue == "Modality Software Not Available") {
     jq.ajax({
@@ -49,7 +50,7 @@
     });
 </script>
 
-
+<!-- Modality header -->
 <div class="modality-header" >    
     <label id=modality-label for modality-software> <h2>Modality Software Availability :</h2> </label>
     <input type="radio" name="modality-sofware" id="modality" value="Modality Software Available">  
@@ -60,5 +61,5 @@
 </div>
 
 <br>
-
+<!-- Modality dialogbox message -->
 <div id="modalityAvailableDialogBox" title="Software Modality Availability">If the software connecting the modality to the PACS system is available then selects “Yes”. <br> If the software connecting the modality to the PACS system is not available then selects “No”. </div>

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.openmrs.module.radiology.fragment.controller;
 
 import java.io.IOException;
@@ -59,10 +54,32 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * @author youdon
+ * Radiologist to add, edit observation and submit observation.
+ * 
+ * @author tenzin
  */
 public class AddEditObservationFragmentController extends BaseHtmlFormFragmentController {
 	
+	/**
+	 * Get the performed status completed orders
+	 * 
+	 * @param config
+	 * @param sessionContext
+	 * @param ui
+	 * @param htmlFormEntryService
+	 * @param adtService
+	 * @param formService
+	 * @param resourceFactory
+	 * @param featureToggles
+	 * @param definitionUiResource
+	 * @param encounter
+	 * @param visit
+	 * @param createVisit
+	 * @param automaticValidation
+	 * @param model
+	 * @param httpSession
+	 * @throws Exception
+	 */
 	public void controller(FragmentConfiguration config, UiSessionContext sessionContext, UiUtils ui,
 			@SpringBean("htmlFormEntryService") HtmlFormEntryService htmlFormEntryService,
 			@SpringBean("adtService") AdtService adtService, @SpringBean("formService") FormService formService,
@@ -75,22 +92,32 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 			@FragmentParam(value = "automaticValidation", defaultValue = "true") boolean automaticValidation,
 			FragmentModel model, HttpSession httpSession) throws Exception {
 		
-		String returnUrl = "";
-		model.addAttribute("returnUrl", returnUrl);
+		// patient dashboard
 		String patientClinicianUrl = "http://localhost:8080/openmrs/coreapps/clinicianfacing/patient.page?patientId=";
 		model.addAttribute("patientClinicianUrl", patientClinicianUrl);
+		// get performed status completed orders
 		List<RadiologyOrder> performedStatusCompletedOrders = getPerformedStatusCompletedRadiologyOrders();
+		// get oviyum url
 		String dicomViewerUrladdress = getDicomViewerUrladdress();
 		model.addAttribute("dicomViewerUrladdress", dicomViewerUrladdress);
 		model.put("performedStatusCompletedOrders", performedStatusCompletedOrders);
 		
 	}
 	
+	/**
+	 * Get the previous radiology orders
+	 * 
+	 * @param service
+	 * @param model
+	 * @param patientId
+	 * @param ui
+	 * @return json radiology orders having report ready status
+	 */
 	public List<SimpleObject> getPatientReportReadyOrder(@SpringBean("conceptService") ConceptService service,
 			FragmentModel model, @RequestParam(value = "patientId") Patient patientId, UiUtils ui) {
 		
 		ArrayList<RadiologyOrder> reportReadyRadiologyOrders = new ArrayList<RadiologyOrder>();
-		
+		// get all patient orders
 		List<Order> allPatientOrders = Context.getOrderService()
 				.getAllOrdersByPatient(patientId);
 		
@@ -105,11 +132,13 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 				
 				radiologyOrder = Context.getService(RadiologyService.class)
 						.getRadiologyOrderByOrderId(order.getOrderId());
+				// get orders with report ready status
 				if (radiologyOrder.isReportReady()) {
 					reportReadyRadiologyOrders.add(radiologyOrder);
 				}
 			}
 		}
+		// properties selected from radiology order
 		String[] properties = new String[8];
 		properties[0] = "orderer.name";
 		properties[1] = "instructions";
@@ -123,11 +152,20 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		return SimpleObject.fromCollection(reportReadyRadiologyOrders, ui, properties);
 	}
 	
+	/**
+	 * If report is saved, get the report saved encounter id
+	 * 
+	 * @param service
+	 * @param model
+	 * @param radiologyorderId
+	 * @param ui
+	 * @return radiology order with report saved encounter id
+	 */
 	public List<SimpleObject> getReportSavedEncounterId(@SpringBean("conceptService") ConceptService service,
 			FragmentModel model, @RequestParam(value = "radiologyorderId") Integer radiologyorderId, UiUtils ui) {
 		
 		ArrayList<RadiologyOrder> reportSavedStudy = new ArrayList<RadiologyOrder>();
-		
+		// get the radiology order with the report saved encounter id
 		RadiologyOrder radiologyOrderByOrderId = Context.getService(RadiologyService.class)
 				.getRadiologyOrderByOrderId(radiologyorderId);
 		reportSavedStudy.add(radiologyOrderByOrderId);
@@ -136,6 +174,15 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		return SimpleObject.fromCollection(reportSavedStudy, ui, properties);
 	}
 	
+	/**
+	 * get the observation for the report encounter id
+	 * 
+	 * @param service
+	 * @param model
+	 * @param encounterId
+	 * @param ui
+	 * @return observations for the encounter id
+	 */
 	public List<SimpleObject> getEncounterIdObs(@SpringBean("conceptService") ConceptService service, FragmentModel model,
 			@RequestParam(value = "encounterId") String encounterId, UiUtils ui) {
 		
@@ -149,6 +196,13 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		return SimpleObject.fromCollection(encounterIdObs, ui, properties);
 	}
 	
+	/**
+	 * @param service
+	 * @param model
+	 * @param radiologyorderId
+	 * @param ui
+	 * @return radiology order with detailed order information
+	 */
 	public List<SimpleObject> getRadiologyOrderDetail(@SpringBean("conceptService") ConceptService service,
 			FragmentModel model, @RequestParam(value = "radiologyorderId") Integer radiologyorderId, UiUtils ui) {
 		
@@ -174,23 +228,33 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		return SimpleObject.fromCollection(radiologyOrdersDetail, ui, properties);
 	}
 	
-	public List<SimpleObject> CancelReportUpdate(@SpringBean("conceptService") ConceptService service, FragmentModel model,
+	/**
+	 * Cancel Saved report and update saved report column in the active order table for the order.
+	 * 
+	 * @param service
+	 * @param model
+	 * @param radiologyorderId
+	 * @param ui
+	 * @return updated report saved column in the active order page
+	 */
+	public List<SimpleObject> CancelSavedReport(@SpringBean("conceptService") ConceptService service, FragmentModel model,
 			@RequestParam(value = "radiologyorderId") Integer radiologyorderId, UiUtils ui) {
 		
 		ArrayList<RadiologyOrder> radiologyOrdersReportUpdate = new ArrayList<RadiologyOrder>();
-		
+		// get the radiology order
 		RadiologyOrder reportEncounterIdToBeRemoved = Context.getService(RadiologyService.class)
 				.getRadiologyOrderByOrderId(radiologyorderId);
+		// remove the report encounter id for the order
 		Context.getService(RadiologyService.class)
 				.updateStudyEncounterId(reportEncounterIdToBeRemoved.getStudy()
 						.getStudyInstanceUid(), null);
-		
+		// get the updated performed status completed orders
 		List<RadiologyOrder> updatePerformedStatusCompletedRadiologyOrders = getPerformedStatusCompletedRadiologyOrders();
 		
 		for (RadiologyOrder updateRadiologyOrder : updatePerformedStatusCompletedRadiologyOrders) {
 			radiologyOrdersReportUpdate.add(updateRadiologyOrder);
 		}
-		
+		// properties selected from the order
 		String[] properties = new String[8];
 		properties[0] = "patient.personName";
 		properties[1] = "patient.patientIdentifier";
@@ -204,6 +268,24 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		return SimpleObject.fromCollection(radiologyOrdersReportUpdate, ui, properties);
 	}
 	
+	/**
+	 * Get the form if the form is generated in the HTMLForm
+	 * 
+	 * @param service
+	 * @param model
+	 * @param radiologyorderId
+	 * @param htmlFormEntryService
+	 * @param adtService
+	 * @param formService
+	 * @param resourceFactory
+	 * @param featureToggles
+	 * @param sessionContext
+	 * @param httpSession
+	 * @param ui
+	 * @return forms from the HTMLForm
+	 * @throws IOException
+	 * @throws Exception
+	 */
 	public List<SimpleObject> getForm(@SpringBean("conceptService") ConceptService service, FragmentModel model,
 			@RequestParam(value = "radiologyorderId") String radiologyorderId,
 			@SpringBean("htmlFormEntryService") HtmlFormEntryService htmlFormEntryService,
@@ -215,7 +297,6 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		String definitionUiResource = null;
 		Encounter encounter = null;
 		Visit visit = null;
-		Boolean createVisit = false;
 		boolean automaticValidation = true;
 		Form form = null;
 		ArrayList<FormEntrySession> command = new ArrayList<FormEntrySession>();
@@ -224,6 +305,7 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		int radiologyorderIdInteger = Integer.parseInt(radiologyorderId);
 		RadiologyService radiologyservice = Context.getService(RadiologyService.class);
 		RadiologyOrder getRadiologyOrder = radiologyservice.getRadiologyOrderByOrderId(radiologyorderIdInteger);
+		// If no report saved encounter Id, then get the generic and non generic form
 		if (getRadiologyOrder.getStudy()
 				.getStudyReportSavedEncounterId() == null) {
 			encounter = null;
@@ -236,24 +318,20 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 			formlist.add(form);
 			formlist.add(genericform);
 		} else {
+			// If there is report saved encounter Id, then get the report saved form
 			encounter = Context.getEncounterService()
 					.getEncounter(getRadiologyOrder.getStudy()
 							.getStudyReportSavedEncounterId());
-			
 			form = encounter.getForm();
-			
 			formlist.add(form);
 		}
 		String returnUrl = "";
-		
 		for (Form eachform : formlist) {
-			
 			HtmlForm hf = HtmlFormEntryUtil.getService()
 					.getHtmlFormByForm(eachform);
 			Patient patient = getRadiologyOrder.getPatient();
 			Integer htmlFormId = eachform.getFormId();
 			String formUuid = eachform.getUuid();
-			
 			if (hf == null) {
 				if (htmlFormId != null) {
 					hf = htmlFormEntryService.getHtmlForm(htmlFormId);
@@ -284,7 +362,6 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 				throw new RuntimeException("Could not find HTML Form");
 			}
 			
-			// the code below doesn't handle the HFFS case where you might want to _add_ data to an existing encounter
 			FormEntrySession fes;
 			if (encounter != null) {
 				fes = new FormEntrySession(patient, encounter, FormEntryContext.Mode.EDIT, hf, null, httpSession,
@@ -297,9 +374,7 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 			VisitDomainWrapper visitDomainWrapper = getVisitDomainWrapper(visit, encounter, adtService);
 			setupVelocityContext(fes, visitDomainWrapper, ui, sessionContext, featureToggles);
 			setupFormEntrySession(fes, visitDomainWrapper, ui, sessionContext, returnUrl);
-			
 			fes.setReturnUrl(returnUrl);
-			
 			command.add(fes);
 			
 		}
@@ -316,14 +391,17 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		return SimpleObject.fromCollection(command, ui, properties);
 	}
 	
+	// get the oviyum url address
 	private String getDicomViewerUrladdress() {
 		RadiologyProperties radiologyProperties = new RadiologyProperties();
-		
 		return radiologyProperties.getServersAddress() + ":" + radiologyProperties.getServersPort()
 				+ radiologyProperties.getDicomViewerUrlBase() + "?" + radiologyProperties.getDicomViewerLocalServerName();
 		
 	}
 	
+	/**
+	 * @return json list of completed radiology orders
+	 */
 	public List<RadiologyOrder> getPerformedStatusCompletedRadiologyOrders() {
 		Vector<RadiologyOrder> completedRadiologyOrders = new Vector<RadiologyOrder>();
 		
@@ -341,10 +419,9 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 				
 				radiologyOrder = Context.getService(RadiologyService.class)
 						.getRadiologyOrderByOrderId(order.getOrderId());
-				
+				// get the completed radiology orders
 				if (radiologyOrder.isCompleted()) {
 					completedRadiologyOrders.add(radiologyOrder);
-					
 				}
 				
 			}
@@ -352,44 +429,46 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		return completedRadiologyOrders;
 	}
 	
+	/**
+	 * Once report is submitted, update the active orders
+	 * 
+	 * @param service
+	 * @param model
+	 * @param radiologyorderId
+	 * @param ui
+	 * @return the updated active orders
+	 */
 	public List<SimpleObject> updateActiveOrders(@SpringBean("conceptService") ConceptService service, FragmentModel model,
 			@RequestParam(value = "radiologyorderId") String radiologyorderId, UiUtils ui) {
 		
 		List<RadiologyOrder> allOrders = Context.getService(RadiologyService.class)
 				.getAllRadiologyOrder();
-		
 		User authenticatedUser = Context.getAuthenticatedUser();
-		
 		RadiologyOrder radiologyOrder;
-		
 		for (Order order : allOrders) {
-			
 			if ((order.getOrderId()
 					.toString().trim()).equals(radiologyorderId.trim())) {
 				
 				radiologyOrder = Context.getService(RadiologyService.class)
 						.getRadiologyOrderByOrderId(order.getOrderId());
-				
+				// update the performed status to report ready so it is available to referring physician
 				Context.getService(RadiologyService.class)
 						.updateStudyPerformedStatus(radiologyOrder.getStudy()
 								.getStudyInstanceUid(), PerformedProcedureStepStatus.REPORT_READY);
-				
+				// get the radiologist submitted obs date
 				Context.getService(RadiologyService.class)
 						.updateObsCompletedDate(radiologyOrder.getStudy()
 								.getStudyInstanceUid(), new Date().toString());
-				
+				// get the radiologist
 				Context.getService(RadiologyService.class)
 						.updateRadiologyOrderUser(radiologyOrder.getStudy()
 								.getStudyInstanceUid(), authenticatedUser.toString());
-				
 			}
-			
 		}
 		
+		// get the updated performed status completed radiology orders
 		ArrayList<RadiologyOrder> updateRadiologyOrder = new ArrayList<RadiologyOrder>();
-		
 		List<RadiologyOrder> performedStatusCompletedOrders = getPerformedStatusCompletedRadiologyOrders();
-		
 		for (RadiologyOrder updateActiveOrder : performedStatusCompletedOrders) {
 			updateRadiologyOrder.add(updateActiveOrder);
 		}
@@ -419,6 +498,8 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	 *
 	 * @param user the username
 	 * @param pass the password
+	 * @param context
+	 * @param emrApiProperties
 	 * @return a simple object to record if successful
 	 */
 	public SimpleObject authenticate(@RequestParam("user") String user, @RequestParam("pass") String pass,
@@ -437,12 +518,18 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	/**
 	 * Handles a form submit request
 	 *
+	 * @param sessionContext
 	 * @param patient
 	 * @param hf
 	 * @param encounter
+	 * @param radiologyOrderId
 	 * @param visit
 	 * @param returnUrl
+	 * @param createVisit
 	 * @param request
+	 * @param featureToggles
+	 * @param adtService
+	 * @param ui
 	 * @return
 	 * @throws Exception
 	 */
@@ -460,15 +547,13 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		
 		RadiologyOrder radiologyOrderByOrderId = Context.getService(RadiologyService.class)
 				.getRadiologyOrderByOrderId(radiologyOrderId);
-		
 		boolean editMode = encounter != null;
-		
 		FormEntrySession fes;
 		if (encounter != null) {
-			
+			// edit saved form
 			fes = new FormEntrySession(patient, encounter, FormEntryContext.Mode.EDIT, hf, request.getSession());
 		} else {
-			
+			// fill new form
 			fes = new FormEntrySession(patient, hf, FormEntryContext.Mode.ENTER, request.getSession());
 		}
 		
@@ -549,7 +634,6 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		
 		// Do actual encounter creation/updating
 		fes.applyActions();
-		
 		Context.getService(RadiologyService.class)
 				.updateStudyEncounterId(radiologyOrderByOrderId.getStudy()
 						.getStudyInstanceUid(), formEncounter.getEncounterId());
@@ -594,21 +678,6 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		if (previousEncounterDate != null
 				&& new DateMidnight(previousEncounterDate).equals(new DateMidnight(formEncounter.getEncounterDatetime()))) {
 			formEncounter.setEncounterDatetime(previousEncounterDate);
-		}
-		
-	}
-	
-	private void setupModel(FragmentModel model, FormEntrySession fes, VisitDomainWrapper visitDomainWrapper,
-			Boolean createVisit) {
-		
-		model.addAttribute("currentDate", (new DateMidnight()).toDate());
-		
-		model.addAttribute("command", fes);
-		model.addAttribute("visit", visitDomainWrapper);
-		if (createVisit != null) {
-			model.addAttribute("createVisit", createVisit.toString());
-		} else {
-			model.addAttribute("createVisit", "false");
 		}
 		
 	}

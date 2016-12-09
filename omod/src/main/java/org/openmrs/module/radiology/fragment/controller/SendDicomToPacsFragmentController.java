@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.openmrs.module.radiology.fragment.controller;
 
 import java.io.File;
@@ -14,11 +9,8 @@ import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.radiology.PerformedProcedureStepStatus;
 import org.openmrs.module.radiology.RadiologyOrder;
-import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.RadiologyService;
 import org.openmrs.module.radiology.ScheduledProcedureStepStatus;
-
-import org.openmrs.module.radiology.Study;
 import org.openmrs.ui.framework.SimpleObject;
 import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.annotation.SpringBean;
@@ -26,13 +18,19 @@ import org.openmrs.ui.framework.fragment.FragmentModel;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * @author youdon
+ * Send Dicom files to PACS when the modality software is not available
+ * 
+ * @author tenzin
  */
 public class SendDicomToPacsFragmentController {
 	
+	/**
+	 * @param model
+	 */
 	public void controller(FragmentModel model) {
-		
+		// get all the active orders
 		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrders();
+		// get the dicom files from the modality station
 		ArrayList<String> dicomeFiles = listFiles("/home/youdon/Desktop/aaa");
 		
 		model.addAttribute("dicomeFiles", dicomeFiles);
@@ -40,6 +38,10 @@ public class SendDicomToPacsFragmentController {
 		
 	}
 	
+	/**
+	 * @param directoryName
+	 * @return arraylist of dicom files
+	 */
 	public ArrayList listFiles(String directoryName) {
 		ArrayList<String> getDicomFiles = new ArrayList();
 		File directory = new File(directoryName);
@@ -56,10 +58,13 @@ public class SendDicomToPacsFragmentController {
 		return getDicomFiles;
 	}
 	
+	/**
+	 * @return all active orders
+	 */
 	public List<RadiologyOrder> getInProgressRadiologyOrders() {
 		
 		Vector<RadiologyOrder> inProgressRadiologyOrders = new Vector<RadiologyOrder>();
-		
+		// get all orders
 		List<RadiologyOrder> allRadiologyOrders = Context.getService(RadiologyService.class)
 				.getAllRadiologyOrder();
 		
@@ -73,7 +78,7 @@ public class SendDicomToPacsFragmentController {
 					.getOrderTypeId() == testOrderTypeId) {
 				radiologyOrder = Context.getService(RadiologyService.class)
 						.getRadiologyOrderByOrderId(order.getOrderId());
-				
+				// get all orders of scheduled status
 				if ((radiologyOrder.getStudy()
 						.getScheduledStatus() == radiologyOrder.getStudy()
 						.getScheduledStatus().SCHEDULED)) {
@@ -86,12 +91,20 @@ public class SendDicomToPacsFragmentController {
 		return inProgressRadiologyOrders;
 	}
 	
+	/**
+	 * @param service
+	 * @param model
+	 * @param radiologyorderId to be updated
+	 * @param ui
+	 * @return updated active orders
+	 */
 	public List<SimpleObject> updateActiveOrders(@SpringBean("conceptService") ConceptService service, FragmentModel model,
 			@RequestParam(value = "radiologyorderId") String radiologyorderId, UiUtils ui) {
 		
 		RadiologyService radiologyService = Context.getService(RadiologyService.class);
+		// send dicom to PACS
 		radiologyService.placeDicomInPacs("/home/youdon/Desktop/aaa");
-		
+		// get all radiology orders
 		List<RadiologyOrder> allRadiologyOrders = Context.getService(RadiologyService.class)
 				.getAllRadiologyOrder();
 		RadiologyOrder radiologyOrder;
@@ -100,15 +113,18 @@ public class SendDicomToPacsFragmentController {
 					.toString().trim()).equals(radiologyorderId.trim())) {
 				radiologyOrder = Context.getService(RadiologyService.class)
 						.getRadiologyOrderByOrderId(order.getOrderId());
+				// update order performed status to completed
 				Context.getService(RadiologyService.class)
 						.updateStudyPerformedStatus(radiologyOrder.getStudy()
 								.getStudyInstanceUid(), PerformedProcedureStepStatus.COMPLETED);
+				// update order scheduled status to started
 				Context.getService(RadiologyService.class)
 						.updateScheduledProcedureStepStatus(radiologyOrder.getStudy()
 								.getStudyInstanceUid(), ScheduledProcedureStepStatus.STARTED);
 			}
 		}
 		
+		// update the active orders
 		ArrayList<RadiologyOrder> getRadiologyOrder = new ArrayList<RadiologyOrder>();
 		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrders();
 		for (RadiologyOrder updateActiveOrder : inProgressRadiologyOrders) {

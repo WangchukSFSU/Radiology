@@ -33,7 +33,7 @@ public class AdminList extends AdministrationSectionExt {
 		final Map<String, String> map = new HashMap<String, String>();
 		map.put("/module/radiology/manage.form", "radiology.manage");
 		map.put("module/radiology/radiologyOrder.list", "radiology.manageOrders");
-		map.put("/pages/radiology/adminInitialize.page", "radiology.initialize");
+		map.put("/pages/radiology/admin.page", "radiology.initialize");
 		
 		return map;
 	}

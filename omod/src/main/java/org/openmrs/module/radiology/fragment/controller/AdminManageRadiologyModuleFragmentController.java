@@ -1,12 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.openmrs.module.radiology.fragment.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.openmrs.Concept;
 import org.openmrs.ConceptClass;
 import org.openmrs.ConceptName;
@@ -24,9 +21,19 @@ import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.fragment.FragmentModel;
 
+/**
+ * Admin manage the modality, study and report for the radiology module
+ * 
+ * @author tenzin
+ */
 public class AdminManageRadiologyModuleFragmentController {
 	
-	public void controller(FragmentModel model) throws Exception {
+	/**
+	 * List modality concepts name available in the concept dictionary
+	 * 
+	 * @param model
+	 */
+	public void controller(FragmentModel model) {
 		
 		ArrayList<ConceptName> modalityConcept = new ArrayList();
 		List<ConceptSet> modalityConceptSet = Context.getConceptService()
@@ -45,24 +52,29 @@ public class AdminManageRadiologyModuleFragmentController {
 		
 	}
 	
+	/**
+	 * @param service
+	 * @param ui
+	 * @return study concepts available in the concept dictionary
+	 */
 	public List<SimpleObject> getStudyConceptsAnswerFromModality(@SpringBean("conceptService") ConceptService service,
 			UiUtils ui) {
 		
 		ArrayList<Concept> studySetMembers = new ArrayList<Concept>();
-		
+		// study class name
 		ConceptClass studyClassName = Context.getConceptService()
 				.getConceptClassByName("Radiology/Imaging Procedure");
 		
 		List<Concept> studyClassNameConcept = Context.getConceptService()
 				.getConceptsByClass(studyClassName);
-		
+		// remove modality concepts from study concept list
 		for (Concept filterStudyClassNameConcept : studyClassNameConcept) {
 			if (!filterStudyClassNameConcept.getDisplayString()
 					.endsWith("modality")) {
 				studySetMembers.add(filterStudyClassNameConcept);
 			}
 		}
-		
+		// properties selected from the study field
 		String[] properties = new String[4];
 		properties[0] = "conceptId";
 		properties[1] = "displayString";
@@ -71,8 +83,13 @@ public class AdminManageRadiologyModuleFragmentController {
 		return SimpleObject.fromCollection(studySetMembers, ui, properties);
 	}
 	
-	public List<SimpleObject> getReport(FragmentModel model, @SpringBean("conceptService") ConceptService service, UiUtils ui)
-			throws Exception {
+	/**
+	 * @param model
+	 * @param service
+	 * @param ui
+	 * @return form available for the study
+	 */
+	public List<SimpleObject> getReport(FragmentModel model, @SpringBean("conceptService") ConceptService service, UiUtils ui) {
 		
 		// list of Study Forms avaialble
 		ArrayList<FormEntrySession> getStudyHTMLCreated = new ArrayList<FormEntrySession>();
@@ -102,35 +119,41 @@ public class AdminManageRadiologyModuleFragmentController {
 				// check if study htmlform is available
 				if (studyDisplayString.equals(htmlFormName)) {
 					
-					Mode mode = Mode.ENTER;
-					
-					HtmlForm htmlForm = HtmlFormEntryUtil.getService()
-							.getHtmlFormByForm(eachHTMLForms);
-					
-					Patient patient = HtmlFormEntryUtil.getFakePerson();
-					
-					FormEntrySession session = null;
-					session = new FormEntrySession(patient, htmlForm, mode, null);
-					
-					session.getHtmlToDisplay();
-					
-					session.getFormName();
-					
-					getStudyHTMLCreated.add(session);
+					try {
+						Mode mode = Mode.ENTER;
+						HtmlForm htmlForm = HtmlFormEntryUtil.getService()
+								.getHtmlFormByForm(eachHTMLForms);
+						Patient patient = HtmlFormEntryUtil.getFakePerson();
+						FormEntrySession session = null;
+						session = new FormEntrySession(patient, htmlForm, mode, null);
+						session.getHtmlToDisplay();
+						session.getFormName();
+						getStudyHTMLCreated.add(session);
+					}
+					catch (Exception ex) {
+						Logger.getLogger(AdminManageRadiologyModuleFragmentController.class.getName())
+								.log(Level.SEVERE, null, ex);
+					}
 					
 				}
 			}
 		}
-		
+		// properties selected from the HtmlForm field
 		String[] properties = new String[2];
 		properties[0] = "FormName";
 		properties[1] = "HtmlToDisplay";
 		return SimpleObject.fromCollection(getStudyHTMLCreated, ui, properties);
 	}
 	
+	/**
+	 * @param service
+	 * @param ui
+	 * @return study concepts that don't have HtmlForm
+	 */
 	public List<SimpleObject> getStudyWithNoFormName(@SpringBean("conceptService") ConceptService service, UiUtils ui) {
 		
 		ArrayList<Concept> studySetMembers = new ArrayList<Concept>();
+		// studies having HtmlForm
 		ArrayList<Concept> studyConceptToBeRemoved = new ArrayList<Concept>();
 		
 		// Get All HTMLForms
@@ -167,11 +190,12 @@ public class AdminManageRadiologyModuleFragmentController {
 				
 			}
 		}
-		
+		// get only study with no HtmlForm
 		listOfStudyConcept.removeAll(studyConceptToBeRemoved);
 		
 		studySetMembers.addAll(listOfStudyConcept);
 		
+		// properties selected from the study field
 		String[] properties = new String[4];
 		properties[0] = "conceptId";
 		properties[1] = "displayString";
