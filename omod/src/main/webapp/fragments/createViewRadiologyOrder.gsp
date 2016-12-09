@@ -467,7 +467,7 @@ function contactRadiologist() {
         </li>
         <li id="manageOrderWithLinkBreadCrumb">
             <i class="icon-chevron-right link"></i>
-            <a href="/openmrs/radiology/radiologyOrder.page?patientId=${patient.person.uuid}&returnUrl="> 
+            <a href="/openmrs/radiology/referringPhysician.page?patientId=${patient.person.uuid}&returnUrl="> 
                 Manage Radiology Order
             </a> 
         </li>
