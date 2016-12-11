@@ -331,658 +331,639 @@
 </script>
 <script>
      jq = jQuery;
-     jq(document).ready(function() {
-
-
-//delete saved report dialog message
-     jq("#reportDeletelDialogMessage").dialog({
-     autoOpen: false,
-     modal: false,
-     title: 'Delete Report',
-     width: 400,
-     buttons : {
-     "Yes": function () { 
-     continueCancelReport();
-     jq(this).dialog('close'); 
-     },
-     "No": function () { 
-     jq(this).dialog('close'); 
-     }
-     },
-
-     });
-
-//display htmlform in the dialog box
-     jq("#formDialogDiv").dialog({
-     autoOpen: false,
-     modal: false,
-     draggable: true,
-     resizable: true,
-     show: 'blind',
-     hide: 'blind',
-     width: 900,
-     dialogClass: 'ui-dialog-osx',
-
-     });
-
-     });
-
-     //show saved report after form is entered
-     function displayReportAfterReportSubmitted() {
-     alert("displayReportAfterReportSubmitted");
-     jq('#patientCompletedOrders').show();
-     jq("#activeOrdersWithNoLinkBreadCrumb").hide();
-     jq("#activeOrdersWithLinkBreadCrumb").show();
-     jq("#orderDetailBreadCrumb").show();
-     jq('#orderDetailDiv').empty();
-     jq("#orderDetailDiv").show();
-     jq("#activeOrderTableDiv").hide();
-     var radiologyorderId = localStorage.getItem("radiologyorderId");
-     <% if (performedStatusCompletedOrders) { %>
-     <% performedStatusCompletedOrders.each { anOrder -> %>
-    var orderId = ${anOrder.orderId} ;
-     if(orderId == radiologyorderId) {
-     localStorage.setItem("radiologyorderId", radiologyorderId);
-     //get order with the report saved encounter id
-        jq.getJSON('${ ui.actionLink("getReportSavedEncounterId") }',
-     { 'radiologyorderId': radiologyorderId
-     })
-     .error(function(xhr, status, err) {
-     alert('AJAX error ' + err);
-     })
-     .success(function(ret) {
-     for (var i = 0; i < ret.length; i++) {
-     var updatedOrderencounterId = ret[i].study.studyReportSavedEncounterId;
-     alert("updatedOrderencounterId   iiiiiiii");
-     alert(updatedOrderencounterId);
-     localStorage.setItem("updatedOrderencounterId", updatedOrderencounterId);
-     }
-     })
-     
- jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailHeading'>RADIOLOGY ORDER DETAILS  :   ${ anOrder.patient.personName }, ${ anOrder.patient.patientIdentifier }, ${anOrder.study.studyname} </div>");
-jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailProvider'>Provider  :  ${anOrder.creator.username} ,  StartDate  : ${ anOrder.dateCreated } </div>");
- jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailDiagnosis'>Diagnosis  : ${anOrder.orderdiagnosis} </div>");
-jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailDiagnosis'>Instructions  : ${anOrder.instructions} </div>");
-jq('#orderDetailDiv').append("<div class='order'  id= 'viewStudyId'><a id = 'viewStudyLink' class='viewStudyLink' href=${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + anOrder.patient.patientIdentifier } onclick='loadImages(); return false;'>ViewStudy</a> </div>");
-//get all the form available in the HTMLForm
-    jq.getJSON('${ ui.actionLink("getForm") }',
-     { 'radiologyorderId': radiologyorderId
-     })
-     .error(function(xhr, status, err) {
-     alert('AJAX error ' + err);
-     })
-     .success(function(ret) {
-     alert("succsss");
-     var formNameArray = [];
-     var formNameHtmlToDisplayArray = [];
-     var patientIdArray = [];
-     var HtmlFormIdArray = [];
-     for (var i = 0; i < ret.length; i++) {
-     var formNameHtmlToDisplay = ret[i].HtmlToDisplay;
-     formNameHtmlToDisplayArray[i] = formNameHtmlToDisplay;
-     var patientId = ret[i].Patient.PatientId;
-     patientIdArray[i] = patientId;
-     var HtmlFormId = ret[i].HtmlFormId;
-     HtmlFormIdArray[i] = HtmlFormId;
-     var FormModifiedTimestamp = ret[i].FormModifiedTimestamp;
-     var ReturnUrl = ret[i].ReturnUrl;
-     var FormName = ret[i].FormName;
-     formNameArray[i] = FormName;
-
-     localStorage.setItem("patientIdForCompletedOrderList", patientId);
-     var radiologyorderId = localStorage.getItem("radiologyorderId");
-     var updatedOrderencounterId = localStorage.getItem("updatedOrderencounterId");
-     //if there is no saved report encounter id, show the form
-     if(updatedOrderencounterId == "null") {
- jq("#orderDetailDiv").append('<a>'+ FormName +' Report Form  </a>');
-
-     } else {
-    //if there is saved report encounter id, show the saved form
-      jq("#orderDetailDiv").append('<a id="pep"> SavedReport <p style="display:none;"> '+ FormName +' </p> </a>');
-     }
-
-     jq('#orderDetailDiv #viewStudyId').next().attr('id', 'formid');
-     jq('#orderDetailDiv a').next().attr('id', 'formid');
-     jq('#orderDetailDiv #viewStudyId').next().addClass("order");
-     jq('#orderDetailDiv a').next().addClass("order");
-     jq('#orderDetailDiv #formid').attr('onclick', onclick="openForm(this); return false;");
-     jq("#orderDetailDiv").append('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'); 
-
-     }
-//show the cancel icon if there is saved report encounter id
-     if(updatedOrderencounterId != "null") {
-  jq("#orderDetailDiv").append('<a><img id="reportCancelId" class = "reportCancelClass" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }" /></a>');
-     jq('#orderDetailDiv #formid').next().attr('id', 'reportCancelIcon');
-     jq('#orderDetailDiv #formid').next().addClass("order");
-     jq('#orderDetailDiv #reportCancelIcon').attr('onclick', onclick="cancelReport(); return false;");
-     }
-
-     localStorage.setItem("FormModifiedTimestamp", FormModifiedTimestamp);
-     localStorage.setItem("ReturnUrl", ReturnUrl);
-     localStorage.setItem("formNameArray", JSON.stringify(formNameArray));
-     localStorage.setItem("formNameHtmlToDisplayArray", JSON.stringify(formNameHtmlToDisplayArray));
-     localStorage.setItem("patientIdArray", JSON.stringify(patientIdArray));
-     localStorage.setItem("HtmlFormIdArray", JSON.stringify(HtmlFormIdArray));
-   var cancelSubmitButton = jq('<div class="order" id= "cancelbtnDivId"><input type="button" id = "cancelbtnId" onclick="cancelBtn();" value="Cancel" /><input type="button" onclick="submitBtn();" value="Submit" /></div>');
-     cancelSubmitButton.appendTo(jq('#orderDetailDiv'));
-
-     var patientIdForCompletedOrderList = localStorage.getItem("patientIdForCompletedOrderList");
-//get the previous patient completed orders
-     jq.getJSON('${ ui.actionLink("getPatientReportReadyOrder") }',
-     { 'patientId': patientIdForCompletedOrderList
-     })
-     .error(function(xhr, status, err) {
-     alert('AJAX error ' + err);
-     })
-     .success(function(ret) {
-     jq('#CancelReportUpdatedDiv').hide();
-     jq('#patientCompletedOrders').empty();
-    jq("<h1></h1>").text("PREVIOUS RADIOLOGY ORDERS").appendTo('#patientCompletedOrders');
-    jq('#patientCompletedOrders').append('<table></table>');
-     jq('#patientCompletedOrders table').attr('id','patientCompletedOrdersDatatable');
-     var patientCompletedOrdersTable = jq('#patientCompletedOrders table');
-  patientCompletedOrdersTable.append( '<thead><tr><th> Report</th><th> StartDate</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th></tr></thead><tbody>' );
-     for (var i = 0; i < ret.length; i++) {
-     var provider = ret[i].orderer.name;
-     var instructions = ret[i].instructions;
-     var patientId = ret[i].Patient.PatientId;
-     var orderdiagnosis = ret[i].orderdiagnosis;
-     var studyname = ret[i].study.studyname;
-     var studyInstanceUid = ret[i].study.studyInstanceUid;
-     var DateCreated = ret[i].DateCreated;
-     var OrderencounterId = ret[i].study.studyReportSavedEncounterId;
-   patientCompletedOrdersTable.append( '<tr><td><a onclick="viewReport('+ OrderencounterId +');"> Obs</a> </td><td> '+ DateCreated +'</td><td> '+ provider +'</td><td> '+ instructions +' </td><td> '+ orderdiagnosis +'</td><td id="dogdog" href="ddasdas"><a id="viewStudyLink" class="viewStudyLink" href="${ dicomViewerUrladdress + "studyUID=" + '+ studyInstanceUid +' + "&patientID=" + '+ patientId +' }" onclick="loadImages(); return false;" >'+ studyname +'</a></td></tr>' );
-     }
-   patientCompletedOrdersTable.append("</tbody>");
-     jq('#patientCompletedOrdersDatatable').DataTable({
-     "sPaginationType": "full_numbers",
-     "bPaginate": true,
-     "bAutoWidth": false,
-     "bLengthChange": true,
-     "bSort": true,
-     "bJQueryUI": true,
-     "iDisplayLength": 5,
-     "aaSorting": [[ 1, "desc" ]] // Sort by first column descending,
-
-     });
-
-     })
-
-
-     })
-
-     }
-
-
-
-     <% } %>
-     <% } %> 
-
-
-     }
-
-
-
-//display order details when click on the active order
-     function viewOrderDetail(el) {
-     localStorage.clear();
-     jq(el).addClass("highlight").css("background-color","#CCCCCC");
-     jq('#patientCompletedOrders').show();
-     jq("#activeOrdersWithNoLinkBreadCrumb").hide();
-     jq("#activeOrdersWithLinkBreadCrumb").show();
-     jq("#orderDetailBreadCrumb").show();
-     jq('#orderDetailDiv').empty();
-//get the order id
-     jq(el).addClass('selected').siblings().removeClass('selected');  
-     var value= jq(el).closest('tr').find('td:first').text();
-     var orderId = parseInt(value, 10);
-     jq("#orderDetailDiv").show();
-     jq("#activeOrderTableDiv").hide();
-     <% if (performedStatusCompletedOrders) { %>
-     <% performedStatusCompletedOrders.each { anOrder -> %>
-    var radiologyorderId = ${anOrder.orderId} ;
-     if(orderId == radiologyorderId) {
-     localStorage.setItem("radiologyorderId", radiologyorderId);
-     //get the report saved encounter id of the order
-        jq.getJSON('${ ui.actionLink("getReportSavedEncounterId") }',
-     { 'radiologyorderId': radiologyorderId
-     })
-     .error(function(xhr, status, err) {
-     alert('AJAX error ' + err);
-     })
-     .success(function(ret) {
-     for (var i = 0; i < ret.length; i++) {
-     var updatedOrderencounterId = ret[i].study.studyReportSavedEncounterId;
-     localStorage.setItem("updatedOrderencounterId", updatedOrderencounterId);
-     }
-     })
-
- jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailHeading'>RADIOLOGY ORDER DETAILS  :  <a id = 'tet' class='tet' target='_blank' href=${ patientClinicianUrl + anOrder.patient.person.uuid } >${ anOrder.patient.personName }</a>  ${ anOrder.patient.patientIdentifier }, ${anOrder.study.studyname} </div>");
-jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailProvider'>Provider  :  ${anOrder.creator.username} ,  StartDate  : ${ anOrder.dateCreated } </div>");
- jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailDiagnosis'>Diagnosis  : ${anOrder.orderdiagnosis} </div>");
-jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailDiagnosis'>Instructions  : ${anOrder.instructions} </div>");
-jq('#orderDetailDiv').append("<div class='order'  id= 'viewStudyId'><a id = 'viewStudyLink' class='viewStudyLink' href=${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + anOrder.patient.patientIdentifier } onclick='loadImages(); return false;'>ViewStudy</a> </div>");
-   //get form
-    jq.getJSON('${ ui.actionLink("getForm") }',
-     { 'radiologyorderId': radiologyorderId
-     })
-     .error(function(xhr, status, err) {
-     alert('AJAX error ' + err);
-     })
-     .success(function(ret) {
-     var formNameArray = [];
-     var formNameHtmlToDisplayArray = [];
-     var patientIdArray = [];
-     var HtmlFormIdArray = [];
-     for (var i = 0; i < ret.length; i++) {
-     var formNameHtmlToDisplay = ret[i].HtmlToDisplay;
-     formNameHtmlToDisplayArray[i] = formNameHtmlToDisplay;
-     var patientId = ret[i].Patient.PatientId;
-     patientIdArray[i] = patientId;
-     var HtmlFormId = ret[i].HtmlFormId;
-     HtmlFormIdArray[i] = HtmlFormId;
-     var FormModifiedTimestamp = ret[i].FormModifiedTimestamp;
-     var ReturnUrl = ret[i].ReturnUrl;
-     var FormName = ret[i].FormName;
-     formNameArray[i] = FormName;
-
-     localStorage.setItem("patientIdForCompletedOrderList", patientId);
-     var radiologyorderId = localStorage.getItem("radiologyorderId");
-     var updatedOrderencounterId = localStorage.getItem("updatedOrderencounterId");
-     if(updatedOrderencounterId == "null") {
- jq("#orderDetailDiv").append('<a>'+ FormName +' Report Form  </a>');
-
-     } else {
-      jq("#orderDetailDiv").append('<a id="pep"> SavedReport <p style="display:none;"> '+ FormName +' </p> </a>');
-     }
-
-     jq('#orderDetailDiv #viewStudyId').next().attr('id', 'formid');
-     jq('#orderDetailDiv a').next().attr('id', 'formid');
-     jq('#orderDetailDiv #viewStudyId').next().addClass("order");
-     jq('#orderDetailDiv a').next().addClass("order");
-     jq('#orderDetailDiv #formid').attr('onclick', onclick="openForm(this); return false;");
-     jq("#orderDetailDiv").append('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'); 
-
-     }
-
-     if(updatedOrderencounterId != "null") {
-  jq("#orderDetailDiv").append('<a><img id="reportCancelId" class = "reportCancelClass" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }" /></a>');
-     jq('#orderDetailDiv #formid').next().attr('id', 'reportCancelIcon');
-     jq('#orderDetailDiv #formid').next().addClass("order");
-     jq('#orderDetailDiv #reportCancelIcon').attr('onclick', onclick="cancelReport(); return false;");
-     }
-
-     localStorage.setItem("FormModifiedTimestamp", FormModifiedTimestamp);
-     localStorage.setItem("ReturnUrl", ReturnUrl);
-     localStorage.setItem("formNameArray", JSON.stringify(formNameArray));
-     localStorage.setItem("formNameHtmlToDisplayArray", JSON.stringify(formNameHtmlToDisplayArray));
-     localStorage.setItem("patientIdArray", JSON.stringify(patientIdArray));
-     localStorage.setItem("HtmlFormIdArray", JSON.stringify(HtmlFormIdArray));
-
-    var cancelSubmitButton = jq('<div class="order" id= "cancelbtnDivId"><input type="button" id = "cancelbtnId" onclick="cancelBtn();" value="Cancel" /><input type="button" onclick="submitBtn();" value="Submit" /></div>');
-     cancelSubmitButton.appendTo(jq('#orderDetailDiv'));
-     var patientIdForCompletedOrderList = localStorage.getItem("patientIdForCompletedOrderList");
-
-     jq.getJSON('${ ui.actionLink("getPatientReportReadyOrder") }',
-     { 'patientId': patientIdForCompletedOrderList
-     })
-     .error(function(xhr, status, err) {
-     alert('AJAX error ' + err);
-     })
-     .success(function(ret) {
-     alert("getPatientReportReadyOrder");
-     jq('#CancelReportUpdatedDiv').hide();
-     jq('#patientCompletedOrders').empty();
-    jq("<h1></h1>").text("PREVIOUS RADIOLOGY ORDERS").appendTo('#patientCompletedOrders');
-         jq('#patientCompletedOrders').append('<table></table>');
-     jq('#patientCompletedOrders table').attr('id','patientCompletedOrdersDatatable');
-
-     var patientCompletedOrdersTable = jq('#patientCompletedOrders table');
-
-  patientCompletedOrdersTable.append( '<thead><tr><th> Report</th><th> StartDate</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th></tr></thead><tbody>' );
-
-     for (var i = 0; i < ret.length; i++) {
-     var provider = ret[i].orderer.name;
-     var instructions = ret[i].instructions;
-     var patientId = ret[i].Patient.PatientId;
-     var orderdiagnosis = ret[i].orderdiagnosis;
-     var studyname = ret[i].study.studyname;
-     var studyInstanceUid = ret[i].study.studyInstanceUid;
-     var DateCreated = ret[i].DateCreated;
-     var OrderencounterId = ret[i].study.studyReportSavedEncounterId;
-
-   patientCompletedOrdersTable.append( '<tr><td><a onclick="viewReport('+ OrderencounterId +');"> Obs</a> </td><td> '+ DateCreated +'</td><td> '+ provider +'</td><td> '+ instructions +' </td><td> '+ orderdiagnosis +'</td><td id="dogdog" href="ddasdas"><a id="viewStudyLink" class="viewStudyLink" href="${ dicomViewerUrladdress + "studyUID=" + '+ studyInstanceUid +' + "&patientID=" + '+ patientId +' }" onclick="loadImages(); return false;" >'+ studyname +'</a></td></tr>' );
-
-
-     }
-   patientCompletedOrdersTable.append("</tbody>");
-     jq('#patientCompletedOrdersDatatable').DataTable({
-     "sPaginationType": "full_numbers",
-     "bPaginate": true,
-     "bAutoWidth": false,
-     "bLengthChange": true,
-     "bSort": true,
-     "bJQueryUI": true,
-     "iDisplayLength": 5,
-     "aaSorting": [[ 1, "desc" ]] // Sort by first column descending,
-
-     });
-
-     })
-
-
-     })
-
-     }
-
-
-
-     <% } %>
-     <% } %> 
-
-
-     }
-
-//click cancel btn on the order detail page
-     function cancelBtn() {
-     location.reload();
-     }
-
-     //click cancel btn on the htmlform
-     function CancelForm(){
-     jq('#formDialogDiv').dialog('close');
-     }
-
-     //delete saved report
-     function cancelReport() {
-     jq( "#reportDeletelDialogMessage" ).dialog( "open" );
-     }
-
-     //if click yes on the cancel report dialog box, continue with the cancellation
-     function continueCancelReport() {
-alert("continueCancelReport");
-     var radiologyorderId = localStorage.getItem("radiologyorderId");
-       jq.getJSON('${ ui.actionLink("CancelSavedReport") }',
-     { 'radiologyorderId': radiologyorderId
-     })
-     .error(function(xhr, status, err) {
-     alert('AJAX error ' + err);
-     })
-     .success(function(ret) {
-     alert("CancelSavedReport");
-
-     jq('#orderDetailBreadCrumb').hide();
-     jq('#activeOrdersWithLinkBreadCrumb').hide();
-     jq('#activeOrdersWithNoLinkBreadCrumb').show();
-     jq('#showReportsDiv').hide();
-
-
-     jq("#patientCompletedOrders").hide();
-     jq('.order').hide();
-     jq('#CancelReportUpdatedDiv').show();
-     jq('#CancelReportUpdatedDiv').empty();
-    jq("<h1></h1>").text("Report deleted successfully").appendTo('#CancelReportUpdatedDiv');
-    jq("<h1></h1>").text("ACTIVE RADIOLOGY ORDERS").appendTo('#CancelReportUpdatedDiv');
-
-      jq('#CancelReportUpdatedDiv').append('<table></table>');
-     jq('#CancelReportUpdatedDiv table').attr('id','cancepReportUpdatedDatatable');
-
-     var cancelReportUpdatedTable = jq('#CancelReportUpdatedDiv table');
-    cancelReportUpdatedTable.append( '<thead><tr><th>Order</th><th>Patient Name</th><th>MRN</th><th>OrderStartDate</th><th>OrderPriority</th><th>SavedReport</th></tr></thead><tbody>' );
-     alert("COOL");
-
-     for (var i = 0; i < ret.length; i++) {
-
-     var studyname = ret[i].study.studyname;
-     var dateCreated = ret[i].dateCreated;
-     var urgency = ret[i].urgency;
-     var patientName = ret[i].patient.personName;
-     var patientIdentifier = ret[i].patient.patientIdentifier;
-     var anOrderId = ret[i].orderId;
-     var patientIdentifier = ret[i].patient.patientIdentifier.Identifier;
-     var OrderencounterId = ret[i].study.studyReportSavedEncounterId;
-
-     if(OrderencounterId) {
-     cancelReportUpdatedTable.append( '<tr><td><a id="studyLinkId" href='+ studyname +' class="studyLinkId" onclick="viewOrderDetail(this); return false;"><p style="display:none;">'+ anOrderId +'</p>'+ studyname +' </a></td><td>'+ patientName +'</td><td>'+ patientIdentifier +'</td><td>'+ dateCreated +'</td><td>'+ urgency +'</td><td>Yes</td></tr>' );
-     } else { 
-      cancelReportUpdatedTable.append( '<tr><td><a id="studyLinkId" href='+ studyname +' class="studyLinkId" onclick="viewOrderDetail(this); return false;"><p style="display:none;">'+ anOrderId +'</p>'+ studyname +' </a></td><td>'+ patientName +'</td><td>'+ patientIdentifier +'</td><td>'+ dateCreated +'</td><td>'+ urgency +'</td><td>No</td></tr>' );
-     }
-
-     }
-
-   cancelReportUpdatedTable.append("</tbody>");
-     jq('#cancepReportUpdatedDatatable').dataTable({
-     "sPaginationType": "full_numbers",
-     "bPaginate": true,
-     "bAutoWidth": false,
-     "bLengthChange": true,
-     "bSort": true,
-     "bJQueryUI": true,
-
-     "iDisplayLength": 5,
-     "aaSorting": [[ 3, "desc" ]] // Sort by first column descending,
-
-
-     });
-
-     })
-
-     }
-
-     
-     function submitBtn() {
-     alert("porto");
-     var radiologyorderId = localStorage.getItem("radiologyorderId");
-     alert("radiologyorderId " + radiologyorderId);
-    jq.getJSON('${ ui.actionLink("updateActiveOrders") }',
-     { 'radiologyorderId': radiologyorderId
-     })
-     .error(function(xhr, status, err) {
-     alert('AJAX error ' + err);
-     })
-     .success(function(ret) {
-     jq('#orderDetailBreadCrumb').hide();
-     jq('#activeOrdersWithLinkBreadCrumb').hide();
-     jq('#activeOrdersWithNoLinkBreadCrumb').show();
-     jq('#showReportsDiv').hide();
-     jq("#patientCompletedOrders").hide();
-
-     jq("#orderDetailDiv").hide();
-     jq('#activeOrderTableDiv').show();
-     jq('#activeOrderTableDiv').empty();
-    jq("<h1></h1>").text("Report submitted successfully").appendTo('#activeOrderTableDiv');
-    jq("<h1></h1>").text("ACTIVE RADIOLOGY ORDERS").appendTo('#activeOrderTableDiv');
-
-      jq('#activeOrderTableDiv').append('<table></table>');
-     jq('#activeOrderTableDiv table').attr('id','updateActiveOrderDatatable');
-
-     var activeOrderTableRow = jq('#activeOrderTableDiv table');
-    activeOrderTableRow.append( '<thead><tr><th>Order</th><th>Patient Name</th><th>MRN</th><th>OrderStartDate</th><th>OrderPriority</th><th>SavedReport</th></tr></thead><tbody>' );
-     for (var i = 0; i < ret.length; i++) {
-     var anOrderId = ret[i].orderId;
-     var studyname = ret[i].study.studyname;
-     var dateCreated = ret[i].dateCreated;
-     var urgency = ret[i].urgency;
-     var patientName = ret[i].patient.personName;
-     var patientIdentifier = ret[i].patient.patientIdentifier.Identifier;
-     var OrderencounterId = ret[i].study.studyReportSavedEncounterId;
-
-     if(OrderencounterId) {
-     activeOrderTableRow.append( '<tr><td><a id="studyLinkId" href='+ studyname +' class="studyLinkId" onclick="viewOrderDetail(this); return false;"><p style="display:none;">'+ anOrderId +'</p>'+ studyname +' </a></td><td>'+ patientName +'</td><td>'+ patientIdentifier +'</td><td>'+ dateCreated +'</td><td>'+ urgency +'</td><td>Yes</td></tr>' );
-     } else { 
-      activeOrderTableRow.append( '<tr><td><a id="studyLinkId" href='+ studyname +' class="studyLinkId" onclick="viewOrderDetail(this); return false;"><p style="display:none;">'+ anOrderId +'</p>'+ studyname +' </a></td><td>'+ patientName +'</td><td>'+ patientIdentifier +'</td><td>'+ dateCreated +'</td><td>'+ urgency +'</td><td>No</td></tr>' );
-     }
-
-     }
-     activeOrderTableRow.append("</tbody>");
-     jq('#updateActiveOrderDatatable').dataTable({
-     "sPaginationType": "full_numbers",
-     "bPaginate": true,
-     "bAutoWidth": false,
-     "bLengthChange": true,
-     "bSort": true,
-     "bJQueryUI": true,
-
-     "iDisplayLength": 5,
-     "aaSorting": [[ 3, "desc" ]] // Sort by first column descending,
-
-
-     });
-
-
-     })
-
-     }
-
-
-
-
-
-     function loadImages() {
-     var addressValue = jq('.viewStudyLink').attr("href");
-     alert(addressValue );
-     jq("#viewStudyImageIframe").attr('src', jq('.viewStudyLink').attr("href"));
-     jq("#viewStudyImageDialog").dialog({
-     width: 400,
-     height: 450,
-     modal: false,
-     buttons : {
-     "Close": function () { 
-     jq(this).dialog('close'); 
-     }
-     },
-     close: function () {
-     jq("#viewStudyImageIframe").attr('src', "about:blank");
-     }
-     });
-     return false;
-     }
-
-     function viewReport(OrderencounterId) {
-     alert("viewReport");
-     alert("OrderencounterId  "+OrderencounterId);
-jq.getJSON('${ ui.actionLink("getEncounterIdObs") }',
-     { 'encounterId': OrderencounterId
-     })
-     .error(function(xhr, status, err) {
-     alert('AJAX error ' + err);
-     })
-     .success(function(ret) {
-    jq('#obsDialogBoxText').append('<table></table>');
-     jq('#obsDialogBoxText table').attr('id','obsDialogBoxTextDatatable');
-     jq("#obsDialogBoxText table").addClass("obsDialogBoxTextclass");
-     var obsDialogBoxTextTable = jq('#obsDialogBoxText table');
-    obsDialogBoxTextTable.append( '<thead><tr><th>Concept</th><th>Value Text</th></tr></thead><tbody>' );
-     for (var i = 0; i < ret.length; i++) {
-     var concept = ret[i].Concept;
-     var valueText = ret[i].valueText;
-    obsDialogBoxTextTable.append( '<tr><td>'+ concept +'</td><td>'+ valueText +'</td></tr>' );
-     }
-    obsDialogBoxTextTable.append("</tbody>");
-     jq( "#obsDialogBox" ).dialog( "open" );
-     })
-
-
-     }
-     
-     function openForm(obj) {
-
-     alert("loadImages");
-     jq("div#content").css({'font-size':16}); 
-     jq('input#closeAfterSubmission').next().empty();
-
-     var formNameArray = JSON.parse(localStorage.getItem("formNameArray"));
-     var formNameHtmlToDisplayArray = JSON.parse(localStorage.getItem("formNameHtmlToDisplayArray"));
-     var patientIdArray = JSON.parse(localStorage.getItem("patientIdArray"));
-     var HtmlFormIdArray = JSON.parse(localStorage.getItem("HtmlFormIdArray"));
-
-     var radiologyorderId = localStorage.getItem("radiologyorderId");
-     var returnUrl = localStorage.getItem("ReturnUrl");
-     var formModifiedTimestamp = localStorage.getItem("FormModifiedTimestamp");
-
-     var text = jq(obj).text();
-     alert(text);
-
-     var firstColumnFormName = text.replace('Report Form','');
-     var firstColumnFormName = firstColumnFormName.replace('SavedReport','');
-
-     alert(firstColumnFormName);
-
-     var formNameHtmlToDisplayt;
-     var patientIdt;
-     var HtmlFormIdt;
-
-     //matches the form cicked and assign it for display
-     for (var i=0;i<formNameArray.length;i++){
-
-     if(jq.trim(firstColumnFormName) == formNameArray[i]) {
-
-     formNameHtmlToDisplayt = formNameHtmlToDisplayArray[i];
-     patientIdt = patientIdArray[i];
-     HtmlFormIdt = HtmlFormIdArray[i];
-     }
-
-     }
-
-     var returnUrl = localStorage.getItem("returnUrl");
-     var formModifiedTimestamp = localStorage.getItem("formModifiedTimestamp");
-     jq( "#formDialogDiv" ).dialog( "open" );
-     jq('#personId').val(patientIdt);
-     jq('#htmlFormId').val(HtmlFormIdt);
-     jq('#returnUrl').val(returnUrl);
-     jq('#radiologyOrderId').val(radiologyorderId);
-     jq('input#closeAfterSubmission').after(formNameHtmlToDisplayt);
-     }
+   jq(document).ready(function() {
+
+
+       //delete saved report dialog message
+       jq("#reportDeletelDialogMessage").dialog({
+           autoOpen: false,
+           modal: false,
+           title: 'Delete Report',
+           width: 400,
+           buttons: {
+               "Yes": function() {
+                   continueCancelReport();
+                   jq(this).dialog('close');
+               },
+               "No": function() {
+                   jq(this).dialog('close');
+               }
+           },
+
+       }).css("font-size", "16px");
+
+       //display htmlform in the dialog box
+       jq("#formDialogDiv").dialog({
+           autoOpen: false,
+           modal: false,
+           draggable: true,
+           resizable: true,
+           show: 'blind',
+           hide: 'blind',
+           width: 900,
+           dialogClass: 'ui-dialog-osx',
+
+       });
+
+       jq('#patientCompletedOrders').hide();
+       jq('#activeOrdersWithLinkBreadCrumb').hide();
+       jq("#orderDetailBreadCrumb").hide();
+
+       jq("#obsDialogBox").dialog({
+           autoOpen: false,
+           modal: true,
+           title: 'View Report',
+           width: 550,
+           height: 350,
+           buttons: {
+               "Ok": function() {
+                   jq(this).dialog('close');
+               }
+           },
+
+       }).css("font-size", "16px");
+
+
+
+       jq('#activeOrderTable').dataTable({
+           "sPaginationType": "full_numbers",
+           "bPaginate": true,
+           "bAutoWidth": false,
+           "bLengthChange": true,
+           "bSort": true,
+           "bJQueryUI": true,
+           "iDisplayLength": 5,
+           "aaSorting": [
+                   [3, "desc"]
+               ] // Sort by first column descending,
+
+       });
+       jq("#orderDetailDiv").hide();
+
+
+
+   });
+
+   //show saved report after form is entered
+   function displayReportAfterReportSubmitted() {
+       jq('#patientCompletedOrders').show();
+       jq("#activeOrdersWithNoLinkBreadCrumb").hide();
+       jq("#activeOrdersWithLinkBreadCrumb").show();
+       jq("#orderDetailBreadCrumb").show();
+       jq('#orderDetailDiv').empty();
+       jq("#orderDetailDiv").show();
+       jq("#activeOrderTableDiv").hide();
+       var radiologyorderId = localStorage.getItem("radiologyorderId");
+       <% if (performedStatusCompletedOrders) { %>
+       <% performedStatusCompletedOrders.each { anOrder -> %>
+       var orderId = ${ anOrder.orderId };
+       if (orderId == radiologyorderId) {
+           localStorage.setItem("radiologyorderId", radiologyorderId);
+           //get order with the report saved encounter id
+           jq.getJSON('${ ui.actionLink("getReportSavedEncounterId") }', {
+                   'radiologyorderId': radiologyorderId
+               })
+               .error(function(xhr, status, err) {
+                   alert('AJAX error ' + err);
+               })
+               .success(function(ret) {
+                   for (var i = 0; i < ret.length; i++) {
+                       var updatedOrderencounterId = ret[i].study.studyReportSavedEncounterId;
+                       localStorage.setItem("updatedOrderencounterId", updatedOrderencounterId);
+                   }
+               })
+
+           jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailHeading'>RADIOLOGY ORDER DETAILS  :   ${ anOrder.patient.personName }, ${ anOrder.patient.patientIdentifier }, ${anOrder.study.studyname} </div>");
+           jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailProvider'>Provider  :  ${anOrder.creator.username} ,  StartDate  : ${ anOrder.dateCreated } </div>");
+           jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailDiagnosis'>Diagnosis  : ${anOrder.orderdiagnosis} </div>");
+           jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailDiagnosis'>Instructions  : ${anOrder.instructions} </div>");
+           jq('#orderDetailDiv').append("<div class='order'  id= 'viewStudyId'><a id = 'viewStudyLink' class='viewStudyLink' href=${ dicomViewerUrladdress + " studyUID = " + anOrder.study.studyInstanceUid + " & patientID = " + anOrder.patient.patientIdentifier } onclick='loadImages(); return false;'>ViewStudy</a> </div>");
+           //get all the form available in the HTMLForm
+           jq.getJSON('${ ui.actionLink("getForm") }', {
+                   'radiologyorderId': radiologyorderId
+               })
+               .error(function(xhr, status, err) {
+                   alert('AJAX error ' + err);
+               })
+               .success(function(ret) {
+                   var formNameArray = [];
+                   var formNameHtmlToDisplayArray = [];
+                   var patientIdArray = [];
+                   var HtmlFormIdArray = [];
+                   for (var i = 0; i < ret.length; i++) {
+                       var formNameHtmlToDisplay = ret[i].HtmlToDisplay;
+                       formNameHtmlToDisplayArray[i] = formNameHtmlToDisplay;
+                       var patientId = ret[i].Patient.PatientId;
+                       patientIdArray[i] = patientId;
+                       var HtmlFormId = ret[i].HtmlFormId;
+                       HtmlFormIdArray[i] = HtmlFormId;
+                       var FormModifiedTimestamp = ret[i].FormModifiedTimestamp;
+                       var ReturnUrl = ret[i].ReturnUrl;
+                       var FormName = ret[i].FormName;
+                       formNameArray[i] = FormName;
+
+                       localStorage.setItem("patientIdForCompletedOrderList", patientId);
+                       var radiologyorderId = localStorage.getItem("radiologyorderId");
+                       var updatedOrderencounterId = localStorage.getItem("updatedOrderencounterId");
+                       //if there is no saved report encounter id, show the form
+                       if (updatedOrderencounterId == "null") {
+                           jq("#orderDetailDiv").append('<a>' + FormName + ' Report Form  </a>');
+
+                       } else {
+                           //if there is saved report encounter id, show the saved form
+                           jq("#orderDetailDiv").append('<a id="pep"> SavedReport <p style="display:none;"> ' + FormName + ' </p> </a>');
+                       }
+
+                       jq('#orderDetailDiv #viewStudyId').next().attr('id', 'formid');
+                       jq('#orderDetailDiv a').next().attr('id', 'formid');
+                       jq('#orderDetailDiv #viewStudyId').next().addClass("order");
+                       jq('#orderDetailDiv a').next().addClass("order");
+                       jq('#orderDetailDiv #formid').attr('onclick', onclick = "openForm(this); return false;");
+                       jq("#orderDetailDiv").append('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
+
+                   }
+                   //show the cancel icon if there is saved report encounter id
+                   if (updatedOrderencounterId != "null") {
+                       jq("#orderDetailDiv").append('<a><img id="reportCancelId" class = "reportCancelClass" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }" /></a>');
+                       jq('#orderDetailDiv #formid').next().attr('id', 'reportCancelIcon');
+                       jq('#orderDetailDiv #formid').next().addClass("order");
+                       jq('#orderDetailDiv #reportCancelIcon').attr('onclick', onclick = "cancelReport(); return false;");
+                   }
+
+                   localStorage.setItem("FormModifiedTimestamp", FormModifiedTimestamp);
+                   localStorage.setItem("ReturnUrl", ReturnUrl);
+                   localStorage.setItem("formNameArray", JSON.stringify(formNameArray));
+                   localStorage.setItem("formNameHtmlToDisplayArray", JSON.stringify(formNameHtmlToDisplayArray));
+                   localStorage.setItem("patientIdArray", JSON.stringify(patientIdArray));
+                   localStorage.setItem("HtmlFormIdArray", JSON.stringify(HtmlFormIdArray));
+                   var cancelSubmitButton = jq('<div class="order" id= "cancelbtnDivId"><input type="button" id = "cancelbtnId" onclick="cancelBtn();" value="Cancel" /><input type="button" onclick="submitBtn();" value="Submit" /></div>');
+                   cancelSubmitButton.appendTo(jq('#orderDetailDiv'));
+
+                   var patientIdForCompletedOrderList = localStorage.getItem("patientIdForCompletedOrderList");
+                   //get the previous patient completed orders
+                   jq.getJSON('${ ui.actionLink("getPatientReportReadyOrder") }', {
+                           'patientId': patientIdForCompletedOrderList
+                       })
+                       .error(function(xhr, status, err) {
+                           alert('AJAX error ' + err);
+                       })
+                       .success(function(ret) {
+                           jq('#CancelReportUpdatedDiv').hide();
+                           jq('#patientCompletedOrders').empty();
+                           jq("<h1></h1>").text("PREVIOUS RADIOLOGY ORDERS").appendTo('#patientCompletedOrders');
+                           jq('#patientCompletedOrders').append('<table></table>');
+                           jq('#patientCompletedOrders table').attr('id', 'patientCompletedOrdersDatatable');
+                           var patientCompletedOrdersTable = jq('#patientCompletedOrders table');
+                           patientCompletedOrdersTable.append('<thead><tr><th> Report</th><th> StartDate</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th></tr></thead><tbody>');
+                           for (var i = 0; i < ret.length; i++) {
+                               var provider = ret[i].orderer.name;
+                               var instructions = ret[i].instructions;
+                               var patientId = ret[i].Patient.PatientId;
+                               var orderdiagnosis = ret[i].orderdiagnosis;
+                               var studyname = ret[i].study.studyname;
+                               var studyInstanceUid = ret[i].study.studyInstanceUid;
+                               var DateCreated = ret[i].DateCreated;
+                               var OrderencounterId = ret[i].study.studyReportSavedEncounterId;
+                               patientCompletedOrdersTable.append('<tr><td><a onclick="viewReport(' + OrderencounterId + ');"> Obs</a> </td><td> ' + DateCreated + '</td><td> ' + provider + '</td><td> ' + instructions + ' </td><td> ' + orderdiagnosis + '</td><td id="dogdog" href="ddasdas"><a id="viewStudyLink" class="viewStudyLink" href="${ dicomViewerUrladdress + "studyUID=" + ' + studyInstanceUid + ' + "&patientID=" + ' + patientId + ' }" onclick="loadImages(); return false;" >' + studyname + '</a></td></tr>');
+                           }
+                           patientCompletedOrdersTable.append("</tbody>");
+                           jq('#patientCompletedOrdersDatatable').DataTable({
+                               "sPaginationType": "full_numbers",
+                               "bPaginate": true,
+                               "bAutoWidth": false,
+                               "bLengthChange": true,
+                               "bSort": true,
+                               "bJQueryUI": true,
+                               "iDisplayLength": 5,
+                               "aaSorting": [
+                                       [1, "desc"]
+                                   ] // Sort by first column descending,
+
+                           });
+
+                       })
+
+
+               })
+
+       }
+
+
+
+       <% } %>
+       <% } %>
+
+
+   }
+
+
+
+   //display order details when click on the active order
+   function viewOrderDetail(el) {
+       localStorage.clear();
+       jq(el).addClass("highlight").css("background-color", "#CCCCCC");
+       jq('#patientCompletedOrders').show();
+       jq("#activeOrdersWithNoLinkBreadCrumb").hide();
+       jq("#activeOrdersWithLinkBreadCrumb").show();
+       jq("#orderDetailBreadCrumb").show();
+       jq('#orderDetailDiv').empty();
+       //get the order id
+       jq(el).addClass('selected').siblings().removeClass('selected');
+       var value = jq(el).closest('tr').find('td:first').text();
+       var orderId = parseInt(value, 10);
+       jq("#orderDetailDiv").show();
+       jq("#activeOrderTableDiv").hide();
+       <% if (performedStatusCompletedOrders) { %>
+       <% performedStatusCompletedOrders.each { anOrder -> %>
+       var radiologyorderId = ${ anOrder.orderId };
+       if (orderId == radiologyorderId) {
+           localStorage.setItem("radiologyorderId", radiologyorderId);
+           //get the report saved encounter id of the order
+           jq.getJSON('${ ui.actionLink("getReportSavedEncounterId") }', 
+           {'radiologyorderId': radiologyorderId })
+               .error(function(xhr, status, err) {
+                   alert('AJAX error ' + err);
+               })
+               .success(function(ret) {
+                   for (var i = 0; i < ret.length; i++) {
+                       var updatedOrderencounterId = ret[i].study.studyReportSavedEncounterId;
+                       localStorage.setItem("updatedOrderencounterId", updatedOrderencounterId);
+                   }
+               })
+
+           jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailHeading'>RADIOLOGY ORDER DETAILS  :  <a id = 'tet' class='tet' target='_blank' href=${ patientClinicianUrl + anOrder.patient.person.uuid } >${ anOrder.patient.personName }</a>  ${ anOrder.patient.patientIdentifier }, ${anOrder.study.studyname} </div>");
+           jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailProvider'>Provider  :  ${anOrder.creator.username} ,  StartDate  : ${ anOrder.dateCreated } </div>");
+           jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailDiagnosis'>Diagnosis  : ${anOrder.orderdiagnosis} </div>");
+           jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailDiagnosis'>Instructions  : ${anOrder.instructions} </div>");
+           jq('#orderDetailDiv').append("<div class='order'  id= 'viewStudyId'><a id = 'viewStudyLink' class='viewStudyLink' href=${ dicomViewerUrladdress + " studyUID = " + anOrder.study.studyInstanceUid + " & patientID = " + anOrder.patient.patientIdentifier } onclick='loadImages(); return false;'>ViewStudy</a> </div>");
+           //get form
+           jq.getJSON('${ ui.actionLink("getForm") }', {
+                   'radiologyorderId': radiologyorderId
+               })
+               .error(function(xhr, status, err) {
+                   alert('AJAX error ' + err);
+               })
+               .success(function(ret) {
+                   var formNameArray = [];
+                   var formNameHtmlToDisplayArray = [];
+                   var patientIdArray = [];
+                   var HtmlFormIdArray = [];
+                   for (var i = 0; i < ret.length; i++) {
+                       var formNameHtmlToDisplay = ret[i].HtmlToDisplay;
+                       formNameHtmlToDisplayArray[i] = formNameHtmlToDisplay;
+                       var patientId = ret[i].Patient.PatientId;
+                       patientIdArray[i] = patientId;
+                       var HtmlFormId = ret[i].HtmlFormId;
+                       HtmlFormIdArray[i] = HtmlFormId;
+                       var FormModifiedTimestamp = ret[i].FormModifiedTimestamp;
+                       var ReturnUrl = ret[i].ReturnUrl;
+                       var FormName = ret[i].FormName;
+                       formNameArray[i] = FormName;
+
+                       localStorage.setItem("patientIdForCompletedOrderList", patientId);
+                       var radiologyorderId = localStorage.getItem("radiologyorderId");
+                       var updatedOrderencounterId = localStorage.getItem("updatedOrderencounterId");
+                       if (updatedOrderencounterId == "null") {
+                           jq("#orderDetailDiv").append('<a>' + FormName + ' Report Form  </a>');
+
+                       } else {
+                           jq("#orderDetailDiv").append('<a id="pep"> SavedReport <p style="display:none;"> ' + FormName + ' </p> </a>');
+                       }
+
+                       jq('#orderDetailDiv #viewStudyId').next().attr('id', 'formid');
+                       jq('#orderDetailDiv a').next().attr('id', 'formid');
+                       jq('#orderDetailDiv #viewStudyId').next().addClass("order");
+                       jq('#orderDetailDiv a').next().addClass("order");
+                       jq('#orderDetailDiv #formid').attr('onclick', onclick = "openForm(this); return false;");
+                       jq("#orderDetailDiv").append('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
+
+                   }
+
+                   if (updatedOrderencounterId != "null") {
+                       jq("#orderDetailDiv").append('<a><img id="reportCancelId" class = "reportCancelClass" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }" /></a>');
+                       jq('#orderDetailDiv #formid').next().attr('id', 'reportCancelIcon');
+                       jq('#orderDetailDiv #formid').next().addClass("order");
+                       jq('#orderDetailDiv #reportCancelIcon').attr('onclick', onclick = "cancelReport(); return false;");
+                   }
+
+                   localStorage.setItem("FormModifiedTimestamp", FormModifiedTimestamp);
+                   localStorage.setItem("ReturnUrl", ReturnUrl);
+                   localStorage.setItem("formNameArray", JSON.stringify(formNameArray));
+                   localStorage.setItem("formNameHtmlToDisplayArray", JSON.stringify(formNameHtmlToDisplayArray));
+                   localStorage.setItem("patientIdArray", JSON.stringify(patientIdArray));
+                   localStorage.setItem("HtmlFormIdArray", JSON.stringify(HtmlFormIdArray));
+
+                   var cancelSubmitButton = jq('<div class="order" id= "cancelbtnDivId"><input type="button" id = "cancelbtnId" onclick="cancelBtn();" value="Cancel" /><input type="button" onclick="submitBtn();" value="Submit" /></div>');
+                   cancelSubmitButton.appendTo(jq('#orderDetailDiv'));
+                   var patientIdForCompletedOrderList = localStorage.getItem("patientIdForCompletedOrderList");
+
+                   jq.getJSON('${ ui.actionLink("getPatientReportReadyOrder") }', {
+                           'patientId': patientIdForCompletedOrderList
+                       })
+                       .error(function(xhr, status, err) {
+                           alert('AJAX error ' + err);
+                       })
+                       .success(function(ret) {
+                           jq('#CancelReportUpdatedDiv').hide();
+                           jq('#patientCompletedOrders').empty();
+                           jq("<h1></h1>").text("PREVIOUS RADIOLOGY ORDERS").appendTo('#patientCompletedOrders');
+                           jq('#patientCompletedOrders').append('<table></table>');
+                           jq('#patientCompletedOrders table').attr('id', 'patientCompletedOrdersDatatable');
+
+                           var patientCompletedOrdersTable = jq('#patientCompletedOrders table');
+
+                           patientCompletedOrdersTable.append('<thead><tr><th> Report</th><th> StartDate</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th></tr></thead><tbody>');
+
+                           for (var i = 0; i < ret.length; i++) {
+                               var provider = ret[i].orderer.name;
+                               var instructions = ret[i].instructions;
+                               var patientId = ret[i].Patient.PatientId;
+                               var orderdiagnosis = ret[i].orderdiagnosis;
+                               var studyname = ret[i].study.studyname;
+                               var studyInstanceUid = ret[i].study.studyInstanceUid;
+                               var DateCreated = ret[i].DateCreated;
+                               var OrderencounterId = ret[i].study.studyReportSavedEncounterId;
+
+                               patientCompletedOrdersTable.append('<tr><td><a onclick="viewReport(' + OrderencounterId + ');"> Obs</a> </td><td> ' + DateCreated + '</td><td> ' + provider + '</td><td> ' + instructions + ' </td><td> ' + orderdiagnosis + '</td><td id="dogdog" href="ddasdas"><a id="viewStudyLink" class="viewStudyLink" href="${ dicomViewerUrladdress + "studyUID=" + ' + studyInstanceUid + ' + "&patientID=" + ' + patientId + ' }" onclick="loadImages(); return false;" >' + studyname + '</a></td></tr>');
+
+
+                           }
+                           patientCompletedOrdersTable.append("</tbody>");
+                           jq('#patientCompletedOrdersDatatable').DataTable({
+                               "sPaginationType": "full_numbers",
+                               "bPaginate": true,
+                               "bAutoWidth": false,
+                               "bLengthChange": true,
+                               "bSort": true,
+                               "bJQueryUI": true,
+                               "iDisplayLength": 5,
+                               "aaSorting": [
+                                       [1, "desc"]
+                                   ] // Sort by first column descending,
+
+                           });
+
+                       })
+
+
+               })
+
+       }
+
+
+
+       <% } %>
+       <% } %>
+
+
+   }
+
+   //click cancel btn on the order detail page
+   function cancelBtn() {
+       location.reload();
+   }
+
+   //click cancel btn on the htmlform
+   function CancelForm() {
+       jq('#formDialogDiv').dialog('close');
+   }
+
+   //delete saved report
+   function cancelReport() {
+       jq("#reportDeletelDialogMessage").dialog("open");
+   }
+
+   //if click yes on the cancel report dialog box, continue with the cancellation
+   function continueCancelReport() {
+       var radiologyorderId = localStorage.getItem("radiologyorderId");
+       jq.getJSON('${ ui.actionLink("CancelSavedReport") }', {
+               'radiologyorderId': radiologyorderId
+           })
+           .error(function(xhr, status, err) {
+               alert('AJAX error ' + err);
+           })
+           .success(function(ret) {
+               jq('#orderDetailBreadCrumb').hide();
+               jq('#activeOrdersWithLinkBreadCrumb').hide();
+               jq('#activeOrdersWithNoLinkBreadCrumb').show();
+               jq('#showReportsDiv').hide();
+
+
+               jq("#patientCompletedOrders").hide();
+               jq('.order').hide();
+               jq('#CancelReportUpdatedDiv').show();
+               jq('#CancelReportUpdatedDiv').empty();
+               jq("<h1></h1>").text("Report deleted successfully").appendTo('#CancelReportUpdatedDiv');
+               jq("<h1></h1>").text("ACTIVE RADIOLOGY ORDERS").appendTo('#CancelReportUpdatedDiv');
+
+               jq('#CancelReportUpdatedDiv').append('<table></table>');
+               jq('#CancelReportUpdatedDiv table').attr('id', 'cancepReportUpdatedDatatable');
+
+               var cancelReportUpdatedTable = jq('#CancelReportUpdatedDiv table');
+               cancelReportUpdatedTable.append('<thead><tr><th>Order</th><th>Patient Name</th><th>MRN</th><th>OrderStartDate</th><th>OrderPriority</th><th>SavedReport</th></tr></thead><tbody>');
+
+               for (var i = 0; i < ret.length; i++) {
+
+                   var studyname = ret[i].study.studyname;
+                   var dateCreated = ret[i].dateCreated;
+                   var urgency = ret[i].urgency;
+                   var patientName = ret[i].patient.personName;
+                   var patientIdentifier = ret[i].patient.patientIdentifier;
+                   var anOrderId = ret[i].orderId;
+                   var patientIdentifier = ret[i].patient.patientIdentifier.Identifier;
+                   var OrderencounterId = ret[i].study.studyReportSavedEncounterId;
+
+                   if (OrderencounterId) {
+                       cancelReportUpdatedTable.append('<tr><td><a id="studyLinkId" href=' + studyname + ' class="studyLinkId" onclick="viewOrderDetail(this); return false;"><p style="display:none;">' + anOrderId + '</p>' + studyname + ' </a></td><td>' + patientName + '</td><td>' + patientIdentifier + '</td><td>' + dateCreated + '</td><td>' + urgency + '</td><td>Yes</td></tr>');
+                   } else {
+                       cancelReportUpdatedTable.append('<tr><td><a id="studyLinkId" href=' + studyname + ' class="studyLinkId" onclick="viewOrderDetail(this); return false;"><p style="display:none;">' + anOrderId + '</p>' + studyname + ' </a></td><td>' + patientName + '</td><td>' + patientIdentifier + '</td><td>' + dateCreated + '</td><td>' + urgency + '</td><td>No</td></tr>');
+                   }
+
+               }
+
+               cancelReportUpdatedTable.append("</tbody>");
+               jq('#cancepReportUpdatedDatatable').dataTable({
+                   "sPaginationType": "full_numbers",
+                   "bPaginate": true,
+                   "bAutoWidth": false,
+                   "bLengthChange": true,
+                   "bSort": true,
+                   "bJQueryUI": true,
+
+                   "iDisplayLength": 5,
+                   "aaSorting": [
+                           [3, "desc"]
+                       ] // Sort by first column descending,
+
+
+               });
+
+           })
+
+   }
+
+
+   function submitBtn() {
+       var radiologyorderId = localStorage.getItem("radiologyorderId");
+       jq.getJSON('${ ui.actionLink("updateActiveOrders") }', {
+               'radiologyorderId': radiologyorderId
+           })
+           .error(function(xhr, status, err) {
+               alert('AJAX error ' + err);
+           })
+           .success(function(ret) {
+               jq('#orderDetailBreadCrumb').hide();
+               jq('#activeOrdersWithLinkBreadCrumb').hide();
+               jq('#activeOrdersWithNoLinkBreadCrumb').show();
+               jq('#showReportsDiv').hide();
+               jq("#patientCompletedOrders").hide();
+
+               jq("#orderDetailDiv").hide();
+               jq('#activeOrderTableDiv').show();
+               jq('#activeOrderTableDiv').empty();
+               jq("<h1></h1>").text("Report submitted successfully").appendTo('#activeOrderTableDiv');
+               jq("<h1></h1>").text("ACTIVE RADIOLOGY ORDERS").appendTo('#activeOrderTableDiv');
+
+               jq('#activeOrderTableDiv').append('<table></table>');
+               jq('#activeOrderTableDiv table').attr('id', 'updateActiveOrderDatatable');
+
+               var activeOrderTableRow = jq('#activeOrderTableDiv table');
+               activeOrderTableRow.append('<thead><tr><th>Order</th><th>Patient Name</th><th>MRN</th><th>OrderStartDate</th><th>OrderPriority</th><th>SavedReport</th></tr></thead><tbody>');
+               for (var i = 0; i < ret.length; i++) {
+                   var anOrderId = ret[i].orderId;
+                   var studyname = ret[i].study.studyname;
+                   var dateCreated = ret[i].dateCreated;
+                   var urgency = ret[i].urgency;
+                   var patientName = ret[i].patient.personName;
+                   var patientIdentifier = ret[i].patient.patientIdentifier.Identifier;
+                   var OrderencounterId = ret[i].study.studyReportSavedEncounterId;
+
+                   if (OrderencounterId) {
+                       activeOrderTableRow.append('<tr><td><a id="studyLinkId" href=' + studyname + ' class="studyLinkId" onclick="viewOrderDetail(this); return false;"><p style="display:none;">' + anOrderId + '</p>' + studyname + ' </a></td><td>' + patientName + '</td><td>' + patientIdentifier + '</td><td>' + dateCreated + '</td><td>' + urgency + '</td><td>Yes</td></tr>');
+                   } else {
+                       activeOrderTableRow.append('<tr><td><a id="studyLinkId" href=' + studyname + ' class="studyLinkId" onclick="viewOrderDetail(this); return false;"><p style="display:none;">' + anOrderId + '</p>' + studyname + ' </a></td><td>' + patientName + '</td><td>' + patientIdentifier + '</td><td>' + dateCreated + '</td><td>' + urgency + '</td><td>No</td></tr>');
+                   }
+
+               }
+               activeOrderTableRow.append("</tbody>");
+               jq('#updateActiveOrderDatatable').dataTable({
+                   "sPaginationType": "full_numbers",
+                   "bPaginate": true,
+                   "bAutoWidth": false,
+                   "bLengthChange": true,
+                   "bSort": true,
+                   "bJQueryUI": true,
+
+                   "iDisplayLength": 5,
+                   "aaSorting": [
+                           [3, "desc"]
+                       ] // Sort by first column descending,
+
+
+               });
+
+
+           })
+
+   }
+
+
+
+
+   function loadImages() {
+       var addressValue = jq('.viewStudyLink').attr("href");
+       jq("#viewStudyImageIframe").attr('src', jq('.viewStudyLink').attr("href"));
+       jq("#viewStudyImageDialog").dialog({
+           width: 400,
+           height: 450,
+           modal: false,
+           buttons: {
+               "Close": function() {
+                   jq(this).dialog('close');
+               }
+           },
+           close: function() {
+               jq("#viewStudyImageIframe").attr('src', "about:blank");
+           }
+       });
+       return false;
+   }
+
+   function viewReport(OrderencounterId) {
+       jq.getJSON('${ ui.actionLink("getEncounterIdObs") }', {
+               'encounterId': OrderencounterId
+           })
+           .error(function(xhr, status, err) {
+               alert('AJAX error ' + err);
+           })
+           .success(function(ret) {
+               jq('#obsDialogBoxText').append('<table></table>');
+               jq('#obsDialogBoxText table').attr('id', 'obsDialogBoxTextDatatable');
+               jq("#obsDialogBoxText table").addClass("obsDialogBoxTextclass");
+               var obsDialogBoxTextTable = jq('#obsDialogBoxText table');
+               obsDialogBoxTextTable.append('<thead><tr><th>Concept</th><th>Value Text</th></tr></thead><tbody>');
+               for (var i = 0; i < ret.length; i++) {
+                   var concept = ret[i].Concept;
+                   var valueText = ret[i].valueText;
+                   obsDialogBoxTextTable.append('<tr><td>' + concept + '</td><td>' + valueText + '</td></tr>');
+               }
+               obsDialogBoxTextTable.append("</tbody>");
+               jq("#obsDialogBox").dialog("open");
+           })
+
+
+   }
+
+   function openForm(obj) {
+       jq("div#content").css({
+           'font-size': 16
+       });
+       jq('input#closeAfterSubmission').next().empty();
+
+       var formNameArray = JSON.parse(localStorage.getItem("formNameArray"));
+       var formNameHtmlToDisplayArray = JSON.parse(localStorage.getItem("formNameHtmlToDisplayArray"));
+       var patientIdArray = JSON.parse(localStorage.getItem("patientIdArray"));
+       var HtmlFormIdArray = JSON.parse(localStorage.getItem("HtmlFormIdArray"));
+
+       var radiologyorderId = localStorage.getItem("radiologyorderId");
+       var returnUrl = localStorage.getItem("ReturnUrl");
+       var formModifiedTimestamp = localStorage.getItem("FormModifiedTimestamp");
+
+       var text = jq(obj).text();
+       var firstColumnFormName = text.replace('Report Form', '');
+       var firstColumnFormName = firstColumnFormName.replace('SavedReport', '');
+       var formNameHtmlToDisplayt;
+       var patientIdt;
+       var HtmlFormIdt;
+
+       //matches the form cicked and assign it for display
+       for (var i = 0; i < formNameArray.length; i++) {
+
+           if (jq.trim(firstColumnFormName) == formNameArray[i]) {
+
+               formNameHtmlToDisplayt = formNameHtmlToDisplayArray[i];
+               patientIdt = patientIdArray[i];
+               HtmlFormIdt = HtmlFormIdArray[i];
+           }
+
+       }
+
+       var returnUrl = localStorage.getItem("returnUrl");
+       var formModifiedTimestamp = localStorage.getItem("formModifiedTimestamp");
+       jq("#formDialogDiv").dialog("open");
+       jq('#personId').val(patientIdt);
+       jq('#htmlFormId').val(HtmlFormIdt);
+       jq('#returnUrl').val(returnUrl);
+       jq('#radiologyOrderId').val(radiologyorderId);
+       jq('input#closeAfterSubmission').after(formNameHtmlToDisplayt);
+   }
 
 
 </script>
 
 
 
-<script>
-     jq = jQuery;
-     jq(document).ready(function() {
 
-     jq('#patientCompletedOrders').hide();
-     jq('#activeOrdersWithLinkBreadCrumb').hide();
-     jq("#orderDetailBreadCrumb").hide();
-
-     jq("#obsDialogBox").dialog({
-     autoOpen: false,
-     modal: true,
-     title: 'View Report',
-     width: 550,
-     height: 350,
-     buttons : {
-     "Ok": function () { 
-     jq(this).dialog('close'); 
-     }
-     },
-
-     });
-
-
-     jq('#activeOrderTable').dataTable({
-     "sPaginationType": "full_numbers",
-     "bPaginate": true,
-     "bAutoWidth": false,
-     "bLengthChange": true,
-     "bSort": true,
-     "bJQueryUI": true,
-     "iDisplayLength": 5,
-     "aaSorting": [[ 3, "desc" ]] // Sort by first column descending,
-
-     });
-     jq("#orderDetailDiv").hide(); 
-
-     });
-
-
-
-
-
-
-</script>
 
 <!-- breadcrumbs -->
 <div class="breadcrumbsactiveorders">

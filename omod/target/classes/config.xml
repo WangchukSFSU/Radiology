@@ -228,6 +228,12 @@
 	<mappingFiles>RadiologyStudy.hbm.xml RadiologyOrder.hbm.xml
 	</mappingFiles>
 
+
+ <!-- Required Privileges -->
+    <privilege>
+        <name>RadiologyOrder toBeRead</name>
+        <description>Allows referring physician to read order</description>
+    </privilege>
 	<!-- Accessed through the url /pageContext()/moduleServlet/<moduleId>/<servlet-name> -->
 	<!-- <servlet> <servlet-name>viewer.jnlp</servlet-name> <servlet-class>org.weasis.servlet.Weasis_Launcher</servlet-class> 
 		</servlet> <servlet> <servlet-name>wadoRequest</servlet-name> <servlet-class>com.hxti.xebra.com.wado.WADORequestServlet</servlet-class> 

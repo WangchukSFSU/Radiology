@@ -18,7 +18,7 @@
                 "url": "radiology/referringPhysician.page?patientId={{patient.uuid}}",
                 "icon": "icon-signin",
                 "order": 23,
-                "requiredPrivilege": "Task: some random privilege"
+                "requiredPrivilege": "Task: patient dashboard radiology order"
             },
               {
                 "id": "radiology.appId31",
@@ -28,7 +28,7 @@
                 "label": "Manage Radiology",
                 "url": "radiology/admin.page",
                 "icon": "icon-signin",
-                "requiredPrivilege": "App: some random privilege"
+                "requiredPrivilege": "App: admin manage radiology"
             },
                {
                 "id": "radiology.appId22",
@@ -37,7 +37,7 @@
                 "label": "RadiologyOrder ToBeRead",
                 "url": "radiology/radiologist.page",
                 "icon": "icon-signin",
-                "requiredPrivilege": "App: some random privilege"
+                "requiredPrivilege": "App: radiology order to be read"
             },
                {
                 "id": "radiology.appId26",
@@ -46,7 +46,7 @@
                 "label": "Send RadiologyImage toPACS",
                 "url": "radiology/technician.page",
                 "icon": "icon-signin",
-                "requiredPrivilege": "App: some random privilege"
+                "requiredPrivilege": "App: send radiology image to pacs"
             }
            
           
