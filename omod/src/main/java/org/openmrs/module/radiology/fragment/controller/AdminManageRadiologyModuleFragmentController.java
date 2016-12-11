@@ -22,7 +22,7 @@ import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.fragment.FragmentModel;
 
 /**
- * Admin manage the modality, study and report for the radiology module
+ * Admin manage modality, study and report for the radiology module
  * 
  * @author tenzin
  */
@@ -34,17 +34,13 @@ public class AdminManageRadiologyModuleFragmentController {
 	 * @param model
 	 */
 	public void controller(FragmentModel model) {
-		
 		ArrayList<ConceptName> modalityConcept = new ArrayList();
 		List<ConceptSet> modalityConceptSet = Context.getConceptService()
 				.getConceptSetsByConcept(Context.getConceptService()
 						.getConcept(164068));
-		
 		for (ConceptSet addModalityConceptSet : modalityConceptSet) {
-			
 			ConceptName modalityConceptName = addModalityConceptSet.getConcept()
 					.getName();
-			
 			modalityConcept.add(modalityConceptName);
 		}
 		
@@ -53,9 +49,12 @@ public class AdminManageRadiologyModuleFragmentController {
 	}
 	
 	/**
-	 * @param service
-	 * @param ui
+	 * @param service ConceptService
+	 * @param ui UiUtils
 	 * @return study concepts available in the concept dictionary
+	 *         The Ajax call requires a json result;
+	 *         properties string array elements are concepts and properties indicate the Concept properties of interest;
+	 *         The framework will build the json response when the method returns
 	 */
 	public List<SimpleObject> getStudyConceptsAnswerFromModality(@SpringBean("conceptService") ConceptService service,
 			UiUtils ui) {
@@ -84,10 +83,13 @@ public class AdminManageRadiologyModuleFragmentController {
 	}
 	
 	/**
-	 * @param model
-	 * @param service
-	 * @param ui
+	 * @param model FragmentModel
+	 * @param service conceptService
+	 * @param ui UiUtils
 	 * @return form available for the study
+	 *         The Ajax call requires a json result;
+	 *         properties string array elements are concepts and properties indicate the Concept properties of interest;
+	 *         The framework will build the json response when the method returns
 	 */
 	public List<SimpleObject> getReport(FragmentModel model, @SpringBean("conceptService") ConceptService service, UiUtils ui) {
 		
@@ -148,7 +150,10 @@ public class AdminManageRadiologyModuleFragmentController {
 	/**
 	 * @param service
 	 * @param ui
-	 * @return study concepts that don't have HtmlForm
+	 * @return study concepts having no generated htmlform available
+	 *         The Ajax call requires a json result;
+	 *         properties string array elements are concepts and properties indicate the Concept properties of interest;
+	 *         The framework will build the json response when the method returns
 	 */
 	public List<SimpleObject> getStudyWithNoFormName(@SpringBean("conceptService") ConceptService service, UiUtils ui) {
 		
@@ -178,11 +183,12 @@ public class AdminManageRadiologyModuleFragmentController {
 				String htmlFormName = eachHTMLForms.getName()
 						.trim();
 				
-				// check if study htmlform is available
+				// check if study htmlform is available, add to the remove list
 				if (studyDisplayString.equals(htmlFormName)) {
 					studyConceptToBeRemoved.add(eachStudyConcept);
 					
 				}
+				// if it is modality, add to the remove list
 				if (studyDisplayString.endsWith("modality")) {
 					studyConceptToBeRemoved.add(eachStudyConcept);
 					
@@ -190,7 +196,7 @@ public class AdminManageRadiologyModuleFragmentController {
 				
 			}
 		}
-		// get only study with no HtmlForm
+		// get only study with no HtmlForm available
 		listOfStudyConcept.removeAll(studyConceptToBeRemoved);
 		
 		studySetMembers.addAll(listOfStudyConcept);

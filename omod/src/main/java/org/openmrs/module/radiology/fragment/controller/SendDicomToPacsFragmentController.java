@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class SendDicomToPacsFragmentController {
 	
 	/**
+	 * Get all the dicom files after picture is taken
+	 * 
 	 * @param model
 	 */
 	public void controller(FragmentModel model) {
@@ -32,13 +34,14 @@ public class SendDicomToPacsFragmentController {
 		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrders();
 		// get the dicom files from the modality station
 		ArrayList<String> dicomeFiles = listFiles("/home/youdon/Desktop/aaa");
-		
 		model.addAttribute("dicomeFiles", dicomeFiles);
 		model.put("inProgressRadiologyOrders", inProgressRadiologyOrders);
 		
 	}
 	
 	/**
+	 * get the dicom files
+	 * 
 	 * @param directoryName
 	 * @return arraylist of dicom files
 	 */
@@ -59,7 +62,9 @@ public class SendDicomToPacsFragmentController {
 	}
 	
 	/**
-	 * @return all active orders
+	 * Get all the in progress radiology orders that needs to take picture
+	 * 
+	 * @return in progress radiology orders
 	 */
 	public List<RadiologyOrder> getInProgressRadiologyOrders() {
 		
@@ -92,10 +97,15 @@ public class SendDicomToPacsFragmentController {
 	}
 	
 	/**
-	 * @param service
+	 * Update active orders after the image is send to PACS
+	 * The Ajax call requires a json result;
+	 * properties string array elements are concepts and properties indicate the Concept properties of interest;
+	 * The framework will build the json response when the method returns
+	 * 
+	 * @param service ConceptService
 	 * @param model
 	 * @param radiologyorderId to be updated
-	 * @param ui
+	 * @param ui UiUtils
 	 * @return updated active orders
 	 */
 	public List<SimpleObject> updateActiveOrders(@SpringBean("conceptService") ConceptService service, FragmentModel model,
@@ -124,7 +134,7 @@ public class SendDicomToPacsFragmentController {
 			}
 		}
 		
-		// update the active orders
+		// get the updated active orders
 		ArrayList<RadiologyOrder> getRadiologyOrder = new ArrayList<RadiologyOrder>();
 		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrders();
 		for (RadiologyOrder updateActiveOrder : inProgressRadiologyOrders) {

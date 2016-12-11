@@ -34,12 +34,6 @@
                 <property name="studyReportSavedEncounterId" column="studyReportSavedEncounterId"
                           type="int">
                 </property>
-                <property name="nonGenericHtmlFormUid" column="nonGenericHtmlFormUid"
-                          length="255">
-                </property>
-                 <property name="genericHtmlFormUid" column="genericHtmlFormUid"
-                          length="255">
-                </property>
                 <property name="studyReportRadiologist" column="studyReportRadiologist"
                           length="255">
                 </property>

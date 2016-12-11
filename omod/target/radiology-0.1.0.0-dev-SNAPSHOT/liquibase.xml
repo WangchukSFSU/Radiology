@@ -1,495 +1,512 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
     http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-	<!-- See http://www.liquibase.org/manual/home#available_database_refactorings 
-		for a list of supported elements and attributes -->
+     <!-- See http://www.liquibase.org/manual/home#available_database_refactorings 
+     for a list of supported elements and attributes -->
 
-	<changeSet id="radiology-2" author="cortex">
-		<sql>
-			drop table if exists radiology_study;
-		</sql>
-	</changeSet>
-	<changeSet author="juanp" id="radiology-3">
-		<preConditions onFail="WARN" onError="WARN">
-			<not>
-				<tableExists tableName="radiology_study" />
-			</not>
-		</preConditions>
-		<createTable tableName="radiology_study">
-			<column name="id" type="int" autoIncrement="true">
-				<constraints primaryKey="true" nullable="false" />
-			</column>
-			<column name="uid" type="varchar(255)"></column>
-			<column name="order_id" type="int">
-				<constraints unique="true" />
-			</column>
-			<column name="scheduled_status" type="int" defaultValue="-1"></column>
-			<column name="performed_status" type="int" defaultValue="-1"></column>
-			<column name="priority" defaultValue="-1" type="int"></column>
-			<column name="modality" defaultValue="-1" type="int"></column>
-			<column name="scheduler_user_id" type="int" defaultValue="-1"></column>
-			<column name="performing_physician_user_id" type="int"
-				defaultValue="-1"></column>
-			<column name="reading_physician_user_id" type="int"
-				defaultValue="-1"></column>
-			<column name="mwlstatus" type="int" defaultValue="-1"></column>
-		</createTable>
-        </changeSet>
-   <changeSet id="radiology-5" author="teleivo">
-		<comment>Change modality column type to varchar(16) in radiology_study
-			table to represent DICOM Tag Modality (0008,0060) value
-			representation CS (Code String) defined in DICOM PS3.5 2014b - Data
-			Structures and Encoding</comment>
-		<modifyDataType tableName="radiology_study" columnName="modality"
-			newDataType="varchar(16)" />
-		<dropDefaultValue tableName="radiology_study"
-			columnName="modality" columnDataType="varchar(16)" />
-		<addNotNullConstraint tableName="radiology_study"
-			columnName="modality" columnDataType="varchar(16)" />
-	</changeSet>
-	<changeSet author="teleivo" id="radiology-6">
-		<comment>priority column represents DICOM Tag (0040,1003) Requested
-			Procedure Priority. Max length 7 chosen for the column because of max
-			priority "ROUTINE"</comment>
-		<modifyDataType tableName="radiology_study" columnName="priority"
-			newDataType="varchar(7)" />
-		<dropDefaultValue tableName="radiology_study"
-			columnName="priority" columnDataType="varchar(7)" />
-		<addNotNullConstraint tableName="radiology_study"
-			columnName="priority" columnDataType="varchar(7)" />
-	</changeSet>     
-	<changeSet id="radiology-10" author="teleivo">
-		<comment>rename column 'uid' to 'study_instance_uid' to make clear
-			that the column represents the Study Instance UID defined by the
-			DICOM standard</comment>
-		<renameColumn columnDataType="varchar(255)"
-			newColumnName="study_instance_uid" oldColumnName="uid" tableName="radiology_study" />
-	</changeSet>
-	<changeSet id="radiology-31" author="teleivo">
-		<comment>rename column 'id' to 'studyid'.</comment>
-		<renameColumn columnDataType="int" newColumnName="studyid"
-			oldColumnName="id" tableName="radiology_study" />
-	</changeSet>
-	<changeSet id="radiology-13" author="bgeVam">
-		<comment>add roles</comment>
-		<insert tableName="role">
-			<column name="role" value="Radiology: Referring physician" />
-			<column name="description" value="The physician who refers the radiology order" />
-			<column name="uuid" value="15c4c14a-e11b-11e5-b4b0-08002719a237" />
-		</insert>
-		<insert tableName="role">
-			<column name="role" value="Radiology: Reading physician" />
-			<column name="description" value="The physician who reads the performed study" />
-			<column name="uuid" value="16e4d536-e11b-11e5-b4b0-08002719a237" />
-		</insert>
-		<insert tableName="role">
-			<column name="role" value="Radiology: Performing physician" />
-			<column name="description" value="The physician who performs the radiology order" />
-			<column name="uuid" value="175f1c62-e11b-11e5-b4b0-08002719a237" />
-		</insert>
-		<insert tableName="role">
-			<column name="role" value="Radiology: Scheduler" />
-			<column name="description" value="The person who schedules the radiology order" />
-			<column name="uuid" value="17c32561-e11b-11e5-b4b0-08002719a237" />
-		</insert>
-	</changeSet>
-	<changeSet id="radiology-14" author="bgeVam">
-		<comment>add privileges</comment>
-		<insert tableName="privilege">
-			<column name="privilege" value="Patient Dashboard - View Radiology Section" />
-			<column name="description"
-				value="Able to view the 'Radiology' tab on the patient dashboard" />
-			<column name="uuid" value="ba21d6b5-e11e-11e5-9a38-08002719a237" />
-		</insert>
-	</changeSet>
-	<changeSet id="radiology-15" author="bgeVam">
-		<insert tableName="order_type">
-			<column name="name" value="Radiology Order" />
-			<column name="description" value="Order type for radiology exams" />
-			<column name="java_class_name" value="org.openmrs.module.radiology.RadiologyOrder" />
-			<column name="creator" valueNumeric="1" />
-			<column name="date_created" valueDate="2015-09-09" />
-			<column name="uuid" value="dbdb9a9b-56ea-11e5-a47f-08002719a237" />
-		</insert>
-	</changeSet>
-	<changeSet id="radiology-16" author="teleivo">
-		<preConditions onFail="MARK_RAN">
-			<not>
-				<tableExists tableName="radiology_order" />
-			</not>
-		</preConditions>
-		<comment>Create radiology_order table for new class RadiologyOrder</comment>
-		<createTable tableName="radiology_order">
-			<column name="order_id" type="int" autoIncrement="true">
-				<constraints primaryKey="true" nullable="false" />
-			</column>
-		</createTable>
-		<addForeignKeyConstraint constraintName="radiology_order_order_id_fk"
-			baseTableName="radiology_order" baseColumnNames="order_id"
-			referencedTableName="test_order" referencedColumnNames="order_id" />
-		<addForeignKeyConstraint constraintName="radiology_study_order_id_fk"
-			baseTableName="radiology_study" baseColumnNames="order_id"
-			referencedTableName="radiology_order" referencedColumnNames="order_id" />
-	</changeSet>
-	<changeSet id="radiology-17" author="teleivo">
-		<comment>Remove columns from radiology_study which are not used
-			anymore</comment>
-		<dropColumn columnName="priority" tableName="radiology_study" />
-		<dropColumn columnName="scheduler_user_id" tableName="radiology_study" />
-		<dropColumn columnName="performing_physician_user_id"
-			tableName="radiology_study" />
-		<dropColumn columnName="reading_physician_user_id"
-			tableName="radiology_study" />
-	</changeSet>
-	<changeSet id="radiology-18" author="teleivo">
-		<comment>Add radiology encounter type and role necessary to add
-			orders, encounters in core 10.2</comment>
-		<insert tableName="encounter_type">
-			<column name="name" value="Radiology Order Encounter" />
-			<column name="description" value="Ordering radiology exams" />
-			<column name="creator" valueNumeric="1" />
-			<column name="date_created" valueDate="2015-09-18" />
-			<column name="uuid" value="19db8c0d-3520-48f2-babd-77f2d450e5c7" />
-		</insert>
-		<insert tableName="encounter_role">
-			<column name="name" value="Radiology Ordering Provider" />
-			<column name="description" value="Provider ordering tests, exams, drugs, ..." />
-			<column name="creator" valueNumeric="1" />
-			<column name="date_created" valueDate="2015-09-18" />
-			<column name="uuid" value="13fc9b4a-49ed-429c-9dde-ca005b387a3d" />
-		</insert>
-	</changeSet>
-	<changeSet id="radiology-20" author="teleivo">
-		<comment>radiology_study shall only exist with a radiology_order.
-			foreign key already in place, not null constraint missing</comment>
-		<addNotNullConstraint columnDataType="int"
-			columnName="order_id" tableName="radiology_study" />
-	</changeSet>
-	<changeSet id="radiology-21" author="jakobf">
-		<sql>
-			drop table if exists radiology_report;
-		</sql>
-		<comment>radiology_report</comment>
-		<createTable tableName="radiology_report">
-			<column name="report_id" type="int" autoIncrement="true">
-				<constraints primaryKey="true" nullable="false" />
-			</column>
-			<column name="order_id" type="int">
-				<constraints nullable="false" />
-			</column>
-			<column name="report_status" type="varchar(12)">
-				<constraints nullable="false" />
-			</column>
-			<column name="principal_results_interpreter" type="int" />
-			<column name="report_date" type="date" />
-			<column name="report_body" type="longtext" />
-			<column name="creator" type="int" defaultValueNumeric="0">
-				<constraints nullable="false" />
-			</column>
-			<column name="date_created" type="DATETIME">
-				<constraints nullable="false" />
-			</column>
-		</createTable>
-		<addForeignKeyConstraint constraintName="radiology_report_order_id_fk"
-			baseTableName="radiology_report" baseColumnNames="order_id"
-			referencedTableName="radiology_order" referencedColumnNames="order_id" />
-		<addForeignKeyConstraint
-			constraintName="radiology_report_principal_results_interpreter_fk"
-			baseTableName="radiology_report" baseColumnNames="principal_results_interpreter"
-			referencedTableName="provider" referencedColumnNames="provider_id" />
-		<addForeignKeyConstraint constraintName="radiology_report_creator_fk"
-			baseTableName="radiology_report" baseColumnNames="creator"
-			referencedTableName="users" referencedColumnNames="user_id" />
-	</changeSet>
-	<changeSet id="radiology-22" author="teleivo">
-		<comment>Add column uuid to radiology_report since its a BaseOpenmrsObject</comment>
-		<addColumn tableName="radiology_report">
-			<column name="uuid" type="char(38)">
-				<constraints nullable="false" unique="true" />
-			</column>
-		</addColumn>
-	</changeSet>
-	<changeSet id="radiology-23" author="bgeVam">
-		<comment>Add radiology visit type</comment>
-		<insert tableName="visit_type">
-			<column name="name" value="Radiology Visit" />
-			<column name="description" value="Visit type for radiology orders" />
-			<column name="creator" value="1" />
-			<column name="date_created" valueDate="2016-03-07" />
-			<column name="uuid" value="fe898a34-1ade-11e1-9c71-00248140a5eb" />
-		</insert>
-	</changeSet>
+     <changeSet id="radiology-2" author="cortex">
+          <sql>
+               drop table if exists radiology_study;
+          </sql>
+     </changeSet>
+     <changeSet author="juanp" id="radiology-3">
+          <preConditions onFail="WARN" onError="WARN">
+               <not>
+                    <tableExists tableName="radiology_study" />
+               </not>
+          </preConditions>
+          <createTable tableName="radiology_study">
+               <column name="id" type="int" autoIncrement="true">
+                    <constraints primaryKey="true" nullable="false" />
+               </column>
+               <column name="uid" type="varchar(255)"></column>
+               <column name="order_id" type="int">
+                    <constraints unique="true" />
+               </column>
+               <column name="scheduled_status" type="int" defaultValue="-1"></column>
+               <column name="performed_status" type="int" defaultValue="-1"></column>
+               <column name="priority" defaultValue="-1" type="int"></column>
+               <column name="modality" defaultValue="-1" type="int"></column>
+               <column name="scheduler_user_id" type="int" defaultValue="-1"></column>
+               <column name="performing_physician_user_id" type="int"
+                                defaultValue="-1">
+               </column>
+               <column name="reading_physician_user_id" type="int"
+                                defaultValue="-1">
+               </column>
+               <column name="mwlstatus" type="int" defaultValue="-1"></column>
+          </createTable>
+     </changeSet>
+     <changeSet id="radiology-5" author="teleivo">
+          <comment>Change modality column type to varchar(16) in radiology_study
+               table to represent DICOM Tag Modality (0008,0060) value
+               representation CS (Code String) defined in DICOM PS3.5 2014b - Data
+               Structures and Encoding</comment>
+          <modifyDataType tableName="radiology_study" columnName="modality"
+                                newDataType="varchar(16)" />
+          <dropDefaultValue tableName="radiology_study"
+                                  columnName="modality" columnDataType="varchar(16)" />
+          <addNotNullConstraint tableName="radiology_study"
+                                      columnName="modality" columnDataType="varchar(16)" />
+     </changeSet>
+     <changeSet author="teleivo" id="radiology-6">
+          <comment>priority column represents DICOM Tag (0040,1003) Requested
+               Procedure Priority. Max length 7 chosen for the column because of max
+               priority "ROUTINE"</comment>
+          <modifyDataType tableName="radiology_study" columnName="priority"
+                                newDataType="varchar(7)" />
+          <dropDefaultValue tableName="radiology_study"
+                                  columnName="priority" columnDataType="varchar(7)" />
+          <addNotNullConstraint tableName="radiology_study"
+                                      columnName="priority" columnDataType="varchar(7)" />
+     </changeSet>     
+     <changeSet id="radiology-10" author="teleivo">
+          <comment>rename column 'uid' to 'study_instance_uid' to make clear
+               that the column represents the Study Instance UID defined by the
+               DICOM standard</comment>
+          <renameColumn columnDataType="varchar(255)"
+                              newColumnName="study_instance_uid" oldColumnName="uid" tableName="radiology_study" />
+     </changeSet>
+     <changeSet id="radiology-31" author="teleivo">
+          <comment>rename column 'id' to 'studyid'.</comment>
+          <renameColumn columnDataType="int" newColumnName="studyid"
+                              oldColumnName="id" tableName="radiology_study" />
+     </changeSet>
+     <changeSet id="radiology-13" author="bgeVam">
+          <comment>add roles</comment>
+          <insert tableName="role">
+               <column name="role" value="Radiology: Referring physician" />
+               <column name="description" value="The physician who refers the radiology order" />
+               <column name="uuid" value="15c4c14a-e11b-11e5-b4b0-08002719a237" />
+          </insert>
+          <insert tableName="role">
+               <column name="role" value="Radiology: Reading physician" />
+               <column name="description" value="The physician who reads the performed study" />
+               <column name="uuid" value="16e4d536-e11b-11e5-b4b0-08002719a237" />
+          </insert>
+          <insert tableName="role">
+               <column name="role" value="Radiology: Performing physician" />
+               <column name="description" value="The physician who performs the radiology order" />
+               <column name="uuid" value="175f1c62-e11b-11e5-b4b0-08002719a237" />
+          </insert>
+          <insert tableName="role">
+               <column name="role" value="Radiology: Scheduler" />
+               <column name="description" value="The person who schedules the radiology order" />
+               <column name="uuid" value="17c32561-e11b-11e5-b4b0-08002719a237" />
+          </insert>
+     </changeSet>
+     <changeSet id="radiology-14" author="bgeVam">
+          <comment>add privileges</comment>
+          <insert tableName="privilege">
+               <column name="privilege" value="Patient Dashboard - View Radiology Section" />
+               <column name="description"
+                                value="Able to view the 'Radiology' tab on the patient dashboard" />
+               <column name="uuid" value="ba21d6b5-e11e-11e5-9a38-08002719a237" />
+          </insert>
+     </changeSet>
+     <changeSet id="radiology-15" author="bgeVam">
+          <insert tableName="order_type">
+               <column name="name" value="Radiology Order" />
+               <column name="description" value="Order type for radiology exams" />
+               <column name="java_class_name" value="org.openmrs.module.radiology.RadiologyOrder" />
+               <column name="creator" valueNumeric="1" />
+               <column name="date_created" valueDate="2015-09-09" />
+               <column name="uuid" value="dbdb9a9b-56ea-11e5-a47f-08002719a237" />
+          </insert>
+     </changeSet>
+     <changeSet id="radiology-16" author="teleivo">
+          <preConditions onFail="MARK_RAN">
+               <not>
+                    <tableExists tableName="radiology_order" />
+               </not>
+          </preConditions>
+          <comment>Create radiology_order table for new class RadiologyOrder</comment>
+          <createTable tableName="radiology_order">
+               <column name="order_id" type="int" autoIncrement="true">
+                    <constraints primaryKey="true" nullable="false" />
+               </column>
+          </createTable>
+          <addForeignKeyConstraint constraintName="radiology_order_order_id_fk"
+                                         baseTableName="radiology_order" baseColumnNames="order_id"
+                                         referencedTableName="test_order" referencedColumnNames="order_id" />
+          <addForeignKeyConstraint constraintName="radiology_study_order_id_fk"
+                                         baseTableName="radiology_study" baseColumnNames="order_id"
+                                         referencedTableName="radiology_order" referencedColumnNames="order_id" />
+     </changeSet>
+     <changeSet id="radiology-17" author="teleivo">
+          <comment>Remove columns from radiology_study which are not used
+               anymore</comment>
+          <dropColumn columnName="priority" tableName="radiology_study" />
+          <dropColumn columnName="scheduler_user_id" tableName="radiology_study" />
+          <dropColumn columnName="performing_physician_user_id"
+                            tableName="radiology_study" />
+          <dropColumn columnName="reading_physician_user_id"
+                            tableName="radiology_study" />
+     </changeSet>
+     <changeSet id="radiology-18" author="teleivo">
+          <comment>Add radiology encounter type and role necessary to add
+               orders, encounters in core 10.2</comment>
+          <insert tableName="encounter_type">
+               <column name="name" value="Radiology Order Encounter" />
+               <column name="description" value="Ordering radiology exams" />
+               <column name="creator" valueNumeric="1" />
+               <column name="date_created" valueDate="2015-09-18" />
+               <column name="uuid" value="19db8c0d-3520-48f2-babd-77f2d450e5c7" />
+          </insert>
+          <insert tableName="encounter_role">
+               <column name="name" value="Radiology Ordering Provider" />
+               <column name="description" value="Provider ordering tests, exams, drugs, ..." />
+               <column name="creator" valueNumeric="1" />
+               <column name="date_created" valueDate="2015-09-18" />
+               <column name="uuid" value="13fc9b4a-49ed-429c-9dde-ca005b387a3d" />
+          </insert>
+     </changeSet>
+     <changeSet id="radiology-20" author="teleivo">
+          <comment>radiology_study shall only exist with a radiology_order.
+               foreign key already in place, not null constraint missing</comment>
+          <addNotNullConstraint columnDataType="int"
+                                      columnName="order_id" tableName="radiology_study" />
+     </changeSet>
+     <changeSet id="radiology-21" author="jakobf">
+          <sql>
+               drop table if exists radiology_report;
+          </sql>
+          <comment>radiology_report</comment>
+          <createTable tableName="radiology_report">
+               <column name="report_id" type="int" autoIncrement="true">
+                    <constraints primaryKey="true" nullable="false" />
+               </column>
+               <column name="order_id" type="int">
+                    <constraints nullable="false" />
+               </column>
+               <column name="report_status" type="varchar(12)">
+                    <constraints nullable="false" />
+               </column>
+               <column name="principal_results_interpreter" type="int" />
+               <column name="report_date" type="date" />
+               <column name="report_body" type="longtext" />
+               <column name="creator" type="int" defaultValueNumeric="0">
+                    <constraints nullable="false" />
+               </column>
+               <column name="date_created" type="DATETIME">
+                    <constraints nullable="false" />
+               </column>
+          </createTable>
+          <addForeignKeyConstraint constraintName="radiology_report_order_id_fk"
+                                         baseTableName="radiology_report" baseColumnNames="order_id"
+                                         referencedTableName="radiology_order" referencedColumnNames="order_id" />
+          <addForeignKeyConstraint
+               constraintName="radiology_report_principal_results_interpreter_fk"
+               baseTableName="radiology_report" baseColumnNames="principal_results_interpreter"
+               referencedTableName="provider" referencedColumnNames="provider_id" />
+          <addForeignKeyConstraint constraintName="radiology_report_creator_fk"
+                                         baseTableName="radiology_report" baseColumnNames="creator"
+                                         referencedTableName="users" referencedColumnNames="user_id" />
+     </changeSet>
+     <changeSet id="radiology-22" author="teleivo">
+          <comment>Add column uuid to radiology_report since its a BaseOpenmrsObject</comment>
+          <addColumn tableName="radiology_report">
+               <column name="uuid" type="char(38)">
+                    <constraints nullable="false" unique="true" />
+               </column>
+          </addColumn>
+     </changeSet>
+     <changeSet id="radiology-23" author="bgeVam">
+          <comment>Add radiology visit type</comment>
+          <insert tableName="visit_type">
+               <column name="name" value="Radiology Visit" />
+               <column name="description" value="Visit type for radiology orders" />
+               <column name="creator" value="1" />
+               <column name="date_created" valueDate="2016-03-07" />
+               <column name="uuid" value="fe898a34-1ade-11e1-9c71-00248140a5eb" />
+          </insert>
+     </changeSet>
         
       
            
         
-        <changeSet id="radiology-30" author="teleivo">
-		<comment>column mwl status is now mapped to by enum MwlStatus. Max
-			length 17 chosen for the column because of max element
-			"UNDISCONTINUE_ERR"</comment>
-		<modifyDataType tableName="radiology_study" columnName="mwlstatus"
-			newDataType="varchar(17)" />
-		<dropDefaultValue tableName="radiology_study"
-			columnName="mwlstatus" columnDataType="varchar(17)" />
-		<addNotNullConstraint tableName="radiology_study"
-			columnName="mwlstatus" columnDataType="varchar(17)" />
-	</changeSet>
+     <changeSet id="radiology-30" author="teleivo">
+          <comment>column mwl status is now mapped to by enum MwlStatus. Max
+               length 17 chosen for the column because of max element
+               "UNDISCONTINUE_ERR"</comment>
+          <modifyDataType tableName="radiology_study" columnName="mwlstatus"
+                                newDataType="varchar(17)" />
+          <dropDefaultValue tableName="radiology_study"
+                                  columnName="mwlstatus" columnDataType="varchar(17)" />
+          <addNotNullConstraint tableName="radiology_study"
+                                      columnName="mwlstatus" columnDataType="varchar(17)" />
+     </changeSet>
     
-        	<changeSet id="radiology-38" author="teleivo">
-		<comment>rename column scheduledStatus</comment>
-		<renameColumn columnDataType="varchar(255)"
-			newColumnName="scheduledStatus" oldColumnName="scheduled_status" tableName="radiology_study" />
-	</changeSet>
-        <changeSet id="radiology-39" author="teleivo">
-		<comment>rename column performedStatus</comment>
-		<renameColumn columnDataType="varchar(255)"
-			newColumnName="performedStatus" oldColumnName="performed_status" tableName="radiology_study" />
-	</changeSet>
-        <changeSet id="radiology-40" author="teleivo">
-		<comment>necessary because of changeset 'radiology-11'. mysql looses
-			'NOT NULL' and 'AUTOINCREMENT' these properties are therefore added
-			again explicitly (see https://liquibase.jira.com/browse/CORE-1019)</comment>
-		<dropDefaultValue columnDataType="int" columnName="studyId"
-			tableName="radiology_study" />
-		<addNotNullConstraint columnDataType="int"
-			columnName="studyId" tableName="radiology_study" />
-		<addAutoIncrement columnDataType="int" columnName="studyId"
-			incrementBy="1" tableName="radiology_study" />
-	</changeSet>
-        	<changeSet id="radiology-42" author="teleivo">
-		<comment>column scheduled_status represents DICOM Scheduled Procedure
-			Step Status (0040,0020) which is now mapped to by enum
-			ScheduledProcedureStepStatus. Max length 9 chosen for the column
-			because of max ScheduledProcedureStepStatus "SCHEDULED"</comment>
-		<modifyDataType tableName="radiology_study" columnName="scheduledStatus"
-			newDataType="varchar(9)" />
-		<dropDefaultValue tableName="radiology_study"
-			columnName="scheduledStatus" columnDataType="varchar(9)" />
-		<addDefaultValue tableName="radiology_study"
-			columnName="scheduledStatus" columnDataType="varchar(9)"
-			defaultValue="null" />
-	</changeSet>
-        <changeSet id="radiology-43" author="teleivo">
-		<comment>column performed_status represents DICOM Performed Procedure
-			Step Status (0040,0252) which is now mapped to by enum
-			PerformedProcedureStepStatus. Max length 12 chosen for the column
-			because of max PerformedProcedureStepStatus "DISCONTINUED"</comment>
-		<modifyDataType tableName="radiology_study" columnName="performedStatus"
-			newDataType="varchar(12)" />
-		<dropDefaultValue tableName="radiology_study"
-			columnName="performedStatus" columnDataType="varchar(12)" />
-		<addDefaultValue tableName="radiology_study"
-			columnName="performedStatus" columnDataType="varchar(12)"
-			defaultValue="null" />
-	</changeSet>
-                <changeSet id="radiology-44" author="tenzin">
-		<comment>rename column mwlstatus</comment>
-		<renameColumn columnDataType="varchar(17)"
-			newColumnName="mwlStatus" oldColumnName="mwlstatus" tableName="radiology_study" />
-	</changeSet>
-        <changeSet author="tenzin" id="radiology-46">
-    <addColumn tableName="radiology_study">
-        <column name="rml" type="varchar(255)"/>
-    </addColumn>
-</changeSet>
+     <changeSet id="radiology-38" author="teleivo">
+          <comment>rename column scheduledStatus</comment>
+          <renameColumn columnDataType="varchar(255)"
+                              newColumnName="scheduledStatus" oldColumnName="scheduled_status" tableName="radiology_study" />
+     </changeSet>
+     <changeSet id="radiology-39" author="teleivo">
+          <comment>rename column performedStatus</comment>
+          <renameColumn columnDataType="varchar(255)"
+                              newColumnName="performedStatus" oldColumnName="performed_status" tableName="radiology_study" />
+     </changeSet>
+     <changeSet id="radiology-40" author="teleivo">
+          <comment>necessary because of changeset 'radiology-11'. mysql looses
+               'NOT NULL' and 'AUTOINCREMENT' these properties are therefore added
+               again explicitly (see https://liquibase.jira.com/browse/CORE-1019)</comment>
+          <dropDefaultValue columnDataType="int" columnName="studyId"
+                                  tableName="radiology_study" />
+          <addNotNullConstraint columnDataType="int"
+                                      columnName="studyId" tableName="radiology_study" />
+          <addAutoIncrement columnDataType="int" columnName="studyId"
+                                  incrementBy="1" tableName="radiology_study" />
+     </changeSet>
+     <changeSet id="radiology-42" author="teleivo">
+          <comment>column scheduled_status represents DICOM Scheduled Procedure
+               Step Status (0040,0020) which is now mapped to by enum
+               ScheduledProcedureStepStatus. Max length 9 chosen for the column
+               because of max ScheduledProcedureStepStatus "SCHEDULED"</comment>
+          <modifyDataType tableName="radiology_study" columnName="scheduledStatus"
+                                newDataType="varchar(9)" />
+          <dropDefaultValue tableName="radiology_study"
+                                  columnName="scheduledStatus" columnDataType="varchar(9)" />
+          <addDefaultValue tableName="radiology_study"
+                                 columnName="scheduledStatus" columnDataType="varchar(9)"
+                                 defaultValue="null" />
+     </changeSet>
+     <changeSet id="radiology-43" author="teleivo">
+          <comment>column performed_status represents DICOM Performed Procedure
+               Step Status (0040,0252) which is now mapped to by enum
+               PerformedProcedureStepStatus. Max length 12 chosen for the column
+               because of max PerformedProcedureStepStatus "DISCONTINUED"</comment>
+          <modifyDataType tableName="radiology_study" columnName="performedStatus"
+                                newDataType="varchar(12)" />
+          <dropDefaultValue tableName="radiology_study"
+                                  columnName="performedStatus" columnDataType="varchar(12)" />
+          <addDefaultValue tableName="radiology_study"
+                                 columnName="performedStatus" columnDataType="varchar(12)"
+                                 defaultValue="null" />
+     </changeSet>
+     <changeSet id="radiology-44" author="tenzin">
+          <comment>rename column mwlstatus</comment>
+          <renameColumn columnDataType="varchar(17)"
+                              newColumnName="mwlStatus" oldColumnName="mwlstatus" tableName="radiology_study" />
+     </changeSet>
+     <changeSet author="tenzin" id="radiology-46">
+          <addColumn tableName="radiology_study">
+               <column name="rml" type="varchar(255)"/>
+          </addColumn>
+     </changeSet>
 
-         <changeSet id="radiology-48" author="tenzin">
-		<comment>rename column rml</comment>
-		<renameColumn columnDataType="varchar(255)"
-			newColumnName="studyname" oldColumnName="rml" tableName="radiology_study" />
-	</changeSet>
-              <changeSet author="tenzin" id="radiology-49">
-    <addColumn tableName="radiology_study">
-        <column name="diagnosis" type="varchar(255)"/>
-    </addColumn>
-</changeSet>
- <changeSet author="tenzin" id="radiology-50">
-    <addColumn tableName="radiology_order">
-        <column name="orderinstruction" type="varchar(255)"/>
-    </addColumn>
-</changeSet>
-<changeSet id="radiology-51" author="tenzin">
-		<comment>Remove columns from radiology_study which are not used
-			anymore</comment>
-		<dropColumn columnName="orderinstruction" tableName="radiology_order" />
+     <changeSet id="radiology-48" author="tenzin">
+          <comment>rename column rml</comment>
+          <renameColumn columnDataType="varchar(255)"
+                              newColumnName="studyname" oldColumnName="rml" tableName="radiology_study" />
+     </changeSet>
+     <changeSet author="tenzin" id="radiology-49">
+          <addColumn tableName="radiology_study">
+               <column name="diagnosis" type="varchar(255)"/>
+          </addColumn>
+     </changeSet>
+     <changeSet author="tenzin" id="radiology-50">
+          <addColumn tableName="radiology_order">
+               <column name="orderinstruction" type="varchar(255)"/>
+          </addColumn>
+     </changeSet>
+     <changeSet id="radiology-51" author="tenzin">
+          <comment>Remove columns from radiology_study which are not used
+               anymore</comment>
+          <dropColumn columnName="orderinstruction" tableName="radiology_order" />
 		
-	</changeSet>
-         <changeSet author="tenzin" id="radiology-52">
-    <addColumn tableName="radiology_order">
-        <column name="orderdiagnosis" type="varchar(255)"/>
-    </addColumn>
-</changeSet>
-    <changeSet id="radiology-53" author="tenzin">
-		<comment>Remove columns from diagnosis which are not used
-			anymore</comment>
-		<dropColumn columnName="diagnosis" tableName="radiology_study" />
+     </changeSet>
+     <changeSet author="tenzin" id="radiology-52">
+          <addColumn tableName="radiology_order">
+               <column name="orderdiagnosis" type="varchar(255)"/>
+          </addColumn>
+     </changeSet>
+     <changeSet id="radiology-53" author="tenzin">
+          <comment>Remove columns from diagnosis which are not used
+               anymore</comment>
+          <dropColumn columnName="diagnosis" tableName="radiology_study" />
 		
-	</changeSet>
+     </changeSet>
         
-<changeSet id="radiology-54" author="teleivo">
-		<comment>rename column 'uid' to 'studyInstanceUid' to make clear
-			that the column represents the Study Instance UID defined by the
-			DICOM standard</comment>
-		<renameColumn columnDataType="varchar(255)"
-			newColumnName="studyInstanceUid" oldColumnName="study_instance_uid" tableName="radiology_study" />
-	</changeSet>
-         <changeSet id="radiology-55" author="tenzin">
-		<comment>Change modality column type to varchar(16) in radiology_study
-			table to represent DICOM Tag Modality (0008,0060) value
-			representation CS (Code String) defined in DICOM PS3.5 2014b - Data
-			Structures and Encoding</comment>
-		<modifyDataType tableName="radiology_study" columnName="modality"
-			newDataType="varchar(255)" />
+     <changeSet id="radiology-54" author="teleivo">
+          <comment>rename column 'uid' to 'studyInstanceUid' to make clear
+               that the column represents the Study Instance UID defined by the
+               DICOM standard</comment>
+          <renameColumn columnDataType="varchar(255)"
+                              newColumnName="studyInstanceUid" oldColumnName="study_instance_uid" tableName="radiology_study" />
+     </changeSet>
+     <changeSet id="radiology-55" author="tenzin">
+          <comment>Change modality column type to varchar(16) in radiology_study
+               table to represent DICOM Tag Modality (0008,0060) value
+               representation CS (Code String) defined in DICOM PS3.5 2014b - Data
+               Structures and Encoding</comment>
+          <modifyDataType tableName="radiology_study" columnName="modality"
+                                newDataType="varchar(255)" />
 		
-	</changeSet>
+     </changeSet>
        
       
-           <changeSet author="tenzin" id="radiology-58">
-    <addColumn tableName="radiology_study">
-        <column name="studyHtmlFormUUID" type="varchar(255)"/>
-    </addColumn>
-</changeSet>
+     <changeSet author="tenzin" id="radiology-58">
+          <addColumn tableName="radiology_study">
+               <column name="studyHtmlFormUUID" type="varchar(255)"/>
+          </addColumn>
+     </changeSet>
     
 
 
-<changeSet author="tenzin" id="radiology-64">
-    <addColumn tableName="radiology_study">
-        <column name="studyreporturl" type="varchar(255)"/>
-    </addColumn>
-</changeSet>
-<changeSet author="tenzin" id="radiology-68">
-    <addColumn tableName="radiology_study">
-        <column name="radiologyStatusOrder" type="varchar(255)"/>
-    </addColumn>
-</changeSet>
-<changeSet author="tenzin" id="radiology-69">
-    <addColumn tableName="radiology_study">
-        <column name="orderCompletedDate" type="varchar(255)"/>
-    </addColumn>
-</changeSet>
-<changeSet author="tenzin" id="radiology-70">
-    <addColumn tableName="radiology_study">
-        <column name="encounterId" type="int"/>
-    </addColumn>
-</changeSet>
-<changeSet author="tenzin" id="radiology-71">
-        <dropColumn columnName="orderCompletedDate" tableName="radiology_study" />
-</changeSet>
-<changeSet author="tenzin" id="radiology-72">
-        <dropColumn columnName="encounterId" tableName="radiology_study" />
-</changeSet>
-<changeSet author="tenzin" id="radiology-73">
-    <addColumn tableName="radiology_order">
-        <column name="orderCompletedDate" type="varchar(255)"/>
-    </addColumn>
-</changeSet>
-<changeSet author="tenzin" id="radiology-74">
-    <addColumn tableName="radiology_order">
-        <column name="encounterId" type="int"/>
-    </addColumn>
-</changeSet>
-<changeSet author="tenzin" id="radiology-75">
-    <addColumn tableName="radiology_study">
-        <column name="obsCompletedDate" type="varchar(255)"/>
-    </addColumn>
-</changeSet>
-<changeSet author="tenzin" id="radiology-76">
-    <addColumn tableName="radiology_study">
-        <column name="orderencounterId" type="int"/>
-    </addColumn>
-</changeSet>
+     <changeSet author="tenzin" id="radiology-64">
+          <addColumn tableName="radiology_study">
+               <column name="studyreporturl" type="varchar(255)"/>
+          </addColumn>
+     </changeSet>
+     <changeSet author="tenzin" id="radiology-68">
+          <addColumn tableName="radiology_study">
+               <column name="radiologyStatusOrder" type="varchar(255)"/>
+          </addColumn>
+     </changeSet>
+     <changeSet author="tenzin" id="radiology-69">
+          <addColumn tableName="radiology_study">
+               <column name="orderCompletedDate" type="varchar(255)"/>
+          </addColumn>
+     </changeSet>
+     <changeSet author="tenzin" id="radiology-70">
+          <addColumn tableName="radiology_study">
+               <column name="encounterId" type="int"/>
+          </addColumn>
+     </changeSet>
+     <changeSet author="tenzin" id="radiology-71">
+          <dropColumn columnName="orderCompletedDate" tableName="radiology_study" />
+     </changeSet>
+     <changeSet author="tenzin" id="radiology-72">
+          <dropColumn columnName="encounterId" tableName="radiology_study" />
+     </changeSet>
+     <changeSet author="tenzin" id="radiology-73">
+          <addColumn tableName="radiology_order">
+               <column name="orderCompletedDate" type="varchar(255)"/>
+          </addColumn>
+     </changeSet>
+     <changeSet author="tenzin" id="radiology-74">
+          <addColumn tableName="radiology_order">
+               <column name="encounterId" type="int"/>
+          </addColumn>
+     </changeSet>
+     <changeSet author="tenzin" id="radiology-75">
+          <addColumn tableName="radiology_study">
+               <column name="obsCompletedDate" type="varchar(255)"/>
+          </addColumn>
+     </changeSet>
+     <changeSet author="tenzin" id="radiology-76">
+          <addColumn tableName="radiology_study">
+               <column name="orderencounterId" type="int"/>
+          </addColumn>
+     </changeSet>
 
-<changeSet id="radiology-80" author="tenzin">
+     <changeSet id="radiology-80" author="tenzin">
 		
-		<dropColumn columnName="radiologyOrderstatus" tableName="radiology_study" />
+          <dropColumn columnName="radiologyOrderstatus" tableName="radiology_study" />
 		
-	</changeSet>
-        <changeSet id="radiology-81" author="tenzin">
+     </changeSet>
+     <changeSet id="radiology-81" author="tenzin">
 		
-		<dropColumn columnName="studyPatientName" tableName="radiology_study" />
+          <dropColumn columnName="studyPatientName" tableName="radiology_study" />
 		
-	</changeSet>
-          <changeSet id="radiology-84" author="tenzin">
+     </changeSet>
+     <changeSet id="radiology-84" author="tenzin">
 		
-		<dropColumn columnName="patientName" tableName="radiology_study" />
+          <dropColumn columnName="patientName" tableName="radiology_study" />
 		
-	</changeSet>
-          <changeSet author="tenzin" id="radiology-85">
-    <addColumn tableName="radiology_study">
-        <column name="studyGenericHTMLFormUUID" type="varchar(255)"/>
-    </addColumn>
-</changeSet>
-      <changeSet id="radiology-86" author="tenzin">
-		<sql>
-			drop table if exists RadiologyStudyList;
-		</sql>
-	</changeSet> 
-          <changeSet id="radiology-87" author="tenzin">
-		<sql>
-			drop table if exists RadiologyModalityList;
-		</sql>
-	</changeSet> 
-         <changeSet id="radiology-88" author="tenzin">
-		<sql>
-			drop table if exists RadiologyReportList;
-		</sql>
-	</changeSet>
-         <changeSet id="radiology-89" author="tenzin">
+     </changeSet>
+     <changeSet author="tenzin" id="radiology-85">
+          <addColumn tableName="radiology_study">
+               <column name="studyGenericHTMLFormUUID" type="varchar(255)"/>
+          </addColumn>
+     </changeSet>
+     <changeSet id="radiology-86" author="tenzin">
+          <sql>
+               drop table if exists RadiologyStudyList;
+          </sql>
+     </changeSet> 
+     <changeSet id="radiology-87" author="tenzin">
+          <sql>
+               drop table if exists RadiologyModalityList;
+          </sql>
+     </changeSet> 
+     <changeSet id="radiology-88" author="tenzin">
+          <sql>
+               drop table if exists RadiologyReportList;
+          </sql>
+     </changeSet>
+     <changeSet id="radiology-89" author="tenzin">
 		
-		<dropColumn columnName="orderCompletedDate" tableName="radiology_order" />
+          <dropColumn columnName="orderCompletedDate" tableName="radiology_order" />
 		
-	</changeSet>
+     </changeSet>
        
-        <changeSet id="radiology-90" author="tenzin">
+     <changeSet id="radiology-90" author="tenzin">
 		
-		<dropColumn columnName="encounterId" tableName="radiology_order" />
+          <dropColumn columnName="encounterId" tableName="radiology_order" />
 		
-	</changeSet>
-        <changeSet id="radiology-91" author="tenzin">
+     </changeSet>
+     <changeSet id="radiology-91" author="tenzin">
 		
-		<dropColumn columnName="studyreporturl" tableName="radiology_study" />
+          <dropColumn columnName="studyreporturl" tableName="radiology_study" />
 		
-	</changeSet>
-         <changeSet author="tenzin" id="radiology-92">
-    <addColumn tableName="radiology_study">
-        <column name="radiologistUserName" type="varchar(255)"/>
-    </addColumn>
-</changeSet>
-    <changeSet author="tenzin" id="radiology-93">
-    <addColumn tableName="radiology_study">
-        <column name="priority" type="varchar(255)"/>
-    </addColumn>
-</changeSet>
-<changeSet id="radiology-94" author="tenzin">
+     </changeSet>
+     <changeSet author="tenzin" id="radiology-92">
+          <addColumn tableName="radiology_study">
+               <column name="radiologistUserName" type="varchar(255)"/>
+          </addColumn>
+     </changeSet>
+     <changeSet author="tenzin" id="radiology-93">
+          <addColumn tableName="radiology_study">
+               <column name="priority" type="varchar(255)"/>
+          </addColumn>
+     </changeSet>
+     <changeSet id="radiology-94" author="tenzin">
 		
-		<dropColumn columnName="priority" tableName="radiology_study" />
+          <dropColumn columnName="priority" tableName="radiology_study" />
 		
-	</changeSet>
-        <changeSet author="tenzin" id="radiology-95">
-            <renameColumn columnDataType="int"
-			newColumnName="studyReportSavedEncounterId" oldColumnName="orderencounterId" tableName="radiology_study" />
-</changeSet>
-        <changeSet author="tenzin" id="radiology-96">
-            <renameColumn columnDataType="varchar(255)"
-			newColumnName="studyReportRadiologist" oldColumnName="radiologistUserName" tableName="radiology_study" />
-</changeSet>
-<changeSet author="tenzin" id="radiology-97">
-            <renameColumn columnDataType="varchar(255)"
-			newColumnName="genericHtmlFormUid" oldColumnName="studyGenericHTMLFormUUID" tableName="radiology_study" />
-</changeSet>
-<changeSet author="tenzin" id="radiology-98">
-            <renameColumn columnDataType="varchar(255)"
-			newColumnName="nonGenericHtmlFormUid" oldColumnName="studyHtmlFormUUID" tableName="radiology_study" />
-</changeSet>
-<changeSet id="radiology-99" author="tenzin">
-		<sql>
-			drop table if exists radiology_report;
-		</sql>
-	</changeSet>
+     </changeSet>
+     <changeSet author="tenzin" id="radiology-95">
+          <renameColumn columnDataType="int"
+                          newColumnName="studyReportSavedEncounterId" oldColumnName="orderencounterId" tableName="radiology_study" />
+     </changeSet>
+     <changeSet author="tenzin" id="radiology-96">
+          <renameColumn columnDataType="varchar(255)"
+                          newColumnName="studyReportRadiologist" oldColumnName="radiologistUserName" tableName="radiology_study" />
+     </changeSet>
+     <changeSet author="tenzin" id="radiology-97">
+          <renameColumn columnDataType="varchar(255)"
+                          newColumnName="genericHtmlFormUid" oldColumnName="studyGenericHTMLFormUUID" tableName="radiology_study" />
+     </changeSet>
+     <changeSet author="tenzin" id="radiology-98">
+          <renameColumn columnDataType="varchar(255)"
+                          newColumnName="nonGenericHtmlFormUid" oldColumnName="studyHtmlFormUUID" tableName="radiology_study" />
+     </changeSet>
+     <changeSet id="radiology-99" author="tenzin">
+          <sql>
+               drop table if exists radiology_report;
+          </sql>
+     </changeSet>
+     <changeSet id="radiology-100" author="tenzin">
+		
+          <dropColumn columnName="nonGenericHtmlFormUid" tableName="radiology_study" />
+		
+     </changeSet>
+     <changeSet id="radiology-101" author="tenzin">
+		
+          <dropColumn columnName="genericHtmlFormUid" tableName="radiology_study" />
+		
+     </changeSet>
+     <changeSet id="radiology-102" author="tenzin">
+		
+          <dropColumn columnName="radiologyStatusOrder" tableName="radiology_study" />
+		
+     </changeSet>
 </databaseChangeLog>
 
 

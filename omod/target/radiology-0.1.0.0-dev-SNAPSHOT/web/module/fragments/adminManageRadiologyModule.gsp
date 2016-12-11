@@ -193,9 +193,7 @@
                 alert('AJAX error ' + err);
             })
             .success(function(ret) {
-
                 reportTableRow.append("<thead><tr><td>Studies</td><td>Report Available</td><td>Action</td></tr></thead><tbody>");
-
                 var formNameArray = [];
                 var formNameHtmlToDisplayArray = [];
                 for (var i = 0; i < ret.length; i++) {

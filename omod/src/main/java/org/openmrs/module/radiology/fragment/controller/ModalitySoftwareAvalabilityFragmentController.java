@@ -34,6 +34,10 @@ public class ModalitySoftwareAvalabilityFragmentController {
 		
 		final String username = "johnDevRadio@gmail.com";
 		final String password = "john1234";
+		
+		// replace with radiologist email address
+		String recipient = "radiologistOpenmrs@gmail.com";
+		
 		// set up smtp server
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
@@ -52,7 +56,7 @@ public class ModalitySoftwareAvalabilityFragmentController {
 			// Sender and receiver info with the message
 			Message message1 = new MimeMessage(session);
 			message1.setFrom(new InternetAddress("johnDevRadio@gmail.com"));
-			message1.setRecipients(Message.RecipientType.TO, InternetAddress.parse("radiologistOpenmrs@gmail.com"));
+			message1.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
 			message1.setSubject("Modality Software Avalaibility");
 			message1.setText("Dear Radiologist," + "\n\n " + message);
 			Transport.send(message1);

@@ -23,7 +23,8 @@ jq(document).ready(function() {
     jq("#radiologyOrderDetailsDiv").hide();
     jq("#contactRadiologist").hide();
     jq("#performedStatusCompletedOrder").show();
-
+    
+   //performedStatus Completed Order  dataTable
     jq('#performedStatusCompletedOrderTable').dataTable({
         "sPaginationType": "full_numbers",
         "bPaginate": true,
@@ -39,7 +40,6 @@ jq(document).ready(function() {
 
     //reload page if click on cancel btn
     jq("#cancelmessage").click(function() {
-        alert("canel");
         location.reload();
     });
     
@@ -58,8 +58,6 @@ jq(document).ready(function() {
             },
             cache: false,
             success: function(data) {
-
-                alert("Sent email");
 
                 //jq("#manageOrderWithLinkBreadCrumb").hide();
                 jq("#messagePatientBreadCrumb").hide();
@@ -82,7 +80,6 @@ jq(document).ready(function() {
 
     //cancel radiology order
     jq("#cancelForm").click(function() {
-
         location.reload();
     });
     
@@ -237,7 +234,6 @@ jq(document).ready(function() {
         jq("#message").val('');
         jq("#manageOrderWithNoLinkBreadCrumb").hide();
         jq("#manageOrderWithLinkBreadCrumb").show();
-
         jq("#messagePatientBreadCrumb").show();
         jq("#addOrderBreadCrumb").hide();
         jq("#orderDetailBreadCrumb").hide();
@@ -254,12 +250,10 @@ jq(document).ready(function() {
         jq(this).addClass('selected').siblings().removeClass('selected');
         var value = jq(this).find('td:first').html();
         alert(value);
-        var splitvalue = value.split('>');
-       
+        var splitvalue = value.split('>');     
         jq("#radiologyOrderDetailsDiv > h1").remove();
         jq("#radiologyOrderDetailsDiv").show();
-        jq("#performedStatusCompletedOrder").hide();
-        
+        jq("#performedStatusCompletedOrder").hide();     
         jq("#completedOrderHeader > h1").remove();
         ordervalue = splitvalue[1];
         alert(ordervalue);
@@ -279,7 +273,6 @@ jq(document).ready(function() {
             localStorage.setItem("orderId", orderId);
             jq('#radiologyOrderDetailsTableId').append('<thead><tr><th> Report</th><th> Radiologist</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th>ViewStudy</th><th> ContactRadiologist</th></tr></thead>');
             jq('#radiologyOrderDetailsTableId').append('<tbody><tr><td><a onclick="ViewReport();"> Obs</a> </td><td> ${anOrder.study.studyReportRadiologist}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td>${anOrder.study.studyname}</td><td id="dogdog" href="ddasdas"><a id="tiger" class="tiger" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + patient.patientIdentifier }" onclick="loadImages(); return false;" >ViewStudy</a></td><td><a onclick="contactRadiologist();"> ContactRadiologist</a></td></tr></tbody>');
-
         }
 
         <% } %>

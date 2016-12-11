@@ -92,8 +92,13 @@ public class CreateViewRadiologyOrderFragmentController {
 	}
 	
 	/**
+	 * Get all report ready status orders of the patient
+	 * 
 	 * @param patient
-	 * @return list of orders with report ready for the patient
+	 * @return orders with report ready status for the patient
+	 *         The Ajax call requires a json result;
+	 *         properties string array elements are concepts and properties indicate the Concept properties of interest;
+	 *         The framework will build the json response when the method returns
 	 */
 	public List<RadiologyOrder> getRadiologyOrdersWithCompletedReportByPatient(Patient p) {
 		
@@ -110,7 +115,7 @@ public class CreateViewRadiologyOrderFragmentController {
 					.getOrderTypeId() == testOrderTypeId) {
 				radiologyOrder = Context.getService(RadiologyService.class)
 						.getRadiologyOrderByOrderId(order.getOrderId());
-				// check if the order is in report ready status
+				// get the orders having report ready status
 				if (radiologyOrder.isReportReady()) {
 					radiologyOrders.add(radiologyOrder);
 					
@@ -122,11 +127,16 @@ public class CreateViewRadiologyOrderFragmentController {
 	}
 	
 	/**
-	 * @param service
-	 * @param model
-	 * @param encounterId report encounterId
-	 * @param ui
-	 * @return list of observations for the report submitted encounterId
+	 * Get all observations recorded for the report generated encounterId of the order
+	 * 
+	 * @param service conceptService
+	 * @param model FragmentModel
+	 * @param encounterId report generated encounterId for the order
+	 * @param ui UiUtils
+	 * @return observations for the report generated encounterId
+	 *         The Ajax call requires a json result;
+	 *         properties string array elements are concepts and properties indicate the Concept properties of interest;
+	 *         The framework will build the json response when the method returns
 	 */
 	public List<SimpleObject> getEncounterIdObs(@SpringBean("conceptService") ConceptService service, FragmentModel model,
 			@RequestParam(value = "encounterId") String encounterId, UiUtils ui) {
@@ -142,11 +152,16 @@ public class CreateViewRadiologyOrderFragmentController {
 	}
 	
 	/**
-	 * @param service
-	 * @param model
-	 * @param ui
+	 * Get all in progress orders of the patient
+	 * 
+	 * @param service conceptService
+	 * @param model FragmentModel
+	 * @param ui UiUtils
 	 * @param patient
 	 * @return in progress radiology orders of the patient
+	 *         The Ajax call requires a json result;
+	 *         properties string array elements are concepts and properties indicate the Concept properties of interest;
+	 *         The framework will build the json response when the method returns
 	 */
 	public List<SimpleObject> getInProgressRadiologyOrders(@SpringBean("conceptService") ConceptService service,
 			FragmentModel model, UiUtils ui, @RequestParam(value = "patientId", required = false) Patient patient) {
@@ -162,8 +177,13 @@ public class CreateViewRadiologyOrderFragmentController {
 	}
 	
 	/**
+	 * Method returns list of in progress radiology orders of the patient
+	 * 
 	 * @param patient
 	 * @return in progress radiology orders of the patient
+	 *         The Ajax call requires a json result;
+	 *         properties string array elements are concepts and properties indicate the Concept properties of interest;
+	 *         The framework will build the json response when the method returns
 	 */
 	public List<RadiologyOrder> getInProgressRadiologyOrdersByPatient(Patient p) {
 		
@@ -195,7 +215,7 @@ public class CreateViewRadiologyOrderFragmentController {
 	}
 	
 	/**
-	 * create radiology order and save in the openmrs database and in pacs
+	 * create radiology order and save in the database and in pacs. Update the radiology orders.
 	 * 
 	 * @param service ConceptService
 	 * @param model
@@ -205,8 +225,11 @@ public class CreateViewRadiologyOrderFragmentController {
 	 * @param diagnosis of the order
 	 * @param instruction of the order
 	 * @param priority of the order
-	 * @param ui
-	 * @return list of completed report orders
+	 * @param ui UiUtils
+	 * @return completed report ready radiology orders
+	 *         The Ajax call requires a json result;
+	 *         properties string array elements are concepts and properties indicate the Concept properties of interest;
+	 *         The framework will build the json response when the method returns
 	 * @throws ParseException
 	 */
 	public List<SimpleObject> placeRadiologyOrder(@SpringBean("conceptService") ConceptService service, FragmentModel model,
@@ -222,6 +245,7 @@ public class CreateViewRadiologyOrderFragmentController {
 		
 		Provider provider = Context.getProviderService()
 				.getProvider(authenticatedUser.getId());
+		// add data to new radiology order
 		radiologyOrder.setCreator(authenticatedUser);
 		radiologyOrder.setOrderer(provider);
 		radiologyOrder.setConcept(Context.getConceptService()
@@ -236,26 +260,6 @@ public class CreateViewRadiologyOrderFragmentController {
 		Study newStudy = new Study();
 		newStudy.setModality(study);
 		newStudy.setStudyname(study);
-		// get the form uid for the study
-		List<Form> getAllForm = Context.getFormService()
-				.getAllForms();
-		for (Form eachForm : getAllForm) {
-			String formName = eachForm.getName()
-					.trim();
-			if (formName.startsWith("Generic")) {
-				String arr[] = formName.split(" ", 2);
-				String studyName = arr[1];
-				if (newStudy.getStudyname()
-						.equals(studyName)) {
-					newStudy.setGenericHtmlFormUid(eachForm.getUuid());
-				}
-			}
-			
-			if (newStudy.getStudyname()
-					.equals(formName)) {
-				newStudy.setNonGenericHtmlFormUid(eachForm.getUuid());
-			}
-		}
 		
 		newStudy.setScheduledStatus(ScheduledProcedureStepStatus.SCHEDULED);
 		radiologyOrder.setStudy(newStudy);
@@ -288,10 +292,13 @@ public class CreateViewRadiologyOrderFragmentController {
 	 * Auto complete feature for the study
 	 * 
 	 * @param query
-	 * @param requireConceptClass
-	 * @param service
-	 * @param ui
-	 * @return
+	 * @param requireConceptClass study concept class
+	 * @param service conceptService
+	 * @param ui UiUtils
+	 * @return 100 matches study concepts
+	 *         The Ajax call requires a json result;
+	 *         properties string array elements are concepts and properties indicate the Concept properties of interest;
+	 *         The framework will build the json response when the method returns
 	 */
 	public List<SimpleObject> getStudyAutocomplete(@RequestParam(value = "query", required = false) String query,
 			@RequestParam(value = "conceptStudyClass", required = false) String requireConceptClass,
@@ -324,11 +331,7 @@ public class CreateViewRadiologyOrderFragmentController {
 				System.out.println("Concept: " + con.getConceptName());
 			}
 		}
-		/*
-		 * The Ajax call requires a json result;
-		 * names are concepts and properties indicate the Concept properties of interest;
-		 * The framework will build the json response when the method returns
-		 */
+		
 		String[] properties = new String[] { "name" };
 		return SimpleObject.fromCollection(names, ui, properties);
 	}
@@ -337,10 +340,10 @@ public class CreateViewRadiologyOrderFragmentController {
 	 * Auto complete feature for the diagnosis
 	 * 
 	 * @param query
-	 * @param requireConceptClass
-	 * @param service
-	 * @param ui
-	 * @return
+	 * @param requireConceptClass diagnosis concept class
+	 * @param service ConceptService
+	 * @param ui UiUtils
+	 * @return 100 matches diagnosis concepts
 	 */
 	public List<SimpleObject> getDiagnosisAutocomplete(@RequestParam(value = "query", required = false) String query,
 			@RequestParam(value = "conceptDiagnosisClass", required = false) String requireConceptClass,
@@ -381,16 +384,19 @@ public class CreateViewRadiologyOrderFragmentController {
 	/**
 	 * Send email message to Radiologist if referring physician has questions.
 	 * 
-	 * @param recipient
-	 * @param subject
-	 * @param message
+	 * @param recipient email recipient
+	 * @param subject email subject
+	 * @param message email message
 	 */
 	public void contactRadiologist(@RequestParam(value = "recipient", required = false) String recipient,
 			@RequestParam(value = "subject", required = false) String subject,
 			@RequestParam(value = "message", required = false) String message) {
 		
+		// authentification username and password
 		final String username = "johnDevRadio@gmail.com";
 		final String password = "john1234";
+		// replace with radiologist email address
+		recipient = "radiologistOpenmrs@gmail.com";
 		// set up smtp server
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
@@ -408,9 +414,9 @@ public class CreateViewRadiologyOrderFragmentController {
 			// Sender and receiver info with the message
 			Message message1 = new MimeMessage(session);
 			message1.setFrom(new InternetAddress("johnDevRadio@gmail.com"));
-			message1.setRecipients(Message.RecipientType.TO, InternetAddress.parse("radiologistOpenmrs@gmail.com"));
-			message1.setSubject("Testing Subject");
-			message1.setText("Dear Mail Crawler," + "\n\n No spam to my email, please!");
+			message1.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
+			message1.setSubject(subject);
+			message1.setText(message);
 			Transport.send(message1);
 		}
 		catch (MessagingException e) {
@@ -422,7 +428,7 @@ public class CreateViewRadiologyOrderFragmentController {
 	/**
 	 * Send email message to patient
 	 * 
-	 * @param recipient
+	 * @param recipient email
 	 * @param subject
 	 * @param message
 	 */
@@ -432,6 +438,8 @@ public class CreateViewRadiologyOrderFragmentController {
 		
 		final String username = "johnDevRadio@gmail.com";
 		final String password = "john1234";
+		// replace with patient email address
+		recipient = "radiologistOpenmrs@gmail.com";
 		// set up smtp server
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
@@ -449,9 +457,9 @@ public class CreateViewRadiologyOrderFragmentController {
 			// Sender and receiver info with the message
 			Message message1 = new MimeMessage(session);
 			message1.setFrom(new InternetAddress("johnDevRadio@gmail.com"));
-			message1.setRecipients(Message.RecipientType.TO, InternetAddress.parse("radiologistOpenmrs@gmail.com"));
-			message1.setSubject("Testing Subject");
-			message1.setText("Dear Mail Crawler," + "\n\n No spam to my email, please!");
+			message1.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
+			message1.setSubject(subject);
+			message1.setText(message);
 			Transport.send(message1);
 		}
 		catch (MessagingException e) {

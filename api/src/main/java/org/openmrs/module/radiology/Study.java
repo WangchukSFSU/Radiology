@@ -23,32 +23,6 @@ public class Study {
 	
 	private Integer studyReportSavedEncounterId;
 	
-	public Integer getStudyReportSavedEncounterId() {
-		return studyReportSavedEncounterId;
-	}
-	
-	public void setStudyReportSavedEncounterId(Integer studyReportSavedEncounterId) {
-		this.studyReportSavedEncounterId = studyReportSavedEncounterId;
-	}
-	
-	private String studyReportRadiologist;
-	
-	public String getStudyReportRadiologist() {
-		return studyReportRadiologist;
-	}
-	
-	public void setStudyReportRadiologist(String studyReportRadiologist) {
-		this.studyReportRadiologist = studyReportRadiologist;
-	}
-	
-	public String getObsCompletedDate() {
-		return obsCompletedDate;
-	}
-	
-	public void setObsCompletedDate(String obsCompletedDate) {
-		this.obsCompletedDate = obsCompletedDate;
-	}
-	
 	private String obsCompletedDate;
 	
 	private RadiologyOrder radiologyOrder;
@@ -59,66 +33,120 @@ public class Study {
 	
 	private String modality;
 	
-	private String genericHtmlFormUid;
-	
-	public String getGenericHtmlFormUid() {
-		return genericHtmlFormUid;
+	/**
+	 * @return studyReportSavedEncounterId
+	 */
+	public Integer getStudyReportSavedEncounterId() {
+		return studyReportSavedEncounterId;
 	}
 	
-	public void setGenericHtmlFormUid(String genericHtmlFormUid) {
-		this.genericHtmlFormUid = genericHtmlFormUid;
+	/**
+	 * @param studyReportSavedEncounterId
+	 */
+	public void setStudyReportSavedEncounterId(Integer studyReportSavedEncounterId) {
+		this.studyReportSavedEncounterId = studyReportSavedEncounterId;
 	}
 	
-	private String nonGenericHtmlFormUid;
+	private String studyReportRadiologist;
 	
-	public String getNonGenericHtmlFormUid() {
-		return nonGenericHtmlFormUid;
+	/**
+	 * @return studyReportRadiologist
+	 */
+	public String getStudyReportRadiologist() {
+		return studyReportRadiologist;
 	}
 	
-	public void setNonGenericHtmlFormUid(String nonGenericHtmlFormUid) {
-		this.nonGenericHtmlFormUid = nonGenericHtmlFormUid;
+	/**
+	 * @param studyReportRadiologist
+	 */
+	public void setStudyReportRadiologist(String studyReportRadiologist) {
+		this.studyReportRadiologist = studyReportRadiologist;
 	}
 	
+	/**
+	 * @return obsCompletedDate
+	 */
+	public String getObsCompletedDate() {
+		return obsCompletedDate;
+	}
+	
+	/**
+	 * @param obsCompletedDate
+	 */
+	public void setObsCompletedDate(String obsCompletedDate) {
+		this.obsCompletedDate = obsCompletedDate;
+	}
+	
+	/**
+	 * @param modality
+	 */
 	public void setModality(String modality) {
 		this.modality = modality;
 	}
 	
+	/**
+	 * @return modality
+	 */
 	public String getModality() {
 		return modality;
 	}
 	
 	private String studyname;
 	
+	/**
+	 * @param studyname
+	 */
 	public void setStudyname(String studyname) {
 		this.studyname = studyname;
 	}
 	
+	/**
+	 * @return studyname
+	 */
 	public String getStudyname() {
 		return studyname;
 	}
 	
 	private MwlStatus mwlStatus;
 	
+	/**
+	 * @return studyId
+	 */
 	public Integer getStudyId() {
 		return studyId;
 	}
 	
+	/**
+	 * @return radiologyOrder
+	 */
 	public RadiologyOrder getRadiologyOrder() {
 		return radiologyOrder;
 	}
 	
+	/**
+	 * @return performedStatus
+	 */
 	public PerformedProcedureStepStatus getPerformedStatus() {
 		return performedStatus;
 	}
 	
+	/**
+	 * @return scheduledStatus
+	 */
 	public ScheduledProcedureStepStatus getScheduledStatus() {
 		return scheduledStatus;
 	}
 	
+	/**
+	 * @return studyInstanceUid
+	 */
 	public String getStudyInstanceUid() {
 		return studyInstanceUid;
 	}
 	
+	/**
+	 * @return mwlStatus
+	 */
 	public MwlStatus getMwlStatus() {
 		return mwlStatus;
 	}
@@ -147,18 +175,30 @@ public class Study {
 		return performedStatus == PerformedProcedureStepStatus.COMPLETED;
 	}
 	
+	/**
+	 * @return true if performedStatus is REPORT_READY
+	 */
 	public boolean isReportReady() {
 		return performedStatus == PerformedProcedureStepStatus.REPORT_READY;
 	}
 	
+	/**
+	 * @return true if performedStatus is null
+	 */
 	public boolean isScheduleable() {
 		return performedStatus == null;
 	}
 	
+	/**
+	 * @param mwlStatus
+	 */
 	public void setMwlStatus(MwlStatus mwlStatus) {
 		this.mwlStatus = mwlStatus;
 	}
 	
+	/**
+	 * @param studyId
+	 */
 	public void setStudyId(Integer studyId) {
 		this.studyId = studyId;
 	}
@@ -167,18 +207,30 @@ public class Study {
 		this.radiologyOrder = radiologyOrder;
 	}
 	
+	/**
+	 * @param performedStatus
+	 */
 	public void setPerformedStatus(PerformedProcedureStepStatus performedStatus) {
 		this.performedStatus = performedStatus;
 	}
 	
+	/**
+	 * @param scheduledStatus
+	 */
 	public void setScheduledStatus(ScheduledProcedureStepStatus scheduledStatus) {
 		this.scheduledStatus = scheduledStatus;
 	}
 	
+	/**
+	 * @param studyInstanceUid
+	 */
 	public void setStudyInstanceUid(String studyInstanceUid) {
 		this.studyInstanceUid = studyInstanceUid;
 	}
 	
+	/**
+	 * @return
+	 */
 	@Override
 	public String toString() {
 		final StringBuilder buff = new StringBuilder();

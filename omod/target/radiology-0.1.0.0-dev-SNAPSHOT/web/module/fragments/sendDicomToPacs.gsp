@@ -26,7 +26,7 @@
 
     });
 
-    //Click any active order
+    //click any active order
     function clickOrder(el) {
         jq(el).addClass("highlight").css("background-color", "#CCCCCC");
         jq('#sendDicomToPACBreadCrumb').show();

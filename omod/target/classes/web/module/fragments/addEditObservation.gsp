@@ -3,6 +3,7 @@
 <script type="text/javascript" src="/${ contextPath }/moduleResources/htmlformentry/htmlFormEntry.js"></script>
 <link href="/${ contextPath }/moduleResources/htmlformentry/htmlFormEntry.css" type="text/css" rel="stylesheet" />
 
+//javascript codes are copied from htmlformentryui module
 <script type="text/javascript">
      // for now we just expose these in the global scope for compatibility with htmlFormEntry.js and legacy forms
      function submitHtmlForm() {
@@ -46,8 +47,9 @@
      });
 
 </script>
-<script>
 
+//javascript codes are copied from htmlformentryui module
+<script>
      // expects to extend htmlForm defined in the core HFE module
      (function( htmlForm, jq, undefined) {
 
@@ -332,8 +334,6 @@
 <script>
      jq = jQuery;
    jq(document).ready(function() {
-
-
        //delete saved report dialog message
        jq("#reportDeletelDialogMessage").dialog({
            autoOpen: false,
@@ -399,9 +399,6 @@
 
        });
        jq("#orderDetailDiv").hide();
-
-
-
    });
 
    //show saved report after form is entered
@@ -542,17 +539,12 @@
                            });
 
                        })
-
-
                })
 
        }
 
-
-
        <% } %>
        <% } %>
-
 
    }
 
@@ -683,10 +675,7 @@
                                var studyInstanceUid = ret[i].study.studyInstanceUid;
                                var DateCreated = ret[i].DateCreated;
                                var OrderencounterId = ret[i].study.studyReportSavedEncounterId;
-
                                patientCompletedOrdersTable.append('<tr><td><a onclick="viewReport(' + OrderencounterId + ');"> Obs</a> </td><td> ' + DateCreated + '</td><td> ' + provider + '</td><td> ' + instructions + ' </td><td> ' + orderdiagnosis + '</td><td id="dogdog" href="ddasdas"><a id="viewStudyLink" class="viewStudyLink" href="${ dicomViewerUrladdress + "studyUID=" + ' + studyInstanceUid + ' + "&patientID=" + ' + patientId + ' }" onclick="loadImages(); return false;" >' + studyname + '</a></td></tr>');
-
-
                            }
                            patientCompletedOrdersTable.append("</tbody>");
                            jq('#patientCompletedOrdersDatatable').DataTable({
@@ -705,16 +694,12 @@
 
                        })
 
-
                })
 
        }
 
-
-
        <% } %>
        <% } %>
-
 
    }
 
@@ -748,7 +733,6 @@
                jq('#activeOrdersWithNoLinkBreadCrumb').show();
                jq('#showReportsDiv').hide();
 
-
                jq("#patientCompletedOrders").hide();
                jq('.order').hide();
                jq('#CancelReportUpdatedDiv').show();
@@ -758,12 +742,10 @@
 
                jq('#CancelReportUpdatedDiv').append('<table></table>');
                jq('#CancelReportUpdatedDiv table').attr('id', 'cancepReportUpdatedDatatable');
-
                var cancelReportUpdatedTable = jq('#CancelReportUpdatedDiv table');
                cancelReportUpdatedTable.append('<thead><tr><th>Order</th><th>Patient Name</th><th>MRN</th><th>OrderStartDate</th><th>OrderPriority</th><th>SavedReport</th></tr></thead><tbody>');
 
                for (var i = 0; i < ret.length; i++) {
-
                    var studyname = ret[i].study.studyname;
                    var dateCreated = ret[i].dateCreated;
                    var urgency = ret[i].urgency;
@@ -802,7 +784,7 @@
 
    }
 
-
+//Submit report and order is no available in the active order list. This order is made avaiable to referring physician to view obs.
    function submitBtn() {
        var radiologyorderId = localStorage.getItem("radiologyorderId");
        jq.getJSON('${ ui.actionLink("updateActiveOrders") }', {
@@ -869,7 +851,7 @@
 
 
 
-
+//Display images in the oviyam dialog box
    function loadImages() {
        var addressValue = jq('.viewStudyLink').attr("href");
        jq("#viewStudyImageIframe").attr('src', jq('.viewStudyLink').attr("href"));
@@ -889,6 +871,7 @@
        return false;
    }
 
+   //view reports of the past orders
    function viewReport(OrderencounterId) {
        jq.getJSON('${ ui.actionLink("getEncounterIdObs") }', {
                'encounterId': OrderencounterId
@@ -914,6 +897,7 @@
 
    }
 
+   //display htmlform in the dialog box
    function openForm(obj) {
        jq("div#content").css({
            'font-size': 16

@@ -54,43 +54,19 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * Radiologist to add, edit observation and submit observation.
- * 
+ * Radiologist to add,and edit observation.
+ *
  * @author tenzin
  */
 public class AddEditObservationFragmentController extends BaseHtmlFormFragmentController {
 	
 	/**
-	 * Get the performed status completed orders
-	 * 
-	 * @param config
-	 * @param sessionContext
-	 * @param ui
-	 * @param htmlFormEntryService
-	 * @param adtService
-	 * @param formService
-	 * @param resourceFactory
-	 * @param featureToggles
-	 * @param definitionUiResource
-	 * @param encounter
-	 * @param visit
-	 * @param createVisit
-	 * @param automaticValidation
+	 * Get the performed status completed orders that needs to add observation
+	 * after the picture is taken
+	 *
 	 * @param model
-	 * @param httpSession
-	 * @throws Exception
 	 */
-	public void controller(FragmentConfiguration config, UiSessionContext sessionContext, UiUtils ui,
-			@SpringBean("htmlFormEntryService") HtmlFormEntryService htmlFormEntryService,
-			@SpringBean("adtService") AdtService adtService, @SpringBean("formService") FormService formService,
-			@SpringBean("coreResourceFactory") ResourceFactory resourceFactory,
-			@SpringBean("featureToggles") FeatureToggleProperties featureToggles,
-			@FragmentParam(value = "definitionUiResource", required = false) String definitionUiResource,
-			@FragmentParam(value = "encounter", required = false) Encounter encounter,
-			@FragmentParam(value = "visit", required = false) Visit visit,
-			@FragmentParam(value = "createVisit", required = false) Boolean createVisit,
-			@FragmentParam(value = "automaticValidation", defaultValue = "true") boolean automaticValidation,
-			FragmentModel model, HttpSession httpSession) throws Exception {
+	public void controller(FragmentModel model) {
 		
 		// patient dashboard
 		String patientClinicianUrl = "http://localhost:8080/openmrs/coreapps/clinicianfacing/patient.page?patientId=";
@@ -105,13 +81,16 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	}
 	
 	/**
-	 * Get the previous radiology orders
-	 * 
-	 * @param service
-	 * @param model
+	 * Get the past completed report ready radiology orders of the patient The
+	 * Ajax call requires a json result; properties string array elements are
+	 * concepts and properties indicate the Concept properties of interest; The
+	 * framework will build the json response when the method returns
+	 *
+	 * @param service ConceptService
+	 * @param model FragmentModel
 	 * @param patientId
-	 * @param ui
-	 * @return json radiology orders having report ready status
+	 * @param ui UiUtils
+	 * @return past radiology orders
 	 */
 	public List<SimpleObject> getPatientReportReadyOrder(@SpringBean("conceptService") ConceptService service,
 			FragmentModel model, @RequestParam(value = "patientId") Patient patientId, UiUtils ui) {
@@ -120,16 +99,13 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		// get all patient orders
 		List<Order> allPatientOrders = Context.getOrderService()
 				.getAllOrdersByPatient(patientId);
-		
 		int testOrderTypeId = Context.getOrderService()
 				.getOrderTypeByName("Radiology Order")
 				.getOrderTypeId();
-		
 		RadiologyOrder radiologyOrder;
 		for (Order order : allPatientOrders) {
 			if (order.getOrderType()
 					.getOrderTypeId() == testOrderTypeId) {
-				
 				radiologyOrder = Context.getService(RadiologyService.class)
 						.getRadiologyOrderByOrderId(order.getOrderId());
 				// get orders with report ready status
@@ -153,10 +129,13 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	}
 	
 	/**
-	 * If report is saved, get the report saved encounter id
-	 * 
-	 * @param service
-	 * @param model
+	 * If report is entered, get the report saved encounter id for the order
+	 * The Ajax call requires a json result; properties string array elements
+	 * are concepts and properties indicate the Concept properties of interest;
+	 * The framework will build the json response when the method returns
+	 *
+	 * @param service ConceptService
+	 * @param model FragmentModel
 	 * @param radiologyorderId
 	 * @param ui
 	 * @return radiology order with report saved encounter id
@@ -175,8 +154,11 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	}
 	
 	/**
-	 * get the observation for the report encounter id
-	 * 
+	 * Get the observation for the report generated encounter id The Ajax call
+	 * requires a json result; properties string array elements are concepts
+	 * and properties indicate the Concept properties of interest; The
+	 * framework will build the json response when the method returns
+	 *
 	 * @param service
 	 * @param model
 	 * @param encounterId
@@ -185,18 +167,20 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	 */
 	public List<SimpleObject> getEncounterIdObs(@SpringBean("conceptService") ConceptService service, FragmentModel model,
 			@RequestParam(value = "encounterId") String encounterId, UiUtils ui) {
-		
 		List<Obs> encounterIdObs = Context.getObsService()
 				.getObservations(encounterId);
-		
 		String[] properties = new String[2];
 		properties[0] = "Concept";
 		properties[1] = "valueText";
-		
 		return SimpleObject.fromCollection(encounterIdObs, ui, properties);
 	}
 	
 	/**
+	 * Get the radiology order detail when click on the radiology order The
+	 * Ajax call requires a json result; properties string array elements are
+	 * concepts and properties indicate the Concept properties of interest; The
+	 * framework will build the json response when the method returns
+	 *
 	 * @param service
 	 * @param model
 	 * @param radiologyorderId
@@ -229,12 +213,16 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	}
 	
 	/**
-	 * Cancel Saved report and update saved report column in the active order table for the order.
-	 * 
-	 * @param service
-	 * @param model
+	 * Delete SavedReport and update report column in the active order table
+	 * for the order. The Ajax call requires a json result; properties string
+	 * array elements are concepts and properties indicate the Concept
+	 * properties of interest; The framework will build the json response when
+	 * the method returns
+	 *
+	 * @param service ConceptService
+	 * @param model FragmentModel
 	 * @param radiologyorderId
-	 * @param ui
+	 * @param ui UiUtils
 	 * @return updated report saved column in the active order page
 	 */
 	public List<SimpleObject> CancelSavedReport(@SpringBean("conceptService") ConceptService service, FragmentModel model,
@@ -269,9 +257,13 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	}
 	
 	/**
-	 * Get the form if the form is generated in the HTMLForm
-	 * 
-	 * @param service
+	 * Get the generic and non-generic available HTMLForm for the study of the
+	 * order. The Ajax call requires a json result; properties string array
+	 * elements are concepts and properties indicate the Concept properties of
+	 * interest; The framework will build the json response when the method
+	 * returns
+	 *
+	 * @param service ConceptService
 	 * @param model
 	 * @param radiologyorderId
 	 * @param htmlFormEntryService
@@ -282,7 +274,7 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	 * @param sessionContext
 	 * @param httpSession
 	 * @param ui
-	 * @return forms from the HTMLForm
+	 * @return HTMLForm forms the order
 	 * @throws IOException
 	 * @throws Exception
 	 */
@@ -298,8 +290,10 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		Encounter encounter = null;
 		Visit visit = null;
 		boolean automaticValidation = true;
+		// generic and non-generic HTMLForm
 		Form form = null;
-		ArrayList<FormEntrySession> command = new ArrayList<FormEntrySession>();
+		Form genericform = null;
+		ArrayList<FormEntrySession> getForms = new ArrayList<FormEntrySession>();
 		ArrayList<Form> formlist = new ArrayList<Form>();
 		
 		int radiologyorderIdInteger = Integer.parseInt(radiologyorderId);
@@ -309,14 +303,37 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		if (getRadiologyOrder.getStudy()
 				.getStudyReportSavedEncounterId() == null) {
 			encounter = null;
-			form = Context.getFormService()
-					.getFormByUuid(getRadiologyOrder.getStudy()
-							.getNonGenericHtmlFormUid());
-			Form genericform = Context.getFormService()
-					.getFormByUuid(getRadiologyOrder.getStudy()
-							.getGenericHtmlFormUid());
+			
+			// get the generic and non-generic form uid for the study
+			List<Form> getAllForm = Context.getFormService()
+					.getAllForms();
+			for (Form eachForm : getAllForm) {
+				String formName = eachForm.getName()
+						.trim();
+				if (formName.startsWith("Generic")) {
+					String arr[] = formName.split(" ", 2);
+					String studyName = arr[1];
+					if (getRadiologyOrder.getStudy()
+							.getStudyname()
+							.trim()
+							.equals(studyName)) {
+						genericform = Context.getFormService()
+								.getFormByUuid(eachForm.getUuid());
+					}
+				}
+				
+				if (getRadiologyOrder.getStudy()
+						.getStudyname()
+						.trim()
+						.equals(formName)) {
+					form = Context.getFormService()
+							.getFormByUuid(eachForm.getUuid());
+				}
+			}
+			
 			formlist.add(form);
 			formlist.add(genericform);
+			
 		} else {
 			// If there is report saved encounter Id, then get the report saved form
 			encounter = Context.getEncounterService()
@@ -325,6 +342,7 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 			form = encounter.getForm();
 			formlist.add(form);
 		}
+		
 		String returnUrl = "";
 		for (Form eachform : formlist) {
 			HtmlForm hf = HtmlFormEntryUtil.getService()
@@ -375,7 +393,7 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 			setupVelocityContext(fes, visitDomainWrapper, ui, sessionContext, featureToggles);
 			setupFormEntrySession(fes, visitDomainWrapper, ui, sessionContext, returnUrl);
 			fes.setReturnUrl(returnUrl);
-			command.add(fes);
+			getForms.add(fes);
 			
 		}
 		
@@ -388,7 +406,7 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		properties[5] = "ReturnUrl";
 		properties[6] = "FormName";
 		
-		return SimpleObject.fromCollection(command, ui, properties);
+		return SimpleObject.fromCollection(getForms, ui, properties);
 	}
 	
 	// get the oviyum url address
@@ -400,7 +418,9 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	}
 	
 	/**
-	 * @return json list of completed radiology orders
+	 * Get all preformed status completed radiology orders
+	 * 
+	 * @return completed radiology orders
 	 */
 	public List<RadiologyOrder> getPerformedStatusCompletedRadiologyOrders() {
 		Vector<RadiologyOrder> completedRadiologyOrders = new Vector<RadiologyOrder>();
@@ -430,12 +450,17 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	}
 	
 	/**
-	 * Once report is submitted, update the active orders
+	 * Once report is submitted, update the active orders. Report submitted order is no longer available in the active order
+	 * list
+	 * The Ajax call requires a json result; properties string array
+	 * elements are concepts and properties indicate the Concept properties of
+	 * interest; The framework will build the json response when the method
+	 * returns
 	 * 
-	 * @param service
-	 * @param model
+	 * @param service ConceptService
+	 * @param model FragmentModel
 	 * @param radiologyorderId
-	 * @param ui
+	 * @param ui UiUtils
 	 * @return the updated active orders
 	 */
 	public List<SimpleObject> updateActiveOrders(@SpringBean("conceptService") ConceptService service, FragmentModel model,
@@ -517,7 +542,8 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	
 	/**
 	 * Handles a form submit request
-	 *
+	 * All below code are from the HTMLFormEntryui module
+	 * 
 	 * @param sessionContext
 	 * @param patient
 	 * @param hf
