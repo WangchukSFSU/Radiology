@@ -19,7 +19,7 @@ Make sure you have a java jdk and [maven](https://maven.apache.org/) installed.
 Clone this project:
 ```bash
 git clone https://github.com/WangchukSFSU/Radiology.git
-```
+git clone https://github.com/WangchukSFSU/Radiology.git
 
 And execute the following command on the command line:
 ```bash
