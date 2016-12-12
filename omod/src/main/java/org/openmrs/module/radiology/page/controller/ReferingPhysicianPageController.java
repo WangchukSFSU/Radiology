@@ -1,17 +1,18 @@
 package org.openmrs.module.radiology.page.controller;
 
-import java.text.ParseException;
 import org.openmrs.Patient;
 import org.openmrs.ui.framework.page.PageModel;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
+ * Referring Physician to create radiology order, view observation
+ * 
  * @author tenzin
  */
 public class ReferingPhysicianPageController {
 	
 	/**
-	 * @param model
+	 * @param model PageModel
 	 * @param returnUrl
 	 * @param patient
 	 */

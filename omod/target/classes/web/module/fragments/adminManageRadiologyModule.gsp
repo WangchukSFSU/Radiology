@@ -235,6 +235,8 @@
 
     //View Report Dailog box
     function displayReport(el) {
+    
+    jq("#viewReportIframe").empty();
         jq("#viewReportDialog").dialog({
             width: 600,
             height: 450,
@@ -258,7 +260,8 @@
 
         }
 
-        //disply form in iframe
+        jq("#viewReportIframe").contents().find("body").html('');
+        //display form in iframe
         var iframe = document.getElementById('viewReportIframe');
         var html_string = '<html><head></head><body>' + formNameHtmlToDisplay + '</body></html>';
         var iframedoc = iframe.document;

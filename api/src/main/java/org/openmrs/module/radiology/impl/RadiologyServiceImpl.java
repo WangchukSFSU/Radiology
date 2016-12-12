@@ -255,6 +255,9 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 		return studyDAO.saveStudy(studyToBeUpdated);
 	}
 	
+	/**
+	 * @see RadiologyService#updateStudyScheduledStatus(String, ScheduledProcedureStepStatus)
+	 */
 	@Transactional
 	@Override
 	public Study updateScheduledProcedureStepStatus(String studyInstanceUid, ScheduledProcedureStepStatus scheduledstatus)
@@ -273,6 +276,9 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 		return studyDAO.saveStudy(studyToBeUpdated);
 	}
 	
+	/**
+	 * @see RadiologyService#updateRadiologyOrderUser(String, User)
+	 */
 	@Transactional
 	@Override
 	public Study updateRadiologyOrderUser(String studyInstanceUid, String user) throws IllegalArgumentException {
@@ -286,6 +292,9 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 		return studyDAO.saveStudy(studyToBeUpdated);
 	}
 	
+	/**
+	 * @see RadiologyService#updateObsCompletedDate(String, obscompleteddate)
+	 */
 	@Transactional
 	@Override
 	public Study updateObsCompletedDate(String studyInstanceUid, String obscompleteddate) throws IllegalArgumentException {
@@ -299,6 +308,9 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 		return studyDAO.saveStudy(studyToBeUpdated);
 	}
 	
+	/**
+	 * @see RadiologyService#updateStudyEncounterId(String, reportSavedEncounterId)
+	 */
 	@Transactional
 	@Override
 	public Study updateStudyEncounterId(String studyInstanceUid, Integer studyencounterid) throws IllegalArgumentException {
@@ -338,6 +350,9 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 		return result;
 	}
 	
+	/**
+	 * @see RadiologyService#placeDicomInPacs(dicomFiles)
+	 */
 	@Transactional
 	@Override
 	public void placeDicomInPacs(String arrays) {

@@ -307,6 +307,8 @@ jq(document).ready(function() {
 //view study images in oviyum in the dialog box
 function loadImages() {
     var addressValue = jq('.tiger').attr("href");
+    
+    alert("addressValue 0000 " +addressValue);
     jq("#viewStudyImageIframe").attr('src', jq('.tiger').attr("href"));
     jq("#viewStudyImageDialog").dialog({
         width: 400,

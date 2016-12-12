@@ -65,6 +65,14 @@ public class RadiologyOrder extends TestOrder {
 		}
 	}
 	
+	/**
+	 * Returns true if study is in report ready and false otherwise.
+	 * 
+	 * @return true if study is in report ready and false otherwise
+	 * @should return false if associated study is null
+	 * @should return false if associated study is not in report ready
+	 * @should return true if associated study is in report ready
+	 */
 	public boolean isReportReady() {
 		
 		if (this.study == null) {

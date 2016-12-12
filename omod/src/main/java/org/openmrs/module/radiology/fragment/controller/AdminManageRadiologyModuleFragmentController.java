@@ -49,6 +49,8 @@ public class AdminManageRadiologyModuleFragmentController {
 	}
 	
 	/**
+	 * Get the study concepts available in the concept dictionary
+	 * 
 	 * @param service ConceptService
 	 * @param ui UiUtils
 	 * @return study concepts available in the concept dictionary
@@ -83,10 +85,12 @@ public class AdminManageRadiologyModuleFragmentController {
 	}
 	
 	/**
+	 * Get report generated for the study
+	 * 
 	 * @param model FragmentModel
 	 * @param service conceptService
 	 * @param ui UiUtils
-	 * @return form available for the study
+	 * @return HTMLFOrm templates available for the study
 	 *         The Ajax call requires a json result;
 	 *         properties string array elements are concepts and properties indicate the Concept properties of interest;
 	 *         The framework will build the json response when the method returns
@@ -148,6 +152,8 @@ public class AdminManageRadiologyModuleFragmentController {
 	}
 	
 	/**
+	 * Get studies having no generated HTMLForm
+	 * 
 	 * @param service
 	 * @param ui
 	 * @return study concepts having no generated htmlform available

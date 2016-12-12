@@ -18,7 +18,7 @@ import org.openmrs.ui.framework.fragment.FragmentModel;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * Send Dicom files to PACS when the modality software is not available
+ * Send dicom files to PACS when the modality software is not available
  * 
  * @author tenzin
  */
@@ -32,7 +32,7 @@ public class SendDicomToPacsFragmentController {
 	public void controller(FragmentModel model) {
 		// get all the active orders
 		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrders();
-		// get the dicom files from the modality station
+		// Transfer all the dicom files modality station to local disk
 		ArrayList<String> dicomeFiles = listFiles("/home/youdon/Desktop/aaa");
 		model.addAttribute("dicomeFiles", dicomeFiles);
 		model.put("inProgressRadiologyOrders", inProgressRadiologyOrders);
@@ -104,7 +104,7 @@ public class SendDicomToPacsFragmentController {
 	 * 
 	 * @param service ConceptService
 	 * @param model
-	 * @param radiologyorderId to be updated
+	 * @param radiologyorderId order to update the order status
 	 * @param ui UiUtils
 	 * @return updated active orders
 	 */

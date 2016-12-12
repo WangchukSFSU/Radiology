@@ -174,7 +174,6 @@ jq(document).ready(function() {
         var diagnosisOrder = jq("#diagnosisTags").val();
         var instructionOrder = jq("#orderInstruction").val();
         var priorityOrder = jq('select[name=priority]').val();
-        alert("Sutyd " + studyOrder);
         jq.getJSON('${ ui.actionLink("placeRadiologyOrder") }', {
                 'patient': patient,
                 'study': studyOrder,
@@ -249,18 +248,15 @@ jq(document).ready(function() {
         //get the order id
         jq(this).addClass('selected').siblings().removeClass('selected');
         var value = jq(this).find('td:first').html();
-        alert(value);
         var splitvalue = value.split('>');     
         jq("#radiologyOrderDetailsDiv > h1").remove();
         jq("#radiologyOrderDetailsDiv").show();
         jq("#performedStatusCompletedOrder").hide();     
         jq("#completedOrderHeader > h1").remove();
         ordervalue = splitvalue[1];
-        alert(ordervalue);
         var orderId = ordervalue.substr(0, ordervalue.indexOf('<'));
         //var orderId = ordervalue.substr(0, 2);
         jq('#radiologyOrderDetailsTableId').empty();
-        alert(orderId);
         <% if (radiologyOrders) { %>
         <% radiologyOrders.each { anOrder -> %>
         var radiologyorderId = ${ anOrder.orderId };
@@ -268,7 +264,6 @@ jq(document).ready(function() {
             var orderencounterId = ${ anOrder.study.studyReportSavedEncounterId };
             jq('#radiologyOrderDetailsDiv').append("<h1 class='order'  id= 'orderDetailHeading'>RADIOLOGY ORDER DETAILS - CompletedDate :   ${ anOrder.study.obsCompletedDate }  </h1>");
             jq('#radiologyOrderDetailsDiv').append(jq('#radiologyOrderDetailsTableId'));
-            alert("orderencounterId" + orderencounterId);
             localStorage.setItem("orderencounterId", orderencounterId);
             localStorage.setItem("orderId", orderId);
             jq('#radiologyOrderDetailsTableId').append('<thead><tr><th> Report</th><th> Radiologist</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th>ViewStudy</th><th> ContactRadiologist</th></tr></thead>');
@@ -282,7 +277,6 @@ jq(document).ready(function() {
 
     //clear radiologist message
     jq("#clearMessage").click(function() {
-        alert("111111 ");
         jq('#contactRadiologistDialogBox').dialog('close');
     });
     
@@ -290,9 +284,7 @@ jq(document).ready(function() {
     jq("#sendEmailRadiologist").click(function() {
         var recipient = jq("#recipientRadiologist").val();
         var subject = jq("#subjectRadiologist").val();
-        alert(subject);
         var message = jq("#messageRadiologist").val();
-        alert(message);
         jq.ajax({
             type: "POST",
             url: "${ ui.actionLink('contactRadiologist') }",
@@ -303,7 +295,6 @@ jq(document).ready(function() {
             },
             cache: false,
             success: function(data) {
-                alert("999ppp");
                 jq('#contactRadiologistDialogBox').dialog('close');
                 jq("<h1>Email sent successfully</h1>").insertBefore(jq('#radiologyOrderDetailsDiv h1'));
 
@@ -315,9 +306,9 @@ jq(document).ready(function() {
 
 //view study images in oviyum in the dialog box
 function loadImages() {
-    alert("addressValue");
     var addressValue = jq('.tiger').attr("href");
-    alert(addressValue);
+    
+    alert("addressValue 0000 " +addressValue);
     jq("#viewStudyImageIframe").attr('src', jq('.tiger').attr("href"));
     jq("#viewStudyImageDialog").dialog({
         width: 400,
@@ -367,10 +358,8 @@ function ViewReport() {
 
 //autofill the radiologist email with the patient and order info
 function contactRadiologist() {
-    alert("run my contactRadiologist");
     jq("#contactRadiologist").show();
     var orderId = localStorage.getItem("orderId");
-    alert("orderId" + orderId);
     jq('#messageRadiologist').val('foobar');
     <% radiologyOrders.each { anOrder -> %>
     var radiologyorderId = ${ anOrder.orderId };

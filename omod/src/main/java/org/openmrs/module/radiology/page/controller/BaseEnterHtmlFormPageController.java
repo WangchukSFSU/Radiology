@@ -21,8 +21,31 @@ import org.openmrs.ui.framework.page.PageModel;
 import org.openmrs.ui.framework.resource.ResourceFactory;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/**
+ * This is from HTMLFormEntryUi module
+ */
 public abstract class BaseEnterHtmlFormPageController extends BaseHtmlFormPageController {
 	
+	/**
+	 * @param sessionContext
+	 * @param currentPatient
+	 * @param formUuid
+	 * @param htmlForm
+	 * @param definitionUiResource
+	 * @param visit
+	 * @param createVisit
+	 * @param returnUrl
+	 * @param returnProvider
+	 * @param returnPage
+	 * @param returnLabel
+	 * @param breadcrumbOverride
+	 * @param htmlFormEntryService
+	 * @param formService
+	 * @param resourceFactory
+	 * @param ui
+	 * @param model
+	 * @throws Exception
+	 */
 	public void get(UiSessionContext sessionContext, @RequestParam("patientId") Patient currentPatient,
 			@RequestParam(value = "formUuid", required = false) String formUuid,
 			@RequestParam(value = "htmlFormId", required = false) HtmlForm htmlForm,

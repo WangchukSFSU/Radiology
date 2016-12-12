@@ -38,13 +38,17 @@ import org.openmrs.ui.framework.page.PageModel;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * Referring Physician create order and view completed order
+ * Referring Physician create order, place order in database and PACS and view completed order
  * 
  * @author tenzin
  */
 public class CreateViewRadiologyOrderFragmentController {
 	
 	/**
+	 * Get the performed status report ready completed order
+	 * Get necessary patient, radiologist information for sending messages
+	 * Get the dicomViewerUrladdress for displaying images in the oviyam
+	 * 
 	 * @param model
 	 * @param returnUrl
 	 * @param patient
@@ -65,6 +69,8 @@ public class CreateViewRadiologyOrderFragmentController {
 		List<RadiologyOrder> radiologyOrdersCompletedReport = getRadiologyOrdersWithCompletedReportByPatient(patient);
 		// get oviyum url
 		String dicomViewerUrladdress = getDicomViewerUrladdress();
+		
+		System.out.println("dicomViewerUrladdress " + dicomViewerUrladdress);
 		model.addAttribute("dicomViewerUrladdress", dicomViewerUrladdress);
 		model.put("radiologyOrders", radiologyOrdersCompletedReport);
 		// contact patient and radiologist information
@@ -120,7 +126,6 @@ public class CreateViewRadiologyOrderFragmentController {
 					radiologyOrders.add(radiologyOrder);
 					
 				}
-				
 			}
 		}
 		return radiologyOrders;
@@ -382,7 +387,7 @@ public class CreateViewRadiologyOrderFragmentController {
 	}
 	
 	/**
-	 * Send email message to Radiologist if referring physician has questions.
+	 * Send email message to Radiologist if referring physician has questions about the observations.
 	 * 
 	 * @param recipient email recipient
 	 * @param subject email subject

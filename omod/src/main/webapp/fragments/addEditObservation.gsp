@@ -778,12 +778,9 @@
                    "aaSorting": [
                            [3, "desc"]
                        ] // Sort by first column descending,
-
-
                });
 
            })
-
    }
 
 //Submit report and order is no available in the active order list. This order is made avaiable to referring physician to view obs.
@@ -856,10 +853,11 @@
 //Display images in the oviyam dialog box
    function loadImages() {
        var addressValue = jq('.viewStudyLink').attr("href");
+       alert("addressValue" + addressValue);
        jq("#viewStudyImageIframe").attr('src', jq('.viewStudyLink').attr("href"));
        jq("#viewStudyImageDialog").dialog({
-           width: 400,
-           height: 450,
+           width: 700,
+           height: 950,
            modal: false,
            buttons: {
                "Close": function() {
@@ -1022,7 +1020,7 @@
 
 <!-- study image dialog box -->
 <div id="viewStudyImageDialog" title="View Study Image" style="display:none;">
-     <iframe id="viewStudyImageIframe" width="550" height="350"></iframe>
+     <iframe id="viewStudyImageIframe" width="750" height="950"></iframe>
 </div>
 
 <!-- observation dialog box -->
@@ -1068,3 +1066,5 @@
 </div>
 <!-- delete saved report dialog message -->
 <div id="reportDeletelDialogMessage" style="width:430px" title="Delete Report"> Are you sure you want to delete Report </div>
+
+

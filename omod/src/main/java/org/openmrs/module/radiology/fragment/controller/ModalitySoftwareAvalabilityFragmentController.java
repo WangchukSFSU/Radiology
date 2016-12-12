@@ -26,7 +26,7 @@ public class ModalitySoftwareAvalabilityFragmentController {
 	}
 	
 	/**
-	 * Send email message to Radiologist
+	 * Send modality software availability message to Radiologist
 	 * 
 	 * @param message message to be send to radiologist
 	 */

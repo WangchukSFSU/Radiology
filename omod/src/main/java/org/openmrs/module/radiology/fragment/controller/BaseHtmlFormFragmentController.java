@@ -7,8 +7,18 @@ import org.openmrs.module.htmlformentry.FormEntrySession;
 import org.openmrs.ui.framework.UiUtils;
 import org.springframework.util.StringUtils;
 
+/**
+ * This abstract class is from HTMLFormEntryUI module
+ */
 public abstract class BaseHtmlFormFragmentController {
 	
+	/**
+	 * @param fes
+	 * @param visitDomainWrapper
+	 * @param ui
+	 * @param sessionContext
+	 * @param featureToggles
+	 */
 	protected void setupVelocityContext(FormEntrySession fes, VisitDomainWrapper visitDomainWrapper, UiUtils ui,
 			UiSessionContext sessionContext, FeatureToggleProperties featureToggles) {
 		
@@ -19,6 +29,13 @@ public abstract class BaseHtmlFormFragmentController {
 		
 	}
 	
+	/**
+	 * @param fes
+	 * @param visitDomainWrapper
+	 * @param ui
+	 * @param sessionContext
+	 * @param returnUrl
+	 */
 	protected void setupFormEntrySession(FormEntrySession fes, VisitDomainWrapper visitDomainWrapper, UiUtils ui,
 			UiSessionContext sessionContext, String returnUrl) {
 		
