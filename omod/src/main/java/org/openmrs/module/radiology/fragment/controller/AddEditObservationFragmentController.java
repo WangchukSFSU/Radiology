@@ -112,6 +112,7 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 						.getRadiologyOrderByOrderId(order.getOrderId());
 				// get orders with report ready status
 				if (radiologyOrder.isReportReady()) {
+					// radiologyOrder.getPatient().getPatientIdentifier().getIdentifier();
 					reportReadyRadiologyOrders.add(radiologyOrder);
 				}
 			}
@@ -120,7 +121,7 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		String[] properties = new String[8];
 		properties[0] = "orderer.name";
 		properties[1] = "instructions";
-		properties[2] = "Patient.PatientId";
+		properties[2] = "patient.patientIdentifier.Identifier";
 		properties[3] = "orderdiagnosis";
 		properties[4] = "study.studyname";
 		properties[5] = "study.studyInstanceUid";

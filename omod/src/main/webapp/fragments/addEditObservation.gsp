@@ -518,13 +518,13 @@
                            for (var i = 0; i < ret.length; i++) {
                                var provider = ret[i].orderer.name;
                                var instructions = ret[i].instructions;
-                               var patientId = ret[i].Patient.PatientId;
+                               var patientId = ret[i].patient.patientIdentifier.Identifier;
                                var orderdiagnosis = ret[i].orderdiagnosis;
                                var studyname = ret[i].study.studyname;
                                var studyInstanceUid = ret[i].study.studyInstanceUid;
                                var DateCreated = ret[i].DateCreated;
                                var OrderencounterId = ret[i].study.studyReportSavedEncounterId;
-                               patientCompletedOrdersTable.append('<tr><td><a onclick="viewReport(' + OrderencounterId + ');"> Obs</a> </td><td> ' + DateCreated + '</td><td> ' + provider + '</td><td> ' + instructions + ' </td><td> ' + orderdiagnosis + '</td><td id="studyColumnId"><a id="viewStudyLink" class="viewStudyLink" target="_blank" href="${ dicomViewerUrladdress + " studyUID =" } '+ studyInstanceUid +'" " & patientID = ' + patientId + ' " >' + studyname + '</a></td></tr>');
+                              patientCompletedOrdersTable.append('<tr><td><a onclick="viewReport(' + OrderencounterId + ');"> Obs</a> </td><td> ' + DateCreated + '</td><td> ' + provider + '</td><td> ' + instructions + ' </td><td> ' + orderdiagnosis + '</td><td id="studyColumnId"><a id="viewStudyLink" class="viewStudyLink" target="_blank" href="${ dicomViewerUrladdress + " studyUID =" }'+ studyInstanceUid +'%20&%20patientID ='+ patientId +' " >' + studyname + '</a></td></tr>');
                            }
                            patientCompletedOrdersTable.append("</tbody>");
                            jq('#patientCompletedOrdersDatatable').DataTable({
@@ -673,13 +673,14 @@
                            for (var i = 0; i < ret.length; i++) {
                                var provider = ret[i].orderer.name;
                                var instructions = ret[i].instructions;
-                               var patientId = ret[i].Patient.PatientId;
+                               var patientId = ret[i].patient.patientIdentifier.Identifier;
                                var orderdiagnosis = ret[i].orderdiagnosis;
                                var studyname = ret[i].study.studyname;
                                var studyInstanceUid = ret[i].study.studyInstanceUid;
                                var DateCreated = ret[i].DateCreated;
                                var OrderencounterId = ret[i].study.studyReportSavedEncounterId;
-                               patientCompletedOrdersTable.append('<tr><td><a onclick="viewReport(' + OrderencounterId + ');"> Obs</a> </td><td> ' + DateCreated + '</td><td> ' + provider + '</td><td> ' + instructions + ' </td><td> ' + orderdiagnosis + '</td><td id="studyColumnId"><a id="viewStudyLink" class="viewStudyLink" target="_blank" href="${ dicomViewerUrladdress + " studyUID =" } '+ studyInstanceUid +'%20&%20patientID = ' + patientId + ' " >' + studyname + '</a></td></tr>');
+                               alert("patientIden "+patientId);
+                               patientCompletedOrdersTable.append('<tr><td><a onclick="viewReport(' + OrderencounterId + ');"> Obs</a> </td><td> ' + DateCreated + '</td><td> ' + provider + '</td><td> ' + instructions + ' </td><td> ' + orderdiagnosis + '</td><td id="studyColumnId"><a id="viewStudyLink" class="viewStudyLink" target="_blank" href="${ dicomViewerUrladdress + " studyUID =" }'+ studyInstanceUid +'%20&%20patientID ='+ patientId +' " >' + studyname + '</a></td></tr>');
                            }
                            patientCompletedOrdersTable.append("</tbody>");
                            jq('#patientCompletedOrdersDatatable').DataTable({
