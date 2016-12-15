@@ -852,26 +852,6 @@
 
 
 
-//Display images in the oviyam dialog box
-   function loadImages() {
-       var addressValue = jq('.viewStudyLink').attr("href");
-       jq("#viewStudyImageIframe").attr('src', jq('.viewStudyLink').attr("href"));
-       jq("#viewStudyImageDialog").dialog({
-           width: 700,
-           height: 950,
-           modal: false,
-           buttons: {
-               "Close": function() {
-                   jq(this).dialog('close');
-               }
-           },
-           close: function() {
-               jq("#viewStudyImageIframe").attr('src', "about:blank");
-           }
-       });
-       return false;
-   }
-
    //view reports of the past orders
    function viewReport(OrderencounterId) {
        jq.getJSON('${ ui.actionLink("getEncounterIdObs") }', {
@@ -1019,10 +999,7 @@
 <div id = "CancelReportUpdatedDiv">
 </div>
 
-<!-- study image dialog box -->
-<div id="viewStudyImageDialog" title="View Study Image" style="display:none;">
-     <iframe id="viewStudyImageIframe" width="750" height="950"></iframe>
-</div>
+
 
 <!-- observation dialog box -->
 <div id="obsDialogBox" title="View Obs" style="display:none;">

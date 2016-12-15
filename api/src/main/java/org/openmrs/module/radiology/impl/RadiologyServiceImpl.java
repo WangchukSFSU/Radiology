@@ -357,9 +357,9 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	 */
 	@Transactional
 	@Override
-	public void placeDicomInPacs(String arrays) {
+	public void placeDicomInPacs(String dicomFilePath) {
 		
-		DicomUtils.sendDicomToPACs(arrays);
+		DicomUtils.sendDicomToPACs(dicomFilePath);
 		
 	}
 	

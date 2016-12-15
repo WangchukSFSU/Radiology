@@ -307,25 +307,7 @@ console.log("fnDrawCallback");
 });
 
 
-//view study images in oviyum in the dialog box
-function loadImages() {
-    var addressValue = jq('.studyLink').attr("href");
-    jq("#viewStudyImageIframe").attr('src', jq('.studyLink').attr("href"));
-    jq("#viewStudyImageDialog").dialog({
-        width: 400,
-        height: 450,
-        modal: true,
-        buttons: {
-            "Close": function() {
-                jq(this).dialog('close');
-            }
-        },
-        close: function() {
-            jq("#viewStudyImageIframe").attr('src', "about:blank");
-        }
-    });
-    return false;
-}
+
 
 
 //view report based on the report encounterId in the dialog box
@@ -535,10 +517,7 @@ function contactRadiologist() {
         </table>
     </div>
 </div>
-<!-- view study image dialog -->
-<div id="viewStudyImageDialog" title="View Study Image" style="display:none;">
-    <iframe id="viewStudyImageIframe" width="550" height="350"></iframe>
-</div>
+
 <!-- add radiology order -->
 <div id="addRadiologyOrderForm">
     <h2> ADD RADIOLOGY ORDER</h2>
