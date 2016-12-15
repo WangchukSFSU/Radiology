@@ -18,8 +18,7 @@ Make sure you have a java jdk and [maven](https://maven.apache.org/) installed.
 
 Clone this project:
 ```bash
-git clone https://github.com/openmrs/openmrs-module-radiology.git
-```
+git clone https://github.com/WangchukSFSU/Radiology.git
 
 And execute the following command on the command line:
 ```bash
@@ -30,24 +29,8 @@ mvn clean package
 
 For a detailed guide on how to install and configure this module see
 
-https://wiki.openmrs.org/display/docs/Radiology+Module
-
-### Contributing
-
-Contributions are very welcome, we can definitely use your help!
-
-Check out our [contributing guidelines](CONTRIBUTING.md) to get started.
-
-## Issues
-
-To file new issues or help to fix existing ones please check out
-
-https://issues.openmrs.org/browse/RAD
+Radiology module user guide
 
 ## Limitations
-
-This module is not yet officially released to the [openmrs modules](https://modules.openmrs.org/#/).
-
-The API and UI are not yet stable and subject to frequent changes.
 
 The module currently only works with OpenMRS Version 1.11.4
