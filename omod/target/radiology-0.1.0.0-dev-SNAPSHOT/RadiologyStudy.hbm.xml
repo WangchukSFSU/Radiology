@@ -28,8 +28,8 @@
                 <property name="studyname" column="studyname"
                           length="255">
                 </property>
-                <property name="obsCompletedDate" column="obsCompletedDate"
-                          length="255">
+                <property name="reportCompletedDate" column="reportCompletedDate"
+                          type="date">
                 </property>
                 <property name="studyReportSavedEncounterId" column="studyReportSavedEncounterId"
                           type="int">

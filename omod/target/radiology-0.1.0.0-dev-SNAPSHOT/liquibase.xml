@@ -507,6 +507,20 @@
           <dropColumn columnName="radiologyStatusOrder" tableName="radiology_study" />
 		
      </changeSet>
+     <changeSet id="radiology-104" author="tenzin">
+		
+          <dropColumn columnName="obsCompletedDate" tableName="radiology_study" />
+		
+     </changeSet>
+     <changeSet author="tenzin" id="radiology-105">
+          <addColumn tableName="radiology_study">
+               <column name="reportCompletedDate" type="DATETIME"/>
+          </addColumn>
+     </changeSet>
+     <changeSet author="tenzin" id="radiology-106">
+          <modifyDataType tableName="radiology_study" columnName="reportCompletedDate"
+                                newDataType="date" />
+     </changeSet>
 </databaseChangeLog>
 
 

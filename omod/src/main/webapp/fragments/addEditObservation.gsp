@@ -336,6 +336,7 @@
 <script>
      jq = jQuery;
    jq(document).ready(function() {
+
        //delete saved report dialog message
        jq("#reportDeletelDialogMessage").dialog({
            autoOpen: false,
@@ -436,7 +437,7 @@
            jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailProvider'>Provider  :  ${anOrder.creator.username} ,  StartDate  : ${ anOrder.dateCreated } </div>");
            jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailDiagnosis'>Diagnosis  : ${anOrder.orderdiagnosis} </div>");
            jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailDiagnosis'>Instructions  : ${anOrder.instructions} </div>");
-           jq('#orderDetailDiv').append("<div class='order'  id= 'viewStudyId'><a id = 'viewStudyLink' class='viewStudyLink' href=${ dicomViewerUrladdress + " studyUID = " + anOrder.study.studyInstanceUid + " & patientID = " + anOrder.patient.patientIdentifier } onclick='loadImages(); return false;'>ViewStudy</a> </div>");
+           jq('#orderDetailDiv').append("<div class='order'  id= 'viewStudyId'><a id = 'viewStudyLink' class='viewStudyLink' target='_blank' href='${ dicomViewerUrladdress + " studyUID =" + anOrder.study.studyInstanceUid + " & patientID =" + anOrder.patient.patientIdentifier   }' >ViewStudy</a> </div>");
            //get all the form available in the HTMLForm
            jq.getJSON('${ ui.actionLink("getForm") }', {
                    'radiologyorderId': radiologyorderId
@@ -523,7 +524,7 @@
                                var studyInstanceUid = ret[i].study.studyInstanceUid;
                                var DateCreated = ret[i].DateCreated;
                                var OrderencounterId = ret[i].study.studyReportSavedEncounterId;
-                               patientCompletedOrdersTable.append('<tr><td><a onclick="viewReport(' + OrderencounterId + ');"> Obs</a> </td><td> ' + DateCreated + '</td><td> ' + provider + '</td><td> ' + instructions + ' </td><td> ' + orderdiagnosis + '</td><td id="dogdog" href="ddasdas"><a id="viewStudyLink" class="viewStudyLink" href="${ dicomViewerUrladdress + "studyUID=" + ' + studyInstanceUid + ' + "&patientID=" + ' + patientId + ' }" onclick="loadImages(); return false;" >' + studyname + '</a></td></tr>');
+                               patientCompletedOrdersTable.append('<tr><td><a onclick="viewReport(' + OrderencounterId + ');"> Obs</a> </td><td> ' + DateCreated + '</td><td> ' + provider + '</td><td> ' + instructions + ' </td><td> ' + orderdiagnosis + '</td><td id="studyColumnId"><a id="viewStudyLink" class="viewStudyLink" target="_blank" href="${ dicomViewerUrladdress + " studyUID =" } '+ studyInstanceUid +'" " & patientID = ' + patientId + ' " >' + studyname + '</a></td></tr>');
                            }
                            patientCompletedOrdersTable.append("</tbody>");
                            jq('#patientCompletedOrdersDatatable').DataTable({
@@ -585,11 +586,12 @@
                    }
                })
 
-           jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailHeading'>RADIOLOGY ORDER DETAILS  :  <a id = 'tet' class='tet' target='_blank' href=${ patientClinicianUrl + anOrder.patient.person.uuid } >${ anOrder.patient.personName }</a>  ${ anOrder.patient.patientIdentifier }, ${anOrder.study.studyname} </div>");
+           jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailHeading'>RADIOLOGY ORDER DETAILS  :  <a target='_blank' href=${ patientClinicianUrl + anOrder.patient.person.uuid } >${ anOrder.patient.personName }</a>  ${ anOrder.patient.patientIdentifier }, ${anOrder.study.studyname} </div>");
            jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailProvider'>Provider  :  ${anOrder.creator.username} ,  StartDate  : ${ anOrder.dateCreated } </div>");
            jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailDiagnosis'>Diagnosis  : ${anOrder.orderdiagnosis} </div>");
-           jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailDiagnosis'>Instructions  : ${anOrder.instructions} </div>");
-           jq('#orderDetailDiv').append("<div class='order'  id= 'viewStudyId'><a id = 'viewStudyLink' class='viewStudyLink' href=${ dicomViewerUrladdress + " studyUID = " + anOrder.study.studyInstanceUid + " & patientID = " + anOrder.patient.patientIdentifier } onclick='loadImages(); return false;'>ViewStudy</a> </div>");
+           jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailDiagnosis'>Instructions  : ${anOrder.instructions} </div>");         
+           jq('#orderDetailDiv').append("<div class='order'  id= 'viewStudyId'><a id = 'viewStudyLink' class='viewStudyLink' target='_blank' href='${ dicomViewerUrladdress + " studyUID =" + anOrder.study.studyInstanceUid + " & patientID =" + anOrder.patient.patientIdentifier   }'>ViewStudy</a> </div>");
+          
            //get form
            jq.getJSON('${ ui.actionLink("getForm") }', {
                    'radiologyorderId': radiologyorderId
@@ -677,7 +679,7 @@
                                var studyInstanceUid = ret[i].study.studyInstanceUid;
                                var DateCreated = ret[i].DateCreated;
                                var OrderencounterId = ret[i].study.studyReportSavedEncounterId;
-                               patientCompletedOrdersTable.append('<tr><td><a onclick="viewReport(' + OrderencounterId + ');"> Obs</a> </td><td> ' + DateCreated + '</td><td> ' + provider + '</td><td> ' + instructions + ' </td><td> ' + orderdiagnosis + '</td><td id="dogdog" href="ddasdas"><a id="viewStudyLink" class="viewStudyLink" href="${ dicomViewerUrladdress + "studyUID=" + ' + studyInstanceUid + ' + "&patientID=" + ' + patientId + ' }" onclick="loadImages(); return false;" >' + studyname + '</a></td></tr>');
+                               patientCompletedOrdersTable.append('<tr><td><a onclick="viewReport(' + OrderencounterId + ');"> Obs</a> </td><td> ' + DateCreated + '</td><td> ' + provider + '</td><td> ' + instructions + ' </td><td> ' + orderdiagnosis + '</td><td id="studyColumnId"><a id="viewStudyLink" class="viewStudyLink" target="_blank" href="${ dicomViewerUrladdress + " studyUID =" } '+ studyInstanceUid +'%20&%20patientID = ' + patientId + ' " >' + studyname + '</a></td></tr>');
                            }
                            patientCompletedOrdersTable.append("</tbody>");
                            jq('#patientCompletedOrdersDatatable').DataTable({
@@ -853,7 +855,6 @@
 //Display images in the oviyam dialog box
    function loadImages() {
        var addressValue = jq('.viewStudyLink').attr("href");
-       alert("addressValue" + addressValue);
        jq("#viewStudyImageIframe").attr('src', jq('.viewStudyLink').attr("href"));
        jq("#viewStudyImageDialog").dialog({
            width: 700,
@@ -1066,5 +1067,4 @@
 </div>
 <!-- delete saved report dialog message -->
 <div id="reportDeletelDialogMessage" style="width:430px" title="Delete Report"> Are you sure you want to delete Report </div>
-
 

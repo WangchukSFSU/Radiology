@@ -9,6 +9,7 @@
  */
 package org.openmrs.module.radiology;
 
+import java.util.Date;
 import java.util.List;
 import org.openmrs.Patient;
 import org.openmrs.api.EncounterService;
@@ -111,13 +112,67 @@ public interface RadiologyService extends OpenmrsService {
 	public Study updateStudyPerformedStatus(String studyInstanceUid, PerformedProcedureStepStatus performedStatus)
 			throws IllegalArgumentException;
 	
+	/**
+	 * <p>
+	 * Update the ScheduledProcedureStepStatus of the <code>Study</code> associated with studyInstanceUid in the database
+	 * </p>
+	 *
+	 * @param studyInstanceUid study instance uid of study whos ScheduledProcedureStepStatus should be updated
+	 * @param scheduledstatus to which study should be set to
+	 * @return study whos ScheduledProcedureStepStatus was updated
+	 * @throws IllegalArgumentException if study instance uid is null
+	 * @should update ScheduledProcedureStepStatus associated with given study instance uid
+	 * @should throw illegal argument exception if study instance uid is null
+	 * @should throw illegal argument exception if ScheduledProcedureStepStatus is null
+	 */
 	public Study updateScheduledProcedureStepStatus(String studyInstanceUid, ScheduledProcedureStepStatus scheduledstatus)
 			throws IllegalArgumentException;
 	
-	public Study updateObsCompletedDate(String studyInstanceUid, String obscompleteddate) throws IllegalArgumentException;
+	/**
+	 * <p>
+	 * Update the ObsCompletedDate of the <code>Study</code> associated with studyInstanceUid in the database
+	 * </p>
+	 *
+	 * @param studyInstanceUid study instance uid of study whos ObsCompletedDate should be updated
+	 * @param obscompleteddate to which study should be set to
+	 * @return study whos ObsCompletedDate was updated
+	 * @throws IllegalArgumentException if study instance uid is null
+	 * @should update ObsCompletedDate associated with given study instance uid
+	 * @should throw illegal argument exception if study instance uid is null
+	 * @should throw illegal argument exception if ObsCompletedDate is null
+	 */
+	public Study updateReportCompletedDate(String studyInstanceUid, Date reportCompletedDate)
+			throws IllegalArgumentException;
 	
-	public Study updateStudyEncounterId(String studyInstanceUid, Integer studyencounterid) throws IllegalArgumentException;
+	/**
+	 * <p>
+	 * Update the studyencounterid of the <code>Study</code> associated with studyInstanceUid in the database
+	 * </p>
+	 *
+	 * @param studyInstanceUid study instance uid of study whos studyencounterid should be updated
+	 * @param studyencounterid to which study should be set to
+	 * @return study whos studyencounterid was updated
+	 * @throws IllegalArgumentException if study instance uid is null
+	 * @should update studyencounterid associated with given study instance uid
+	 * @should throw illegal argument exception if study instance uid is null
+	 * @should throw illegal argument exception if studyencounterid is null
+	 */
+	public Study updateReportSavedEncounterId(String studyInstanceUid, Integer reportSavedEncounterId)
+			throws IllegalArgumentException;
 	
+	/**
+	 * <p>
+	 * Update the user of the <code>Study</code> associated with studyInstanceUid in the database
+	 * </p>
+	 *
+	 * @param studyInstanceUid study instance uid of study whos user should be updated
+	 * @param user to which study should be set to
+	 * @return study whos user was updated
+	 * @throws IllegalArgumentException if study instance uid is null
+	 * @should update user associated with given study instance uid
+	 * @should throw illegal argument exception if study instance uid is null
+	 * @should throw illegal argument exception if user is null
+	 */
 	public Study updateRadiologyOrderUser(String studyInstanceUid, String user) throws IllegalArgumentException;
 	
 	/**
@@ -136,7 +191,12 @@ public interface RadiologyService extends OpenmrsService {
 	 */
 	public boolean placeRadiologyOrderInPacs(RadiologyOrder radiologyOrder);
 	
-	public void placeDicomInPacs(String apo);
+	/**
+	 * Send given <code>dicom files</code> to PACS using storescu utility.
+	 *
+	 * @param dicomFilePath to sent to the PACS
+	 */
+	public void placeDicomInPacs(String dicomFilePath);
 	
 	/**
 	 * Get Study by studyId

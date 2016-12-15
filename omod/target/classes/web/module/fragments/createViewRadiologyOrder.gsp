@@ -27,6 +27,9 @@ jq(document).ready(function() {
    //performedStatus Completed Order  dataTable
     jq('#performedStatusCompletedOrderTable').dataTable({
         "sPaginationType": "full_numbers",
+        "fnDrawCallback": function(){
+console.log("fnDrawCallback");
+},
         "bPaginate": true,
         "bAutoWidth": false,
         "bLengthChange": true,
@@ -239,7 +242,7 @@ jq(document).ready(function() {
     });
     
     //get order detail of the order
-    jq("#performedStatusCompletedOrderTable tr").click(function() {
+    jq("#performedStatusCompletedOrderTable").delegate("tbody tr", "click", function (event) {
         jq("#manageOrderWithNoLinkBreadCrumb").hide();
         jq("#manageOrderWithLinkBreadCrumb").show();
         jq("#messagePatientBreadCrumb").hide();
@@ -262,12 +265,12 @@ jq(document).ready(function() {
         var radiologyorderId = ${ anOrder.orderId };
         if (orderId == radiologyorderId) {
             var orderencounterId = ${ anOrder.study.studyReportSavedEncounterId };
-            jq('#radiologyOrderDetailsDiv').append("<h1 class='order'  id= 'orderDetailHeading'>RADIOLOGY ORDER DETAILS - CompletedDate :   ${ anOrder.study.obsCompletedDate }  </h1>");
+            jq('#radiologyOrderDetailsDiv').append("<h1 class='order'  id= 'orderDetailHeading'>RADIOLOGY ORDER DETAILS - CompletedDate :   ${ anOrder.study.reportCompletedDate }  </h1>");
             jq('#radiologyOrderDetailsDiv').append(jq('#radiologyOrderDetailsTableId'));
             localStorage.setItem("orderencounterId", orderencounterId);
             localStorage.setItem("orderId", orderId);
             jq('#radiologyOrderDetailsTableId').append('<thead><tr><th> Report</th><th> Radiologist</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th>ViewStudy</th><th> ContactRadiologist</th></tr></thead>');
-            jq('#radiologyOrderDetailsTableId').append('<tbody><tr><td><a onclick="ViewReport();"> Obs</a> </td><td> ${anOrder.study.studyReportRadiologist}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td>${anOrder.study.studyname}</td><td id="dogdog" href="ddasdas"><a id="tiger" class="tiger" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + patient.patientIdentifier }" onclick="loadImages(); return false;" >ViewStudy</a></td><td><a onclick="contactRadiologist();"> ContactRadiologist</a></td></tr></tbody>');
+            jq('#radiologyOrderDetailsTableId').append('<tbody><tr><td><a onclick="ViewReport();"> Obs</a> </td><td> ${anOrder.study.studyReportRadiologist}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td>${anOrder.study.studyname}</td><td><a id="studyLink" class="studyLink" target="_blank" href="${ dicomViewerUrladdress + " studyUID =" + anOrder.study.studyInstanceUid + " & patientID =" +  anOrder.patient.patientIdentifier }" >ViewStudy</a></td><td><a onclick="contactRadiologist();"> ContactRadiologist</a></td></tr></tbody>');
         }
 
         <% } %>
@@ -306,10 +309,8 @@ jq(document).ready(function() {
 
 //view study images in oviyum in the dialog box
 function loadImages() {
-    var addressValue = jq('.tiger').attr("href");
-    
-    alert("addressValue 0000 " +addressValue);
-    jq("#viewStudyImageIframe").attr('src', jq('.tiger').attr("href"));
+    var addressValue = jq('.studyLink').attr("href");
+    jq("#viewStudyImageIframe").attr('src', jq('.studyLink').attr("href"));
     jq("#viewStudyImageDialog").dialog({
         width: 400,
         height: 450,
@@ -492,7 +493,7 @@ function contactRadiologist() {
                     <td> <p style="display:none;">${ anOrder.orderId }</p>
                         ${anOrder.study.studyname}</td>
                     <td> ${anOrder.study.studyReportRadiologist}</td>
-                    <td>${ anOrder.study.obsCompletedDate } </td>
+                    <td>${ anOrder.study.reportCompletedDate } </td>
                 </tr>
                 <% } %>  
             </tbody>

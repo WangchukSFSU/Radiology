@@ -297,14 +297,15 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	 */
 	@Transactional
 	@Override
-	public Study updateObsCompletedDate(String studyInstanceUid, String obscompleteddate) throws IllegalArgumentException {
+	public Study updateReportCompletedDate(String studyInstanceUid, Date reportCompletedDate)
+			throws IllegalArgumentException {
 		
 		if (studyInstanceUid == null) {
 			throw new IllegalArgumentException("studyInstanceUid is required");
 		}
 		
 		final Study studyToBeUpdated = studyDAO.getStudyByStudyInstanceUid(studyInstanceUid);
-		studyToBeUpdated.setObsCompletedDate(obscompleteddate);
+		studyToBeUpdated.setReportCompletedDate(reportCompletedDate);
 		return studyDAO.saveStudy(studyToBeUpdated);
 	}
 	
@@ -313,14 +314,15 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	 */
 	@Transactional
 	@Override
-	public Study updateStudyEncounterId(String studyInstanceUid, Integer studyencounterid) throws IllegalArgumentException {
+	public Study updateReportSavedEncounterId(String studyInstanceUid, Integer reportSavedEncounterId)
+			throws IllegalArgumentException {
 		
 		if (studyInstanceUid == null) {
 			throw new IllegalArgumentException("studyInstanceUid is required");
 		}
 		
 		final Study studyToBeUpdated = studyDAO.getStudyByStudyInstanceUid(studyInstanceUid);
-		studyToBeUpdated.setStudyReportSavedEncounterId(studyencounterid);
+		studyToBeUpdated.setStudyReportSavedEncounterId(reportSavedEncounterId);
 		return studyDAO.saveStudy(studyToBeUpdated);
 	}
 	

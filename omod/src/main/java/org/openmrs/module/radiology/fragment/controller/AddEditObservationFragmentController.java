@@ -94,6 +94,10 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 			FragmentModel model, @RequestParam(value = "patientId") Patient patientId, UiUtils ui) {
 		
 		ArrayList<RadiologyOrder> reportReadyRadiologyOrders = new ArrayList<RadiologyOrder>();
+		
+		if (patientId == null) {
+			throw new IllegalArgumentException("patientId is required");
+		}
 		// get all patient orders
 		List<Order> allPatientOrders = Context.getOrderService()
 				.getAllOrdersByPatient(patientId);
@@ -146,8 +150,10 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		RadiologyOrder radiologyOrderByOrderId = Context.getService(RadiologyService.class)
 				.getRadiologyOrderByOrderId(radiologyorderId);
 		reportSavedStudy.add(radiologyOrderByOrderId);
-		String[] properties = new String[1];
+		String[] properties = new String[3];
 		properties[0] = "study.studyReportSavedEncounterId";
+		properties[1] = "study.studyInstanceUid";
+		properties[2] = "patient.patientIdentifier";
 		return SimpleObject.fromCollection(reportSavedStudy, ui, properties);
 	}
 	
@@ -232,12 +238,14 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 				.getRadiologyOrderByOrderId(radiologyorderId);
 		// remove the report encounter id for the order
 		Context.getService(RadiologyService.class)
-				.updateStudyEncounterId(reportEncounterIdToBeRemoved.getStudy()
+				.updateReportSavedEncounterId(reportEncounterIdToBeRemoved.getStudy()
 						.getStudyInstanceUid(), null);
 		// get the updated performed status completed orders
 		List<RadiologyOrder> updatePerformedStatusCompletedRadiologyOrders = getPerformedStatusCompletedRadiologyOrders();
 		
 		for (RadiologyOrder updateRadiologyOrder : updatePerformedStatusCompletedRadiologyOrders) {
+			updateRadiologyOrder.getPatient()
+					.getPatientIdentifier();
 			radiologyOrdersReportUpdate.add(updateRadiologyOrder);
 		}
 		// properties selected from the order
@@ -410,10 +418,6 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	private String getDicomViewerUrladdress() {
 		RadiologyProperties radiologyProperties = new RadiologyProperties();
 		
-		System.out.println("radiologyProperties getDicomViewerUrladdress " + radiologyProperties.getServersAddress() + ":"
-				+ radiologyProperties.getServersPort() + radiologyProperties.getDicomViewerUrlBase() + "?"
-				+ radiologyProperties.getDicomViewerLocalServerName());
-		
 		return radiologyProperties.getServersAddress() + ":" + radiologyProperties.getServersPort()
 				+ radiologyProperties.getDicomViewerUrlBase() + "?" + radiologyProperties.getDicomViewerLocalServerName();
 		
@@ -484,8 +488,8 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 								.getStudyInstanceUid(), PerformedProcedureStepStatus.REPORT_READY);
 				// get the radiologist submitted obs date
 				Context.getService(RadiologyService.class)
-						.updateObsCompletedDate(radiologyOrder.getStudy()
-								.getStudyInstanceUid(), new Date().toString());
+						.updateReportCompletedDate(radiologyOrder.getStudy()
+								.getStudyInstanceUid(), new Date());
 				// get the radiologist
 				Context.getService(RadiologyService.class)
 						.updateRadiologyOrderUser(radiologyOrder.getStudy()
@@ -663,7 +667,7 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		// Do actual encounter creation/updating
 		fes.applyActions();
 		Context.getService(RadiologyService.class)
-				.updateStudyEncounterId(radiologyOrderByOrderId.getStudy()
+				.updateReportSavedEncounterId(radiologyOrderByOrderId.getStudy()
 						.getStudyInstanceUid(), formEncounter.getEncounterId());
 		return returnHelper(null, fes, formEncounter);
 	}

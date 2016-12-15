@@ -10,6 +10,7 @@
 package org.openmrs.module.radiology;
 
 import java.lang.reflect.Field;
+import java.util.Date;
 
 /**
  * A class that supports on openmrs's orders to make the module DICOM compatible, corresponds to the
@@ -23,7 +24,21 @@ public class Study {
 	
 	private Integer studyReportSavedEncounterId;
 	
-	private String obsCompletedDate;
+	private Date reportCompletedDate;
+	
+	/**
+	 * @return reportCompletedDate
+	 */
+	public Date getReportCompletedDate() {
+		return reportCompletedDate;
+	}
+	
+	/**
+	 * @param reportCompletedDate
+	 */
+	public void setReportCompletedDate(Date reportCompletedDate) {
+		this.reportCompletedDate = reportCompletedDate;
+	}
 	
 	private RadiologyOrder radiologyOrder;
 	
@@ -61,20 +76,6 @@ public class Study {
 	 */
 	public void setStudyReportRadiologist(String studyReportRadiologist) {
 		this.studyReportRadiologist = studyReportRadiologist;
-	}
-	
-	/**
-	 * @return obsCompletedDate
-	 */
-	public String getObsCompletedDate() {
-		return obsCompletedDate;
-	}
-	
-	/**
-	 * @param obsCompletedDate
-	 */
-	public void setObsCompletedDate(String obsCompletedDate) {
-		this.obsCompletedDate = obsCompletedDate;
 	}
 	
 	/**
