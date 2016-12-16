@@ -38,17 +38,18 @@ import org.openmrs.ui.framework.page.PageModel;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * Referring Physician create order, place order in database and PACS and view completed order
- * 
+ * Referring Physician create order, place order in database and PACS and view
+ * completed order
+ *
  * @author tenzin
  */
 public class CreateViewRadiologyOrderFragmentController {
 	
 	/**
-	 * Get the performed status report ready completed order
-	 * Get necessary patient, radiologist information for sending messages
-	 * Get the dicomViewerUrladdress for displaying images in the oviyam
-	 * 
+	 * Get the performed status report ready completed order Get necessary
+	 * patient, radiologist information for sending messages Get the
+	 * dicomViewerUrladdress for displaying images in the oviyam
+	 *
 	 * @param model
 	 * @param returnUrl
 	 * @param patient
@@ -99,12 +100,12 @@ public class CreateViewRadiologyOrderFragmentController {
 	
 	/**
 	 * Get all report ready status orders of the patient
-	 * 
+	 *
 	 * @param patient
-	 * @return orders with report ready status for the patient
-	 *         The Ajax call requires a json result;
-	 *         properties string array elements are concepts and properties indicate the Concept properties of interest;
-	 *         The framework will build the json response when the method returns
+	 * @return orders with report ready status for the patient The Ajax call
+	 *         requires a json result; properties string array elements are concepts
+	 *         and properties indicate the Concept properties of interest; The
+	 *         framework will build the json response when the method returns
 	 */
 	public List<RadiologyOrder> getRadiologyOrdersWithCompletedReportByPatient(Patient p) {
 		
@@ -132,16 +133,17 @@ public class CreateViewRadiologyOrderFragmentController {
 	}
 	
 	/**
-	 * Get all observations recorded for the report generated encounterId of the order
-	 * 
+	 * Get all observations recorded for the report generated encounterId of
+	 * the order
+	 *
 	 * @param service conceptService
 	 * @param model FragmentModel
 	 * @param encounterId report generated encounterId for the order
 	 * @param ui UiUtils
-	 * @return observations for the report generated encounterId
-	 *         The Ajax call requires a json result;
-	 *         properties string array elements are concepts and properties indicate the Concept properties of interest;
-	 *         The framework will build the json response when the method returns
+	 * @return observations for the report generated encounterId The Ajax call
+	 *         requires a json result; properties string array elements are concepts
+	 *         and properties indicate the Concept properties of interest; The
+	 *         framework will build the json response when the method returns
 	 */
 	public List<SimpleObject> getEncounterIdObs(@SpringBean("conceptService") ConceptService service, FragmentModel model,
 			@RequestParam(value = "encounterId") String encounterId, UiUtils ui) {
@@ -158,37 +160,38 @@ public class CreateViewRadiologyOrderFragmentController {
 	
 	/**
 	 * Get all in progress orders of the patient
-	 * 
+	 *
 	 * @param service conceptService
 	 * @param model FragmentModel
 	 * @param ui UiUtils
 	 * @param patient
-	 * @return in progress radiology orders of the patient
-	 *         The Ajax call requires a json result;
-	 *         properties string array elements are concepts and properties indicate the Concept properties of interest;
-	 *         The framework will build the json response when the method returns
+	 * @return in progress radiology orders of the patient The Ajax call
+	 *         requires a json result; properties string array elements are concepts
+	 *         and properties indicate the Concept properties of interest; The
+	 *         framework will build the json response when the method returns
 	 */
 	public List<SimpleObject> getInProgressRadiologyOrders(@SpringBean("conceptService") ConceptService service,
 			FragmentModel model, UiUtils ui, @RequestParam(value = "patientId", required = false) Patient patient) {
 		// get in progress orders of the patient
 		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrdersByPatient(patient);
 		// properties selected from orders
-		String[] properties = new String[3];
+		String[] properties = new String[4];
 		properties[0] = "study.studyname";
 		properties[1] = "dateCreated";
 		properties[2] = "study.scheduledStatus";
+		properties[3] = "study.performedStatus";
 		
 		return SimpleObject.fromCollection(inProgressRadiologyOrders, ui, properties);
 	}
 	
 	/**
 	 * Method returns list of in progress radiology orders of the patient
-	 * 
+	 *
 	 * @param patient
-	 * @return in progress radiology orders of the patient
-	 *         The Ajax call requires a json result;
-	 *         properties string array elements are concepts and properties indicate the Concept properties of interest;
-	 *         The framework will build the json response when the method returns
+	 * @return in progress radiology orders of the patient The Ajax call
+	 *         requires a json result; properties string array elements are concepts
+	 *         and properties indicate the Concept properties of interest; The
+	 *         framework will build the json response when the method returns
 	 */
 	public List<RadiologyOrder> getInProgressRadiologyOrdersByPatient(Patient p) {
 		
@@ -210,6 +213,7 @@ public class CreateViewRadiologyOrderFragmentController {
 				if (radiologyOrder.isInProgress() || radiologyOrder.isCompleted() || (radiologyOrder.getStudy()
 						.getScheduledStatus() == radiologyOrder.getStudy()
 						.getScheduledStatus().SCHEDULED)) {
+					
 					radiologyOrders.add(radiologyOrder);
 					
 				}
@@ -220,8 +224,9 @@ public class CreateViewRadiologyOrderFragmentController {
 	}
 	
 	/**
-	 * create radiology order and save in the database and in pacs. Update the radiology orders.
-	 * 
+	 * create radiology order and save in the database and in pacs. Update the
+	 * radiology orders.
+	 *
 	 * @param service ConceptService
 	 * @param model
 	 * @param patient
@@ -231,10 +236,10 @@ public class CreateViewRadiologyOrderFragmentController {
 	 * @param instruction of the order
 	 * @param priority of the order
 	 * @param ui UiUtils
-	 * @return completed report ready radiology orders
-	 *         The Ajax call requires a json result;
-	 *         properties string array elements are concepts and properties indicate the Concept properties of interest;
-	 *         The framework will build the json response when the method returns
+	 * @return completed report ready radiology orders The Ajax call requires a
+	 *         json result; properties string array elements are concepts and
+	 *         properties indicate the Concept properties of interest; The framework
+	 *         will build the json response when the method returns
 	 * @throws ParseException
 	 */
 	public List<SimpleObject> placeRadiologyOrder(@SpringBean("conceptService") ConceptService service, FragmentModel model,
@@ -295,15 +300,15 @@ public class CreateViewRadiologyOrderFragmentController {
 	
 	/**
 	 * Auto complete feature for the study
-	 * 
+	 *
 	 * @param query
 	 * @param requireConceptClass study concept class
 	 * @param service conceptService
 	 * @param ui UiUtils
-	 * @return 100 matches study concepts
-	 *         The Ajax call requires a json result;
-	 *         properties string array elements are concepts and properties indicate the Concept properties of interest;
-	 *         The framework will build the json response when the method returns
+	 * @return 100 matches study concepts The Ajax call requires a json result;
+	 *         properties string array elements are concepts and properties indicate
+	 *         the Concept properties of interest; The framework will build the json
+	 *         response when the method returns
 	 */
 	public List<SimpleObject> getStudyAutocomplete(@RequestParam(value = "query", required = false) String query,
 			@RequestParam(value = "conceptStudyClass", required = false) String requireConceptClass,
@@ -343,7 +348,7 @@ public class CreateViewRadiologyOrderFragmentController {
 	
 	/**
 	 * Auto complete feature for the diagnosis
-	 * 
+	 *
 	 * @param query
 	 * @param requireConceptClass diagnosis concept class
 	 * @param service ConceptService
@@ -387,8 +392,9 @@ public class CreateViewRadiologyOrderFragmentController {
 	}
 	
 	/**
-	 * Send email message to Radiologist if referring physician has questions about the observations.
-	 * 
+	 * Send email message to Radiologist if referring physician has questions
+	 * about the observations.
+	 *
 	 * @param recipient email recipient
 	 * @param subject email subject
 	 * @param message email message
@@ -432,7 +438,7 @@ public class CreateViewRadiologyOrderFragmentController {
 	
 	/**
 	 * Send email message to patient
-	 * 
+	 *
 	 * @param recipient email
 	 * @param subject
 	 * @param message

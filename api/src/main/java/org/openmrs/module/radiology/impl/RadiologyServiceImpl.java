@@ -130,13 +130,15 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	
 	/**
 	 * Save radiology order encounter for given parameters
-	 * 
+	 *
 	 * @param patient the encounter patient
 	 * @param provider the encounter provider
 	 * @param encounterDateTime the encounter date
 	 * @return radiology order encounter for given parameters
-	 * @should create radiology order encounter attached to existing active visit given patient with active visit
-	 * @should create radiology order encounter attached to new active visit given patient without active visit
+	 * @should create radiology order encounter attached to existing active
+	 *         visit given patient with active visit
+	 * @should create radiology order encounter attached to new active visit
+	 *         given patient without active visit
 	 */
 	@Transactional
 	private Encounter saveRadiologyOrderEncounter(Patient patient, Provider provider, Date encounterDateTime) {
@@ -165,8 +167,9 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	 * <p>
 	 * Save the given <code>Study</code> to the database
 	 * </p>
-	 * Additionally, study and study.order information are written into a DICOM xml file.
-	 * 
+	 * Additionally, study and study.order information are written into a DICOM
+	 * xml file.
+	 *
 	 * @param study study to be created or updated
 	 * @return study who was created or updated
 	 * @should create new study from given study object
@@ -277,11 +280,11 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	}
 	
 	/**
-	 * @see RadiologyService#updateRadiologyOrderUser(String, User)
+	 * @see RadiologyService#updateStudyReportRadiologist(String, User)
 	 */
 	@Transactional
 	@Override
-	public Study updateRadiologyOrderUser(String studyInstanceUid, String user) throws IllegalArgumentException {
+	public Study updateStudyReportRadiologist(String studyInstanceUid, String user) throws IllegalArgumentException {
 		
 		if (studyInstanceUid == null) {
 			throw new IllegalArgumentException("studyInstanceUid is required");
@@ -293,7 +296,7 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	}
 	
 	/**
-	 * @see RadiologyService#updateObsCompletedDate(String, obscompleteddate)
+	 * @see RadiologyService#updateReportCompletedDate(String, reportCompletedDate)
 	 */
 	@Transactional
 	@Override
@@ -310,7 +313,7 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	}
 	
 	/**
-	 * @see RadiologyService#updateStudyEncounterId(String, reportSavedEncounterId)
+	 * @see RadiologyService#updateReportSavedEncounterId(String, reportSavedEncounterId)
 	 */
 	@Transactional
 	@Override
@@ -358,18 +361,18 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	@Transactional
 	@Override
 	public void placeDicomInPacs(String dicomFilePath) {
-		
 		DicomUtils.sendDicomToPACs(dicomFilePath);
-		
 	}
 	
 	/**
 	 * Set MwlStatus of given RadiologyOrder's Study to IN_SYNC and OUT_OF_SYNC
-	 * 
+	 *
 	 * @param radiologyOrder radiology order whos study mwlstatus is updated
 	 * @param isInSync set the study mwlstatus to in sync if true
-	 * @should set the study mwlstatus of given radiology order to in sync given is in sync true
-	 * @should set the study mwlstatus of given radiology order to out of sync given is in sync false
+	 * @should set the study mwlstatus of given radiology order to in sync
+	 *         given is in sync true
+	 * @should set the study mwlstatus of given radiology order to out of sync
+	 *         given is in sync false
 	 */
 	@Transactional
 	private void updateStudyMwlStatus(RadiologyOrder radiologyOrder, final boolean isInSync) {

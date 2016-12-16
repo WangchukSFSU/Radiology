@@ -1,134 +1,134 @@
 .modalityHeaderDiv {
-    border-style: solid;
-    border-color: gainsboro;
-    padding-left: 3%;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    margin-top: -15px;
+     border-style: solid;
+     border-color: gainsboro;
+     padding-left: 3%;
+     padding-top: 5px;
+     padding-bottom: 5px;
+     margin-top: -15px;
 
 }
 
 div#modalityTable_wrapper {
-    min-height: 260px;
+     min-height: 260px;
 }
 
 div#studyTableId_wrapper {
-    min-height: 300px;
+     min-height: 300px;
 }
 .studyHeaderDiv {
-    border-style: solid;
-    border-color: gainsboro;
-    padding-left: 3%;
-    padding-top: 5px;
-    padding-bottom: 5px;
+     border-style: solid;
+     border-color: gainsboro;
+     padding-left: 3%;
+     padding-top: 5px;
+     padding-bottom: 5px;
 
 }
 
 .reportHeaderDiv {
-    border-style: solid;
-    border-color: gainsboro;
-    padding-left: 3%;
-    padding-top: 5px;
-    padding-bottom: 5px;
+     border-style: solid;
+     border-color: gainsboro;
+     padding-left: 3%;
+     padding-top: 5px;
+     padding-bottom: 5px;
 
 }
 
 
 #modalityDialogMessage {
-    width: 550px;
-    height: 40px;
-    margin-left: 16px;  
-    font: bold 15px Arial;
-    text-decoration: none;
-    background-color: #EEEEEE;
-    color: #333333;
-    padding: 2px 6px 2px 6px;
-    border-top: 1px solid #CCCCCC;
-    border-right: 1px solid #333333;
-    border-bottom: 1px solid #333333;
-    border-left: 1px solid #CCCCCC;
+     width: 550px;
+     height: 40px;
+     margin-left: 16px;  
+     font: bold 15px Arial;
+     text-decoration: none;
+     background-color: #EEEEEE;
+     color: #333333;
+     padding: 2px 6px 2px 6px;
+     border-top: 1px solid #CCCCCC;
+     border-right: 1px solid #333333;
+     border-bottom: 1px solid #333333;
+     border-left: 1px solid #CCCCCC;
 
 }
 
 #studyDialogMessage {
-    width: 550px;
-    height: 60px;
-    margin-left: 16px;  
-    font: bold 15px Arial;
-    text-decoration: none;
-    background-color: #EEEEEE;
-    color: #333333;
-    padding: 2px 6px 2px 6px;
-    border-top: 1px solid #CCCCCC;
-    border-right: 1px solid #333333;
-    border-bottom: 1px solid #333333;
-    border-left: 1px solid #CCCCCC;
+     width: 550px;
+     height: 60px;
+     margin-left: 16px;  
+     font: bold 15px Arial;
+     text-decoration: none;
+     background-color: #EEEEEE;
+     color: #333333;
+     padding: 2px 6px 2px 6px;
+     border-top: 1px solid #CCCCCC;
+     border-right: 1px solid #333333;
+     border-bottom: 1px solid #333333;
+     border-left: 1px solid #CCCCCC;
 }
 
 
 #reportDialogMessage {
-    width: 550px;
-    height: 60px;
-    margin-left: 16px;  
-    font: bold 15px Arial;
-    text-decoration: none;
-    background-color: #EEEEEE;
-    color: #333333;
-    padding: 2px 6px 2px 6px;
-    border-top: 1px solid #CCCCCC;
-    border-right: 1px solid #333333;
-    border-bottom: 1px solid #333333;
-    border-left: 1px solid #CCCCCC;
+     width: 550px;
+     height: 60px;
+     margin-left: 16px;  
+     font: bold 15px Arial;
+     text-decoration: none;
+     background-color: #EEEEEE;
+     color: #333333;
+     padding: 2px 6px 2px 6px;
+     border-top: 1px solid #CCCCCC;
+     border-right: 1px solid #333333;
+     border-bottom: 1px solid #333333;
+     border-left: 1px solid #CCCCCC;
 
 }
 
 
 label {
-    margin-left: 5px;    
-    display: inline-block;
+     margin-left: 5px;    
+     display: inline-block;
 }
 
 #studyRefreshBtn {
-    float: right;
-    margin-right: 145px;
+     float: right;
+     margin-right: 145px;
 }
 
 #modalityRefreshBtn {
-    float: right;
-    margin-right: 25px;
+     float: right;
+     margin-right: 25px;
 }
 
 #reportRefreshBtn {
-    float: right;
-    margin-right: 45px;
+     float: right;
+     margin-right: 45px;
 }
 
 
 #modalitySoftwareAvailabilityFragment {
-    text-align:center
+     text-align:center
 }
 
 
 #alllink {
-    display: inline-flex;
+     display: inline-flex;
 }
 
 
 .modalityContinueBtnDiv {
-    margin-top: 27px;
+     margin-top: 27px;
 }
 
 
 img.img-circle {
-    width: 22px;
+     width: 22px;
 
 }
 
 
 
 #modalityTableDiv {
-    margin-bottom: -25px;
-    //margin-top: 25px;
+     margin-bottom: -25px;
+     //margin-top: 25px;
 
 }
 

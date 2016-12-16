@@ -26,6 +26,18 @@ public class Study {
 	
 	private Date reportCompletedDate;
 	
+	private RadiologyOrder radiologyOrder;
+	
+	private ScheduledProcedureStepStatus scheduledStatus;
+	
+	private PerformedProcedureStepStatus performedStatus;
+	
+	private String studyReportRadiologist;
+	
+	private String modality;
+	
+	private String studyname;
+	
 	/**
 	 * @return reportCompletedDate
 	 */
@@ -34,19 +46,11 @@ public class Study {
 	}
 	
 	/**
-	 * @param reportCompletedDate
+	 * @param reportCompletedDate when radiologist done submitted the report
 	 */
 	public void setReportCompletedDate(Date reportCompletedDate) {
 		this.reportCompletedDate = reportCompletedDate;
 	}
-	
-	private RadiologyOrder radiologyOrder;
-	
-	private ScheduledProcedureStepStatus scheduledStatus;
-	
-	private PerformedProcedureStepStatus performedStatus;
-	
-	private String modality;
 	
 	/**
 	 * @return studyReportSavedEncounterId
@@ -56,13 +60,11 @@ public class Study {
 	}
 	
 	/**
-	 * @param studyReportSavedEncounterId
+	 * @param studyReportSavedEncounterId encounter id generated from HTMLForm entered
 	 */
 	public void setStudyReportSavedEncounterId(Integer studyReportSavedEncounterId) {
 		this.studyReportSavedEncounterId = studyReportSavedEncounterId;
 	}
-	
-	private String studyReportRadiologist;
 	
 	/**
 	 * @return studyReportRadiologist
@@ -72,7 +74,7 @@ public class Study {
 	}
 	
 	/**
-	 * @param studyReportRadiologist
+	 * @param studyReportRadiologist get the radiologist name
 	 */
 	public void setStudyReportRadiologist(String studyReportRadiologist) {
 		this.studyReportRadiologist = studyReportRadiologist;
@@ -91,8 +93,6 @@ public class Study {
 	public String getModality() {
 		return modality;
 	}
-	
-	private String studyname;
 	
 	/**
 	 * @param studyname

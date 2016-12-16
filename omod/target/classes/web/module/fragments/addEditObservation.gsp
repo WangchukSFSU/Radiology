@@ -437,7 +437,7 @@
            jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailProvider'>Provider  :  ${anOrder.creator.username} ,  StartDate  : ${ anOrder.dateCreated } </div>");
            jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailDiagnosis'>Diagnosis  : ${anOrder.orderdiagnosis} </div>");
            jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailDiagnosis'>Instructions  : ${anOrder.instructions} </div>");
-           jq('#orderDetailDiv').append("<div class='order'  id= 'viewStudyId'><a id = 'viewStudyLink' class='viewStudyLink' target='_blank' href='${ dicomViewerUrladdress + " studyUID =" + anOrder.study.studyInstanceUid + " & patientID =" + anOrder.patient.patientIdentifier   }' >ViewStudy</a> </div>");
+           jq('#orderDetailDiv').append("<div class='order'  id= 'viewStudyId'><a id = 'viewStudyLink' class='viewStudyLink' target='_blank' href='${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + anOrder.patient.patientIdentifier   }' >ViewStudy</a> </div>");
            //get all the form available in the HTMLForm
            jq.getJSON('${ ui.actionLink("getForm") }', {
                    'radiologyorderId': radiologyorderId
@@ -518,13 +518,13 @@
                            for (var i = 0; i < ret.length; i++) {
                                var provider = ret[i].orderer.name;
                                var instructions = ret[i].instructions;
-                               var patientId = ret[i].Patient.PatientId;
+                               var patientId = ret[i].patient.patientIdentifier.Identifier;
                                var orderdiagnosis = ret[i].orderdiagnosis;
                                var studyname = ret[i].study.studyname;
                                var studyInstanceUid = ret[i].study.studyInstanceUid;
                                var DateCreated = ret[i].DateCreated;
                                var OrderencounterId = ret[i].study.studyReportSavedEncounterId;
-                               patientCompletedOrdersTable.append('<tr><td><a onclick="viewReport(' + OrderencounterId + ');"> Obs</a> </td><td> ' + DateCreated + '</td><td> ' + provider + '</td><td> ' + instructions + ' </td><td> ' + orderdiagnosis + '</td><td id="studyColumnId"><a id="viewStudyLink" class="viewStudyLink" target="_blank" href="${ dicomViewerUrladdress + " studyUID =" } '+ studyInstanceUid +'" " & patientID = ' + patientId + ' " >' + studyname + '</a></td></tr>');
+                              patientCompletedOrdersTable.append('<tr><td><a onclick="viewReport(' + OrderencounterId + ');"> Obs</a> </td><td> ' + DateCreated + '</td><td> ' + provider + '</td><td> ' + instructions + ' </td><td> ' + orderdiagnosis + '</td><td id="studyColumnId"><a id="viewStudyLink" class="viewStudyLink" target="_blank" href="${ dicomViewerUrladdress + "studyUID=" }'+ studyInstanceUid +'%20&%20patientID='+ patientId +' " >' + studyname + '</a></td></tr>');
                            }
                            patientCompletedOrdersTable.append("</tbody>");
                            jq('#patientCompletedOrdersDatatable').DataTable({
@@ -590,7 +590,7 @@
            jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailProvider'>Provider  :  ${anOrder.creator.username} ,  StartDate  : ${ anOrder.dateCreated } </div>");
            jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailDiagnosis'>Diagnosis  : ${anOrder.orderdiagnosis} </div>");
            jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailDiagnosis'>Instructions  : ${anOrder.instructions} </div>");         
-           jq('#orderDetailDiv').append("<div class='order'  id= 'viewStudyId'><a id = 'viewStudyLink' class='viewStudyLink' target='_blank' href='${ dicomViewerUrladdress + " studyUID =" + anOrder.study.studyInstanceUid + " & patientID =" + anOrder.patient.patientIdentifier   }'>ViewStudy</a> </div>");
+           jq('#orderDetailDiv').append("<div class='order'  id= 'viewStudyId'><a id = 'viewStudyLink' class='viewStudyLink' target='_blank' href='${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + anOrder.patient.patientIdentifier   }'>ViewStudy</a> </div>");
           
            //get form
            jq.getJSON('${ ui.actionLink("getForm") }', {
@@ -673,14 +673,13 @@
                            for (var i = 0; i < ret.length; i++) {
                                var provider = ret[i].orderer.name;
                                var instructions = ret[i].instructions;
-                               var patientId = ret[i].patient.patientIdentifier;
+                               var patientId = ret[i].patient.patientIdentifier.Identifier;
                                var orderdiagnosis = ret[i].orderdiagnosis;
                                var studyname = ret[i].study.studyname;
                                var studyInstanceUid = ret[i].study.studyInstanceUid;
                                var DateCreated = ret[i].DateCreated;
                                var OrderencounterId = ret[i].study.studyReportSavedEncounterId;
-                               alert("patientIden "+patientId);
-                               patientCompletedOrdersTable.append('<tr><td><a onclick="viewReport(' + OrderencounterId + ');"> Obs</a> </td><td> ' + DateCreated + '</td><td> ' + provider + '</td><td> ' + instructions + ' </td><td> ' + orderdiagnosis + '</td><td id="studyColumnId"><a id="viewStudyLink" class="viewStudyLink" target="_blank" href="${ dicomViewerUrladdress + " studyUID =" }'+ studyInstanceUid +'%20&%20patientID ='+ patientId +' " >' + studyname + '</a></td></tr>');
+                               patientCompletedOrdersTable.append('<tr><td><a onclick="viewReport(' + OrderencounterId + ');"> Obs</a> </td><td> ' + DateCreated + '</td><td> ' + provider + '</td><td> ' + instructions + ' </td><td> ' + orderdiagnosis + '</td><td id="studyColumnId"><a id="viewStudyLink" class="viewStudyLink" target="_blank" href="${ dicomViewerUrladdress + "studyUID=" }'+ studyInstanceUid +'%20&%20patientID='+ patientId +' " >' + studyname + '</a></td></tr>');
                            }
                            patientCompletedOrdersTable.append("</tbody>");
                            jq('#patientCompletedOrdersDatatable').DataTable({
@@ -1045,4 +1044,3 @@
 </div>
 <!-- delete saved report dialog message -->
 <div id="reportDeletelDialogMessage" style="width:430px" title="Delete Report"> Are you sure you want to delete Report </div>
-

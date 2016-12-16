@@ -2,91 +2,91 @@
 
 #diagnosislistSelect {
 
-    display: inline;
+     display: inline;
 }
 
 #studySelect {
 
-    display: inline;
+     display: inline;
 }
 
 
 #studyTags {
-    width: 505px;
+     width: 505px;
 }
 
 #diagnosisTags {
-    width: 505px;
+     width: 505px;
 }
 
 .fields {
-    margin-top: 5px;
+     margin-top: 5px;
 }
 #submitForm {
-    margin-top: 15px;
-    margin-left: 53px;
+     margin-top: 15px;
+     margin-left: 53px;
 }
 .ui-widget-header {
-    background:#b9cd6d;
-    border: 1px solid #b9cd6d;
-    color: #FFFFFF;
-    font-weight: bold;
+     background:#b9cd6d;
+     border: 1px solid #b9cd6d;
+     color: #FFFFFF;
+     font-weight: bold;
 }
 
 
 .fieldclass {
-    margin-top: 12px;
+     margin-top: 12px;
 }
 
 .fg-toolbar.ui-toolbar.ui-widget-header.ui-corner-tl.ui-corner-tr.ui-helper-clearfix {
-    background-color: #b9cd6d;
+     background-color: #b9cd6d;
 }
 
 .fg-toolbar.ui-toolbar.ui-widget-header.ui-corner-bl.ui-corner-br.ui-helper-clearfix {
 
-    background-color: #b9cd6d;
+     background-color: #b9cd6d;
 }
 
 
 
 .ui-dialog-titlebar.ui-widget-header.ui-corner-all.ui-helper-clearfix {
 
-    background-color: #b9cd6d;
+     background-color: #b9cd6d;
 }
 
 #completedOrderHeader {
-    padding-bottom: 50px;
-    margin-top: 17px;
+     padding-bottom: 50px;
+     margin-top: 17px;
 }
 
 #performedStatuses {
-    height: 36px;
+     height: 36px;
 }
 
 
 
 
 #radiologyOrderDetailsDiv {
-    margin-top: 12px;
+     margin-top: 12px;
 }
 
 
 #ContactRadiologist {
-    margin-top: 16px;
+     margin-top: 16px;
 }
 
 #inProgressOrderDiv {
-    margin-top: -23px;
+     margin-top: -23px;
 }
 
 #performedStatusReportReadyDiv {
-    margin-top: 17px;
+     margin-top: 17px;
 }
 
 #addRadiologyOrderForm {
-    margin-top: 36px;
+     margin-top: 36px;
 }
 
 div#performedStatusCompletedOrder {
-    margin-top: -57px;
+     margin-top: -57px;
 }

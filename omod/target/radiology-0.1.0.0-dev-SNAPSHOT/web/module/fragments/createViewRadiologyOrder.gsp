@@ -1,4 +1,3 @@
-
 <% ui.includeCss("radiology", "createViewRadiologyOrder.css") %>
 <% ui.includeCss("radiology", "jquery-ui.css") %>
 <%
@@ -112,8 +111,13 @@ console.log("fnDrawCallback");
                     var studyName = ret[i].study.studyname;
                     var dateCreated = ret[i].dateCreated;
                     var scheduledStatus = ret[i].study.scheduledStatus;
+                    var performedStatus = ret[i].study.performedStatus;                            
+                    if(performedStatus == 'IN_PROGRESS') {                
+                     patientCompletedOrdersTable.append('<tr><td> ' + studyName + ' </td><td> ' + dateCreated + '</td><td> STARTED </td></tr>');
+                } else {
                     patientCompletedOrdersTable.append('<tr><td> ' + studyName + ' </td><td> ' + dateCreated + '</td><td> ' + scheduledStatus + '</td></tr>');
                 }
+                    }
                 patientCompletedOrdersTable.append("</tbody>");
 
                 jq('#patientCompletedOrdersDatatable').DataTable({
@@ -589,5 +593,3 @@ function contactRadiologist() {
 <div id="patientId">
     <p style="display:none;">${ patient }</p>
 </div>
-
-

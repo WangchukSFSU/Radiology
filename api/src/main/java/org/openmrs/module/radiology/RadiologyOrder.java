@@ -20,14 +20,23 @@ public class RadiologyOrder extends TestOrder {
 	
 	private String orderdiagnosis;
 	
+	/**
+	 * @return order diagnosis
+	 */
 	public String getOrderdiagnosis() {
 		return orderdiagnosis;
 	}
 	
+	/**
+	 * @param orderdiagnosis referring physician set diagnosis for the order
+	 */
 	public void setOrderdiagnosis(String orderdiagnosis) {
 		this.orderdiagnosis = orderdiagnosis;
 	}
 	
+	/**
+	 * @return
+	 */
 	public Study getStudy() {
 		return study;
 	}
@@ -66,7 +75,7 @@ public class RadiologyOrder extends TestOrder {
 	}
 	
 	/**
-	 * Returns true if study is in report ready and false otherwise.
+	 * Returns true if radiologist has submitted the report for the study and false otherwise.
 	 * 
 	 * @return true if study is in report ready and false otherwise
 	 * @should return false if associated study is null
