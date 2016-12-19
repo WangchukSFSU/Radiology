@@ -1,0 +1,14 @@
+/home/wangchuk/openmrs/test2/temp-project/radiology/omod/src/main/java/org/openmrs/module/radiology/web/extension/html/AdminList.java
+/home/wangchuk/openmrs/test2/temp-project/radiology/omod/src/main/java/org/openmrs/module/radiology/web/extension/html/RadiologyDashboardExt.java
+/home/wangchuk/openmrs/test2/temp-project/radiology/omod/src/main/java/org/openmrs/module/radiology/fragment/controller/CreateViewRadiologyOrderFragmentController.java
+/home/wangchuk/openmrs/test2/temp-project/radiology/omod/src/main/java/org/openmrs/module/radiology/fragment/controller/AdminManageRadiologyModuleFragmentController.java
+/home/wangchuk/openmrs/test2/temp-project/radiology/omod/src/main/java/org/openmrs/module/radiology/fragment/controller/SendDicomToPacsFragmentController.java
+/home/wangchuk/openmrs/test2/temp-project/radiology/omod/src/main/java/org/openmrs/module/radiology/page/controller/ReferingPhysicianPageController.java
+/home/wangchuk/openmrs/test2/temp-project/radiology/omod/src/main/java/org/openmrs/module/radiology/page/controller/RadiologistPageController.java
+/home/wangchuk/openmrs/test2/temp-project/radiology/omod/src/main/java/org/openmrs/module/radiology/web/controller/ManageController.java
+/home/wangchuk/openmrs/test2/temp-project/radiology/omod/src/main/java/org/openmrs/module/radiology/page/controller/BaseEnterHtmlFormPageController.java
+/home/wangchuk/openmrs/test2/temp-project/radiology/omod/src/main/java/org/openmrs/module/radiology/fragment/controller/AddEditObservationFragmentController.java
+/home/wangchuk/openmrs/test2/temp-project/radiology/omod/src/main/java/org/openmrs/module/radiology/page/controller/TechnicianPageController.java
+/home/wangchuk/openmrs/test2/temp-project/radiology/omod/src/main/java/org/openmrs/module/radiology/fragment/controller/BaseHtmlFormFragmentController.java
+/home/wangchuk/openmrs/test2/temp-project/radiology/omod/src/main/java/org/openmrs/module/radiology/page/controller/AdminPageController.java
+/home/wangchuk/openmrs/test2/temp-project/radiology/omod/src/main/java/org/openmrs/module/radiology/fragment/controller/ModalitySoftwareAvalabilityFragmentController.java

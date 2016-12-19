@@ -324,7 +324,7 @@ function ViewReport() {
             alert('AJAX error ' + err);
         })
         .success(function(ret) {
-
+            jq('#obsDialogBoxText').empty();
             jq('#obsDialogBoxText').append('<table></table>');
             jq('#obsDialogBoxText table').attr('id', 'obsDialogBoxTextDatatable');
             jq("#obsDialogBoxText table").addClass("obsDialogBoxTextclass");
@@ -333,8 +333,13 @@ function ViewReport() {
             for (var i = 0; i < ret.length; i++) {
                 var concept = ret[i].Concept;
                 var valueText = ret[i].valueText;
+                var valueNumeric = ret[i].valueNumeric;
+                if(valueText) {
                 obsDialogBoxTextTable.append('<tr><td>' + concept + '</td><td>' + valueText + '</td></tr>');
+            } else {
+                obsDialogBoxTextTable.append('<tr><td>' + concept + '</td><td>' + valueNumeric + '</td></tr>');
             }
+                }
             obsDialogBoxTextTable.append("</tbody>");
             jq("#obsDialogBox").dialog("open");
 

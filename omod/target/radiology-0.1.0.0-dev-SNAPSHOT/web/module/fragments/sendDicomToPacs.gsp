@@ -146,6 +146,8 @@
                     <th>Order</th>
                     <th>OrderStartDate</th>
                     <th>OrderPriority</th>
+                     <th>PatientID</th>
+                    <th>studyInstanceUid</th>
                </tr>
           </thead>
           <tbody>
@@ -155,6 +157,8 @@
                               ${anOrder.study.studyname}</a></td>
                     <td>${ anOrder.dateCreated } </td>
                     <td>${ anOrder.urgency }</td>
+                       <td>${ anOrder.patient.patientIdentifier }</td>
+                    <td>${ anOrder.study.studyInstanceUid }</td>
                </tr>
                <% } %>  
           </tbody>

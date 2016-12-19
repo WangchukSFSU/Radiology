@@ -148,12 +148,21 @@ public class CreateViewRadiologyOrderFragmentController {
 	public List<SimpleObject> getEncounterIdObs(@SpringBean("conceptService") ConceptService service, FragmentModel model,
 			@RequestParam(value = "encounterId") String encounterId, UiUtils ui) {
 		// get observations for the encounterId
+		System.out.println("encounter id " + encounterId);
 		List<Obs> encounterIdObs = Context.getObsService()
 				.getObservations(encounterId);
+		for (Obs aa : encounterIdObs) {
+			System.out.println("list obs " + aa.getConcept()
+					.getDisplayString());
+			System.out.println("list obs text" + aa.getValueText());
+			
+		}
+		
 		// properties selected for the obs
-		String[] properties = new String[2];
+		String[] properties = new String[3];
 		properties[0] = "Concept";
 		properties[1] = "valueText";
+		properties[2] = "valueNumeric";
 		
 		return SimpleObject.fromCollection(encounterIdObs, ui, properties);
 	}
@@ -254,7 +263,9 @@ public class CreateViewRadiologyOrderFragmentController {
 		User authenticatedUser = Context.getAuthenticatedUser();
 		
 		Provider provider = Context.getProviderService()
-				.getProvider(authenticatedUser.getId());
+				.getProvider(4);
+		// .getProvider(authenticatedUser.getId());
+		
 		// add data to new radiology order
 		radiologyOrder.setCreator(authenticatedUser);
 		radiologyOrder.setOrderer(provider);

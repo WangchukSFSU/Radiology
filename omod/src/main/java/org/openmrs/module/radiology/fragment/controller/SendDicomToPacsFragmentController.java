@@ -33,7 +33,7 @@ public class SendDicomToPacsFragmentController {
 		// get all the active orders
 		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrders();
 		// Transfer all the dicom files modality station to local disk
-		ArrayList<String> dicomeFiles = listFiles("/home/youdon/Desktop/aaa");
+		ArrayList<String> dicomeFiles = listFiles("/home/wangchuk/Desktop/DicomFromModality");
 		model.addAttribute("dicomeFiles", dicomeFiles);
 		model.put("inProgressRadiologyOrders", inProgressRadiologyOrders);
 		
@@ -86,7 +86,9 @@ public class SendDicomToPacsFragmentController {
 				// get all orders of scheduled status
 				if ((radiologyOrder.getStudy()
 						.getScheduledStatus() == radiologyOrder.getStudy()
-						.getScheduledStatus().SCHEDULED)) {
+						.getScheduledStatus().SCHEDULED) && (radiologyOrder.getStudy()
+						.getPerformedStatus() != radiologyOrder.getStudy()
+						.getPerformedStatus().REPORT_READY)) {
 					inProgressRadiologyOrders.add(radiologyOrder);
 					
 				}
