@@ -134,13 +134,16 @@
 	</globalProperty>
 	<globalProperty>
 		<property>radiology.dicomWebViewerBaseUrl</property>
-		<defaultValue>/weasis-pacs-connector/viewer</defaultValue>
-		<description>Base URL of the DICOM web viewer (e.g. Weasis, Oviyam,
-			...). Default is for Weasis using weasis-pacs-connector (Weasis needs
-			java on client):
-			"/weasis-pacs-connector/viewer". For
-			Oviyam:
+		<defaultValue></defaultValue>
+		<description>Base URL of the DICOM web viewer Oviyam
 			"/oviyam2/viewer.html".
+		</description>
+	</globalProperty>
+        <globalProperty>
+		<property>radiology.dicomWebViewerWeasisBaseUrl</property>
+		<defaultValue>/weasis-pacs-connector/viewer</defaultValue>
+		<description>Base URL of the DICOM web viewer Weasis
+			"/weasis-pacs-connector/viewer". 
 		</description>
 	</globalProperty>
 	<globalProperty>

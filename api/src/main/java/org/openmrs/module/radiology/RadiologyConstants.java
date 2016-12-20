@@ -42,6 +42,8 @@ public class RadiologyConstants {
 	
 	public static final String GP_DICOM_WEB_VIEWER_BASE_URL = "radiology.dicomWebViewerBaseUrl";
 	
+	public static final String GP_DICOM_WEB_VIEWER_WEASIS_BASE_URL = "radiology.dicomWebViewerWeasisBaseUrl";
+	
 	public static final String GP_DICOM_WEB_VIEWER_LOCAL_SERVER_NAME = "radiology.dicomWebViewerLocalServerName";
 	
 	public static final String GP_RADIOLOGY_CARE_SETTING = "radiology.radiologyCareSetting";

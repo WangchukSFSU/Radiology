@@ -66,14 +66,28 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	 */
 	public void controller(FragmentModel model) {
 		
+		RadiologyProperties radiologyProperties = new RadiologyProperties();
 		// patient dashboard
-		String patientClinicianUrl = "http://localhost:8080/openmrs/coreapps/clinicianfacing/patient.page?patientId=";
+		String serverAddress = radiologyProperties.getServersAddress();
+		String patientClinicianUrl = serverAddress + ":8080/openmrs/coreapps/clinicianfacing/patient.page?patientId=";
 		model.addAttribute("patientClinicianUrl", patientClinicianUrl);
 		// get performed status completed orders
 		List<RadiologyOrder> performedStatusCompletedOrders = getPerformedStatusCompletedRadiologyOrders();
+		
+		String oviyamStatus = radiologyProperties.getDicomViewerLocalServerName();
+		System.out.println("oviyamStatus " + oviyamStatus);
+		String weasisStatus = radiologyProperties.getDicomViewerWeasisUrlBase();
+		System.out.println("weasisStatus " + weasisStatus);
+		
 		// get oviyum url
 		String dicomViewerUrladdress = getDicomViewerUrladdress();
+		
+		// get weasis url
+		String dicomViewerWeasisUrladdress = getDicomViewerWeasisUrladdress();
+		model.addAttribute("oviyamStatus", oviyamStatus);
+		model.addAttribute("weasisStatus", weasisStatus);
 		model.addAttribute("dicomViewerUrladdress", dicomViewerUrladdress);
+		model.addAttribute("dicomViewerWeasisUrladdress", dicomViewerWeasisUrladdress);
 		model.put("performedStatusCompletedOrders", performedStatusCompletedOrders);
 		
 	}
@@ -423,9 +437,26 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	// get the oviyum url address
 	private String getDicomViewerUrladdress() {
 		RadiologyProperties radiologyProperties = new RadiologyProperties();
+		System.out.println(radiologyProperties.getServersAddress() + ":" + radiologyProperties.getServersPort()
+				+ radiologyProperties.getDicomViewerUrlBase() + "?" + radiologyProperties.getDicomViewerLocalServerName());
+		System.out.println("radiologyProperties.getServersAddress() " + radiologyProperties.getServersAddress());
+		System.out.println("radiologyProperties.getServersPort() " + radiologyProperties.getServersPort());
+		System.out.println("radiologyProperties.getDicomViewerUrlBase() " + radiologyProperties.getDicomViewerUrlBase());
+		System.out.println("radiologyProperties.getDicomViewerLocalServerName() "
+				+ radiologyProperties.getDicomViewerLocalServerName());
+		System.out.println("radiologyProperties.getWeasisBaseURL() " + radiologyProperties.getDicomViewerWeasisUrlBase());
 		
 		return radiologyProperties.getServersAddress() + ":" + radiologyProperties.getServersPort()
 				+ radiologyProperties.getDicomViewerUrlBase() + "?" + radiologyProperties.getDicomViewerLocalServerName();
+		
+	}
+	
+	// get the weasis url address
+	private String getDicomViewerWeasisUrladdress() {
+		RadiologyProperties radiologyProperties = new RadiologyProperties();
+		
+		return radiologyProperties.getServersAddress() + ":" + radiologyProperties.getServersPort()
+				+ radiologyProperties.getDicomViewerWeasisUrlBase() + "?";
 		
 	}
 	

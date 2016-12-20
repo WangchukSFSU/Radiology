@@ -16,6 +16,7 @@ import org.openmrs.module.htmlformentry.FormEntryContext.Mode;
 import org.openmrs.module.htmlformentry.FormEntrySession;
 import org.openmrs.module.htmlformentry.HtmlForm;
 import org.openmrs.module.htmlformentry.HtmlFormEntryUtil;
+import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.ui.framework.SimpleObject;
 import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.annotation.SpringBean;
@@ -44,6 +45,14 @@ public class AdminManageRadiologyModuleFragmentController {
 			modalityConcept.add(modalityConceptName);
 		}
 		
+		RadiologyProperties radiologyProperties = new RadiologyProperties();
+		// concept dictionary and htmlform url
+		String serverAddress = radiologyProperties.getServersAddress();
+		String conceptDictionaryFormUrl = serverAddress + ":8080/openmrs/dictionary/concept.form";
+		String htmlFormsUrl = serverAddress + ":8080/openmrs/module/htmlformentry/htmlForms.list";
+		
+		model.addAttribute("htmlFormsUrl", htmlFormsUrl);
+		model.addAttribute("conceptDictionaryFormUrl", conceptDictionaryFormUrl);
 		model.addAttribute("modalityConcept", modalityConcept);
 		
 	}

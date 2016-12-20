@@ -68,11 +68,23 @@ public class CreateViewRadiologyOrderFragmentController {
 		model.addAttribute("returnUrl", returnUrl);
 		// get all orders with report ready
 		List<RadiologyOrder> radiologyOrdersCompletedReport = getRadiologyOrdersWithCompletedReportByPatient(patient);
+		
+		RadiologyProperties radiologyProperties = new RadiologyProperties();
+		String oviyamStatus = radiologyProperties.getDicomViewerLocalServerName();
+		System.out.println("oviyamStatus " + oviyamStatus);
+		String weasisStatus = radiologyProperties.getDicomViewerWeasisUrlBase();
+		System.out.println("weasisStatus " + weasisStatus);
+		
+		// get weasis url
+		String dicomViewerWeasisUrladdress = getDicomViewerWeasisUrladdress();
+		model.addAttribute("oviyamStatus", oviyamStatus);
+		model.addAttribute("weasisStatus", weasisStatus);
+		model.addAttribute("dicomViewerWeasisUrladdress", dicomViewerWeasisUrladdress);
+		
 		// get oviyum url
 		String dicomViewerUrladdress = getDicomViewerUrladdress();
-		
-		System.out.println("dicomViewerUrladdress " + dicomViewerUrladdress);
 		model.addAttribute("dicomViewerUrladdress", dicomViewerUrladdress);
+		
 		model.put("radiologyOrders", radiologyOrdersCompletedReport);
 		// contact patient and radiologist information
 		String PatientName = patient.getNames()
@@ -95,6 +107,15 @@ public class CreateViewRadiologyOrderFragmentController {
 		RadiologyProperties radiologyProperties = new RadiologyProperties();
 		return radiologyProperties.getServersAddress() + ":" + radiologyProperties.getServersPort()
 				+ radiologyProperties.getDicomViewerUrlBase() + "?" + radiologyProperties.getDicomViewerLocalServerName();
+		
+	}
+	
+	// get the weasis url address
+	private String getDicomViewerWeasisUrladdress() {
+		RadiologyProperties radiologyProperties = new RadiologyProperties();
+		
+		return radiologyProperties.getServersAddress() + ":" + radiologyProperties.getServersPort()
+				+ radiologyProperties.getDicomViewerWeasisUrlBase() + "?";
 		
 	}
 	

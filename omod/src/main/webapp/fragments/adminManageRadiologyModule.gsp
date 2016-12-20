@@ -201,7 +201,7 @@
                     formNameArray[i] = FormName;
                     var formNameHtmlToDisplay = ret[i].HtmlToDisplay;
                     formNameHtmlToDisplayArray[i] = formNameHtmlToDisplay;
-                    reportTableRow.append('<tr><td>' + FormName + '</td><td> <a id="viewReportLink" href=' + FormName + ' class="viewReportLink" onclick="displayReport(this); return false;" >' + FormName + ' </a> </td> <td><a id="editFormLink" target="_blank" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForms.list"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a>  </td></tr>');
+                    reportTableRow.append('<tr><td>' + FormName + '</td><td> <a id="viewReportLink" href=' + FormName + ' class="viewReportLink" onclick="displayReport(this); return false;" >' + FormName + ' </a> </td> <td><a id="editFormLink" target="_blank" href="${ htmlFormsUrl }"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_edit_black_24dp.png") }"/></a>  </td></tr>');
                 }
                 localStorage.setItem("formNameArray", JSON.stringify(formNameArray));
                 localStorage.setItem("formNameHtmlToDisplayArray", JSON.stringify(formNameHtmlToDisplayArray));
@@ -214,7 +214,7 @@
                         for (var i = 0; i < ret.length; i++) {
                             var studyId = ret[i].id;
                             var studyName = ret[i].name;
-                            reportTableRow.append('<tr><td> ' + studyName + ' </td><td> </td> <td><a id="addStudyIconLink" target="_blank" href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a><a id<img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a>  </td></tr>');
+                            reportTableRow.append('<tr><td> ' + studyName + ' </td><td> </td> <td><a id="addStudyIconLink" target="_blank" href="${ htmlFormsUrl }"><img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a><a id<img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_control_point_2x.png") }"/></a>  </td></tr>');
                         }
 
                         jq('#reportTableRow').append("</tbody>");
@@ -304,19 +304,19 @@
 </div>
 <!-- Modality Page Header -->
 <div class="modalityHeaderDiv">
-     <label id="modalityDialogMessage" for modality-dialog-label> Please Add Modality not appearing in list to Concept Dictionary and Refresh: <a id="conceptMessage" target='_blank' href="http://localhost:8080/openmrs/dictionary/concept.form"> Click here to Concept Dictionary </a></label>
+     <label id="modalityDialogMessage" for modality-dialog-label> Please Add Modality not appearing in list to Concept Dictionary and Refresh: <a id="conceptMessage" target='_blank' href="${ conceptDictionaryFormUrl }"> Click here to Concept Dictionary </a></label>
      <input type="button" id="modalityDialogBtn" value = "?" >
      <input type="button" onclick="location.href='/openmrs/pages/radiology/admin.page'" id="modalityRefreshBtn" value="Refresh">
 </div>
 <!-- Study Page Header -->
 <div class="studyHeaderDiv">
-     <label id="studyDialogMessage" for modality-dialog-label> Please Add Study not appearing in list to Concept Dictionary and Refresh: <a id="conceptMessage" target='_blank' href="http://localhost:8080/openmrs/dictionary/concept.form"> Click here to Concept Dictionary </a></label>
+     <label id="studyDialogMessage" for modality-dialog-label> Please Add Study not appearing in list to Concept Dictionary and Refresh: <a id="conceptMessage" target='_blank' href="${ conceptDictionaryFormUrl }"> Click here to Concept Dictionary </a></label>
      <input type="button" id="studyDialogBtn" value = "?" >
      <input type="button" id="studyRefreshBtn" value="Refresh">
 </div>
 <!-- Report Page Header -->
 <div class="reportHeaderDiv">
-     <label id="reportDialogMessage" for report-dialog-label>  Please Create Report not appearing in list and Refresh: <a id="conceptMessage" target='_blank' href="http://localhost:8080/openmrs/module/htmlformentry/htmlForm.form"> Click here to create HTMLForm  </a></label>
+     <label id="reportDialogMessage" for report-dialog-label>  Please Create Report not appearing in list and Refresh: <a id="conceptMessage" target='_blank' href="${ htmlFormsUrl }"> Click here to create HTMLForm  </a></label>
      <input type="button" id="reportDialogBtn" value = "?" >
      <input type="button" id="reportRefreshBtn" value="Refresh">
 </div>
