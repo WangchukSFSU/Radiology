@@ -12,7 +12,7 @@ import org.openmrs.ui.framework.fragment.FragmentModel;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * Admin let the Radiologist know about the modality software availability
+ * Admin let the Radiologist know the modality software availability
  * 
  * @author tenzin
  */

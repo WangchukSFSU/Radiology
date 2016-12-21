@@ -52,7 +52,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * Radiologist to add,and edit observation.
+ * Radiologist to add,and edit observations
+ * Following methods are from HTMLFormEntryUI module:
+ * GetForm() submit() returnHelper() hasNoTimeComponent()
+ * keepTimeComponentOfEncounterIfDateComponentHasNotChanged()
+ * getVisitDomainWrapper() authenticate() checkIfLoggedIn()
  *
  * @author tenzin
  */
@@ -73,17 +77,16 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		model.addAttribute("patientClinicianUrl", patientClinicianUrl);
 		// get performed status completed orders
 		List<RadiologyOrder> performedStatusCompletedOrders = getPerformedStatusCompletedRadiologyOrders();
-		
+		// check dicom web viewer availability
 		String oviyamStatus = radiologyProperties.getDicomViewerLocalServerName();
-		System.out.println("oviyamStatus " + oviyamStatus);
 		String weasisStatus = radiologyProperties.getDicomViewerWeasisUrlBase();
-		System.out.println("weasisStatus " + weasisStatus);
 		
 		// get oviyum url
 		String dicomViewerUrladdress = getDicomViewerUrladdress();
 		
 		// get weasis url
 		String dicomViewerWeasisUrladdress = getDicomViewerWeasisUrladdress();
+		
 		model.addAttribute("oviyamStatus", oviyamStatus);
 		model.addAttribute("weasisStatus", weasisStatus);
 		model.addAttribute("dicomViewerUrladdress", dicomViewerUrladdress);
@@ -108,7 +111,6 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 			FragmentModel model, @RequestParam(value = "patientId") Patient patientId, UiUtils ui) {
 		
 		ArrayList<RadiologyOrder> reportReadyRadiologyOrders = new ArrayList<RadiologyOrder>();
-		
 		if (patientId == null) {
 			throw new IllegalArgumentException("patientId is required");
 		}
@@ -126,7 +128,6 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 						.getRadiologyOrderByOrderId(order.getOrderId());
 				// get orders with report ready status
 				if (radiologyOrder.isReportReady()) {
-					// radiologyOrder.getPatient().getPatientIdentifier().getIdentifier();
 					reportReadyRadiologyOrders.add(radiologyOrder);
 				}
 			}
@@ -437,15 +438,6 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	// get the oviyum url address
 	private String getDicomViewerUrladdress() {
 		RadiologyProperties radiologyProperties = new RadiologyProperties();
-		System.out.println(radiologyProperties.getServersAddress() + ":" + radiologyProperties.getServersPort()
-				+ radiologyProperties.getDicomViewerUrlBase() + "?" + radiologyProperties.getDicomViewerLocalServerName());
-		System.out.println("radiologyProperties.getServersAddress() " + radiologyProperties.getServersAddress());
-		System.out.println("radiologyProperties.getServersPort() " + radiologyProperties.getServersPort());
-		System.out.println("radiologyProperties.getDicomViewerUrlBase() " + radiologyProperties.getDicomViewerUrlBase());
-		System.out.println("radiologyProperties.getDicomViewerLocalServerName() "
-				+ radiologyProperties.getDicomViewerLocalServerName());
-		System.out.println("radiologyProperties.getWeasisBaseURL() " + radiologyProperties.getDicomViewerWeasisUrlBase());
-		
 		return radiologyProperties.getServersAddress() + ":" + radiologyProperties.getServersPort()
 				+ radiologyProperties.getDicomViewerUrlBase() + "?" + radiologyProperties.getDicomViewerLocalServerName();
 		
@@ -454,7 +446,6 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	// get the weasis url address
 	private String getDicomViewerWeasisUrladdress() {
 		RadiologyProperties radiologyProperties = new RadiologyProperties();
-		
 		return radiologyProperties.getServersAddress() + ":" + radiologyProperties.getServersPort()
 				+ radiologyProperties.getDicomViewerWeasisUrlBase() + "?";
 		

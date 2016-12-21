@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * Referring Physician to create radiology order, view observation
+ * Pages does not allow to have ajax call therefore no any functionality added
  * 
  * @author tenzin
  */

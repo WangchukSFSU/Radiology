@@ -69,11 +69,10 @@ public class CreateViewRadiologyOrderFragmentController {
 		// get all orders with report ready
 		List<RadiologyOrder> radiologyOrdersCompletedReport = getRadiologyOrdersWithCompletedReportByPatient(patient);
 		
+		// check for dicom viwer avalability
 		RadiologyProperties radiologyProperties = new RadiologyProperties();
 		String oviyamStatus = radiologyProperties.getDicomViewerLocalServerName();
-		System.out.println("oviyamStatus " + oviyamStatus);
 		String weasisStatus = radiologyProperties.getDicomViewerWeasisUrlBase();
-		System.out.println("weasisStatus " + weasisStatus);
 		
 		// get weasis url
 		String dicomViewerWeasisUrladdress = getDicomViewerWeasisUrladdress();
@@ -282,10 +281,8 @@ public class CreateViewRadiologyOrderFragmentController {
 		RadiologyOrder radiologyOrder = new RadiologyOrder();
 		// get the user
 		User authenticatedUser = Context.getAuthenticatedUser();
-		
 		Provider provider = Context.getProviderService()
 				.getProvider(4);
-		// .getProvider(authenticatedUser.getId());
 		
 		// add data to new radiology order
 		radiologyOrder.setCreator(authenticatedUser);

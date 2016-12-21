@@ -1,9 +1,7 @@
 <% ui.includeCss("radiology", "adminManageRadiologyModule.css") %>
 <% ui.includeCss("radiology", "jquery-ui.css") %>
 
-
-
-<script type="text/javascript">
+<script>
    jq = jQuery;
     jq(document).ready(function() {
 
