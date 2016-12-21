@@ -33,7 +33,7 @@ public class SendDicomToPacsFragmentController {
 		// get all the active orders
 		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrders();
 		// Transfer all the dicom files modality station to local disk
-		ArrayList<String> dicomeFiles = listFiles("/home/youdon/Desktop/aaa");
+		ArrayList<String> dicomeFiles = listFiles("/home/wangchuk/Desktop/DicomFromModality");
 		model.addAttribute("dicomeFiles", dicomeFiles);
 		model.put("inProgressRadiologyOrders", inProgressRadiologyOrders);
 		

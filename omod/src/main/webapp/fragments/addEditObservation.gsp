@@ -449,7 +449,7 @@ jq('#orderDetailDiv').append("<div class='order'  id= 'viewStudyId2'><a id = 'vi
      <% if ((weasisStatus != null) && (oviyamStatus != "")) { %>
      jq('#orderDetailDiv').append("<span class='order'  id= 'viewStudyText'>ViewStudy  :  </span>"); 
 jq('#orderDetailDiv').append("<a  id = 'viewstudyid' class='order' target='_blank' href='${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + anOrder.patient.patientIdentifier   }'>Oviyam</a> ");
-   jq('#orderDetailDiv').append("<a id = 'viewStudyId' class='order' target='_blank' href='${ dicomViewerWeasisUrladdress + "studyUID=" + "1.3.6.1.4.1.5962.1.1.0.0.0.1168612284.20369.0.1" + "&patientID=" + anOrder.patient.patientIdentifier   }'>Weasis</a> <br>");
+   jq('#orderDetailDiv').append("<a id = 'viewStudyId' class='order' target='_blank' href='${ dicomViewerWeasisUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + anOrder.patient.patientIdentifier   }'>Weasis</a> <br>");
      <% } %>
             
            
@@ -629,7 +629,7 @@ jq('#orderDetailDiv').append("<div class='order'  id= 'viewStudyId2'><a id = 'vi
      <% if ((weasisStatus != null) && (oviyamStatus != "")) { %>
 jq('#orderDetailDiv').append("<span class='order'  id= 'viewStudyText'>ViewStudy  :  </span>");         
 jq('#orderDetailDiv').append("<a  id = 'viewstudyid' class='order' target='_blank' href='${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + anOrder.patient.patientIdentifier   }'>Oviyam</a> ");
-   jq('#orderDetailDiv').append("<a id = 'viewStudyId' class='order' target='_blank' href='${ dicomViewerWeasisUrladdress + "studyUID=" + "1.3.6.1.4.1.5962.1.1.0.0.0.1168612284.20369.0.1" + "&patientID=" + anOrder.patient.patientIdentifier   }'>Weasis</a> <br>");
+   jq('#orderDetailDiv').append("<a id = 'viewStudyId' class='order' target='_blank' href='${ dicomViewerWeasisUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + anOrder.patient.patientIdentifier   }'>Weasis</a> <br>");
      <% } %>
 
 
@@ -681,7 +681,7 @@ jq('#orderDetailDiv').append("<a  id = 'viewstudyid' class='order' target='_blan
      }
 
      if (updatedOrderencounterId != "null") {
-                       jq("#orderDetailDiv").append('<a><img id="reportCancelId" class = "reportCancelClass" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }" /></a>');
+     jq("#orderDetailDiv").append('<a><img id="reportCancelId" class = "reportCancelClass" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }" /></a>');
      jq('#orderDetailDiv #formid').next().attr('id', 'reportCancelIcon');
      jq('#orderDetailDiv #formid').next().addClass("order");
      jq('#orderDetailDiv #reportCancelIcon').attr('onclick', onclick = "cancelReport(); return false;");
@@ -694,11 +694,11 @@ jq('#orderDetailDiv').append("<a  id = 'viewstudyid' class='order' target='_blan
      localStorage.setItem("patientIdArray", JSON.stringify(patientIdArray));
      localStorage.setItem("HtmlFormIdArray", JSON.stringify(HtmlFormIdArray));
 
-                   var cancelSubmitButton = jq('<div class="order" id= "cancelbtnDivId"><input type="button" id = "cancelbtnId" onclick="cancelBtn();" value="Cancel" /><input type="button" onclick="submitBtn();" value="Submit" /></div>');
+     var cancelSubmitButton = jq('<div class="order" id= "cancelbtnDivId"><input type="button" id = "cancelbtnId" onclick="cancelBtn();" value="Cancel" /><input type="button" onclick="submitBtn();" value="Submit" /></div>');
      cancelSubmitButton.appendTo(jq('#orderDetailDiv'));
      var patientIdForCompletedOrderList = localStorage.getItem("patientIdForCompletedOrderList");
 
-                   jq.getJSON('${ ui.actionLink("getPatientReportReadyOrder") }', {
+     jq.getJSON('${ ui.actionLink("getPatientReportReadyOrder") }', {
      'patientId': patientIdForCompletedOrderList
      })
      .error(function(xhr, status, err) {
