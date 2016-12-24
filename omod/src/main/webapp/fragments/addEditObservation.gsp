@@ -396,6 +396,7 @@
      "bSort": true,
      "bJQueryUI": true,
      "iDisplayLength": 5,
+     "aLengthMenu": [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, "All"]],
      "aaSorting": [
      [3, "desc"]
      ] // Sort by first column descending,
@@ -507,7 +508,7 @@
      localStorage.setItem("formNameHtmlToDisplayArray", JSON.stringify(formNameHtmlToDisplayArray));
      localStorage.setItem("patientIdArray", JSON.stringify(patientIdArray));
      localStorage.setItem("HtmlFormIdArray", JSON.stringify(HtmlFormIdArray));
-     var cancelSubmitButton = jq('<div class="order" id= "cancelbtnDivId"><input type="button" id = "cancelbtnId" onclick="cancelBtn();" value="Cancel" /><input type="button" onclick="submitBtn();" value="Submit" /></div>');
+     var cancelSubmitButton = jq('<div class="order" id= "cancelbtnDivId"><input type="button" id = "cancelbtnId" onclick="cancelBtn();" value="Process Another Order"/><input type="button" onclick="submitBtn();" value="Submit" /></div>');
      cancelSubmitButton.appendTo(jq('#orderDetailDiv'));
 
      var patientIdForCompletedOrderList = localStorage.getItem("patientIdForCompletedOrderList");
@@ -521,7 +522,7 @@
      .success(function(ret) {
      jq('#CancelReportUpdatedDiv').hide();
      jq('#patientCompletedOrders').empty();
-     jq("<h1></h1>").text("PREVIOUS RADIOLOGY ORDERS").appendTo('#patientCompletedOrders');
+     jq("<h1></h1>").text("PREVIOUS RADIOLOGY ORDERS for :" + ' ${ anOrder.patient.personName} ').appendTo('#patientCompletedOrders');
      jq('#patientCompletedOrders').append('<table></table>');
      jq('#patientCompletedOrders table').attr('id', 'patientCompletedOrdersDatatable');
      var patientCompletedOrdersTable = jq('#patientCompletedOrders table');
@@ -556,6 +557,7 @@
      "bSort": true,
      "bJQueryUI": true,
      "iDisplayLength": 5,
+     "aLengthMenu": [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, "All"]],
      "aaSorting": [
      [1, "desc"]
      ] // Sort by first column descending,
@@ -620,7 +622,7 @@
      <% } %>
      <% if ((weasisStatus != null) && (oviyamStatus != "")) { %>
            jq('#orderDetailDiv').append("<span class='order'  id= 'viewStudyText'>ViewStudy  :  </span>");         
-           jq('#orderDetailDiv').append("<a  id = 'viewstudyid2' class='order' target='_blank' href='${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + anOrder.patient.patientIdentifier   }'>Oviyam</a> ");
+           jq('#orderDetailDiv').append("<a  id = 'viewstudyid2' class='order' target='_blank' href='${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + anOrder.patient.patientIdentifier   }'>Oviyam   &nbsp;</a> ");
            jq('#orderDetailDiv').append("<a id = 'viewStudyId' class='order' target='_blank' href='${ dicomViewerWeasisUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" + anOrder.patient.patientIdentifier   }'>Weasis</a> <br>");
      <% } %>
 
@@ -682,7 +684,7 @@
      localStorage.setItem("patientIdArray", JSON.stringify(patientIdArray));
      localStorage.setItem("HtmlFormIdArray", JSON.stringify(HtmlFormIdArray));
 
-     var cancelSubmitButton = jq('<div class="order" id= "cancelbtnDivId"><input type="button" id = "cancelbtnId" onclick="cancelBtn();" value="Cancel" /><input type="button" onclick="submitBtn();" value="Submit" /></div>');
+     var cancelSubmitButton = jq('<div class="order" id= "cancelbtnDivId"><input type="button" id = "cancelbtnId" onclick="cancelBtn();" value="Process Another Order" /><input type="button" onclick="submitBtn();" value="Submit" /></div>');
      cancelSubmitButton.appendTo(jq('#orderDetailDiv'));
      var patientIdForCompletedOrderList = localStorage.getItem("patientIdForCompletedOrderList");
 
@@ -695,7 +697,7 @@
      .success(function(ret) {
      jq('#CancelReportUpdatedDiv').hide();
      jq('#patientCompletedOrders').empty();
-          jq("<h1></h1>").text("PREVIOUS RADIOLOGY ORDERS").appendTo('#patientCompletedOrders');
+          jq("<h1></h1>").text("PREVIOUS RADIOLOGY ORDERS for :"+ ' ${ anOrder.patient.personName} ').appendTo('#patientCompletedOrders');
           jq('#patientCompletedOrders').append('<table></table>');
      jq('#patientCompletedOrders table').attr('id', 'patientCompletedOrdersDatatable');
      var patientCompletedOrdersTable = jq('#patientCompletedOrders table');
@@ -730,6 +732,7 @@
      "bSort": true,
      "bJQueryUI": true,
      "iDisplayLength": 5,
+     "aLengthMenu": [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, "All"]],
      "aaSorting": [
      [1, "desc"]
      ] // Sort by first column descending,
@@ -782,7 +785,7 @@
      jq('#orderDetailDiv').hide();
      jq('#CancelReportUpdatedDiv').show();
      jq('#CancelReportUpdatedDiv').empty();
-     jq("<h1></h1>").text("Report deleted successfully").appendTo('#CancelReportUpdatedDiv');
+     emr.successMessage("Report deleted successfully");
      jq("<h1></h1>").text("ACTIVE RADIOLOGY ORDERS").appendTo('#CancelReportUpdatedDiv');
      jq('#CancelReportUpdatedDiv').append('<table></table>');
      jq('#CancelReportUpdatedDiv table').attr('id', 'cancepReportUpdatedDatatable');
@@ -813,6 +816,7 @@
      "bSort": true,
      "bJQueryUI": true,
      "iDisplayLength": 5,
+     "aLengthMenu": [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, "All"]],
      "aaSorting": [
      [3, "desc"]
      ] // Sort by first column descending,
@@ -838,7 +842,7 @@
      jq("#orderDetailDiv").hide();
      jq('#activeOrderTableDiv').show();
      jq('#activeOrderTableDiv').empty();
-     jq("<h1></h1>").text("Report submitted successfully").appendTo('#activeOrderTableDiv');
+      emr.successMessage("Report submitted successfully");
      jq("<h1></h1>").text("ACTIVE RADIOLOGY ORDERS").appendTo('#activeOrderTableDiv');
      jq('#activeOrderTableDiv').append('<table></table>');
      jq('#activeOrderTableDiv table').attr('id', 'updateActiveOrderDatatable');
@@ -867,6 +871,7 @@
      "bSort": true,
      "bJQueryUI": true,
      "iDisplayLength": 5,
+     "aLengthMenu": [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, "All"]],
      "aaSorting": [
      [3, "desc"]
      ] // Sort by first column descending,
@@ -997,7 +1002,7 @@
                               ${anOrder.study.studyname}</a></td>
                     <td>${ anOrder.patient.personName } </td>
                     <td>${ anOrder.patient.patientIdentifier } </td>
-                    <td>${ anOrder.dateCreated } </td>
+                    <td>${ ui.format(anOrder.dateCreated) } </td>
                     <td>${ anOrder.urgency }</td>
                     <% if(anOrder.study.studyReportSavedEncounterId) { %>
                     <td>Yes</td>

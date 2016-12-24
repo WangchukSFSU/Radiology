@@ -325,9 +325,20 @@ public class RadiologyProperties extends ModuleProperties {
 				.getGlobalProperty(RadiologyConstants.GP_DICOM_WEB_VIEWER_ADDRESS);
 	}
 	
+	public String getOpenMRSServersAddress() {
+		
+		return "http://" + Context.getAdministrationService()
+				.getGlobalProperty(RadiologyConstants.GP_OPENMRS_SERVER_ADDRESS);
+	}
+	
 	public String getServersPort() {
 		return Context.getAdministrationService()
 				.getGlobalProperty(RadiologyConstants.GP_DICOM_WEB_VIEWER_PORT);
+	}
+	
+	public String getOpenMRSServersPort() {
+		return Context.getAdministrationService()
+				.getGlobalProperty(RadiologyConstants.GP_OPENMRS_SERVER_PORT);
 	}
 	
 	public String getDicomViewerUrlBase() {
@@ -338,6 +349,11 @@ public class RadiologyProperties extends ModuleProperties {
 	public String getDicomViewerWeasisUrlBase() {
 		return Context.getAdministrationService()
 				.getGlobalProperty(RadiologyConstants.GP_DICOM_WEB_VIEWER_WEASIS_BASE_URL);
+	}
+	
+	public String getModalitySoftwareAvalability() {
+		return Context.getAdministrationService()
+				.getGlobalProperty(RadiologyConstants.GP_MODALITY_SOFTWARE_AVAILABILITY);
 	}
 	
 	public String getDicomViewerLocalServerName() {

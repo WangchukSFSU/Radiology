@@ -94,9 +94,9 @@ public class CreateViewRadiologyOrderFragmentController {
 		model.addAttribute("patientname", patientName);
 		model.addAttribute("patientdob", patient.getBirthdate());
 		model.addAttribute("patientid", patient.getId());
-		model.addAttribute("radiologistemailaddress", "radiologistemailaddress@gmail.com");
+		model.addAttribute("radiologistemailaddress", "radiologistOpenmrs@gmail.com");
 		model.addAttribute("subject", "Enquire Patient Observation");
-		model.addAttribute("patientemailaddress", "patientemailaddress@gmail.com");
+		model.addAttribute("patientemailaddress", "radiologistOpenmrs@gmail.com");
 		model.addAttribute("subjectPatient", "Recent visit information");
 		
 	}
@@ -242,11 +242,8 @@ public class CreateViewRadiologyOrderFragmentController {
 				if (radiologyOrder.isInProgress() || radiologyOrder.isCompleted() || (radiologyOrder.getStudy()
 						.getScheduledStatus() == radiologyOrder.getStudy()
 						.getScheduledStatus().SCHEDULED)) {
-					
 					radiologyOrders.add(radiologyOrder);
-					
 				}
-				
 			}
 		}
 		return radiologyOrders;
@@ -435,8 +432,7 @@ public class CreateViewRadiologyOrderFragmentController {
 		// authentification username and password
 		final String username = "johnDevRadio@gmail.com";
 		final String password = "john1234";
-		// replace with radiologist email address
-		recipient = "radiologistOpenmrs@gmail.com";
+		
 		// set up smtp server
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
@@ -478,8 +474,7 @@ public class CreateViewRadiologyOrderFragmentController {
 		
 		final String username = "johnDevRadio@gmail.com";
 		final String password = "john1234";
-		// replace with patient email address
-		recipient = "radiologistOpenmrs@gmail.com";
+		
 		// set up smtp server
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");

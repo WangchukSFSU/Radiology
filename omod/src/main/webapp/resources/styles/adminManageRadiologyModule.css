@@ -4,9 +4,10 @@
      padding-left: 3%;
      padding-top: 5px;
      padding-bottom: 5px;
-     margin-top: -15px;
+     margin-top: 15px;
 
 }
+
 
 div#modalityTable_wrapper {
      min-height: 260px;
@@ -132,5 +133,16 @@ img.img-circle {
 
 }
 
+.fg-toolbar.ui-toolbar.ui-widget-header.ui-corner-tl.ui-corner-tr.ui-helper-clearfix {
+    background-color: #b9cd6d;
+}
 
 
+
+.fg-toolbar.ui-toolbar.ui-widget-header.ui-corner-bl.ui-corner-br.ui-helper-clearfix{
+     background-color: #b9cd6d;
+}
+
+td.ui-state-default {
+     font-weight: bold;
+}

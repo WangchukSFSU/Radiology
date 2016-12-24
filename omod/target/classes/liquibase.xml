@@ -517,8 +517,9 @@
                <column name="reportCompletedDate" type="DATETIME"/>
           </addColumn>
      </changeSet>
-     <changeSet author="tenzin" id="radiology-106">
+     <changeSet author="tenzin" id="radiology-113">
           <modifyDataType tableName="radiology_study" columnName="reportCompletedDate"
-                                newDataType="date" />
+                                newDataType="timestamp" />
      </changeSet>
+
 </databaseChangeLog>

@@ -5,6 +5,8 @@
    jq = jQuery;
     jq(document).ready(function() {
 
+    jq( document ).tooltip();
+    
         jq(".studyHeaderDiv").hide();
         jq(".studyContinueBtnDiv").hide();
         jq(".breadcrumbs").show();
@@ -12,50 +14,6 @@
         jq("#reportTableDiv").hide();
         jq("#studyTableDiv").hide();
 
-        //Modality Concept Message dialog with button
-        jq("#createModalityConceptMessage").dialog({
-            autoOpen: false,
-            buttons: {
-                OK: function() {
-                    jq(this).dialog("close");
-                }
-            },
-            title: "Concept Dictionary",
-            position: {
-                my: "left center",
-                at: "left center"
-            }
-        });
-
-        //Study Concept Message dialog with button
-        jq("#createStudyConceptMessage").dialog({
-            autoOpen: false,
-            buttons: {
-                OK: function() {
-                    jq(this).dialog("close");
-                }
-            },
-            title: "Concept Dictionary",
-            position: {
-                my: "left center",
-                at: "left center"
-            }
-        });
-
-        //Report Message dialog with button
-        jq("#createReportDialogMessage").dialog({
-            autoOpen: false,
-            buttons: {
-                OK: function() {
-                    jq(this).dialog("close");
-                }
-            },
-            title: "USER GUIDE",
-            position: {
-                my: "left center",
-                at: "left center"
-            }
-        });
 
         //ModalityTable datatable
         jq('#modalityTable').DataTable({
@@ -66,12 +24,9 @@
             "bSort": true,
             "bJQueryUI": true,
             "iDisplayLength": 5,
+             "aLengthMenu": [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, "All"]],
         });
 
-        //Open Modality Concept Message dialog
-        jq("#modalityDialogBtn").click(function() {
-            jq("#createModalityConceptMessage").dialog("open");
-        });
 
         //Refresh study table
         jq("#studyRefreshBtn").click(function() {
@@ -118,16 +73,7 @@
             manageReportBreadCrumbClick();
         });
 
-        //Report ? btn is clicked
-        jq("#reportDialogBtn").click(function() {
-            jq("#createReportDialogMessage").dialog("option", "width", 460);
-            jq("#createReportDialogMessage").dialog("open");
-        });
-
-        //Study ? btn is clicked
-        jq("#studyDialogBtn").click(function() {
-            jq("#createStudyConceptMessage").dialog("open");
-        });
+        
 
     });
 
@@ -172,6 +118,7 @@
                     "bSort": true,
                     "bJQueryUI": true,
                     "iDisplayLength": 5,
+                     "aLengthMenu": [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, "All"]],
                 });
             })
     }
@@ -225,6 +172,7 @@
                             "bSort": true,
                             "bJQueryUI": true,
                             "iDisplayLength": 5,
+                             "aLengthMenu": [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, "All"]],
                         });
                     })
             })
@@ -296,26 +244,19 @@
      </ul>
 </div>
 
-<!-- Include modalitySoftwareAvailabilityFragment fragment -->
-<div id ="modalitySoftwareAvailabilityFragment"  >
-     ${ ui.includeFragment("radiology", "modalitySoftwareAvalability") }
-</div>
 <!-- Modality Page Header -->
 <div class="modalityHeaderDiv">
-     <label id="modalityDialogMessage" for modality-dialog-label> Please Add Modality not appearing in list to Concept Dictionary and Refresh: <a id="conceptMessage" target='_blank' href="${ conceptDictionaryFormUrl }"> Click here to Concept Dictionary </a></label>
-     <input type="button" id="modalityDialogBtn" value = "?" >
+     <label id="modalityDialogMessage" title="IMPORTANT NOTES FOR CREATING MODALITY CONCEPT: <br> 1) Select Radiology Imaging/Procedure as class from the dropdown menu.<br> 2) Select N/A as datatype from the dropdown menu.<br> 3) Add newly created modality concept to Imaging modalitites ConvSet in the concept dictionary. <br> 4) Please see user guide for detail explanation."> Please Add Modality not appearing in list to Concept Dictionary and Refresh: <a id="conceptMessage" target='_blank' href="${ conceptDictionaryFormUrl }"> Click here to Concept Dictionary </a>  </label>
      <input type="button" onclick="location.href='/openmrs/pages/radiology/admin.page'" id="modalityRefreshBtn" value="Refresh">
 </div>
 <!-- Study Page Header -->
 <div class="studyHeaderDiv">
-     <label id="studyDialogMessage" for modality-dialog-label> Please Add Study not appearing in list to Concept Dictionary and Refresh: <a id="conceptMessage" target='_blank' href="${ conceptDictionaryFormUrl }"> Click here to Concept Dictionary </a></label>
-     <input type="button" id="studyDialogBtn" value = "?" >
+     <label id="studyDialogMessage" title="IMPORTANT NOTES FOR CREATING STUDY CONCEPT: <br> 1) Select Radiology Imaging/Procedure  as class from the dropdown menu. <br> 2) Select N/A as datatype from the dropdown menu. <br> 3)  Include the newly created study concept to modality set using concept dictionary.<br> 4) Please see user guide for detail explanation."> Please Add Study not appearing in list to Concept Dictionary and Refresh: <a id="conceptMessage" target='_blank' href="${ conceptDictionaryFormUrl }"> Click here to Concept Dictionary </a> </label>  
      <input type="button" id="studyRefreshBtn" value="Refresh">
 </div>
 <!-- Report Page Header -->
 <div class="reportHeaderDiv">
-     <label id="reportDialogMessage" for report-dialog-label>  Please Create Report not appearing in list and Refresh: <a id="conceptMessage" target='_blank' href="${ htmlFormsUrl }"> Click here to create HTMLForm  </a></label>
-     <input type="button" id="reportDialogBtn" value = "?" >
+     <label id="reportDialogMessage" title="See radiology user guide for directions on creating report"> Please Create Report not appearing in list and Refresh: <a id="conceptMessage" target='_blank' href="${ htmlFormsUrl }"> Click here to create HTMLForm  </a>  </label>
      <input type="button" id="reportRefreshBtn" value="Refresh">
 </div>
 <!-- Modality table -->
@@ -345,20 +286,19 @@
 </div>
 
 <div class="modalityContinueBtnDiv">
-     <input type="button" id="modalityContinueBtn" value="Continue" >
+     <input title="Show availale studies in the Concept Dictionary" type="button" id="modalityContinueBtn" value="Show Available Studies" >
 </div>
 <div class="studyContinueBtnDiv">
-     <input type="button" id="studyContinueBtn" value="Continue" >
+     <input title="Show available reports for the Studies" type="button" id="studyContinueBtn" value="Show Available Reports" >
 </div>
-<!-- Dialog box messages -->
-<div id="createModalityConceptMessage" title="Create Modality Concept">IMPORTANT NOTES FOR CREATING MODALITY CONCEPT: <br> 1) Select Radiology Imaging/Procedure as class from the dropdown menu.<br> 2) Select N/A as datatype from the dropdown menu.<br> 3) Add newly created modality concept to Imaging modalitites ConvSet in the concept dictionary. </div>
-<div id="createStudyConceptMessage" title="Create Study Concept"> IMPORTANT NOTES FOR CREATING STUDY CONCEPT: <br> 1) Select Radiology Imaging/Procedure  as class from the dropdown menu. <br> 2) Select N/A as datatype from the dropdown menu. <br> 3)  Include the newly created study concept to modality set using concept dictionary.  </div>
-<div id="createReportDialogMessage" style="width:430px" title="Create Report"> See radiology user guide for directions on creating report </div>
 
 <!-- Dialog and Iframe for view report -->
 <div id="viewReportDialog" title="View Report" style="display:none;">
      <iframe id="viewReportIframe" width="1250" height="550"></iframe>
 </div>
 
+
+
+  
 
 

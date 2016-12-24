@@ -126,6 +126,7 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 					.getOrderTypeId() == testOrderTypeId) {
 				radiologyOrder = Context.getService(RadiologyService.class)
 						.getRadiologyOrderByOrderId(order.getOrderId());
+                             //   radiologyOrder.getPatient().getPersonName()
 				// get orders with report ready status
 				if (radiologyOrder.isReportReady()) {
 					reportReadyRadiologyOrders.add(radiologyOrder);

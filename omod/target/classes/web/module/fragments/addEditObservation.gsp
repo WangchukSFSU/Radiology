@@ -396,6 +396,7 @@
      "bSort": true,
      "bJQueryUI": true,
      "iDisplayLength": 5,
+     "aLengthMenu": [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, "All"]],
      "aaSorting": [
      [3, "desc"]
      ] // Sort by first column descending,
@@ -507,7 +508,7 @@
      localStorage.setItem("formNameHtmlToDisplayArray", JSON.stringify(formNameHtmlToDisplayArray));
      localStorage.setItem("patientIdArray", JSON.stringify(patientIdArray));
      localStorage.setItem("HtmlFormIdArray", JSON.stringify(HtmlFormIdArray));
-     var cancelSubmitButton = jq('<div class="order" id= "cancelbtnDivId"><input type="button" id = "cancelbtnId" onclick="cancelBtn();" value="Cancel" /><input type="button" onclick="submitBtn();" value="Submit" /></div>');
+     var cancelSubmitButton = jq('<div class="order" id= "cancelbtnDivId"><input type="button" id = "cancelbtnId" onclick="cancelBtn();" value="Process Another Order"/><input type="button" onclick="submitBtn();" value="Submit" /></div>');
      cancelSubmitButton.appendTo(jq('#orderDetailDiv'));
 
      var patientIdForCompletedOrderList = localStorage.getItem("patientIdForCompletedOrderList");
@@ -556,6 +557,7 @@
      "bSort": true,
      "bJQueryUI": true,
      "iDisplayLength": 5,
+     "aLengthMenu": [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, "All"]],
      "aaSorting": [
      [1, "desc"]
      ] // Sort by first column descending,
@@ -730,6 +732,7 @@
      "bSort": true,
      "bJQueryUI": true,
      "iDisplayLength": 5,
+     "aLengthMenu": [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, "All"]],
      "aaSorting": [
      [1, "desc"]
      ] // Sort by first column descending,
@@ -813,6 +816,7 @@
      "bSort": true,
      "bJQueryUI": true,
      "iDisplayLength": 5,
+     "aLengthMenu": [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, "All"]],
      "aaSorting": [
      [3, "desc"]
      ] // Sort by first column descending,
@@ -867,6 +871,7 @@
      "bSort": true,
      "bJQueryUI": true,
      "iDisplayLength": 5,
+     "aLengthMenu": [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, "All"]],
      "aaSorting": [
      [3, "desc"]
      ] // Sort by first column descending,
@@ -997,7 +1002,7 @@
                               ${anOrder.study.studyname}</a></td>
                     <td>${ anOrder.patient.personName } </td>
                     <td>${ anOrder.patient.patientIdentifier } </td>
-                    <td>${ anOrder.dateCreated } </td>
+                    <td>${ ui.format(anOrder.dateCreated) } </td>
                     <td>${ anOrder.urgency }</td>
                     <% if(anOrder.study.studyReportSavedEncounterId) { %>
                     <td>Yes</td>

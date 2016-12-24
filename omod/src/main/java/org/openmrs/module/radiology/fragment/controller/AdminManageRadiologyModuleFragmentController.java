@@ -35,26 +35,38 @@ public class AdminManageRadiologyModuleFragmentController {
 	 * @param model
 	 */
 	public void controller(FragmentModel model) {
-		ArrayList<ConceptName> modalityConcept = new ArrayList();
-		List<ConceptSet> modalityConceptSet = Context.getConceptService()
-				.getConceptSetsByConcept(Context.getConceptService()
-						.getConcept(164068));
-		for (ConceptSet addModalityConceptSet : modalityConceptSet) {
-			ConceptName modalityConceptName = addModalityConceptSet.getConcept()
-					.getName();
-			modalityConcept.add(modalityConceptName);
+		// get modality concept name
+		ArrayList<ConceptName> modalityConceptName = new ArrayList();
+		// get modality concept
+		ArrayList<Concept> modalityConcept = getModalityConcept();
+		// convert modality concept to conceptName
+		for (Concept getModalityConceptName : modalityConcept) {
+			modalityConceptName.add(getModalityConceptName.getName());
 		}
 		
 		RadiologyProperties radiologyProperties = new RadiologyProperties();
 		// concept dictionary and htmlform url
-		String serverAddress = radiologyProperties.getServersAddress();
-		String conceptDictionaryFormUrl = serverAddress + ":8080/openmrs/dictionary/concept.form";
-		String htmlFormsUrl = serverAddress + ":8080/openmrs/module/htmlformentry/htmlForms.list";
-		
+		String serverAddress = radiologyProperties.getOpenMRSServersAddress();
+		String serverPort = radiologyProperties.getOpenMRSServersPort();
+		String conceptDictionaryFormUrl = serverAddress + ":" + serverPort + "/openmrs/dictionary/concept.form";
+		String htmlFormsUrl = serverAddress + ":" + serverPort + "/openmrs/module/htmlformentry/htmlForms.list";
 		model.addAttribute("htmlFormsUrl", htmlFormsUrl);
 		model.addAttribute("conceptDictionaryFormUrl", conceptDictionaryFormUrl);
-		model.addAttribute("modalityConcept", modalityConcept);
+		model.addAttribute("modalityConcept", modalityConceptName);
 		
+	}
+	
+	// get modality concept
+	public ArrayList<Concept> getModalityConcept() {
+		ArrayList<Concept> modalityConcept = new ArrayList();
+		List<ConceptSet> modalityConceptSet = Context.getConceptService()
+				.getConceptSetsByConcept(Context.getConceptService()
+						.getConcept(164068));
+		for (ConceptSet addModalityConceptSet : modalityConceptSet) {
+			Concept modalityConceptName = addModalityConceptSet.getConcept();
+			modalityConcept.add(modalityConceptName);
+		}
+		return modalityConcept;
 	}
 	
 	/**
@@ -70,20 +82,8 @@ public class AdminManageRadiologyModuleFragmentController {
 	public List<SimpleObject> getStudyConceptsAnswerFromModality(@SpringBean("conceptService") ConceptService service,
 			UiUtils ui) {
 		
-		ArrayList<Concept> studySetMembers = new ArrayList<Concept>();
-		// study class name
-		ConceptClass studyClassName = Context.getConceptService()
-				.getConceptClassByName("Radiology/Imaging Procedure");
+		ArrayList<Concept> studySetMembers = getStudyConcept();
 		
-		List<Concept> studyClassNameConcept = Context.getConceptService()
-				.getConceptsByClass(studyClassName);
-		// remove modality concepts from study concept list
-		for (Concept filterStudyClassNameConcept : studyClassNameConcept) {
-			if (!filterStudyClassNameConcept.getDisplayString()
-					.endsWith("modality")) {
-				studySetMembers.add(filterStudyClassNameConcept);
-			}
-		}
 		// properties selected from the study field
 		String[] properties = new String[4];
 		properties[0] = "conceptId";
@@ -91,6 +91,24 @@ public class AdminManageRadiologyModuleFragmentController {
 		properties[2] = "id";
 		properties[3] = "name";
 		return SimpleObject.fromCollection(studySetMembers, ui, properties);
+	}
+	
+	// get study concept
+	public ArrayList<Concept> getStudyConcept() {
+		ArrayList<Concept> studyConcept = new ArrayList<Concept>();
+		
+		ArrayList<Concept> modalityConceptToBeRemovedFromStudyConcept = getModalityConcept();
+		// study class name
+		ConceptClass studyClassName = Context.getConceptService()
+				.getConceptClassByName("Radiology/Imaging Procedure");
+		List<Concept> studyClassNameConcept = Context.getConceptService()
+				.getConceptsByClass(studyClassName);
+		// get only study with no HtmlForm available
+		studyClassNameConcept.removeAll(modalityConceptToBeRemovedFromStudyConcept);
+		
+		studyConcept.addAll(studyClassNameConcept);
+		
+		return studyConcept;
 	}
 	
 	/**
@@ -112,28 +130,17 @@ public class AdminManageRadiologyModuleFragmentController {
 		// Get All HTMLForms
 		List<Form> getAllHTMLForms = Context.getFormService()
 				.getAllForms();
-		
-		// Study Concept Class
-		ConceptClass studyConceptClass = Context.getConceptService()
-				.getConceptClassByName("Radiology/Imaging Procedure");
-		
 		// Get all Study Concept
-		List<Concept> listOfStudyConcept = Context.getConceptService()
-				.getConceptsByClass(studyConceptClass);
-		
+		List<Concept> listOfStudyConcept = getStudyConcept();
 		for (Concept eachStudyConcept : listOfStudyConcept) {
-			
 			for (Form eachHTMLForms : getAllHTMLForms) {
-				
 				// study name
 				String studyDisplayString = eachStudyConcept.getDisplayString();
 				// htmlform name
 				String htmlFormName = eachHTMLForms.getName()
 						.trim();
-				
 				// check if study htmlform is available
 				if (studyDisplayString.equals(htmlFormName)) {
-					
 					try {
 						Mode mode = Mode.ENTER;
 						HtmlForm htmlForm = HtmlFormEntryUtil.getService()
@@ -179,19 +186,10 @@ public class AdminManageRadiologyModuleFragmentController {
 		// Get All HTMLForms
 		List<Form> getAllHTMLForms = Context.getFormService()
 				.getAllForms();
-		
-		// Study Concept Class
-		ConceptClass studyConceptClass = Context.getConceptService()
-				.getConceptClassByName("Radiology/Imaging Procedure");
-		
 		// Get all Study Concept
-		List<Concept> listOfStudyConcept = Context.getConceptService()
-				.getConceptsByClass(studyConceptClass);
-		
+		List<Concept> listOfStudyConcept = getStudyConcept();
 		for (Concept eachStudyConcept : listOfStudyConcept) {
-			
 			for (Form eachHTMLForms : getAllHTMLForms) {
-				
 				// study name
 				String studyDisplayString = eachStudyConcept.getDisplayString();
 				// htmlform name
@@ -200,11 +198,6 @@ public class AdminManageRadiologyModuleFragmentController {
 				
 				// check if study htmlform is available, add to the remove list
 				if (studyDisplayString.equals(htmlFormName)) {
-					studyConceptToBeRemoved.add(eachStudyConcept);
-					
-				}
-				// if it is modality, add to the remove list
-				if (studyDisplayString.endsWith("modality")) {
 					studyConceptToBeRemoved.add(eachStudyConcept);
 					
 				}

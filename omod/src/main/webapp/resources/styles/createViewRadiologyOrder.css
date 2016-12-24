@@ -88,5 +88,9 @@
 }
 
 div#performedStatusCompletedOrder {
-     margin-top: -57px;
+     margin-top:7px;
+}
+
+.priorityCheckBox {
+     margin-left: 27px;
 }

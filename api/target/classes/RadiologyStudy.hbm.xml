@@ -29,7 +29,7 @@
                           length="255">
                 </property>
                 <property name="reportCompletedDate" column="reportCompletedDate"
-                          type="date">
+                          type="timestamp">
                 </property>
                 <property name="studyReportSavedEncounterId" column="studyReportSavedEncounterId"
                           type="int">

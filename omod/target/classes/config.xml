@@ -127,10 +127,21 @@
 		<description>IP address or hostname of the DICOM web viewer
 		</description>
 	</globalProperty>
-	<globalProperty>
+        <globalProperty>
+		<property>radiology.openMRSServerAddress</property>
+		<defaultValue>localhost</defaultValue>
+		<description>openMRS Server Address
+		</description>
+	</globalProperty>
+        <globalProperty>
 		<property>radiology.dicomWebViewerPort</property>
 		<defaultValue>8081</defaultValue>
 		<description>Port of the DICOM web viewer</description>
+	</globalProperty>
+	<globalProperty>
+		<property>radiology.openMRSPort</property>
+		<defaultValue>8080</defaultValue>
+		<description>openMRS server Port</description>
 	</globalProperty>
 	<globalProperty>
 		<property>radiology.dicomWebViewerBaseUrl</property>
@@ -144,6 +155,12 @@
 		<defaultValue>/weasis-pacs-connector/viewer</defaultValue>
 		<description>Base URL of the DICOM web viewer Weasis
 			"/weasis-pacs-connector/viewer". 
+		</description>
+	</globalProperty>
+        <globalProperty>
+		<property>radiology.modalitySoftwareAvailability</property>
+		<defaultValue>Yes</defaultValue>
+		<description> If modality software is available, enter 'yes' else 'no'
 		</description>
 	</globalProperty>
 	<globalProperty>

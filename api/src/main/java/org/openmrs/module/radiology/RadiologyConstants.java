@@ -38,11 +38,17 @@ public class RadiologyConstants {
 	
 	public static final String GP_DICOM_WEB_VIEWER_ADDRESS = "radiology.dicomWebViewerAddress";
 	
+	public static final String GP_OPENMRS_SERVER_ADDRESS = "radiology.openMRSServerAddress";
+	
+	public static final String GP_OPENMRS_SERVER_PORT = "radiology.openMRSPort";
+	
 	public static final String GP_DICOM_WEB_VIEWER_PORT = "radiology.dicomWebViewerPort";
 	
 	public static final String GP_DICOM_WEB_VIEWER_BASE_URL = "radiology.dicomWebViewerBaseUrl";
 	
 	public static final String GP_DICOM_WEB_VIEWER_WEASIS_BASE_URL = "radiology.dicomWebViewerWeasisBaseUrl";
+	
+	public static final String GP_MODALITY_SOFTWARE_AVAILABILITY = "radiology.modalitySoftwareAvailability";
 	
 	public static final String GP_DICOM_WEB_VIEWER_LOCAL_SERVER_NAME = "radiology.dicomWebViewerLocalServerName";
 	

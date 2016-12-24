@@ -35,6 +35,7 @@ console.log("fnDrawCallback");
         "bSort": true,
         "bJQueryUI": true,
         "iDisplayLength": 5,
+        "aLengthMenu": [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, "All"]],
         "aaSorting": [
                 [2, "desc"]
             ] // Sort by first column descending,
@@ -68,8 +69,7 @@ console.log("fnDrawCallback");
                 jq("#contactPatientDiv").hide();
                 //sent comfirmation message
                 jq("#completedOrderHeader").show();
-                jq("#completedOrderHeader").children("h1").remove();
-                jq("<h1></h1>").text("Email sent successfully").appendTo('#completedOrderHeader');
+                emr.successMessage("Email sent successfully");
                 jq("#addRadiologyOrderForm").hide();
                 jq("#performedStatusInProgressOrder").hide();
                 jq("#radiologyOrderDetailsDiv").hide();
@@ -128,6 +128,7 @@ console.log("fnDrawCallback");
                     "bSort": true,
                     "bJQueryUI": true,
                     "iDisplayLength": 5,
+                    "aLengthMenu": [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, "All"]],
                     "aaSorting": [
                             [1, "desc"]
                         ] // Sort by first column descending,
@@ -152,9 +153,7 @@ console.log("fnDrawCallback");
         width: 550,
         height: 350,
         buttons: {
-
             "Ok": function() {
-
                 jq(this).dialog('close');
             }
         },
@@ -180,7 +179,14 @@ console.log("fnDrawCallback");
         var studyOrder = jq("#studyTags").val();
         var diagnosisOrder = jq("#diagnosisTags").val();
         var instructionOrder = jq("#orderInstruction").val();
-        var priorityOrder = jq('select[name=priority]').val();
+       
+        if (jq('#STAT').is(":checked"))
+         {
+           var priorityOrder = jq('#STAT').val();
+         } else {
+          var priorityOrder = jq('#ROUTINE').val();
+         }
+
         jq.getJSON('${ ui.actionLink("placeRadiologyOrder") }', {
                 'patient': patient,
                 'study': studyOrder,
@@ -196,14 +202,14 @@ console.log("fnDrawCallback");
                 jq("#addOrderBreadCrumb").hide();
                 jq("#orderDetailBreadCrumb").hide();
                 jq("#completedOrderHeader").show();
-                jq("#completedOrderHeader").children("h1").remove();
-                jq("<h1></h1>").text("Radiology order sent successfully").appendTo('#completedOrderHeader');
+                emr.successMessage("Radiology Order Submitted Successfully");
                 jq("#addRadiologyOrderForm").hide();
                 jq("#contactPatientDiv").hide();
                 jq("#performedStatusInProgressOrder").hide();
                 jq("#radiologyOrderDetailsDiv").hide();
                 jq("#contactRadiologist").hide();
                 jq("#performedStatusCompletedOrder").show();
+                jq("#InProgressOrdersList").click();
 
             })
     });
@@ -281,8 +287,9 @@ console.log("fnDrawCallback");
                  jq('#radiologyOrderDetailsTableId').append('<tbody><tr><td><a onclick="ViewReport();"> Obs</a> </td><td> ${anOrder.study.studyReportRadiologist}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td>${anOrder.study.studyname}</td><td><a id="studyLink" class="studyLink" target="_blank" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" +  anOrder.patient.patientIdentifier }" >ViewStudy</a></td><td><a onclick="contactRadiologist();"> ContactRadiologist</a></td></tr></tbody>');
             <% } %>
             <% if ((weasisStatus != null) && (oviyamStatus != "")) { %>
-                 jq('#radiologyOrderDetailsTableId').append('<tbody><tr><td><a onclick="ViewReport();"> Obs</a> </td><td> ${anOrder.study.studyReportRadiologist}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td>${anOrder.study.studyname}</td><td><a id="studyLink" class="studyLink" target="_blank" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" +  anOrder.patient.patientIdentifier }" >ViewStudy</a></td><td><a onclick="contactRadiologist();"> ContactRadiologist</a></td></tr></tbody>');
-            <% } %> 
+                 jq('#radiologyOrderDetailsTableId').append('<tbody><tr><td><a onclick="ViewReport();"> Obs</a> </td><td> ${anOrder.study.studyReportRadiologist}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td>${anOrder.study.studyname}</td><td><a id="studyLink" class="studyLink" target="_blank" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" +  anOrder.patient.patientIdentifier }" >Oviyam</a><br><a id="studyLink" class="studyLink" target="_blank" href="${ dicomViewerWeasisUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" +  anOrder.patient.patientIdentifier }" >Weasis</a></td><td><a onclick="contactRadiologist();"> ContactRadiologist</a></td></tr></tbody>');
+          
+                 <% } %> 
         }
 
         <% } %>
@@ -311,14 +318,11 @@ console.log("fnDrawCallback");
             cache: false,
             success: function(data) {
                 jq('#contactRadiologistDialogBox').dialog('close');
-                jq("<h1>Email sent successfully</h1>").insertBefore(jq('#radiologyOrderDetailsDiv h1'));
-
+                 emr.successMessage("Email sent successfully");
             }
         });
     });
 });
-
-
 
 
 
@@ -492,7 +496,7 @@ function contactRadiologist() {
                     <td> <p style="display:none;">${ anOrder.orderId }</p>
                         ${anOrder.study.studyname}</td>
                     <td> ${anOrder.study.studyReportRadiologist}</td>
-                    <td>${ anOrder.study.reportCompletedDate } </td>
+                    <td>${ ui.format(anOrder.study.reportCompletedDate) } </td>
                 </tr>
                 <% } %>  
             </tbody>
@@ -553,13 +557,10 @@ function contactRadiologist() {
     </div>
 
     <div class="fieldclass"><label>Priority </label>
-        <span>
-            <select name="priority" id="priority">
-                <option name="priority" selected="selected" value="priority">Select One</option>
-                <% urgencies.each { urgencies -> %>
-                <option name="priority" value="$urgencies">${urgencies}</option>
-                <% } %>
-            </select>        
+        <span class="priorityCheckBox">       
+                  <% urgencies.each { urgencies -> %>        
+                <input id="${ urgencies }" name ="priority" value="$urgencies"  type="checkbox">  ${ urgencies }        
+            <% } %>             
         </span>
     </div>
     <input class="fields" id="submitForm" type="button" value="Submit" />
@@ -579,11 +580,10 @@ function contactRadiologist() {
         <table border="0" width="80%">
             <tr>
                 <td>To:</td>
-                <td><input type="text" id ="recipientRadiologist"  name="recipient" size="65" value =" radiologistemailaddress" /></td>
+                <td><input type="text" id ="recipientRadiologist"  name="recipient" size="65" value =" ${ radiologistemailaddress }" /></td>
             </tr>
             <tr>
                 <td>Subject:</td>
-
                 <td><input type="text" id ="subjectRadiologist" name="subject" size="65" value=" ${subject}"/></td>
             </tr>
             <tr>
@@ -606,3 +606,7 @@ function contactRadiologist() {
 <div id="patientId">
     <p style="display:none;">${ patient }</p>
 </div>
+
+
+
+
