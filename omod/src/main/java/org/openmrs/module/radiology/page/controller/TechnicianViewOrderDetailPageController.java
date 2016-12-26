@@ -3,7 +3,7 @@ package org.openmrs.module.radiology.page.controller;
 import org.openmrs.ui.framework.page.PageModel;
 
 /**
- * Technician checks the Patient Order Detail
+ * Technician make sure the Patient Order Detail is available before taking picture
  * Pages does not allow to have ajax call therefore no any functionality added
  * 
  * @author tenzin

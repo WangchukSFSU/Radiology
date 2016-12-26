@@ -57,6 +57,7 @@ public class CreateViewRadiologyOrderFragmentController {
 	 */
 	public void controller(PageModel model, @RequestParam(value = "returnUrl", required = false) String returnUrl,
 			@RequestParam(value = "patientId", required = false) Patient patient) {
+		
 		// Priority of the order
 		final List<String> urgencies = new LinkedList<String>();
 		for (Order.Urgency urgency : Order.Urgency.values()) {
@@ -295,6 +296,7 @@ public class CreateViewRadiologyOrderFragmentController {
 		RadiologyService radiologyservice = Context.getService(RadiologyService.class);
 		// create new study
 		Study newStudy = new Study();
+		
 		newStudy.setModality(study);
 		newStudy.setStudyname(study);
 		

@@ -56,7 +56,9 @@ public class AdminManageRadiologyModuleFragmentController {
 		
 	}
 	
-	// get modality concept
+	/**
+	 * @return modalityConcept
+	 */
 	public ArrayList<Concept> getModalityConcept() {
 		ArrayList<Concept> modalityConcept = new ArrayList();
 		List<ConceptSet> modalityConceptSet = Context.getConceptService()
@@ -94,6 +96,10 @@ public class AdminManageRadiologyModuleFragmentController {
 	}
 	
 	// get study concept
+	
+	/**
+	 * @return studyConcept
+	 */
 	public ArrayList<Concept> getStudyConcept() {
 		ArrayList<Concept> studyConcept = new ArrayList<Concept>();
 		

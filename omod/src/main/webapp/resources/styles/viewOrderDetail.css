@@ -1,5 +1,14 @@
-#patient-search-clear-button {
-    position: relative;
-    right: 25px;
-    background-color: red;
+.fg-toolbar.ui-toolbar.ui-widget-header.ui-corner-tl.ui-corner-tr.ui-helper-clearfix {
+     background-color: #b9cd6d;
+}
+
+.fg-toolbar.ui-toolbar.ui-widget-header.ui-corner-bl.ui-corner-br.ui-helper-clearfix {
+
+     background-color: #b9cd6d;
+}
+
+
+.ui-dialog-titlebar.ui-widget-header.ui-corner-all.ui-helper-clearfix {
+
+     background-color: #b9cd6d;
 }

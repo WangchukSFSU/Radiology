@@ -17,6 +17,7 @@ import org.openmrs.ui.framework.fragment.FragmentModel;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
+ * Technician make sure the Patient Order Detail is available before taking picture
  * Find Patient Order Detail
  *
  * @author tenzin
@@ -83,6 +84,8 @@ public class ViewOrderDetailFragmentController {
 	}
 	
 	/**
+	 * Find patient orders
+	 * 
 	 * @param service ConceptService
 	 * @param model FragmentModel
 	 * @param ui UiUtils
@@ -100,8 +103,8 @@ public class ViewOrderDetailFragmentController {
 					.trim()
 					.equals(patientName.trim())) {
 				
-				// get in progress orders of the patient
-				inProgressRadiologyOrders = getInProgressRadiologyOrdersByPatient(eachPatient);
+				// get ScheduledStatus orders of the patient
+				inProgressRadiologyOrders = getScheduledStatusRadiologyOrdersByPatient(eachPatient);
 				
 			}
 		}
@@ -126,15 +129,15 @@ public class ViewOrderDetailFragmentController {
 	}
 	
 	/**
-	 * Method returns list of in progress radiology orders of the patient
+	 * Method returns list of ScheduledStatus radiology orders of the patient
 	 *
 	 * @param patient
-	 * @return in progress radiology orders of the patient The Ajax call
+	 * @return ScheduledStatus radiology orders of the patient The Ajax call
 	 *         requires a json result; properties string array elements are concepts
 	 *         and properties indicate the Concept properties of interest; The
 	 *         framework will build the json response when the method returns
 	 */
-	public List<RadiologyOrder> getInProgressRadiologyOrdersByPatient(Patient p) {
+	public List<RadiologyOrder> getScheduledStatusRadiologyOrdersByPatient(Patient p) {
 		
 		Vector<RadiologyOrder> radiologyOrders = new Vector<RadiologyOrder>();
 		// get all orders of the patient
@@ -150,8 +153,8 @@ public class ViewOrderDetailFragmentController {
 					.getOrderTypeId() == testOrderTypeId) {
 				radiologyOrder = Context.getService(RadiologyService.class)
 						.getRadiologyOrderByOrderId(order.getOrderId());
-				// get inprogress, completed and scehduled status orders
-				if (radiologyOrder.isInProgress() || radiologyOrder.isCompleted() || (radiologyOrder.getStudy()
+				// get scehduled status orders
+				if ((radiologyOrder.getStudy()
 						.getScheduledStatus() == radiologyOrder.getStudy()
 						.getScheduledStatus().SCHEDULED)) {
 					radiologyOrders.add(radiologyOrder);

@@ -13,8 +13,8 @@ def conceptPatientClass = config.requirePatientClass
      jq('#findPatientLinkBreadCrumb').hide();
      jq('#patientOrderDetailBreadCrumb').hide();
 
-     //get diagnosis list for autocomlete feature
-     jq("#diagnosisTags").autocomplete({
+     //get patients for autocomlete feature
+     jq("#patientTags").autocomplete({
      source: function(request, response) {
      var results = [];
                 jq.getJSON('${ ui.actionLink("getPatientAutocomplete") }', {
@@ -39,8 +39,6 @@ def conceptPatientClass = config.requirePatientClass
 
      patientInfoTable.append('<tr><td> ' + patientIdentifier + '</td><td> ' + personName + '</td><td> ' + gender + ' </td><td> ' + age + '</td><td> '+ birthdate +'</td></tr>');                    
      }
-
-
      patientInfoTable.append("</tbody>");
      jq('#patientInfoDatatable').DataTable({
      "sPaginationType": "full_numbers",
@@ -59,7 +57,7 @@ def conceptPatientClass = config.requirePatientClass
      }
      })
 
-
+     //get PatientOrderDetails
      jq("#patientInfo").delegate("tbody tr", "click", function (event) {
      var value = jq('#patientInfoDatatable td').eq(1).text();
      jq('#patientInfo').remove();
@@ -76,11 +74,15 @@ def conceptPatientClass = config.requirePatientClass
      jq('#patientOrderDetailBreadCrumb').show();
 
      jq('#orderDetailDiv').empty();
-     jq("<h1></h1>").text("Patient Radiology Order Detail").appendTo('#orderDetailDiv');
+     for (var i = 0; i < 1; i++) {
+     var personName = ret[i].patient.personName;
+     }
+     jq("<h1></h1>").text("Radiology Order Detail for :  " +  personName ).appendTo('#orderDetailDiv');
      jq('#orderDetailDiv').append('<table></table>');
      jq('#orderDetailDiv table').attr('id', 'orderDetailDivTableid');
      var orderDetailDivTable = jq('#orderDetailDiv table');
-     orderDetailDivTable.append('<thead><tr><th style="background-color:#b9cd6d;"> </th><th style="background-color:#b9cd6d;"></th><th style="background-color:#b9cd6d;"></th><th style="background-color:#b9cd6d;"> </th><th style="background-color:#b9cd6d;"></th></tr></thead><tbody>');      
+
+     orderDetailDivTable.append('<thead><tr><th>OrderId </th><th>StudyName</th><th>StudyInstanceUid</th><th>DateCreated</th><th>Urgency</th></tr></thead><tbody>');      
 
      for (var i = 0; i < ret.length; i++) {
      var personName = ret[i].patient.personName;
@@ -97,25 +99,26 @@ def conceptPatientClass = config.requirePatientClass
      var studyInstanceUid = ret[i].study.studyInstanceUid;
      var birthdate = ret[i].patient.birthdate;
 
-       orderDetailDivTable.append('<tr style="font-weight: bold;"><td> PatientIdentifier</td><td> PatientName</td><td> Gender </td><td> Age</td><td> Birthdate</td></tr>');                        
-       orderDetailDivTable.append('<tr><td> ' + patientIdentifier + '</td><td> ' + personName + '</td><td> ' + gender + ' </td><td> ' + age + '</td><td> '+ birthdate +'</td></tr>');                    
-       orderDetailDivTable.append('<tr style="font-weight: bold;"><td> OrderId</td><td> StudyName</td><td> StudyInstanceUid </td><td> Instructions</td><td> Urgency</td></tr>');                        
-       orderDetailDivTable.append('<tr><td> ' + orderId + '</td><td> ' + studyname + '</td><td> ' + studyInstanceUid + ' </td><td> ' + Instructions + '</td><td> '+ urgency +'</td></tr>');                    
-       orderDetailDivTable.append('<tr style="background-color:#b9cd6d;"><td> </td><td> </td><td> </td><td> </td><td> </td></tr>'); 
+     orderDetailDivTable.append('<tr><td> ' + orderId + '</td><td> ' + studyname + '</td><td> ' + studyInstanceUid + ' </td><td> ' + dateCreated + '</td><td> '+ urgency +'</td></tr>');                    
 
      }
 
-     orderDetailDivTable.append("</tbody>");
-     jq('#orderDetailDivTableid').DataTable({
+     orderDetailDivTable.append("</tbody>");   
+     jq('#orderDetailDivTableid').dataTable({
      "sPaginationType": "full_numbers",
      "bPaginate": true,
      "bAutoWidth": false,
-     "bLengthChange": false,
-     "bSort": false,
-     "bJQueryUI": false,
-     "bFilter": false,
+     "bLengthChange": true,
+     "bSort": true,
+     "bJQueryUI": true,
+     "iDisplayLength": 5,
+     "aLengthMenu": [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, "All"]],
+     "aaSorting": [
+     [3, "desc"]
+     ] // Sort by first column descending,
 
      });
+
      })
      });
      })
@@ -150,8 +153,7 @@ def conceptPatientClass = config.requirePatientClass
 <!-- Find Patient -->
 <form method="get" id="patient-search-form" onsubmit="return false">
      <label for="tags">Find Patient </label>
-     <input id="diagnosisTags" placeholder="Search by ID or Name">
-     <i id="patient-search-clear-button" class="small icon-remove-sign"></i>
+     <input id="patientTags" placeholder="Search by ID or Name">
 </form>
 
 
