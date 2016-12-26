@@ -73,7 +73,9 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		RadiologyProperties radiologyProperties = new RadiologyProperties();
 		// patient dashboard
 		String serverAddress = radiologyProperties.getServersAddress();
-		String patientClinicianUrl = serverAddress + ":8080/openmrs/coreapps/clinicianfacing/patient.page?patientId=";
+		String serverPort = radiologyProperties.getOpenMRSServersPort();
+		String patientClinicianUrl = serverAddress + ":" + serverPort
+				+ "/openmrs/coreapps/clinicianfacing/patient.page?patientId=";
 		model.addAttribute("patientClinicianUrl", patientClinicianUrl);
 		// get performed status completed orders
 		List<RadiologyOrder> performedStatusCompletedOrders = getPerformedStatusCompletedRadiologyOrders();
@@ -126,7 +128,7 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 					.getOrderTypeId() == testOrderTypeId) {
 				radiologyOrder = Context.getService(RadiologyService.class)
 						.getRadiologyOrderByOrderId(order.getOrderId());
-                             //   radiologyOrder.getPatient().getPersonName()
+				// radiologyOrder.getPatient().getPersonName()
 				// get orders with report ready status
 				if (radiologyOrder.isReportReady()) {
 					reportReadyRadiologyOrders.add(radiologyOrder);
@@ -423,7 +425,6 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 			getForms.add(fes);
 			
 		}
-		
 		String[] properties = new String[7];
 		properties[0] = "EncounterModifiedTimestamp";
 		properties[1] = "HtmlToDisplay";

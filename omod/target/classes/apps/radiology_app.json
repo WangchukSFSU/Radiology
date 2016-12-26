@@ -47,8 +47,16 @@
                 "url": "radiology/technician.page",
                 "icon": "icon-signin",
                 "requiredPrivilege": "App: send radiology image to pacs"
+            },
+           {
+                "id": "radiology.appId28",
+                "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
+                "type": "link",
+                "label": "View RadiologyOrder Detail",
+                "url": "radiology/technicianViewOrderDetail.page",
+                "icon": "icon-signin",
+                "requiredPrivilege": "App: technician view radiology order detail"
             }
-           
           
        
  

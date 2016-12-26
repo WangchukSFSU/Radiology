@@ -17,6 +17,7 @@ import javax.mail.internet.MimeMessage;
 import org.openmrs.Concept;
 import org.openmrs.ConceptClass;
 import org.openmrs.ConceptSearchResult;
+import org.openmrs.ConceptSet;
 import org.openmrs.Form;
 import org.openmrs.Obs;
 import org.openmrs.Order;
@@ -359,17 +360,29 @@ public class CreateViewRadiologyOrderFragmentController {
 				.getConcepts(query, null, false, requireClasses, null, null, null, null, 0, 100);
 		
 		List<Concept> names = new ArrayList<Concept>();
-		for (ConceptSearchResult con : results) {
-			if (!con.getConcept()
-					.getDisplayString()
-					.endsWith("modality")) {
-				names.add(con.getConcept()); // con.getConcept().getName().getName()
-				System.out.println("Concept: " + con.getConceptName());
-			}
+		List<Concept> removedlist = new ArrayList<Concept>();
+		ArrayList<Concept> modalityConceptToBeRemovedFromStudyConcept = getModalityConcept();
+		for (ConceptSearchResult resultsConcept : results) {
+			removedlist.add(resultsConcept.getConcept());
 		}
+		removedlist.removeAll(modalityConceptToBeRemovedFromStudyConcept);
+		names.addAll(removedlist);
 		
 		String[] properties = new String[] { "name" };
 		return SimpleObject.fromCollection(names, ui, properties);
+	}
+	
+	// get modality concept
+	public ArrayList<Concept> getModalityConcept() {
+		ArrayList<Concept> modalityConcept = new ArrayList();
+		List<ConceptSet> modalityConceptSet = Context.getConceptService()
+				.getConceptSetsByConcept(Context.getConceptService()
+						.getConcept(164068));
+		for (ConceptSet addModalityConceptSet : modalityConceptSet) {
+			Concept modalityConceptName = addModalityConceptSet.getConcept();
+			modalityConcept.add(modalityConceptName);
+		}
+		return modalityConcept;
 	}
 	
 	/**
