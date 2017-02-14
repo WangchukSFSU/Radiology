@@ -18,27 +18,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * Technician make sure the Patient Order Detail is available before taking picture
- * Find Patient Order Detail
- *
+ * 
  * @author tenzin
  */
 public class ViewOrderDetailFragmentController {
 	
 	/**
-	 * @param model
+	 * @param model FragmentModel
 	 */
 	public void controller(FragmentModel model) {
 		
 	}
 	
 	/**
-	 * Auto complete feature for the patient
+	 * Auto complete feature for the patient name
 	 *
-	 * @param query
+	 * @param query to get patient list
 	 * @param requireConceptClass
 	 * @param service ConceptService
 	 * @param ui UiUtils
-	 * @return matches patient
+	 * @return list of matched patient
 	 */
 	public List<SimpleObject> getPatientAutocomplete(@RequestParam(value = "query", required = false) String query,
 			@RequestParam(value = "conceptPatientClass", required = false) String requireConceptClass,
@@ -84,7 +83,7 @@ public class ViewOrderDetailFragmentController {
 	}
 	
 	/**
-	 * Find patient orders
+	 * list orders for the patient
 	 * 
 	 * @param service ConceptService
 	 * @param model FragmentModel
@@ -137,12 +136,12 @@ public class ViewOrderDetailFragmentController {
 	 *         and properties indicate the Concept properties of interest; The
 	 *         framework will build the json response when the method returns
 	 */
-	public List<RadiologyOrder> getScheduledStatusRadiologyOrdersByPatient(Patient p) {
+	public List<RadiologyOrder> getScheduledStatusRadiologyOrdersByPatient(Patient patient) {
 		
 		Vector<RadiologyOrder> radiologyOrders = new Vector<RadiologyOrder>();
 		// get all orders of the patient
 		List<Order> orders = Context.getOrderService()
-				.getAllOrdersByPatient(p);
+				.getAllOrdersByPatient(patient);
 		int testOrderTypeId = Context.getOrderService()
 				.getOrderTypeByName("Radiology Order")
 				.getOrderTypeId();

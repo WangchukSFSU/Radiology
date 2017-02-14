@@ -27,20 +27,20 @@ public class SendDicomToPacsFragmentController {
 	/**
 	 * Get all the dicom files after picture is taken
 	 * 
-	 * @param model
+	 * @param model FragmentModel
 	 */
 	public void controller(FragmentModel model) {
 		// get all the active orders
 		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrders();
-		// Transfer all the dicom files modality station to local disk
-		ArrayList<String> dicomeFiles = listFiles("/home/youdon/Desktop/DicomFiles/");
+		// Transfer all the dicom files from modality station to DicomFiles folder
+		ArrayList<String> dicomeFiles = listFiles(System.getProperty("user.home") + "/Desktop" + "/DicomFiles/");
 		model.addAttribute("dicomeFiles", dicomeFiles);
 		model.put("inProgressRadiologyOrders", inProgressRadiologyOrders);
 		
 	}
 	
 	/**
-	 * get the dicom files
+	 * Get the dicom files
 	 * 
 	 * @param directoryName
 	 * @return arraylist of dicom files
@@ -105,9 +105,9 @@ public class SendDicomToPacsFragmentController {
 	 * The framework will build the json response when the method returns
 	 * 
 	 * @param service ConceptService
-	 * @param model
+	 * @param model FragmentModel
 	 * @param radiologyorderId order to update the order status
-	 * @param ui UiUtils
+	 * @param ui UiUtils Utility methods
 	 * @return updated active orders
 	 */
 	public List<SimpleObject> updateActiveOrders(@SpringBean("conceptService") ConceptService service, FragmentModel model,

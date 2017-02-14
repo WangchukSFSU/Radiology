@@ -78,7 +78,8 @@
                 jq('#sendImageToPACNoLinkBreadCrumb').show();
                 jq('#tableDiv').empty();
                 //dicom files send to PACS and update the active orders
-                jq("<h1></h1>").text("dicom files(s) sent successfully").appendTo('#tableDiv');
+               // jq("<h1></h1>").text("dicom files(s) sent successfully").appendTo('#tableDiv');
+               emr.successMessage("dicom files(s) sent successfull");
                 jq("<h1></h1>").text("CLICK RADIOLOGY ORDER TO SEND IMAGE TO PAC").appendTo('#tableDiv');
                 jq('#tableDiv').append('<table></table>');
                 jq('#tableDiv table').attr('id', 'updateActiveOrderDatatable');

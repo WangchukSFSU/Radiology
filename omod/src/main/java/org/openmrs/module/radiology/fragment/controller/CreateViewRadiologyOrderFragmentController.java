@@ -18,7 +18,6 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptClass;
 import org.openmrs.ConceptSearchResult;
 import org.openmrs.ConceptSet;
-import org.openmrs.Form;
 import org.openmrs.Obs;
 import org.openmrs.Order;
 import org.openmrs.Patient;
@@ -39,7 +38,7 @@ import org.openmrs.ui.framework.page.PageModel;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * Referring Physician create order, place order in database and PACS and view
+ * Referring Physician create order, place order in database, PACS and view
  * completed order
  *
  * @author tenzin
@@ -47,15 +46,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class CreateViewRadiologyOrderFragmentController {
 	
 	/**
-	 * Get the performed status report ready completed order Get necessary
-	 * patient, radiologist information for sending messages Get the
-	 * dicomViewerUrladdress for displaying images in the oviyam
+	 * Get the performed status report ready completed order. Get necessary
+	 * patient, radiologist information for sending messages. Get the
+	 * dicomViewerUrladdress for displaying images
 	 *
-	 * @param model
+	 * @param model FragmentModel
 	 * @param returnUrl
 	 * @param patient
 	 */
-	public void controller(PageModel model, @RequestParam(value = "returnUrl", required = false) String returnUrl,
+	public void controller(FragmentModel model, @RequestParam(value = "returnUrl", required = false) String returnUrl,
 			@RequestParam(value = "patientId", required = false) Patient patient) {
 		
 		// Priority of the order
@@ -103,7 +102,9 @@ public class CreateViewRadiologyOrderFragmentController {
 		
 	}
 	
-	// Oviyum url address
+	/**
+	 * Oviyum url address
+	 */
 	private String getDicomViewerUrladdress() {
 		RadiologyProperties radiologyProperties = new RadiologyProperties();
 		return radiologyProperties.getServersAddress() + ":" + radiologyProperties.getServersPort()
@@ -111,7 +112,9 @@ public class CreateViewRadiologyOrderFragmentController {
 		
 	}
 	
-	// get the weasis url address
+	/**
+	 * get the weasis url address
+	 */
 	private String getDicomViewerWeasisUrladdress() {
 		RadiologyProperties radiologyProperties = new RadiologyProperties();
 		
@@ -129,12 +132,12 @@ public class CreateViewRadiologyOrderFragmentController {
 	 *         and properties indicate the Concept properties of interest; The
 	 *         framework will build the json response when the method returns
 	 */
-	public List<RadiologyOrder> getRadiologyOrdersWithCompletedReportByPatient(Patient p) {
+	public List<RadiologyOrder> getRadiologyOrdersWithCompletedReportByPatient(Patient patient) {
 		
 		Vector<RadiologyOrder> radiologyOrders = new Vector<RadiologyOrder>();
 		// get all patient orders
 		List<Order> orders = Context.getOrderService()
-				.getAllOrdersByPatient(p);
+				.getAllOrdersByPatient(patient);
 		int testOrderTypeId = Context.getOrderService()
 				.getOrderTypeByName("Radiology Order")
 				.getOrderTypeId();
@@ -216,7 +219,7 @@ public class CreateViewRadiologyOrderFragmentController {
 	}
 	
 	/**
-	 * Method returns list of in progress radiology orders of the patient
+	 * Get list of in progress radiology orders of the patient
 	 *
 	 * @param patient
 	 * @return in progress radiology orders of the patient The Ajax call
@@ -224,12 +227,12 @@ public class CreateViewRadiologyOrderFragmentController {
 	 *         and properties indicate the Concept properties of interest; The
 	 *         framework will build the json response when the method returns
 	 */
-	public List<RadiologyOrder> getInProgressRadiologyOrdersByPatient(Patient p) {
+	public List<RadiologyOrder> getInProgressRadiologyOrdersByPatient(Patient patient) {
 		
 		Vector<RadiologyOrder> radiologyOrders = new Vector<RadiologyOrder>();
 		// get all orders of the patient
 		List<Order> orders = Context.getOrderService()
-				.getAllOrdersByPatient(p);
+				.getAllOrdersByPatient(patient);
 		int testOrderTypeId = Context.getOrderService()
 				.getOrderTypeByName("Radiology Order")
 				.getOrderTypeId();
@@ -256,13 +259,13 @@ public class CreateViewRadiologyOrderFragmentController {
 	 * radiology orders.
 	 *
 	 * @param service ConceptService
-	 * @param model
+	 * @param model FragmentModel
 	 * @param patient
 	 * @param returnUrl
-	 * @param study of the order
-	 * @param diagnosis of the order
-	 * @param instruction of the order
-	 * @param priority of the order
+	 * @param study of the radiology order
+	 * @param diagnosis of the radiology order
+	 * @param instruction of the radiology order
+	 * @param priority of the radiology order
 	 * @param ui UiUtils
 	 * @return completed report ready radiology orders The Ajax call requires a
 	 *         json result; properties string array elements are concepts and
@@ -330,7 +333,7 @@ public class CreateViewRadiologyOrderFragmentController {
 	/**
 	 * Auto complete feature for the study
 	 *
-	 * @param query
+	 * @param query to get study concepts
 	 * @param requireConceptClass study concept class
 	 * @param service conceptService
 	 * @param ui UiUtils
@@ -374,7 +377,6 @@ public class CreateViewRadiologyOrderFragmentController {
 		return SimpleObject.fromCollection(names, ui, properties);
 	}
 	
-	// get modality concept
 	public ArrayList<Concept> getModalityConcept() {
 		ArrayList<Concept> modalityConcept = new ArrayList();
 		List<ConceptSet> modalityConceptSet = Context.getConceptService()
@@ -390,7 +392,7 @@ public class CreateViewRadiologyOrderFragmentController {
 	/**
 	 * Auto complete feature for the diagnosis
 	 *
-	 * @param query
+	 * @param query to get diagnosis concepts
 	 * @param requireConceptClass diagnosis concept class
 	 * @param service ConceptService
 	 * @param ui UiUtils
@@ -480,8 +482,8 @@ public class CreateViewRadiologyOrderFragmentController {
 	 * Send email message to patient
 	 *
 	 * @param recipient email
-	 * @param subject
-	 * @param message
+	 * @param subject of the email
+	 * @param message content of the email
 	 */
 	public void contactPatient(@RequestParam(value = "recipient", required = false) String recipient,
 			@RequestParam(value = "subject", required = false) String subject,

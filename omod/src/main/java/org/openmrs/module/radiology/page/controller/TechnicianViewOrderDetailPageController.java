@@ -11,7 +11,7 @@ import org.openmrs.ui.framework.page.PageModel;
 public class TechnicianViewOrderDetailPageController {
 	
 	/**
-	 * @param model
+	 * @param model PageModel
 	 */
 	public void controller(PageModel model) {
 		

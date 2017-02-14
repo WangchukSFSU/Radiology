@@ -30,9 +30,10 @@ import org.openmrs.ui.framework.fragment.FragmentModel;
 public class AdminManageRadiologyModuleFragmentController {
 	
 	/**
-	 * List modality concepts name available in the concept dictionary
+	 * Get modality concepts available in the concept dictionary
+	 * Get the URL for the concept dictionary and htmlform
 	 * 
-	 * @param model
+	 * @param model FragmentModel
 	 */
 	public void controller(FragmentModel model) {
 		// get modality concept name
@@ -57,7 +58,9 @@ public class AdminManageRadiologyModuleFragmentController {
 	}
 	
 	/**
-	 * @return modalityConcept
+	 * Get the list of modality concept
+	 * 
+	 * @return modality Concepts from the concept dictionary
 	 */
 	public ArrayList<Concept> getModalityConcept() {
 		ArrayList<Concept> modalityConcept = new ArrayList();
@@ -77,9 +80,6 @@ public class AdminManageRadiologyModuleFragmentController {
 	 * @param service ConceptService
 	 * @param ui UiUtils
 	 * @return study concepts available in the concept dictionary
-	 *         The Ajax call requires a json result;
-	 *         properties string array elements are concepts and properties indicate the Concept properties of interest;
-	 *         The framework will build the json response when the method returns
 	 */
 	public List<SimpleObject> getStudyConceptsAnswerFromModality(@SpringBean("conceptService") ConceptService service,
 			UiUtils ui) {
@@ -95,9 +95,9 @@ public class AdminManageRadiologyModuleFragmentController {
 		return SimpleObject.fromCollection(studySetMembers, ui, properties);
 	}
 	
-	// get study concept
-	
 	/**
+	 * Get the list of study concepts
+	 * 
 	 * @return studyConcept
 	 */
 	public ArrayList<Concept> getStudyConcept() {
@@ -124,9 +124,6 @@ public class AdminManageRadiologyModuleFragmentController {
 	 * @param service conceptService
 	 * @param ui UiUtils
 	 * @return HTMLFOrm templates available for the study
-	 *         The Ajax call requires a json result;
-	 *         properties string array elements are concepts and properties indicate the Concept properties of interest;
-	 *         The framework will build the json response when the method returns
 	 */
 	public List<SimpleObject> getReport(FragmentModel model, @SpringBean("conceptService") ConceptService service, UiUtils ui) {
 		
@@ -174,14 +171,11 @@ public class AdminManageRadiologyModuleFragmentController {
 	}
 	
 	/**
-	 * Get studies having no generated HTMLForm
+	 * List studies having no generated HTMLForm
 	 * 
-	 * @param service
-	 * @param ui
+	 * @param service ConceptService
+	 * @param ui UiUtils
 	 * @return study concepts having no generated htmlform available
-	 *         The Ajax call requires a json result;
-	 *         properties string array elements are concepts and properties indicate the Concept properties of interest;
-	 *         The framework will build the json response when the method returns
 	 */
 	public List<SimpleObject> getStudyWithNoFormName(@SpringBean("conceptService") ConceptService service, UiUtils ui) {
 		

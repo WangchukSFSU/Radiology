@@ -48,7 +48,6 @@ import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.fragment.FragmentModel;
 import org.openmrs.ui.framework.resource.ResourceFactory;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -66,7 +65,7 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	 * Get the performed status completed orders that needs to add observation
 	 * after the picture is taken
 	 *
-	 * @param model
+	 * @param model FragmentModel
 	 */
 	public void controller(FragmentModel model) {
 		
@@ -105,7 +104,7 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	 *
 	 * @param service ConceptService
 	 * @param model FragmentModel
-	 * @param patientId
+	 * @param patientId to retrieve previous radiology orders
 	 * @param ui UiUtils
 	 * @return past radiology orders
 	 */
@@ -159,7 +158,7 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	 * @param model FragmentModel
 	 * @param radiologyorderId order having HTMLFormEntryUI report saved
 	 *        encounterId
-	 * @param ui
+	 * @param ui UiUtils
 	 * @return radiology order with report saved encounter id
 	 */
 	public List<SimpleObject> getReportSavedEncounterId(@SpringBean("conceptService") ConceptService service,
@@ -183,13 +182,12 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	 * and properties indicate the Concept properties of interest; The
 	 * framework will build the json response when the method returns
 	 *
-	 * @param service
-	 * @param model
+	 * @param service ConceptService
 	 * @param encounterId HTMLFormEntryUI encounterId
-	 * @param ui
+	 * @param ui UiUtils
 	 * @return observations for the encounter id
 	 */
-	public List<SimpleObject> getEncounterIdObs(@SpringBean("conceptService") ConceptService service, FragmentModel model,
+	public List<SimpleObject> getEncounterIdObs(@SpringBean("conceptService") ConceptService service,
 			@RequestParam(value = "encounterId") String encounterId, UiUtils ui) {
 		List<Obs> encounterIdObs = Context.getObsService()
 				.getObservations(encounterId);
@@ -206,14 +204,13 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	 * concepts and properties indicate the Concept properties of interest; The
 	 * framework will build the json response when the method returns
 	 *
-	 * @param service
-	 * @param model
+	 * @param service ConceptService
 	 * @param radiologyorderId order clicked on active order page
-	 * @param ui
-	 * @return radiology order with detailed order information
+	 * @param ui UiUtils
+	 * @return radiology orders with detailed order information
 	 */
 	public List<SimpleObject> getRadiologyOrderDetail(@SpringBean("conceptService") ConceptService service,
-			FragmentModel model, @RequestParam(value = "radiologyorderId") Integer radiologyorderId, UiUtils ui) {
+			@RequestParam(value = "radiologyorderId") Integer radiologyorderId, UiUtils ui) {
 		
 		ArrayList<RadiologyOrder> radiologyOrdersDetail = new ArrayList<RadiologyOrder>();
 		RadiologyOrder radiologyOrderByOrderId = Context.getService(RadiologyService.class)
@@ -292,22 +289,22 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	 * returns
 	 *
 	 * @param service ConceptService
-	 * @param model
 	 * @param radiologyorderId order to get the HTMLFormEntryui report
 	 *        templates
-	 * @param htmlFormEntryService
-	 * @param adtService
-	 * @param formService
-	 * @param resourceFactory
-	 * @param featureToggles
-	 * @param sessionContext
-	 * @param httpSession
-	 * @param ui UiUtils
+	 * @param htmlFormEntryService services provided by the HTML Form Entry module
+	 * @param adtService API methods related to Check-In, Admission, Discharge, and Transfer of patient
+	 * @param formService service contains methods relating to Form, FormField, and Field
+	 * @param resourceFactory provides methods for getting resources
+	 * @param featureToggles allow us to develop features that take a long time to build directly in the main development
+	 *        line without showing it to the end user
+	 * @param sessionContext Details of the current user's login session
+	 * @param httpSession current user session
+	 * @param ui UiUtils Utility methods available in view technologies for pages and fragments
 	 * @return HTMLFormEntryui forms available for the order
 	 * @throws IOException
 	 * @throws Exception
 	 */
-	public List<SimpleObject> getForm(@SpringBean("conceptService") ConceptService service, FragmentModel model,
+	public List<SimpleObject> getForm(@SpringBean("conceptService") ConceptService service,
 			@RequestParam(value = "radiologyorderId") String radiologyorderId,
 			@SpringBean("htmlFormEntryService") HtmlFormEntryService htmlFormEntryService,
 			@SpringBean("adtService") AdtService adtService, @SpringBean("formService") FormService formService,
@@ -437,7 +434,7 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	}
 	
 	/**
-	 * @return oviyam address
+	 * @return oviyam URL address
 	 */
 	private String getDicomViewerUrladdress() {
 		RadiologyProperties radiologyProperties = new RadiologyProperties();
@@ -447,7 +444,7 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	}
 	
 	/**
-	 * @return weasis address
+	 * @return weasis URL address
 	 */
 	private String getDicomViewerWeasisUrladdress() {
 		RadiologyProperties radiologyProperties = new RadiologyProperties();
@@ -498,7 +495,7 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	 * @param service ConceptService
 	 * @param model FragmentModel
 	 * @param radiologyorderId order HTMLFormEntryUI report submitted
-	 * @param ui UiUtils
+	 * @param ui UiUtils Utility methods
 	 * @return the updated active orders
 	 */
 	public List<SimpleObject> updateActiveOrders(@SpringBean("conceptService") ConceptService service, FragmentModel model,
@@ -559,9 +556,9 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	/**
 	 * Tries to authenticate with the given credentials
 	 *
-	 * @param user the username
-	 * @param pass the password
-	 * @param context
+	 * @param user username
+	 * @param pass password
+	 * @param context UiSessionContext
 	 * @param emrApiProperties
 	 * @return a simple object to record if successful
 	 */
@@ -579,24 +576,25 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	}
 	
 	/**
-	 * Handles a form submit request This is from the HTMLFormEntryui module
+	 * Handles a form submit request. This is from the HTMLFormEntryui module
 	 *
-	 * @param sessionContext
+	 * @param sessionContext Details of the current user's login session
 	 * @param patient
-	 * @param hf HTMLForm
-	 * @param encounter HTMLFormEntryui encounter
+	 * @param hf HTMLForm for report template
+	 * @param encounter HTMLForm completed to record observations
 	 * @param radiologyOrderId order form submitted
-	 * @param visit
+	 * @param visit a patient visit
 	 * @param returnUrl
-	 * @param createVisit
-	 * @param request
-	 * @param featureToggles
-	 * @param adtService
-	 * @param ui UiUtils
+	 * @param createVisit create visit type
+	 * @param request HttpServletRequest
+	 * @param featureToggles allow us to develop features that take a long time to build directly in the main development
+	 *        line without showing it to the end user
+	 * @param adtService API methods related to Check-In, Admission, Discharge, and Transfer of patient
+	 * @param ui UiUtils Utility methods
 	 * @return if any form validation errors occurs
 	 * @throws Exception
 	 */
-	@Transactional
+	// @Transactional
 	public SimpleObject submit(UiSessionContext sessionContext, @RequestParam("personId") Patient patient,
 			@RequestParam("htmlFormId") HtmlForm hf,
 			@RequestParam(value = "encounterId", required = false) Encounter encounter,
