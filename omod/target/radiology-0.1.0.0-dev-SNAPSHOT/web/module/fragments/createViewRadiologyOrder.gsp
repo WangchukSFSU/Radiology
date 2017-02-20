@@ -371,6 +371,9 @@ function contactRadiologist() {
         jq('#messageRadiologist').val('StudyName  :');
         jq('#messageRadiologist').val(jq('#messageRadiologist').val() + '${anOrder.study.studyname}');
         jq('#messageRadiologist').val(jq('#messageRadiologist').val() + "\\r");
+        jq('#messageRadiologist').val(jq('#messageRadiologist').val() + 'PatientId   :');
+        jq('#messageRadiologist').val(jq('#messageRadiologist').val() + '${anOrder.patient.patientIdentifier}');
+        jq('#messageRadiologist').val(jq('#messageRadiologist').val() + "\\r");
         jq('#messageRadiologist').val(jq('#messageRadiologist').val() + 'Diagnosis   :');
         jq('#messageRadiologist').val(jq('#messageRadiologist').val() + '${anOrder.orderdiagnosis}');
         jq('#messageRadiologist').val(jq('#messageRadiologist').val() + "\\r");

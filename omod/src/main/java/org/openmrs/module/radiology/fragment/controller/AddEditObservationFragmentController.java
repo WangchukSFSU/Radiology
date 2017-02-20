@@ -335,16 +335,9 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 			for (Form eachForm : getAllForm) {
 				String formName = eachForm.getName()
 						.trim();
-				if (formName.startsWith("Generic")) {
-					String arr[] = formName.split(" ", 2);
-					String studyName = arr[1];
-					if (getRadiologyOrder.getStudy()
-							.getStudyname()
-							.trim()
-							.equals(studyName)) {
-						genericform = Context.getFormService()
-								.getFormByUuid(eachForm.getUuid());
-					}
+				if (formName.startsWith("Generic Radiology Report")) {
+					genericform = Context.getFormService()
+							.getFormByUuid(eachForm.getUuid());
 				}
 				
 				if (getRadiologyOrder.getStudy()
@@ -353,10 +346,11 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 						.equals(formName)) {
 					form = Context.getFormService()
 							.getFormByUuid(eachForm.getUuid());
+					formlist.add(form);
 				}
 			}
 			
-			formlist.add(form);
+			// formlist.add(form);
 			formlist.add(genericform);
 			
 		} else {
@@ -370,6 +364,7 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		
 		String returnUrl = "";
 		for (Form eachform : formlist) {
+			System.out.println("TETETETETET " + eachform.getName());
 			HtmlForm hf = HtmlFormEntryUtil.getService()
 					.getHtmlFormByForm(eachform);
 			Patient patient = getRadiologyOrder.getPatient();

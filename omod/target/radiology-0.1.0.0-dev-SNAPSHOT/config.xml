@@ -163,6 +163,12 @@
 		<description> If modality software is available, enter 'yes' else 'no'
 		</description>
 	</globalProperty>
+        <globalProperty>
+		<property>radiology.dicomFileRootFolder</property>
+		<defaultValue>DicomFile</defaultValue>
+		<description> This is the root folder for all the dicom files for each Patient
+		</description>
+	</globalProperty>
 	<globalProperty>
 		<property>radiology.dicomWebViewerLocalServerName</property>
 		<defaultValue></defaultValue>

@@ -344,11 +344,11 @@
      title: 'Delete Report',
      width: 400,
      buttons: {
-     "Yes": function() {
-     continueCancelReport();
+     "No": function() {
      jq(this).dialog('close');
      },
-     "No": function() {
+     "Yes": function() {
+     continueCancelReport();
      jq(this).dialog('close');
      }
      },
@@ -505,7 +505,7 @@
      var radiologyorderId = localStorage.getItem("radiologyorderId");
      var updatedOrderencounterId = localStorage.getItem("updatedOrderencounterId");
      if (updatedOrderencounterId == "null") {
-          jq("#orderDetailDiv").append('<a>' + FormName + ' Report Form  </a>');
+          jq("#orderDetailDiv").append('<a>' + FormName + ' Form  </a>');
 
      } else {
           jq("#orderDetailDiv").append('<a id="pep"> SavedReport <p style="display:none;"> ' + FormName + ' </p> </a>');
@@ -775,7 +775,7 @@
      var returnUrl = localStorage.getItem("ReturnUrl");
      var formModifiedTimestamp = localStorage.getItem("FormModifiedTimestamp");
      var text = jq(obj).text();
-     var firstColumnFormName = text.replace('Report Form', '');
+     var firstColumnFormName = text.replace('Form', '');
      var firstColumnFormName = firstColumnFormName.replace('SavedReport', '');
      var formNameHtmlToDisplayt;
      var patientIdt;

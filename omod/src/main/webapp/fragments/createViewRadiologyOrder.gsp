@@ -8,6 +8,7 @@ def conceptDiagnosisClass = config.requireDiagnosisClass
 %>   
 
 
+
 <script>
     jq = jQuery;
 jq(document).ready(function() {
@@ -371,6 +372,9 @@ function contactRadiologist() {
         jq('#messageRadiologist').val('StudyName  :');
         jq('#messageRadiologist').val(jq('#messageRadiologist').val() + '${anOrder.study.studyname}');
         jq('#messageRadiologist').val(jq('#messageRadiologist').val() + "\\r");
+        jq('#messageRadiologist').val(jq('#messageRadiologist').val() + 'PatientId   :');
+        jq('#messageRadiologist').val(jq('#messageRadiologist').val() + '${anOrder.patient.patientIdentifier}');
+        jq('#messageRadiologist').val(jq('#messageRadiologist').val() + "\\r");
         jq('#messageRadiologist').val(jq('#messageRadiologist').val() + 'Diagnosis   :');
         jq('#messageRadiologist').val(jq('#messageRadiologist').val() + '${anOrder.orderdiagnosis}');
         jq('#messageRadiologist').val(jq('#messageRadiologist').val() + "\\r");
@@ -430,6 +434,7 @@ function contactRadiologist() {
         })
     });
 </script>
+
 
 
 
@@ -502,6 +507,7 @@ function contactRadiologist() {
             </tbody>
         </table>
     </div>
+    </div>
 <!-- in progress radiology order table -->
     <div id="performedStatusInProgressOrder">
     </div>
@@ -537,7 +543,6 @@ function contactRadiologist() {
         <table id="radiologyOrderDetailsTableId">
         </table>
     </div>
-</div>
 
 <!-- add radiology order -->
 <div id="addRadiologyOrderForm">
@@ -602,11 +607,6 @@ function contactRadiologist() {
     </center>
 </div>
 
-
 <div id="patientId">
     <p style="display:none;">${ patient }</p>
 </div>
-
-
-
-

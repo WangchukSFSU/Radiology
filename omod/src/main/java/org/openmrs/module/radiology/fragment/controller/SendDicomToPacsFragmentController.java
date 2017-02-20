@@ -2,19 +2,27 @@ package org.openmrs.module.radiology.fragment.controller;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
+import javax.servlet.http.HttpServletRequest;
 import org.openmrs.Order;
+import org.openmrs.Patient;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.radiology.PerformedProcedureStepStatus;
 import org.openmrs.module.radiology.RadiologyOrder;
+import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.RadiologyService;
 import org.openmrs.module.radiology.ScheduledProcedureStepStatus;
+import org.openmrs.ui.framework.Model;
 import org.openmrs.ui.framework.SimpleObject;
 import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.fragment.FragmentModel;
+import org.openmrs.ui.framework.fragment.action.FragmentActionResult;
+import org.openmrs.ui.framework.fragment.action.SuccessResult;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -30,11 +38,28 @@ public class SendDicomToPacsFragmentController {
 	 * @param model FragmentModel
 	 */
 	public void controller(FragmentModel model) {
+		
 		// get all the active orders
 		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrders();
-		// Transfer all the dicom files from modality station to DicomFiles folder
-		ArrayList<String> dicomeFiles = listFiles(System.getProperty("user.home") + "/Desktop" + "/DicomFiles/");
-		model.addAttribute("dicomeFiles", dicomeFiles);
+		RadiologyProperties radiologyProperties = new RadiologyProperties();
+		String dicomFileRootFolder = radiologyProperties.getDicomFileRootFolder();
+		String path = System.getProperty("user.home") + File.separator + dicomFileRootFolder;
+		
+		Map<String, List<String>> dicomFolderNameFiles = new HashMap<String, List<String>>();
+		for (RadiologyOrder createSubFolderForEachPatient : inProgressRadiologyOrders) {
+			String subDirectory = path + File.separator + createSubFolderForEachPatient.getPatient()
+					.getPerson()
+					.getPersonName() + createSubFolderForEachPatient.getPatient()
+					.getPatientIdentifier();
+			String subFolderPatientId = createSubFolderForEachPatient.getPatient()
+					.getPatientIdentifier()
+					.toString();
+			
+			ArrayList<String> dicomeFiles = listFiles(subDirectory);
+			dicomFolderNameFiles.put(subFolderPatientId, dicomeFiles);
+		}
+		
+		model.put("dicomFolderNameFiles", dicomFolderNameFiles);
 		model.put("inProgressRadiologyOrders", inProgressRadiologyOrders);
 		
 	}
@@ -113,9 +138,25 @@ public class SendDicomToPacsFragmentController {
 	public List<SimpleObject> updateActiveOrders(@SpringBean("conceptService") ConceptService service, FragmentModel model,
 			@RequestParam(value = "radiologyorderId") String radiologyorderId, UiUtils ui) {
 		
+		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrders();
+		RadiologyProperties radiologyProperties = new RadiologyProperties();
+		String dicomFileRootFolder = radiologyProperties.getDicomFileRootFolder();
+		String path = System.getProperty("user.home") + File.separator + dicomFileRootFolder;
+		String subDirectory = null;
+		for (RadiologyOrder getPatientImageFolder : inProgressRadiologyOrders) {
+			if ((getPatientImageFolder.getOrderId()
+					.toString().trim()).equals(radiologyorderId.trim())) {
+				
+				subDirectory = path + File.separator + getPatientImageFolder.getPatient()
+						.getPerson()
+						.getPersonName() + getPatientImageFolder.getPatient()
+						.getPatientIdentifier();
+			}
+		}
+		
 		RadiologyService radiologyService = Context.getService(RadiologyService.class);
 		// send dicom to PACS
-		radiologyService.placeDicomInPacs("/home/youdon/Desktop/DicomFiles/");
+		radiologyService.placeDicomInPacs(subDirectory);
 		// get all radiology orders
 		List<RadiologyOrder> allRadiologyOrders = Context.getService(RadiologyService.class)
 				.getAllRadiologyOrder();
@@ -138,15 +179,17 @@ public class SendDicomToPacsFragmentController {
 		
 		// get the updated active orders
 		ArrayList<RadiologyOrder> getRadiologyOrder = new ArrayList<RadiologyOrder>();
-		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrders();
+		
 		for (RadiologyOrder updateActiveOrder : inProgressRadiologyOrders) {
 			getRadiologyOrder.add(updateActiveOrder);
 		}
-		String[] properties = new String[4];
+		String[] properties = new String[6];
 		properties[0] = "orderId";
 		properties[1] = "study.studyname";
 		properties[2] = "dateCreated";
 		properties[3] = "urgency";
+		properties[4] = "patient.person.personName";
+		properties[5] = "patient.patientIdentifier.Identifier";
 		
 		return SimpleObject.fromCollection(getRadiologyOrder, ui, properties);
 	}

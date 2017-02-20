@@ -93,11 +93,10 @@ public class CreateViewRadiologyOrderFragmentController {
 		model.addAttribute("patient", patient);
 		model.addAttribute("patientID", patient.getPatientId());
 		model.addAttribute("patientname", patientName);
-		model.addAttribute("patientdob", patient.getBirthdate());
 		model.addAttribute("patientid", patient.getId());
-		model.addAttribute("radiologistemailaddress", "radiologistOpenmrs@gmail.com");
+		model.addAttribute("radiologistemailaddress", "radiologist@gmail.com");
 		model.addAttribute("subject", "Enquire Patient Observation");
-		model.addAttribute("patientemailaddress", "radiologistOpenmrs@gmail.com");
+		model.addAttribute("patientemailaddress", "patient@gmail.com");
 		model.addAttribute("subjectPatient", "Recent visit information");
 		
 	}

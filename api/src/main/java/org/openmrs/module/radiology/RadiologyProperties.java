@@ -346,6 +346,11 @@ public class RadiologyProperties extends ModuleProperties {
 				.getGlobalProperty(RadiologyConstants.GP_DICOM_WEB_VIEWER_BASE_URL);
 	}
 	
+	public String getDicomFileRootFolder() {
+		return Context.getAdministrationService()
+				.getGlobalProperty(RadiologyConstants.GP_DICOMFILE_ROOT_FOLDER);
+	}
+	
 	public String getDicomViewerWeasisUrlBase() {
 		return Context.getAdministrationService()
 				.getGlobalProperty(RadiologyConstants.GP_DICOM_WEB_VIEWER_WEASIS_BASE_URL);

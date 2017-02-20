@@ -28,6 +28,8 @@ public class RadiologyConstants {
 	
 	public static final String GP_DICOM_MPPS_PORT = "radiology.dicomMppsPort";
 	
+	public static final String GP_DICOMFILE_ROOT_FOLDER = "radiology.dicomFileRootFolder";
+	
 	public static final String GP_DICOM_AE_TITLE = "radiology.dicomAeTitle";
 	
 	public static final String GP_DICOM_APPLICATION_UID = "radiology.dicomApplicationUID";

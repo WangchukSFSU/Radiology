@@ -52,8 +52,8 @@
                 "id": "radiology.appId28",
                 "extensionPointId": "org.openmrs.referenceapplication.homepageLink",
                 "type": "link",
-                "label": "View RadiologyOrder Detail",
-                "url": "radiology/technicianViewOrderDetail.page",
+                "label": "View Patient RadiologyOrders",
+                "url": "radiology/findRadiologyOrdersForPatient.page",
                 "icon": "icon-signin",
                 "requiredPrivilege": "App: technician view radiology order detail"
             }
