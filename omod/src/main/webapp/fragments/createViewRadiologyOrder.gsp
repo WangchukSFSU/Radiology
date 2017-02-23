@@ -387,8 +387,6 @@ function contactRadiologist() {
 }
 
 </script>
-
-
 <script>
     jq(function() {
         //get study list for autocomlete feature
@@ -434,9 +432,6 @@ function contactRadiologist() {
         })
     });
 </script>
-
-
-
 
 <!-- breadcrumbs -->
 <div class="breadcrumbradiologyorder">
@@ -610,3 +605,5 @@ function contactRadiologist() {
 <div id="patientId">
     <p style="display:none;">${ patient }</p>
 </div>
+
+

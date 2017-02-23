@@ -8,6 +8,7 @@ def conceptDiagnosisClass = config.requireDiagnosisClass
 %>   
 
 
+
 <script>
     jq = jQuery;
 jq(document).ready(function() {
@@ -386,8 +387,6 @@ function contactRadiologist() {
 }
 
 </script>
-
-
 <script>
     jq(function() {
         //get study list for autocomlete feature
@@ -433,8 +432,6 @@ function contactRadiologist() {
         })
     });
 </script>
-
-
 
 <!-- breadcrumbs -->
 <div class="breadcrumbradiologyorder">
@@ -505,6 +502,7 @@ function contactRadiologist() {
             </tbody>
         </table>
     </div>
+    </div>
 <!-- in progress radiology order table -->
     <div id="performedStatusInProgressOrder">
     </div>
@@ -540,7 +538,6 @@ function contactRadiologist() {
         <table id="radiologyOrderDetailsTableId">
         </table>
     </div>
-</div>
 
 <!-- add radiology order -->
 <div id="addRadiologyOrderForm">
@@ -605,11 +602,8 @@ function contactRadiologist() {
     </center>
 </div>
 
-
 <div id="patientId">
     <p style="display:none;">${ patient }</p>
 </div>
-
-
 
 

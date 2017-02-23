@@ -54,7 +54,11 @@ public class SendDicomToPacsFragmentController {
 			String subFolderPatientId = createSubFolderForEachPatient.getPatient()
 					.getPatientIdentifier()
 					.toString();
-			
+			File subFolder = new File(subDirectory);
+			if (!subFolder.exists()) {
+				subFolder.mkdir();
+				
+			}
 			ArrayList<String> dicomeFiles = listFiles(subDirectory);
 			dicomFolderNameFiles.put(subFolderPatientId, dicomeFiles);
 		}
@@ -179,8 +183,8 @@ public class SendDicomToPacsFragmentController {
 		
 		// get the updated active orders
 		ArrayList<RadiologyOrder> getRadiologyOrder = new ArrayList<RadiologyOrder>();
-		
-		for (RadiologyOrder updateActiveOrder : inProgressRadiologyOrders) {
+		List<RadiologyOrder> inProgressRadiologyOrdersUpdate = getInProgressRadiologyOrders();
+		for (RadiologyOrder updateActiveOrder : inProgressRadiologyOrdersUpdate) {
 			getRadiologyOrder.add(updateActiveOrder);
 		}
 		String[] properties = new String[6];

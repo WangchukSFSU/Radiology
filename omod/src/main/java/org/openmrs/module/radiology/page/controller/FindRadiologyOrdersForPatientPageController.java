@@ -12,7 +12,6 @@ import org.openmrs.ui.framework.page.PageModel;
 
 /**
  * Technician make sure the Patient Order Detail is available before taking picture
- * Pages does not allow to have ajax call therefore no any functionality added
  * 
  * @author tenzin
  */
@@ -22,16 +21,13 @@ public class FindRadiologyOrdersForPatientPageController {
 	 * @param model PageModel
 	 */
 	public void controller(PageModel model) {
-		// get all the active orders
+		// get all the active orders and create folders for each patient
 		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrders();
 		RadiologyProperties radiologyProperties = new RadiologyProperties();
 		String dicomFileRootFolder = radiologyProperties.getDicomFileRootFolder();
 		String path = System.getProperty("user.home") + File.separator + dicomFileRootFolder;
 		File customDir = new File(path);
-		if (customDir.exists()) {
-			System.out.println(customDir + " already exists");
-		} else {
-			System.out.println(customDir + " not exists");
+		if (customDir.exists()) {} else {
 			boolean success = new java.io.File(System.getProperty("user.home"), dicomFileRootFolder).mkdirs();
 			
 		}
@@ -53,7 +49,7 @@ public class FindRadiologyOrdersForPatientPageController {
 	}
 	
 	/**
-	 * Get all the in progress radiology orders that needs to take picture
+	 * Get all in progress radiology orders
 	 * 
 	 * @return in progress radiology orders
 	 */
