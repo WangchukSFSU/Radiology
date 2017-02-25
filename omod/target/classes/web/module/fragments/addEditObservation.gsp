@@ -1,3 +1,8 @@
+<%
+ui.decorateWith("appui", "standardEmrPage")
+ui.includeJavascript("uicommons", "datatables/jquery.dataTables.min.js")
+ui.includeCss("uicommons", "datatables/dataTables_jui.css")
+%>
 <% ui.includeCss("radiology", "addEditObservation.css") %>
 <% ui.includeCss("radiology", "jquery-ui.css") %>
 <script type="text/javascript" src="/${ contextPath }/moduleResources/htmlformentry/htmlFormEntry.js"></script>

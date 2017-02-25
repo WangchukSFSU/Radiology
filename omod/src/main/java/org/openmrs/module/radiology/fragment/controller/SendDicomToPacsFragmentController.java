@@ -62,7 +62,6 @@ public class SendDicomToPacsFragmentController {
 			ArrayList<String> dicomeFiles = listFiles(subDirectory);
 			dicomFolderNameFiles.put(subFolderPatientId, dicomeFiles);
 		}
-		
 		model.put("dicomFolderNameFiles", dicomFolderNameFiles);
 		model.put("inProgressRadiologyOrders", inProgressRadiologyOrders);
 		

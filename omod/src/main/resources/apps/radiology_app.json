@@ -47,6 +47,8 @@
                 "url": "radiology/technician.page",
                 "icon": "icon-signin",
                 "requiredPrivilege": "App: send radiology image to pacs"
+                
+                
             },
            {
                 "id": "radiology.appId28",
