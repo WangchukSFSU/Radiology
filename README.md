@@ -27,7 +27,7 @@ mvn clean package
 
 For a detailed guide on how to install and configure this module see
 
-Radiology module user guide
+[Radiology module user guide and install guide](https://drive.google.com/open?id=0B8EXdIpPdidkRmFvaWpwYS11eVE)
 
 ## Limitations
 
