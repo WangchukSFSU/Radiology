@@ -36,7 +36,11 @@
 
 .fieldclass {
      margin-top: 12px;
+       display:block;
 }
+
+
+
 
 .fg-toolbar.ui-toolbar.ui-widget-header.ui-corner-tl.ui-corner-tr.ui-helper-clearfix {
      background-color: #b9cd6d;
@@ -93,4 +97,8 @@ div#performedStatusCompletedOrder {
 
 .priorityCheckBox {
      margin-left: 27px;
+}
+
+img.img-circle {
+     width: 22px;
 }

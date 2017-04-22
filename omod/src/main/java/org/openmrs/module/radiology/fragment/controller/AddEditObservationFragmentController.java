@@ -77,8 +77,7 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 				+ "/openmrs/coreapps/clinicianfacing/patient.page?patientId=";
 		model.addAttribute("patientClinicianUrl", patientClinicianUrl);
 		// get performed status completed orders
-		List<RadiologyOrder> performedStatusCompletedOrders = getPerformedStatusCompletedRadiologyOrders();
-		// check dicom web viewer availability
+		
 		String oviyamStatus = radiologyProperties.getDicomViewerLocalServerName();
 		String weasisStatus = radiologyProperties.getDicomViewerWeasisUrlBase();
 		
@@ -88,12 +87,13 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		// get weasis url
 		String dicomViewerWeasisUrladdress = getDicomViewerWeasisUrladdress();
 		
+		List<RadiologyOrder> performedStatusCompletedOrders = getPerformedStatusCompletedRadiologyOrders();
+		
 		model.addAttribute("oviyamStatus", oviyamStatus);
 		model.addAttribute("weasisStatus", weasisStatus);
 		model.addAttribute("dicomViewerUrladdress", dicomViewerUrladdress);
 		model.addAttribute("dicomViewerWeasisUrladdress", dicomViewerWeasisUrladdress);
 		model.put("performedStatusCompletedOrders", performedStatusCompletedOrders);
-		
 	}
 	
 	/**
@@ -498,7 +498,11 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		
 		List<RadiologyOrder> allOrders = Context.getService(RadiologyService.class)
 				.getAllRadiologyOrder();
-		User authenticatedUser = Context.getAuthenticatedUser();
+		String authenticatedUser = Context.getAuthenticatedUser()
+				.getFamilyName();
+		
+		System.out.println("authenticatedUser 1212121" + authenticatedUser);
+		
 		RadiologyOrder radiologyOrder;
 		for (Order order : allOrders) {
 			if ((order.getOrderId()
@@ -517,7 +521,7 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 				// get the radiologist
 				Context.getService(RadiologyService.class)
 						.updateStudyReportRadiologist(radiologyOrder.getStudy()
-								.getStudyInstanceUid(), authenticatedUser.toString());
+								.getStudyInstanceUid(), authenticatedUser);
 			}
 		}
 		

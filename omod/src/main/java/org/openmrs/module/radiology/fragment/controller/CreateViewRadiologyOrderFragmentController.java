@@ -25,6 +25,7 @@ import org.openmrs.Provider;
 import org.openmrs.User;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.radiology.PerformedProcedureStepStatus;
 import org.openmrs.module.radiology.RadiologyOrder;
 import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.RadiologyService;
@@ -175,7 +176,22 @@ public class CreateViewRadiologyOrderFragmentController {
 		System.out.println("encounter id " + encounterId);
 		List<Obs> encounterIdObs = Context.getObsService()
 				.getObservations(encounterId);
+		System.out.println("size size" + encounterIdObs.size());
+		
 		for (Obs aa : encounterIdObs) {
+			System.out.println("encounter id location 11111" + aa.getLocation()
+					.getAddress1());
+			System.out.println("encounter id date 2222" + aa.getObsDatetime());
+			System.out.println("encounter id date 33333" + aa.getCreator());
+			
+			System.out.println("encounter id location 44444" + aa.getEncounter()
+					.getLocation());
+			System.out.println("encounter id date 55555" + aa.getEncounter()
+					.getEncounterDatetime());
+			System.out.println("encounter id date 6666" + aa.getEncounter()
+					.getProvider()
+					.getPersonName());
+			
 			System.out.println("list obs " + aa.getConcept()
 					.getDisplayString());
 			System.out.println("list obs text" + aa.getValueText());
@@ -183,10 +199,13 @@ public class CreateViewRadiologyOrderFragmentController {
 		}
 		
 		// properties selected for the obs
-		String[] properties = new String[3];
+		String[] properties = new String[6];
 		properties[0] = "Concept";
 		properties[1] = "valueText";
 		properties[2] = "valueNumeric";
+		properties[3] = "Encounter.Location";
+		properties[4] = "Encounter.EncounterDatetime";
+		properties[5] = "Encounter.Provider.PersonName";
 		
 		return SimpleObject.fromCollection(encounterIdObs, ui, properties);
 	}
@@ -208,11 +227,12 @@ public class CreateViewRadiologyOrderFragmentController {
 		// get in progress orders of the patient
 		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrdersByPatient(patient);
 		// properties selected from orders
-		String[] properties = new String[4];
+		String[] properties = new String[5];
 		properties[0] = "study.studyname";
 		properties[1] = "dateCreated";
 		properties[2] = "study.scheduledStatus";
 		properties[3] = "study.performedStatus";
+		properties[4] = "orderId";
 		
 		return SimpleObject.fromCollection(inProgressRadiologyOrders, ui, properties);
 	}
@@ -282,8 +302,12 @@ public class CreateViewRadiologyOrderFragmentController {
 		RadiologyOrder radiologyOrder = new RadiologyOrder();
 		// get the user
 		User authenticatedUser = Context.getAuthenticatedUser();
-		Provider provider = Context.getProviderService()
-				.getProvider(4);
+		System.out.println("User setCreator " + authenticatedUser);
+		// Provider provider = Context.getProviderService()
+		// .getProvider(4);
+		List<Provider> provs = Context.getProviderService()
+				.getAllProviders();
+		Provider provider = provs.get(0);
 		
 		// add data to new radiology order
 		radiologyOrder.setCreator(authenticatedUser);
@@ -293,12 +317,11 @@ public class CreateViewRadiologyOrderFragmentController {
 		radiologyOrder.setPatient(patient);
 		radiologyOrder.setDateCreated(new Date());
 		radiologyOrder.setInstructions(instruction);
-		radiologyOrder.setUrgency(Order.Urgency.valueOf(priority));
+		radiologyOrder.setUrgency(Order.Urgency.valueOf(priority));	
 		radiologyOrder.setOrderdiagnosis(diagnosis);
 		RadiologyService radiologyservice = Context.getService(RadiologyService.class);
 		// create new study
 		Study newStudy = new Study();
-		
 		newStudy.setModality(study);
 		newStudy.setStudyname(study);
 		
@@ -518,4 +541,39 @@ public class CreateViewRadiologyOrderFragmentController {
 		}
 		
 	}
+	
+	public List<SimpleObject> deleteOrder(UiUtils ui, @RequestParam(value = "orderId", required = false) Integer orderId)
+			throws Exception {
+		
+		// get the radiology order with the report saved encounter id
+		RadiologyOrder deleteRadiologyOrder = Context.getService(RadiologyService.class)
+				.getRadiologyOrderByOrderId(orderId);
+		// update the performed status to report ready so it is available to referring physician
+		Context.getService(RadiologyService.class)
+				.updateStudyPerformedStatus(deleteRadiologyOrder.getStudy()
+						.getStudyInstanceUid(), PerformedProcedureStepStatus.DISCONTINUED);
+		Context.getService(RadiologyService.class)
+				.updateScheduledProcedureStepStatus(deleteRadiologyOrder.getStudy()
+						.getStudyInstanceUid(), ScheduledProcedureStepStatus.DEPARTED);
+		
+		RadiologyService radiologyService = Context.getService(RadiologyService.class);
+		// radiologyService.discontinueRadiologyOrder(deleteRadiologyOrder, deleteRadiologyOrder.getOrderer(),
+		// "delete order");
+		
+		radiologyService.discontinueRadiologyOrderInPacs(deleteRadiologyOrder);
+		
+		ArrayList<RadiologyOrder> deleteOrder = new ArrayList<RadiologyOrder>();
+		deleteOrder.add(deleteRadiologyOrder);
+		
+		// properties selected from orders
+		String[] properties = new String[5];
+		properties[0] = "study.studyname";
+		properties[1] = "dateCreated";
+		properties[2] = "study.scheduledStatus";
+		properties[3] = "study.performedStatus";
+		properties[4] = "orderId";
+		
+		return SimpleObject.fromCollection(deleteOrder, ui, properties);
+	}
+	
 }

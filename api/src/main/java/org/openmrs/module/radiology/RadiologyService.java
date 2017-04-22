@@ -11,7 +11,9 @@ package org.openmrs.module.radiology;
 
 import java.util.Date;
 import java.util.List;
+import org.openmrs.Order;
 import org.openmrs.Patient;
+import org.openmrs.Provider;
 import org.openmrs.api.EncounterService;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.api.OrderService;
@@ -266,4 +268,39 @@ public interface RadiologyService extends OpenmrsService {
 	 */
 	public List<Study> getStudiesByRadiologyOrders(List<RadiologyOrder> radiologyOrders) throws IllegalArgumentException;
 	
+	/**
+	 * Discontinue given <code>RadiologyOrder</code>
+	 *
+	 * @param radiologyOrder radiology order to be discontinued
+	 * @return Order who was created to discontinue RadiologyOrder
+	 * @throws IllegalArgumentException if radiologyOrder is null
+	 * @throws IllegalArgumentException if radiologyOrder orderId is null
+	 * @throws IllegalArgumentException if radiologyOrder is not active
+	 * @throws IllegalArgumentException if provider is null
+	 * @should create discontinuation order which discontinues given radiology order that is not in progress or completed
+	 * @should create discontinuation order with encounter attached to existing active visit if patient has active visit
+	 * @should create discontinuation order with encounter attached to new active visit if patient without active visit
+	 * @should throw illegal argument exception given empty radiology order
+	 * @should throw illegal argument exception given radiology order with orderId null
+	 * @should throw illegal argument exception if radiology order is not active
+	 * @should throw illegal argument exception if radiology order is in progress
+	 * @should throw illegal argument exception if radiology order is completed
+	 * @should throw illegal argument exception given empty provider
+	 */
+	public Order discontinueRadiologyOrder(RadiologyOrder radiologyOrder, Provider orderer, String discontinueReason)
+			throws Exception;
+	
+	/**
+	 * Discontinue given <code>RadiologyOrder</code> in the PACS by sending an HL7 order message.
+	 *
+	 * @param radiologyOrder radiology order for which hl7 order message is sent to the PACS
+	 * @return true if hl7 order message to discontinue radiology order was successfully sent to PACS and false otherwise
+	 * @throws IllegalArgumentException if radiologyOrder is null
+	 * @throws IllegalArgumentException if radiologyOrder orderId is null
+	 * @should send hl7 order message to pacs to discontinue given radiology order and return true on success
+	 * @should send hl7 order message to pacs to discontinue given radiology order and return false on failure
+	 * @should throw illegal argument exception given null
+	 * @should throw illegal argument exception given radiology order with orderId null
+	 */
+	public boolean discontinueRadiologyOrderInPacs(RadiologyOrder radiologyOrder);
 }

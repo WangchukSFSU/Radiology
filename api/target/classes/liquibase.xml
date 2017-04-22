@@ -405,41 +405,12 @@
           </addColumn>
      </changeSet>
 
-     <changeSet id="radiology-80" author="tenzin">
-		
-          <dropColumn columnName="radiologyOrderstatus" tableName="radiology_study" />
-		
-     </changeSet>
-     <changeSet id="radiology-81" author="tenzin">
-		
-          <dropColumn columnName="studyPatientName" tableName="radiology_study" />
-		
-     </changeSet>
-     <changeSet id="radiology-84" author="tenzin">
-		
-          <dropColumn columnName="patientName" tableName="radiology_study" />
-		
-     </changeSet>
      <changeSet author="tenzin" id="radiology-85">
           <addColumn tableName="radiology_study">
                <column name="studyGenericHTMLFormUUID" type="varchar(255)"/>
           </addColumn>
      </changeSet>
-     <changeSet id="radiology-86" author="tenzin">
-          <sql>
-               drop table if exists RadiologyStudyList;
-          </sql>
-     </changeSet> 
-     <changeSet id="radiology-87" author="tenzin">
-          <sql>
-               drop table if exists RadiologyModalityList;
-          </sql>
-     </changeSet> 
-     <changeSet id="radiology-88" author="tenzin">
-          <sql>
-               drop table if exists RadiologyReportList;
-          </sql>
-     </changeSet>
+    
      <changeSet id="radiology-89" author="tenzin">
 		
           <dropColumn columnName="orderCompletedDate" tableName="radiology_order" />

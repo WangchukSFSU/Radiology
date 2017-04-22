@@ -18,6 +18,15 @@ def conceptDiagnosisClass = config.requireDiagnosisClass
     jq = jQuery;
 jq(document).ready(function() {
 
+jq('input.tt').on('change', function() {
+    jq('input.tt').not(this).prop('checked', false);  
+    var pp = jq('input.tt').val();
+    alert("pp    " + pp);
+   
+});
+         
+
+
     jq("#manageOrderWithLinkBreadCrumb").hide();
     jq("#messagePatientBreadCrumb").hide();
     jq("#addOrderBreadCrumb").hide();
@@ -112,16 +121,17 @@ console.log("fnDrawCallback");
                 jq('#performedStatusInProgressOrder table').attr('id', 'patientCompletedOrdersDatatable');
                 jq("#performedStatusInProgressOrder table").addClass("patientCompletedOrdersClass");
                 var patientCompletedOrdersTable = jq('#performedStatusInProgressOrder table');
-                patientCompletedOrdersTable.append('<thead><tr><th> Order</th><th> StartDate</th><th> OrderStatus</th></tr></thead><tbody>');
+                patientCompletedOrdersTable.append('<thead><tr><th> Order</th><th> StartDate</th><th> OrderStatus</th><th> DeleteOrder</th></thead><tbody>');
                 for (var i = 0; i < ret.length; i++) {
                     var studyName = ret[i].study.studyname;
                     var dateCreated = ret[i].dateCreated;
                     var scheduledStatus = ret[i].study.scheduledStatus;
-                    var performedStatus = ret[i].study.performedStatus;                            
-                    if(performedStatus == 'IN_PROGRESS') {                
-                     patientCompletedOrdersTable.append('<tr><td> ' + studyName + ' </td><td> ' + dateCreated + '</td><td> STARTED </td></tr>');
+                    var performedStatus = ret[i].study.performedStatus; 
+                    var orderId = ret[i].orderId; 
+                    if(scheduledStatus == 'STARTED') { 
+                     patientCompletedOrdersTable.append('<tr><td> ' + studyName + ' </td><td> ' + dateCreated + '</td><td> STARTED </td><td><p style="display:none;">No</p></td></tr>');
                 } else {
-                    patientCompletedOrdersTable.append('<tr><td> ' + studyName + ' </td><td> ' + dateCreated + '</td><td> ' + scheduledStatus + '</td></tr>');
+                    patientCompletedOrdersTable.append('<tr><td> ' + studyName + ' </td><td> ' + dateCreated + '</td><td> ' + scheduledStatus + '</td><td><a href=' + studyName + ' onclick="clickOrder(' + orderId + '); return false;" > <img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/> </a></td></tr>');
                 }
                     }
                 patientCompletedOrdersTable.append("</tbody>");
@@ -185,14 +195,17 @@ console.log("fnDrawCallback");
         var studyOrder = jq("#studyTags").val();
         var diagnosisOrder = jq("#diagnosisTags").val();
         var instructionOrder = jq("#orderInstruction").val();
-       
-        if (jq('#STAT').is(":checked"))
+       var tttt = jq('.tt').val();
+       alert("ttt"+ tttt);
+        if (jq('#bb').is(":checked"))
          {
-           var priorityOrder = jq('#STAT').val();
+         alert("STAT");
+           var priorityOrder = jq('#bb').val();
          } else {
-          var priorityOrder = jq('#ROUTINE').val();
+         alert("ROUTINE");
+          var priorityOrder = jq('#cc').val();
          }
-
+alert("priorityOrder " +priorityOrder);
         jq.getJSON('${ ui.actionLink("placeRadiologyOrder") }', {
                 'patient': patient,
                 'study': studyOrder,
@@ -285,6 +298,7 @@ console.log("fnDrawCallback");
             jq('#radiologyOrderDetailsDiv').append(jq('#radiologyOrderDetailsTableId'));
             localStorage.setItem("orderencounterId", orderencounterId);
             localStorage.setItem("orderId", orderId);
+            
             jq('#radiologyOrderDetailsTableId').append('<thead><tr><th> Report</th><th> Radiologist</th><th> Instructions </th><th> Diagnosis</th><th> Study</th><th>ViewStudy</th><th> ContactRadiologist</th></tr></thead>');      
             <% if (oviyamStatus == "") { %>
                  jq('#radiologyOrderDetailsTableId').append('<tbody><tr><td><a onclick="ViewReport();"> Obs</a> </td><td> ${anOrder.study.studyReportRadiologist}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td>${anOrder.study.studyname}</td><td><a id="studyLink" class="studyLink" target="_blank" href="${ dicomViewerWeasisUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" +  anOrder.patient.patientIdentifier }" >ViewStudy</a></td><td><a onclick="contactRadiologist();"> ContactRadiologist</a></td></tr></tbody>');
@@ -330,7 +344,21 @@ console.log("fnDrawCallback");
     });
 });
 
-
+//click any active order
+     function clickOrder(el) {
+     jq.getJSON('${ ui.actionLink("deleteOrder") }', {
+            'orderId': el
+        })
+        .error(function(xhr, status, err) {
+            alert('AJAX error ' + err);
+        })
+        .success(function(ret) {
+        emr.successMessage("Deleted order successfully");
+        jq("#InProgressOrdersList").click();
+        
+        })
+     
+     }
 
 //view report based on the report encounterId in the dialog box
 function ViewReport() {
@@ -348,10 +376,25 @@ function ViewReport() {
             jq("#obsDialogBoxText table").addClass("obsDialogBoxTextclass");
             var obsDialogBoxTextTable = jq('#obsDialogBoxText table');
             obsDialogBoxTextTable.append('<thead><tr><th>Concept</th><th>Value Text/Numbers</th></tr></thead><tbody>');
-            for (var i = 0; i < ret.length; i++) {
+            var loopOnce = true;
+            
+            for (var i = 0; i < (ret.length-1); i++) {
                 var concept = ret[i].Concept;
                 var valueText = ret[i].valueText;
                 var valueNumeric = ret[i].valueNumeric;
+                var obsLocation = ret[i].Encounter.Location;
+                var obsDateTime = ret[i].Encounter.EncounterDatetime;
+                var obsGivenName = ret[i].Encounter.Provider.PersonName;
+                
+                
+                
+                if(loopOnce) {
+               
+                obsDialogBoxTextTable.append('<tr><td>Location</td><td>' + obsLocation + '</td></tr>');
+                obsDialogBoxTextTable.append('<tr><td>Date</td><td>' + obsDateTime + '</td></tr>');
+                obsDialogBoxTextTable.append('<tr><td>Provider</td><td>' + obsGivenName + '</td></tr>');
+                loopOnce = false;
+                }
                 if(valueText) {
                 obsDialogBoxTextTable.append('<tr><td>' + concept + '</td><td>' + valueText + '</td></tr>');
             } else {
@@ -486,7 +529,7 @@ function contactRadiologist() {
     </div>
 <!-- completed radiology order table -->
     <div id="performedStatusCompletedOrder">
-        <h1>COMPLETED RADIOLOGY ORDERS</h1>
+        <h1>CLICK COMPLETED RADIOLOGY ORDERS TO VIEW OBS</h1>
         <table id="performedStatusCompletedOrderTable">
             <thead>
                 <tr>
@@ -562,11 +605,11 @@ function contactRadiologist() {
     </div>
 
     <div class="fieldclass"><label>Priority </label>
-        <span class="priorityCheckBox">       
-                  <% urgencies.each { urgencies -> %>        
-                <input id="${ urgencies }" name ="priority" value="$urgencies"  type="checkbox">  ${ urgencies }        
-            <% } %>             
-        </span>
+              
+                      
+ <input type="checkbox"  class ="tt" name ="priority" id= "bb" value="ROUTINE">ROUTINE
+  <input type="checkbox" class = "tt" name ="priority" id="cc" value="STAT" checked> STAT
+       
     </div>
     <input class="fields" id="submitForm" type="button" value="Submit" />
     <input class="fields" id="cancelForm" type="button" value="Cancel" />

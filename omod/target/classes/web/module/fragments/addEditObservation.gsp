@@ -53,6 +53,9 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
 
      }).css("font-size", "16px");
 
+     
+
+     
      //display htmlform in the dialog box
      jq("#formDialogDiv").dialog({
      autoOpen: false,
@@ -90,130 +93,6 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
 
 
 </script>
-
-
-
-
-<!-- breadcrumbs -->
-<div class="breadcrumbsactiveorders">
-     <ul id="breadcrumbs" class="apple">
-          <li>
-               <a href="/openmrs/index.htm">    
-                    <i class="icon-home small"></i>  
-               </a>       
-          </li>
-          <li id="activeOrdersWithNoLinkBreadCrumb">
-               <i class="icon-chevron-right link"></i>
-               Radiology Active Orders
-          </li>
-          <li id="activeOrdersWithLinkBreadCrumb">
-               <i class="icon-chevron-right link"></i>
-               <a href='/openmrs/radiology/radiologist.page'> Radiology Active Orders
-               </a>
-          </li>
-            <li id="orderDetailBreadCrumb">  
-               <i class="icon-chevron-right link"></i>
-               Radiology Order Detail
-          </li>
-     </ul>
-</div>
-<!-- active radiology orders -->
-<div id="activeOrderTableDiv">
-     <h1>ACTIVE RADIOLOGY ORDERS</h1>
-     <table id="activeOrderTable">
-          <thead>
-               <tr>
-                    <th>Order</th>
-                    <th>Patient Name</th>
-                    <th>PatientID</th>
-                    <th>OrderStartDate</th>
-                    <th>OrderPriority</th>
-                    <th>SavedReport</th>
-               </tr>
-          </thead>
-          <tbody>
-               <% performedStatusCompletedOrders.each { anOrder -> %>
-               <tr>
-                    <td><a id="studyLinkId" href='+ studyname +' class="studyLinkId" onclick="viewOrderDetail(this); return false;"><p style="display:none;">${ anOrder.orderId }</p>
-                              ${anOrder.study.studyname}</a></td>
-                    <td>${ anOrder.patient.personName } </td>
-                    <td>${ anOrder.patient.patientIdentifier } </td>
-                    <td>${ ui.format(anOrder.dateCreated) } </td>
-                    <td>${ anOrder.urgency }</td>
-                    <% if(anOrder.study.studyReportSavedEncounterId) { %>
-                    <td>Yes</td>
-                    <% } else { %>
-                    <td>No</td>
-                    <% } %>
-               </tr>
-               <% } %>  
-          </tbody>
-     </table>
-</div>
-
-
-
-<!-- display order detail on the order clicked in the active orders -->
-<div id = "orderDetailDiv">
-</div>
-
-<!-- display previous completed orders -->
-<div id = "patientCompletedOrders">
-</div>
-
-<!-- update order detail after the saved report is cancelled -->
-<div id = "CancelReportUpdatedDiv">
-</div>
-
-
-
-<!-- observation dialog box -->
-<div id="obsDialogBox" title="View Obs" style="display:none;">
-     <div id="obsDialogBoxText" width="550" height="350"></div>
-</div>
-
-<div id="htmlFormDiv">
-<!-- htmlform view in a dialog box -->
-<div id="formDialogDiv" title="Fill Report">
-     <span class="error" style="display: none" id="general-form-error"></span>
-     <form id="htmlform" method="post" action="${ ui.actionLink("submit") }" onSubmit="submitHtmlForm(); return false;">
-          <input type="hidden" id = "personId" name="personId" value=""/>
-          <input type="hidden" id = "htmlFormId" name="htmlFormId" value=""/>
-          <input type="hidden" id = "createVisit" name="createVisit" value=""/>
-          <input type="hidden" id = "radiologyOrderId" name="radiologyOrderId" value=""/>
-          <input type="hidden" id = "formModifiedTimestamp" name="formModifiedTimestamp" value=""/>
-          <input type="hidden" id = "encounterModifiedTimestamp" name="encounterModifiedTimestamp" value=""/>
-          <input type="hidden" id = "encounterId" name="encounterId" value=""/>
-          <input type="hidden" id = "visitId" name="visitId" value=""/>
-          <input type="hidden" id = "returnUrl" name="returnUrl" value=""/>
-          <input type="hidden" id = "closeAfterSubmission" name="closeAfterSubmission" value=""/>
-          <div id="passwordPopup" style="position: absolute; z-axis: 1; bottom: 25px; background-color: #ffff00; border: 2px black solid; display: none; padding: 10px">
-               <center>
-                    <table>
-                         <tr>
-                              <td colspan="2"><b>${ ui.message("htmlformentry.loginAgainMessage") }</b></td>
-                         </tr>
-                         <tr>
-                              <td align="right"><b>${ ui.message("coreapps.user.username") }:</b></td>
-                              <td><input type="text" id="passwordPopupUsername"/></td>
-                         </tr>
-                         <tr>
-                              <td align="right"><b>${ ui.message("coreapps.user.password") }:</b></td>
-                              <td><input type="password" id="passwordPopupPassword"/></td>
-                         </tr>
-                         <tr>
-                              <td colspan="2" align="center"><input type="button" value="Submit" onClick="loginThenSubmitHtmlForm()"/></td>
-                         </tr>
-                    </table>
-               </center>
-          </div>
-     </form>
-</div>
-
-</div>
-
-<!-- delete saved report dialog message -->
-<div id="reportDeletelDialogMessage" style="width:430px" title="Delete Report"> Are you sure you want to delete Report </div>
 
 
 
@@ -603,7 +482,7 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
      })
 
            jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailHeading'>RADIOLOGY ORDER DETAILS  :  <a target='_blank' href=${ patientClinicianUrl + anOrder.patient.person.uuid } >${ anOrder.patient.personName }</a>  ${ anOrder.patient.patientIdentifier }, ${anOrder.study.studyname} </div>");
-           jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailProvider'>Provider  :  ${anOrder.creator.username} ,  StartDate  : ${ anOrder.dateCreated } </div>");
+           jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailProvider'>Provider  :  ${anOrder.orderer.name},  StartDate  : ${ anOrder.dateCreated } </div>");
            jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailDiagnosis'>Diagnosis  : ${anOrder.orderdiagnosis} </div>");
            jq('#orderDetailDiv').append("<div class='order'  id= 'orderDetailDiagnosis'>Instructions  : ${anOrder.instructions} </div>");         
 
@@ -821,6 +700,8 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
 
      //Submit report and order is no available in the active order list. This order is made avaiable to referring physician to view obs.
      function submitBtn() {
+     
+    
      var radiologyorderId = localStorage.getItem("radiologyorderId");
      jq.getJSON('${ ui.actionLink("updateActiveOrders") }', {
      'radiologyorderId': radiologyorderId
@@ -947,5 +828,126 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
      }
 
 </script>
+
+<!-- breadcrumbs -->
+<div class="breadcrumbsactiveorders">
+     <ul id="breadcrumbs" class="apple">
+          <li>
+               <a href="/openmrs/index.htm">    
+                    <i class="icon-home small"></i>  
+               </a>       
+          </li>
+          <li id="activeOrdersWithNoLinkBreadCrumb">
+               <i class="icon-chevron-right link"></i>
+               Radiology Active Orders
+          </li>
+          <li id="activeOrdersWithLinkBreadCrumb">
+               <i class="icon-chevron-right link"></i>
+               <a href='/openmrs/radiology/radiologist.page'> Radiology Active Orders
+               </a>
+          </li>
+            <li id="orderDetailBreadCrumb">  
+               <i class="icon-chevron-right link"></i>
+               Radiology Order Detail
+          </li>
+     </ul>
+</div>
+<!-- active radiology orders -->
+<div id="activeOrderTableDiv">
+     <h1>ACTIVE RADIOLOGY ORDERS</h1>
+     <table id="activeOrderTable">
+          <thead>
+               <tr>
+                    <th>Order</th>
+                    <th>Patient Name</th>
+                    <th>PatientID</th>
+                    <th>OrderStartDate</th>
+                    <th>OrderPriority</th>
+                    <th>SavedReport</th>
+               </tr>
+          </thead>
+          <tbody>
+               <% performedStatusCompletedOrders.each { anOrder -> %>
+               <tr>
+                    <td><a id="studyLinkId" href='+ studyname +' class="studyLinkId" onclick="viewOrderDetail(this); return false;"><p style="display:none;">${ anOrder.orderId }</p>
+                              ${anOrder.study.studyname}</a></td>
+                    <td>${ anOrder.patient.personName } </td>
+                    <td>${ anOrder.patient.patientIdentifier } </td>
+                    <td>${ ui.format(anOrder.dateCreated) } </td>
+                    <td>${ anOrder.urgency }</td>
+                    <% if(anOrder.study.studyReportSavedEncounterId) { %>
+                    <td>Yes</td>
+                    <% } else { %>
+                    <td>No</td>
+                    <% } %>
+               </tr>
+               <% } %>  
+          </tbody>
+     </table>
+</div>
+
+
+
+<!-- display order detail on the order clicked in the active orders -->
+<div id = "orderDetailDiv">
+</div>
+
+<!-- display previous completed orders -->
+<div id = "patientCompletedOrders">
+</div>
+
+<!-- update order detail after the saved report is cancelled -->
+<div id = "CancelReportUpdatedDiv">
+</div>
+
+
+
+<!-- observation dialog box -->
+<div id="obsDialogBox" title="View Obs" style="display:none;">
+     <div id="obsDialogBoxText" width="550" height="350"></div>
+</div>
+
+<div id="htmlFormDiv">
+<!-- htmlform view in a dialog box -->
+<div id="formDialogDiv" title="Fill Report">
+     <span class="error" style="display: none" id="general-form-error"></span>
+     <form id="htmlform" method="post" action="${ ui.actionLink("submit") }" onSubmit="submitHtmlForm(); return false;">
+          <input type="hidden" id = "personId" name="personId" value=""/>
+          <input type="hidden" id = "htmlFormId" name="htmlFormId" value=""/>
+          <input type="hidden" id = "createVisit" name="createVisit" value=""/>
+          <input type="hidden" id = "radiologyOrderId" name="radiologyOrderId" value=""/>
+          <input type="hidden" id = "formModifiedTimestamp" name="formModifiedTimestamp" value=""/>
+          <input type="hidden" id = "encounterModifiedTimestamp" name="encounterModifiedTimestamp" value=""/>
+          <input type="hidden" id = "encounterId" name="encounterId" value=""/>
+          <input type="hidden" id = "visitId" name="visitId" value=""/>
+          <input type="hidden" id = "returnUrl" name="returnUrl" value=""/>
+          <input type="hidden" id = "closeAfterSubmission" name="closeAfterSubmission" value=""/>
+          <div id="passwordPopup" style="position: absolute; z-axis: 1; bottom: 25px; background-color: #ffff00; border: 2px black solid; display: none; padding: 10px">
+               <center>
+                    <table>
+                         <tr>
+                              <td colspan="2"><b>${ ui.message("htmlformentry.loginAgainMessage") }</b></td>
+                         </tr>
+                         <tr>
+                              <td align="right"><b>${ ui.message("coreapps.user.username") }:</b></td>
+                              <td><input type="text" id="passwordPopupUsername"/></td>
+                         </tr>
+                         <tr>
+                              <td align="right"><b>${ ui.message("coreapps.user.password") }:</b></td>
+                              <td><input type="password" id="passwordPopupPassword"/></td>
+                         </tr>
+                         <tr>
+                              <td colspan="2" align="center"><input type="button" value="Submit" onClick="loginThenSubmitHtmlForm()"/></td>
+                         </tr>
+                    </table>
+               </center>
+          </div>
+     </form>
+</div>
+
+</div>
+
+<!-- delete saved report dialog message -->
+<div id="reportDeletelDialogMessage" style="width:430px" title="Delete Report"> Are you sure you want to delete Report </div>
 
 
