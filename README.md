@@ -17,19 +17,17 @@ with the open source clinical image and object management system
 Make sure you have a java jdk and [maven](https://maven.apache.org/) installed.
 
 Clone this project:
-```bash
 git clone https://github.com/WangchukSFSU/Radiology.git
 
 And execute the following command on the command line:
-```bash
 mvn clean package
-```
+
 
 ### Installation
 
 For a detailed guide on how to install and configure this module see
 
-Radiology module user guide
+[Radiology module Install guide and User guide](https://drive.google.com/open?id=0B8EXdIpPdidkbWlGQ0FpQWVxdWc)
 
 ## Limitations
 
