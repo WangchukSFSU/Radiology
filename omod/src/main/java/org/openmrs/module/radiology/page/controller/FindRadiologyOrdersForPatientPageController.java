@@ -1,6 +1,8 @@
 package org.openmrs.module.radiology.page.controller;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import org.openmrs.Order;
@@ -27,8 +29,24 @@ public class FindRadiologyOrdersForPatientPageController {
 		String dicomFileRootFolder = radiologyProperties.getDicomFileRootFolder();
 		String path = System.getProperty("user.home") + File.separator + dicomFileRootFolder;
 		File customDir = new File(path);
-		if (customDir.exists()) {} else {
-			boolean success = new java.io.File(System.getProperty("user.home"), dicomFileRootFolder).mkdirs();
+		boolean customDirExists = customDir.exists();
+		if (customDirExists == true) {
+			File[] folder = customDir.listFiles();
+			for (File eachFolder : folder) {
+				
+				File[] files = eachFolder.listFiles();
+				for (File eachFile : files) {
+					eachFile.delete();
+				}
+				
+			}
+			for (File deleteFolder : folder) {
+				deleteFolder.delete();
+			}
+			
+		} else {
+			
+			new java.io.File(System.getProperty("user.home"), dicomFileRootFolder).mkdirs();
 			
 		}
 		

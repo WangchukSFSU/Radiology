@@ -317,7 +317,7 @@ public class CreateViewRadiologyOrderFragmentController {
 		radiologyOrder.setPatient(patient);
 		radiologyOrder.setDateCreated(new Date());
 		radiologyOrder.setInstructions(instruction);
-		radiologyOrder.setUrgency(Order.Urgency.valueOf(priority));	
+		radiologyOrder.setUrgency(Order.Urgency.valueOf(priority));
 		radiologyOrder.setOrderdiagnosis(diagnosis);
 		RadiologyService radiologyservice = Context.getService(RadiologyService.class);
 		// create new study

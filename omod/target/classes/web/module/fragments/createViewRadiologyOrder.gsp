@@ -18,10 +18,8 @@ def conceptDiagnosisClass = config.requireDiagnosisClass
     jq = jQuery;
 jq(document).ready(function() {
 
-jq('input.tt').on('change', function() {
-    jq('input.tt').not(this).prop('checked', false);  
-    var pp = jq('input.tt').val();
-    alert("pp    " + pp);
+jq('input.priority').on('change', function() {
+    jq('input.priority').not(this).prop('checked', false);  
    
 });
          
@@ -195,17 +193,13 @@ console.log("fnDrawCallback");
         var studyOrder = jq("#studyTags").val();
         var diagnosisOrder = jq("#diagnosisTags").val();
         var instructionOrder = jq("#orderInstruction").val();
-       var tttt = jq('.tt').val();
-       alert("ttt"+ tttt);
-        if (jq('#bb').is(":checked"))
+        if (jq('#routine').is(":checked"))
          {
-         alert("STAT");
-           var priorityOrder = jq('#bb').val();
+           var priorityOrder = jq('#routine').val();
          } else {
-         alert("ROUTINE");
-          var priorityOrder = jq('#cc').val();
+          var priorityOrder = jq('#stat').val();
          }
-alert("priorityOrder " +priorityOrder);
+
         jq.getJSON('${ ui.actionLink("placeRadiologyOrder") }', {
                 'patient': patient,
                 'study': studyOrder,
@@ -607,8 +601,8 @@ function contactRadiologist() {
     <div class="fieldclass"><label>Priority </label>
               
                       
- <input type="checkbox"  class ="tt" name ="priority" id= "bb" value="ROUTINE">ROUTINE
-  <input type="checkbox" class = "tt" name ="priority" id="cc" value="STAT" checked> STAT
+ <input type="checkbox"  class ="priority" name ="priority" id= "routine" value="ROUTINE">ROUTINE
+  <input type="checkbox" class = "priority" name ="priority" id="stat" value="STAT" checked> STAT
        
     </div>
     <input class="fields" id="submitForm" type="button" value="Submit" />

@@ -499,9 +499,8 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		List<RadiologyOrder> allOrders = Context.getService(RadiologyService.class)
 				.getAllRadiologyOrder();
 		String authenticatedUser = Context.getAuthenticatedUser()
-				.getFamilyName();
-		
-		System.out.println("authenticatedUser 1212121" + authenticatedUser);
+				.getPersonName()
+				.getFullName();
 		
 		RadiologyOrder radiologyOrder;
 		for (Order order : allOrders) {
