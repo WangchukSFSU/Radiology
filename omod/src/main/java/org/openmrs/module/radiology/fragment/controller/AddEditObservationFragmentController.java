@@ -191,10 +191,14 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 			@RequestParam(value = "encounterId") String encounterId, UiUtils ui) {
 		List<Obs> encounterIdObs = Context.getObsService()
 				.getObservations(encounterId);
-		String[] properties = new String[3];
+		
+		String[] properties = new String[6];
 		properties[0] = "Concept";
 		properties[1] = "valueText";
 		properties[2] = "valueNumeric";
+		properties[3] = "Encounter.Location";
+		properties[4] = "Encounter.EncounterDatetime";
+		properties[5] = "Encounter.Provider.PersonName";
 		return SimpleObject.fromCollection(encounterIdObs, ui, properties);
 	}
 	

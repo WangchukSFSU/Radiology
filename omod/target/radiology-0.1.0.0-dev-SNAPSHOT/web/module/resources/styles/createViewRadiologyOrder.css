@@ -1,4 +1,13 @@
+.formSpan {
+     color: red;
+}
 
+
+
+
+.formLabel:after { content:" *"; 
+    color : red;
+    }
 
 #diagnosislistSelect {
 

@@ -173,30 +173,9 @@ public class CreateViewRadiologyOrderFragmentController {
 	public List<SimpleObject> getEncounterIdObs(@SpringBean("conceptService") ConceptService service, FragmentModel model,
 			@RequestParam(value = "encounterId") String encounterId, UiUtils ui) {
 		// get observations for the encounterId
-		System.out.println("encounter id " + encounterId);
+		
 		List<Obs> encounterIdObs = Context.getObsService()
 				.getObservations(encounterId);
-		System.out.println("size size" + encounterIdObs.size());
-		
-		for (Obs aa : encounterIdObs) {
-			System.out.println("encounter id location 11111" + aa.getLocation()
-					.getAddress1());
-			System.out.println("encounter id date 2222" + aa.getObsDatetime());
-			System.out.println("encounter id date 33333" + aa.getCreator());
-			
-			System.out.println("encounter id location 44444" + aa.getEncounter()
-					.getLocation());
-			System.out.println("encounter id date 55555" + aa.getEncounter()
-					.getEncounterDatetime());
-			System.out.println("encounter id date 6666" + aa.getEncounter()
-					.getProvider()
-					.getPersonName());
-			
-			System.out.println("list obs " + aa.getConcept()
-					.getDisplayString());
-			System.out.println("list obs text" + aa.getValueText());
-			
-		}
 		
 		// properties selected for the obs
 		String[] properties = new String[6];
@@ -376,7 +355,7 @@ public class CreateViewRadiologyOrderFragmentController {
 			for (ConceptClass cl : service.getAllConceptClasses()) {
 				if (requireConceptClass.equals(cl.getName())) {
 					requireClasses.add(cl);
-					System.out.println("Concept Class Name Found: " + cl.getName());
+					// System.out.println("Concept Class Name Found: " + cl.getName());
 					break;
 				}
 			}
@@ -432,7 +411,7 @@ public class CreateViewRadiologyOrderFragmentController {
 			for (ConceptClass cl : service.getAllConceptClasses()) {
 				if (requireConceptClass.equals(cl.getName())) {
 					requireClasses.add(cl);
-					System.out.println("Concept Class Name Found: " + cl.getName());
+					// System.out.println("Concept Class Name Found: " + cl.getName());
 					break;
 				}
 			}
@@ -445,7 +424,7 @@ public class CreateViewRadiologyOrderFragmentController {
 		List<Concept> names = new ArrayList<Concept>();
 		for (ConceptSearchResult con : results) {
 			names.add(con.getConcept()); // con.getConcept().getName().getName()
-			System.out.println("Concept: " + con.getConceptName());
+			// System.out.println("Concept: " + con.getConceptName());
 		}
 		/*
 		 * The Ajax call requires a json result;

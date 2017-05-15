@@ -57,7 +57,10 @@ table#cancepReportUpdatedDatatable {
 }
 
 
-
+header .user-options {
+    text-align: right;
+    font-size: 14px;
+}
 
 
 .fg-toolbar.ui-toolbar.ui-widget-header.ui-corner-tl.ui-corner-tr.ui-helper-clearfix {

@@ -771,10 +771,25 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
      jq("#obsDialogBoxText table").addClass("obsDialogBoxTextclass");
      var obsDialogBoxTextTable = jq('#obsDialogBoxText table');
      obsDialogBoxTextTable.append('<thead><tr><th>Concept</th><th>Value Text/Numbers</th></tr></thead><tbody>');
-     for (var i = 0; i < ret.length; i++) {
-     var concept = ret[i].Concept;
-     var valueText = ret[i].valueText;
-     var valueNumeric = ret[i].valueNumeric;
+     
+             var loopOnce = true;
+            
+            for (var i = 0; i < (ret.length-1); i++) {
+                var concept = ret[i].Concept;
+                var valueText = ret[i].valueText;
+                var valueNumeric = ret[i].valueNumeric;
+                var obsLocation = ret[i].Encounter.Location;
+                var obsDateTime = ret[i].Encounter.EncounterDatetime;
+                var obsGivenName = ret[i].Encounter.Provider.PersonName;
+                
+                 if(loopOnce) {
+               
+                obsDialogBoxTextTable.append('<tr><td>Location</td><td>' + obsLocation + '</td></tr>');
+                obsDialogBoxTextTable.append('<tr><td>Date</td><td>' + obsDateTime + '</td></tr>');
+                obsDialogBoxTextTable.append('<tr><td>Provider</td><td>' + obsGivenName + '</td></tr>');
+                loopOnce = false;
+                }
+                
      if(valueText) {
                    obsDialogBoxTextTable.append('<tr><td>' + concept + '</td><td>' + valueText + '</td></tr>');
      } else {

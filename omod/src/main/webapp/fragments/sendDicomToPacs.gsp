@@ -19,7 +19,7 @@
      "iDisplayLength": 5,
      "aLengthMenu": [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, "All"]],
      "aaSorting": [
-     [1, "desc"]
+     [2, "desc"]
      ] // Sort by first column descending,
 
      });
@@ -120,7 +120,7 @@
      "iDisplayLength": 5,
      "aLengthMenu": [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, "All"]],
      "aaSorting": [
-     [1, "desc"]
+     [2, "desc"]
      ] // Sort by first column descending,
 
      });

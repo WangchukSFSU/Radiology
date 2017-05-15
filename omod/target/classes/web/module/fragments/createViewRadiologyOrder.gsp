@@ -1,3 +1,4 @@
+
 <%
 ui.decorateWith("appui", "standardEmrPage")
 ui.includeJavascript("uicommons", "datatables/jquery.dataTables.min.js")
@@ -17,14 +18,11 @@ def conceptDiagnosisClass = config.requireDiagnosisClass
 <script>
     jq = jQuery;
 jq(document).ready(function() {
-
 jq('input.priority').on('change', function() {
     jq('input.priority').not(this).prop('checked', false);  
    
 });
          
-
-
     jq("#manageOrderWithLinkBreadCrumb").hide();
     jq("#messagePatientBreadCrumb").hide();
     jq("#addOrderBreadCrumb").hide();
@@ -53,7 +51,6 @@ console.log("fnDrawCallback");
                 [2, "desc"]
             ] // Sort by first column descending,
     });
-
     //reload page if click on cancel btn
     jq("#cancelmessage").click(function() {
         location.reload();
@@ -74,7 +71,6 @@ console.log("fnDrawCallback");
             },
             cache: false,
             success: function(data) {
-
                 //jq("#manageOrderWithLinkBreadCrumb").hide();
                 jq("#messagePatientBreadCrumb").hide();
                 jq("#manageOrderWithLinkBreadCrumb").show();
@@ -88,11 +84,9 @@ console.log("fnDrawCallback");
                 jq("#radiologyOrderDetailsDiv").hide();
                 jq("#contactRadiologist").hide();
                 jq("#performedStatusCompletedOrder").show();
-
             }
         });
     });
-
     //cancel radiology order
     jq("#cancelForm").click(function() {
         location.reload();
@@ -133,7 +127,6 @@ console.log("fnDrawCallback");
                 }
                     }
                 patientCompletedOrdersTable.append("</tbody>");
-
                 jq('#patientCompletedOrdersDatatable').DataTable({
                     "sPaginationType": "full_numbers",
                     "bPaginate": true,
@@ -146,12 +139,9 @@ console.log("fnDrawCallback");
                     "aaSorting": [
                             [1, "desc"]
                         ] // Sort by first column descending,
-
                 });
             })
     });
-
-
     jq("#contactRadiologistDialogBox").dialog({
         autoOpen: false,
         modal: false,
@@ -159,7 +149,7 @@ console.log("fnDrawCallback");
         width: 550,
         height: 350,
     });
-
+    
     jq("#obsDialogBox").dialog({
         autoOpen: false,
         modal: false,
@@ -171,8 +161,11 @@ console.log("fnDrawCallback");
                 jq(this).dialog('close');
             }
         },
-
     });
+    
+    
+      
+        
     
     //get completed report ready orders
     jq("#CompletedOrdersList").click(function() {
@@ -182,10 +175,12 @@ console.log("fnDrawCallback");
         jq('#radiologyOrderDetailsDiv').children("h1").remove();
         jq('#radiologyOrderDetailsDiv').children("h1").remove();
         jq("#radiologyOrderDetailsDiv").hide();
-
     });
-
-
+    
+    jq( "#orderInstruction" ).change(function() {
+  jq("#instructionSpan").text("");
+});
+    
     //create new radiology order and save in database and Pacs
     jq("#submitForm").click(function() {
         var pat = "${patient}".split("#");
@@ -199,7 +194,31 @@ console.log("fnDrawCallback");
          } else {
           var priorityOrder = jq('#stat').val();
          }
-
+         
+         
+         
+         
+          var emptyStudy = false; 
+var emptyDiagnosis = false; 
+var emptyInstruction = false; 
+        var notMatchStudy = true;
+        var notMatchDiagnosis = true;
+         
+          if(studyOrder == "") {
+      
+         jq("#studySpan").text("Please enter study");
+        }
+        if(diagnosisOrder == "") {
+        jq("#diagnosisSpan").text("Please enter diagnosis");
+        } 
+        if(instructionOrder == "") {
+        jq("#instructionSpan").text("Please add instruction");
+        }
+ 
+       
+        
+        
+        
         jq.getJSON('${ ui.actionLink("placeRadiologyOrder") }', {
                 'patient': patient,
                 'study': studyOrder,
@@ -207,9 +226,7 @@ console.log("fnDrawCallback");
                 'instruction': instructionOrder,
                 'priority': priorityOrder
             })
-            .error(function(xhr, status, err) {
-                alert('AJAX error ' + err);
-            })
+           
             .success(function(ret) {
                 jq("#messagePatientBreadCrumb").hide();
                 jq("#addOrderBreadCrumb").hide();
@@ -223,10 +240,8 @@ console.log("fnDrawCallback");
                 jq("#contactRadiologist").hide();
                 jq("#performedStatusCompletedOrder").show();
                 jq("#InProgressOrdersList").click();
-
             })
     });
-
     //create new radiology order
     jq("#addRadiologyOrderBtn").click(function() {
         jq("#completedOrderHeader").hide();
@@ -244,9 +259,6 @@ console.log("fnDrawCallback");
         jq("#addOrderBreadCrumb").show();
         jq("#orderDetailBreadCrumb").hide();
     });
-
-
-
     //message patient
     jq("#emailform").click(function() {
         jq("#performedStatusCompletedOrder").hide();
@@ -305,12 +317,9 @@ console.log("fnDrawCallback");
           
                  <% } %> 
         }
-
         <% } %>
         <% } %>
-
     });
-
     //clear radiologist message
     jq("#clearMessage").click(function() {
         jq('#contactRadiologistDialogBox').dialog('close');
@@ -337,7 +346,6 @@ console.log("fnDrawCallback");
         });
     });
 });
-
 //click any active order
      function clickOrder(el) {
      jq.getJSON('${ ui.actionLink("deleteOrder") }', {
@@ -353,7 +361,6 @@ console.log("fnDrawCallback");
         })
      
      }
-
 //view report based on the report encounterId in the dialog box
 function ViewReport() {
     var orderencounterId = localStorage.getItem("orderencounterId");
@@ -397,12 +404,8 @@ function ViewReport() {
                 }
             obsDialogBoxTextTable.append("</tbody>");
             jq("#obsDialogBox").dialog("open");
-
         })
-
 }
-
-
 //autofill the radiologist email with the patient and order info
 function contactRadiologist() {
     jq("#contactRadiologist").show();
@@ -423,11 +426,9 @@ function contactRadiologist() {
         jq('#messageRadiologist').val(jq('#messageRadiologist').val() + 'Instruction   :');
         jq('#messageRadiologist').val(jq('#messageRadiologist').val() + '${anOrder.instructions}');
     }
-
     <% } %>
     jq("#contactRadiologistDialogBox").dialog("open");
 }
-
 </script>
 <script>
     jq(function() {
@@ -444,14 +445,42 @@ function contactRadiologist() {
                             var item = data[index];
                             results.push(item.name);
                         }
-                        response(results);
+                          if(results.length == 0) {
+                         jq("#studySpan").text("Please select study from list");
+                         
+                         jq('input#submitForm[type="button"]').attr('disabled','disabled');
+
+                         } else {
+                        response(results); 
+                       
+                        jq('input#submitForm[type="button"]').removeAttr('disabled');
+                        
+
+                        }
                     })
                     .error(function(xhr, status, err) {
                         alert('AJAX error ' + err);
                     });
-            }
+            },
+             select: function(event, ui) { 
+             
+              if (ui.item) {
+            
+              jq("#studySpan").text("");
+               jq('input#submitForm[type="button"]').removeAttr('disabled');
+         
+        } 
+             
+             },
+             
+             
+             
+             
+             
+             
+             
+             
         })
-
         //get diagnosis list for autocomlete feature
         jq("#diagnosisTags").autocomplete({
             source: function(request, response) {
@@ -465,12 +494,35 @@ function contactRadiologist() {
                             var item = data[index];
                             results.push(item.name);
                         }
-                        response(results);
+                          if(results.length == 0) {
+                         jq("#diagnosisSpan").text("Please select diagnosis from list");
+                         
+                         jq('input#submitForm[type="button"]').attr('disabled','disabled');
+
+                         } else {
+                        response(results); 
+                       
+                        jq('input#submitForm[type="button"]').removeAttr('disabled');
+                        
+
+                        }
                     })
                     .error(function(xhr, status, err) {
                         alert('AJAX error ' + err);
                     });
-            }
+            },
+            select: function(event, ui) { 
+             
+              if (ui.item) {
+            
+              jq("#diagnosisSpan").text("");
+                jq('input#submitForm[type="button"]').removeAttr('disabled');
+         
+        } 
+             
+             }
+             
+             
         })
     });
 </script>
@@ -585,20 +637,20 @@ function contactRadiologist() {
 <div id="addRadiologyOrderForm">
     <h2> ADD RADIOLOGY ORDER</h2>
     <div class="studyfieldclass">
-        <label for="tags">Study </label>
-        <input id="studyTags">
+        <label for="tags" class="formLabel">Study </label>
+        <input id="studyTags"><span id="studySpan" class="formSpan"></span>
     </div>
 
     <div class="fieldclass">
-        <label for="tags">Diagnosis </label>
-        <input id="diagnosisTags">
+        <label for="tags" class="formLabel">Diagnosis </label>
+        <input id="diagnosisTags"><span id="diagnosisSpan" class="formSpan"></span>
     </div>
 
-    <div class="fieldclass"><label>Instruction </label>
-        <textarea  name="orderInstruction" id="orderInstruction" rows="1" cols="50">  </textarea>
+    <div class="fieldclass"><label class="formLabel">Instruction </label>
+        <textarea  name="orderInstruction" id="orderInstruction" rows="1" cols="50">  </textarea><span id="instructionSpan" class="formSpan"></span>
     </div>
 
-    <div class="fieldclass"><label>Priority </label>
+    <div class="fieldclass"><label >Priority </label>
               
                       
  <input type="checkbox"  class ="priority" name ="priority" id= "routine" value="ROUTINE">ROUTINE
@@ -647,5 +699,4 @@ function contactRadiologist() {
 <div id="patientId">
     <p style="display:none;">${ patient }</p>
 </div>
-
 
