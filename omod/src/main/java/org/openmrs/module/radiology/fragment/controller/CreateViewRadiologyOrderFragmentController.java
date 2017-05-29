@@ -2,6 +2,7 @@ package org.openmrs.module.radiology.fragment.controller;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,6 +16,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import org.openmrs.Concept;
+import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptClass;
 import org.openmrs.ConceptSearchResult;
 import org.openmrs.ConceptSet;
@@ -301,6 +303,33 @@ public class CreateViewRadiologyOrderFragmentController {
 		RadiologyService radiologyservice = Context.getService(RadiologyService.class);
 		// create new study
 		Study newStudy = new Study();
+		
+		ArrayList<Concept> modalityConcept = getModalityConcept();
+		for (Concept ConceptModality : modalityConcept) {
+			System.out.println("LLLLLLLLL " + ConceptModality.getDisplayString());
+			List<ConceptSet> modalityConceptSet = Context.getConceptService()
+					.getConceptSetsByConcept(ConceptModality);
+			Collection<ConceptAnswer> nn = ConceptModality.getAnswers();
+			for (ConceptAnswer jj : nn) {
+				System.out.println("AAAAAAAAAA " + jj.getAnswerConcept());
+			}
+			System.out.println("MMMMMMMMMM " + ConceptModality.getAnswers());
+			System.out.println("JJJJJJJJJJJJJJ " + ConceptModality.getConceptSets());
+			System.out.println("OOOOOOOOOOOOOO " + ConceptModality.getConceptMappings());
+			for (ConceptSet modalityConceptSetMember : modalityConceptSet) {
+				String modalityConceptName = modalityConceptSetMember.getConcept()
+						.getDisplayString();
+				System.out.println("XXXXXXXXXX " + modalityConceptSetMember.getConcept()
+						.getDisplayString());
+				
+				if (modalityConceptName.equals(study)) {
+					// newStudy.setModality(ConceptModality.getDisplayString());
+				}
+				
+			}
+			
+		}
+		
 		newStudy.setModality(study);
 		newStudy.setStudyname(study);
 		
@@ -329,6 +358,18 @@ public class CreateViewRadiologyOrderFragmentController {
 		
 		return SimpleObject.fromCollection(getRadiologyOrder, ui, properties);
 		
+	}
+	
+	public ArrayList<Concept> getModalityConcept() {
+		ArrayList<Concept> modalityConcept = new ArrayList();
+		List<ConceptSet> modalityConceptSet = Context.getConceptService()
+				.getConceptSetsByConcept(Context.getConceptService()
+						.getConcept(164068));
+		for (ConceptSet addModalityConceptSet : modalityConceptSet) {
+			Concept modalityConceptName = addModalityConceptSet.getConcept();
+			modalityConcept.add(modalityConceptName);
+		}
+		return modalityConcept;
 	}
 	
 	/**
@@ -376,18 +417,6 @@ public class CreateViewRadiologyOrderFragmentController {
 		
 		String[] properties = new String[] { "name" };
 		return SimpleObject.fromCollection(names, ui, properties);
-	}
-	
-	public ArrayList<Concept> getModalityConcept() {
-		ArrayList<Concept> modalityConcept = new ArrayList();
-		List<ConceptSet> modalityConceptSet = Context.getConceptService()
-				.getConceptSetsByConcept(Context.getConceptService()
-						.getConcept(164068));
-		for (ConceptSet addModalityConceptSet : modalityConceptSet) {
-			Concept modalityConceptName = addModalityConceptSet.getConcept();
-			modalityConcept.add(modalityConceptName);
-		}
-		return modalityConcept;
 	}
 	
 	/**
@@ -448,8 +477,9 @@ public class CreateViewRadiologyOrderFragmentController {
 			@RequestParam(value = "message", required = false) String message) {
 		
 		// authentification username and password
-		final String username = "johnDevRadio@gmail.com";
-		final String password = "john1234";
+		RadiologyProperties radiologyProperties = new RadiologyProperties();
+		final String username = radiologyProperties.getSmtpAuthentificationEmailAddress();
+		final String password = radiologyProperties.getSmtpAuthentificationPassword();
 		
 		// set up smtp server
 		Properties props = new Properties();
@@ -467,7 +497,7 @@ public class CreateViewRadiologyOrderFragmentController {
 		try {
 			// Sender and receiver info with the message
 			Message message1 = new MimeMessage(session);
-			message1.setFrom(new InternetAddress("johnDevRadio@gmail.com"));
+			message1.setFrom(new InternetAddress(username));
 			message1.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
 			message1.setSubject(subject);
 			message1.setText(message);
@@ -490,8 +520,16 @@ public class CreateViewRadiologyOrderFragmentController {
 			@RequestParam(value = "subject", required = false) String subject,
 			@RequestParam(value = "message", required = false) String message) {
 		
-		final String username = "johnDevRadio@gmail.com";
-		final String password = "john1234";
+		RadiologyProperties radiologyProperties = new RadiologyProperties();
+		final String username = radiologyProperties.getSmtpAuthentificationEmailAddress();
+		final String password = radiologyProperties.getSmtpAuthentificationPassword();
+		String p1 = radiologyProperties.getServersPort();
+		String p2 = radiologyProperties.getSmtpAuthentificationPassword();
+		
+		System.out.println("434334 " + username);
+		System.out.println("655465645656 " + password);
+		System.out.println("kjkjkjkjk " + p1);
+		System.out.println("545454545 " + p2);
 		
 		// set up smtp server
 		Properties props = new Properties();
@@ -509,7 +547,7 @@ public class CreateViewRadiologyOrderFragmentController {
 		try {
 			// Sender and receiver info with the message
 			Message message1 = new MimeMessage(session);
-			message1.setFrom(new InternetAddress("johnDevRadio@gmail.com"));
+			message1.setFrom(new InternetAddress(username));
 			message1.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
 			message1.setSubject(subject);
 			message1.setText(message);

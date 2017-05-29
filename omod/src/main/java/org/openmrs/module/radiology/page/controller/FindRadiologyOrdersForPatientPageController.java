@@ -25,44 +25,6 @@ public class FindRadiologyOrdersForPatientPageController {
 	public void controller(PageModel model) {
 		// get all the active orders and create folders for each patient
 		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrders();
-		RadiologyProperties radiologyProperties = new RadiologyProperties();
-		String dicomFileRootFolder = radiologyProperties.getDicomFileRootFolder();
-		String path = System.getProperty("user.home") + File.separator + dicomFileRootFolder;
-		File customDir = new File(path);
-		boolean customDirExists = customDir.exists();
-		if (customDirExists == true) {
-			File[] folder = customDir.listFiles();
-			for (File eachFolder : folder) {
-				
-				File[] files = eachFolder.listFiles();
-				for (File eachFile : files) {
-					eachFile.delete();
-				}
-				
-			}
-			for (File deleteFolder : folder) {
-				deleteFolder.delete();
-			}
-			
-		} else {
-			
-			new java.io.File(System.getProperty("user.home"), dicomFileRootFolder).mkdirs();
-			
-		}
-		
-		for (RadiologyOrder createSubFolderForEachPatient : inProgressRadiologyOrders) {
-			String subDirectory = path + File.separator + createSubFolderForEachPatient.getPatient()
-					.getPerson()
-					.getPersonName() + createSubFolderForEachPatient.getPatient()
-					.getPatientIdentifier();
-			
-			File subFolder = new File(subDirectory);
-			if (!subFolder.exists()) {
-				subFolder.mkdir();
-				
-			}
-			
-		}
 		
 	}
 	

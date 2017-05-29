@@ -18,6 +18,7 @@ import org.openmrs.api.EncounterService;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.api.OrderService;
 import org.openmrs.module.emrapi.encounter.EmrEncounterService;
+
 import org.openmrs.module.radiology.db.RadiologyOrderDAO;
 import org.openmrs.module.radiology.db.StudyDAO;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,22 +26,22 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface RadiologyService extends OpenmrsService {
 	
-	public void setRadiologyOrderDao(RadiologyOrderDAO radiologyOrderDao);
+	void setRadiologyOrderDao(RadiologyOrderDAO radiologyOrderDao);
 	
-	public void setStudyDAO(StudyDAO studyDAO);
+	void setStudyDAO(StudyDAO studyDAO);
+	
+	void setOrderService(OrderService orderService);
+	
+	void setEncounterService(EncounterService encounterService);
+	
+	void setEmrEncounterService(EmrEncounterService emrEncounterService);
+	
+	void setRadiologyProperties(RadiologyProperties radiologyProperties);
 	
 	List<Study> getAllStudyRadiologyOrder();
 	
 	@Transactional(readOnly = true)
 	List<RadiologyOrder> getAllRadiologyOrder();
-	
-	public void setOrderService(OrderService orderService);
-	
-	public void setEncounterService(EncounterService encounterService);
-	
-	public void setEmrEncounterService(EmrEncounterService emrEncounterService);
-	
-	void setRadiologyProperties(RadiologyProperties radiologyProperties);
 	
 	/**
 	 * Save given <code>RadiologyOrder</code> and its <code>RadiologyOrder.study</code> to the database
@@ -62,7 +63,7 @@ public interface RadiologyService extends OpenmrsService {
 	 *         study
 	 * @should throw illegal argument exception if given study modality is null
 	 */
-	public RadiologyOrder placeRadiologyOrder(RadiologyOrder radiologyOrder) throws IllegalArgumentException;
+	RadiologyOrder placeRadiologyOrder(RadiologyOrder radiologyOrder) throws IllegalArgumentException;
 	
 	/**
 	 * Get RadiologyOrder by its orderId
@@ -74,7 +75,7 @@ public interface RadiologyService extends OpenmrsService {
 	 * @should return null if no match was found
 	 * @should throw illegal argument exception given null
 	 */
-	public RadiologyOrder getRadiologyOrderByOrderId(Integer orderId) throws IllegalArgumentException;
+	RadiologyOrder getRadiologyOrderByOrderId(Integer orderId) throws IllegalArgumentException;
 	
 	/**
 	 * Get RadiologyOrder's by its associated Patient
@@ -87,7 +88,7 @@ public interface RadiologyService extends OpenmrsService {
 	 *         orders
 	 * @should throw illegal argument exception given null
 	 */
-	public List<RadiologyOrder> getRadiologyOrdersByPatient(Patient patient) throws IllegalArgumentException;
+	List<RadiologyOrder> getRadiologyOrdersByPatient(Patient patient) throws IllegalArgumentException;
 	
 	/**
 	 * Get RadiologyOrder's by its associated Patients
@@ -99,7 +100,7 @@ public interface RadiologyService extends OpenmrsService {
 	 * @should return all radiology orders given empty patient list
 	 * @should throw illegal argument exception given null
 	 */
-	public List<RadiologyOrder> getRadiologyOrdersByPatients(List<Patient> patients) throws IllegalArgumentException;
+	List<RadiologyOrder> getRadiologyOrdersByPatients(List<Patient> patients) throws IllegalArgumentException;
 	
 	/**
 	 * <p>
@@ -117,7 +118,7 @@ public interface RadiologyService extends OpenmrsService {
 	 * @should throw illegal argument exception if study instance uid is null
 	 * @should throw illegal argument exception if performed status is null
 	 */
-	public Study updateStudyPerformedStatus(String studyInstanceUid, PerformedProcedureStepStatus performedStatus)
+	Study updateStudyPerformedStatus(String studyInstanceUid, PerformedProcedureStepStatus performedStatus)
 			throws IllegalArgumentException;
 	
 	/**
@@ -136,7 +137,7 @@ public interface RadiologyService extends OpenmrsService {
 	 * @should throw illegal argument exception if ScheduledProcedureStepStatus
 	 *         is null
 	 */
-	public Study updateScheduledProcedureStepStatus(String studyInstanceUid, ScheduledProcedureStepStatus scheduledstatus)
+	Study updateScheduledProcedureStepStatus(String studyInstanceUid, ScheduledProcedureStepStatus scheduledstatus)
 			throws IllegalArgumentException;
 	
 	/**
@@ -153,8 +154,7 @@ public interface RadiologyService extends OpenmrsService {
 	 * @should throw illegal argument exception if study instance uid is null
 	 * @should throw illegal argument exception if reportCompletedDate is null
 	 */
-	public Study updateReportCompletedDate(String studyInstanceUid, Date reportCompletedDate)
-			throws IllegalArgumentException;
+	Study updateReportCompletedDate(String studyInstanceUid, Date reportCompletedDate) throws IllegalArgumentException;
 	
 	/**
 	 * <p>
@@ -170,7 +170,7 @@ public interface RadiologyService extends OpenmrsService {
 	 * @should throw illegal argument exception if study instance uid is null
 	 * @should throw illegal argument exception if reportSavedEncounterId is null
 	 */
-	public Study updateReportSavedEncounterId(String studyInstanceUid, Integer reportSavedEncounterId)
+	Study updateReportSavedEncounterId(String studyInstanceUid, Integer reportSavedEncounterId)
 			throws IllegalArgumentException;
 	
 	/**
@@ -187,7 +187,7 @@ public interface RadiologyService extends OpenmrsService {
 	 * @should throw illegal argument exception if study instance uid is null
 	 * @should throw illegal argument exception if user is null
 	 */
-	public Study updateStudyReportRadiologist(String studyInstanceUid, String user) throws IllegalArgumentException;
+	Study updateStudyReportRadiologist(String studyInstanceUid, String user) throws IllegalArgumentException;
 	
 	/**
 	 * Save given <code>RadiologyOrder</code> in the PACS by sending an HL7
@@ -210,14 +210,14 @@ public interface RadiologyService extends OpenmrsService {
 	 * @should throw illegal argument exception if given radiology order has no
 	 *         study
 	 */
-	public boolean placeRadiologyOrderInPacs(RadiologyOrder radiologyOrder);
+	boolean placeRadiologyOrderInPacs(RadiologyOrder radiologyOrder);
 	
 	/**
 	 * Send given dicom files to PACS using storescu utility.
 	 *
 	 * @param dicomFilePath to sent to the PACS
 	 */
-	public void placeDicomInPacs(String dicomFilePath);
+	void placeDicomInPacs(String dicomFilePath);
 	
 	/**
 	 * Get Study by studyId
@@ -227,7 +227,7 @@ public interface RadiologyService extends OpenmrsService {
 	 * @should return study for given study id
 	 * @should return null if no match was found
 	 */
-	public Study getStudyByStudyId(Integer studyId);
+	Study getStudyByStudyId(Integer studyId);
 	
 	/**
 	 * Get Study by its associated RadiologyOrder's orderId
@@ -240,7 +240,7 @@ public interface RadiologyService extends OpenmrsService {
 	 * @should return null if no match was found
 	 * @should throw illegal argument exception given null
 	 */
-	public Study getStudyByOrderId(Integer orderId) throws IllegalArgumentException;
+	Study getStudyByOrderId(Integer orderId) throws IllegalArgumentException;
 	
 	/**
 	 * Get study by its Study Instance UID
@@ -251,7 +251,7 @@ public interface RadiologyService extends OpenmrsService {
 	 * @should return null if no match was found
 	 * @should throw IllegalArgumentException if study instance uid is null
 	 */
-	public Study getStudyByStudyInstanceUid(String studyInstanceUid) throws IllegalArgumentException;
+	Study getStudyByStudyInstanceUid(String studyInstanceUid) throws IllegalArgumentException;
 	
 	/**
 	 * Get all studies corresponding to list of RadiologyOrder's
@@ -266,7 +266,7 @@ public interface RadiologyService extends OpenmrsService {
 	 * @should return empty list given empty radiology order list
 	 * @should throw IllegalArgumentException given null
 	 */
-	public List<Study> getStudiesByRadiologyOrders(List<RadiologyOrder> radiologyOrders) throws IllegalArgumentException;
+	List<Study> getStudiesByRadiologyOrders(List<RadiologyOrder> radiologyOrders) throws IllegalArgumentException;
 	
 	/**
 	 * Discontinue given <code>RadiologyOrder</code>
@@ -287,7 +287,7 @@ public interface RadiologyService extends OpenmrsService {
 	 * @should throw illegal argument exception if radiology order is completed
 	 * @should throw illegal argument exception given empty provider
 	 */
-	public Order discontinueRadiologyOrder(RadiologyOrder radiologyOrder, Provider orderer, String discontinueReason)
+	Order discontinueRadiologyOrder(RadiologyOrder radiologyOrder, Provider orderer, String discontinueReason)
 			throws Exception;
 	
 	/**
@@ -302,5 +302,32 @@ public interface RadiologyService extends OpenmrsService {
 	 * @should throw illegal argument exception given null
 	 * @should throw illegal argument exception given radiology order with orderId null
 	 */
-	public boolean discontinueRadiologyOrderInPacs(RadiologyOrder radiologyOrder);
+	boolean discontinueRadiologyOrderInPacs(RadiologyOrder radiologyOrder);
+	
+	@Transactional(readOnly = true)
+	List<ModalityInit> getAllModalityInit();
+	
+	/**
+	 * Gets a department for a given id.
+	 *
+	 * @param id the department id
+	 * @return the department with the given id
+	 */
+	@Transactional(readOnly = true)
+	ModalityInit getModalityInit(Integer modalityId);
+	
+	/**
+	 * Saves a new or existing department.
+	 *
+	 * @param department the department to save.
+	 * @return the saved department.
+	 */
+	ModalityInit saveModalityInit(ModalityInit modalityinit);
+	
+	/**
+	 * Deletes a department from the database.
+	 *
+	 * @param department the department to delete.
+	 */
+	void purgeModalityInit(ModalityInit modalityinit);
 }

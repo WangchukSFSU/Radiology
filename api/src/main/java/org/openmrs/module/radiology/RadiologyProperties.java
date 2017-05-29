@@ -287,14 +287,7 @@ public class RadiologyProperties extends ModuleProperties {
 	 */
 	public String getRadiologyConceptClassNames() {
 		
-		System.out.println("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
-		
-		System.out.println("RadiologyConstants.GP_RADIOLOGY_CONCEPT_CLASSES, "
-				+ RadiologyConstants.GP_RADIOLOGY_CONCEPT_CLASSES);
-		
 		String radiologyConceptClassUuidSetting = getGlobalProperty(RadiologyConstants.GP_RADIOLOGY_CONCEPT_CLASSES, true);
-		
-		System.out.println("radiologyConceptClassUuidSetting " + radiologyConceptClassUuidSetting);
 		
 		radiologyConceptClassUuidSetting = radiologyConceptClassUuidSetting.replace(" ", "");
 		if (!radiologyConceptClassUuidSetting.matches("^[0-9a-fA-f,-]+$")) {
@@ -346,9 +339,14 @@ public class RadiologyProperties extends ModuleProperties {
 				.getGlobalProperty(RadiologyConstants.GP_DICOM_WEB_VIEWER_BASE_URL);
 	}
 	
-	public String getDicomFileRootFolder() {
+	public String getSmtpAuthentificationPassword() {
 		return Context.getAdministrationService()
-				.getGlobalProperty(RadiologyConstants.GP_DICOMFILE_ROOT_FOLDER);
+				.getGlobalProperty(RadiologyConstants.GP_SmtpAuthentificationPassword);
+	}
+	
+	public String getSmtpAuthentificationEmailAddress() {
+		return Context.getAdministrationService()
+				.getGlobalProperty(RadiologyConstants.GP_SmtpAuthentificationEmailAddress);
 	}
 	
 	public String getDicomViewerWeasisUrlBase() {

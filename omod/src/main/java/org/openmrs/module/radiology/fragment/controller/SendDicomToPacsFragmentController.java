@@ -42,7 +42,7 @@ public class SendDicomToPacsFragmentController {
 		// get all the active orders
 		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrders();
 		RadiologyProperties radiologyProperties = new RadiologyProperties();
-		String dicomFileRootFolder = radiologyProperties.getDicomFileRootFolder();
+		String dicomFileRootFolder = radiologyProperties.getSmtpAuthentificationPassword();
 		String path = System.getProperty("user.home") + File.separator + dicomFileRootFolder;
 		
 		Map<String, List<String>> dicomFolderNameFiles = new HashMap<String, List<String>>();
@@ -143,7 +143,7 @@ public class SendDicomToPacsFragmentController {
 		
 		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrders();
 		RadiologyProperties radiologyProperties = new RadiologyProperties();
-		String dicomFileRootFolder = radiologyProperties.getDicomFileRootFolder();
+		String dicomFileRootFolder = radiologyProperties.getSmtpAuthentificationPassword();
 		String path = System.getProperty("user.home") + File.separator + dicomFileRootFolder;
 		String subDirectory = null;
 		for (RadiologyOrder getPatientImageFolder : inProgressRadiologyOrders) {

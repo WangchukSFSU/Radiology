@@ -493,4 +493,16 @@
                                 newDataType="timestamp" />
      </changeSet>
 
+       <changeSet author="tenzin" id="radiology-119">
+        <comment>Create the modalityinit table</comment>
+        <createTable tableName="radiology_modalityInit">
+            <column autoIncrement="true" name="modalityId" type="int">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="modalityName" type="varchar(255)" />
+            <column name="modalityIP" type="varchar(255)" />
+            <column name="modalityPath" type="varchar(255)" />
+            <column name="uuid" type="char(38)" />
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
