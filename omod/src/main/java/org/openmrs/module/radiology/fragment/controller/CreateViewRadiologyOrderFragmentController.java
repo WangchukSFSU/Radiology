@@ -306,21 +306,13 @@ public class CreateViewRadiologyOrderFragmentController {
 		
 		ArrayList<Concept> modalityConcept = getModalityConcept();
 		for (Concept ConceptModality : modalityConcept) {
-			System.out.println("LLLLLLLLL " + ConceptModality.getDisplayString());
 			List<ConceptSet> modalityConceptSet = Context.getConceptService()
 					.getConceptSetsByConcept(ConceptModality);
 			Collection<ConceptAnswer> nn = ConceptModality.getAnswers();
-			for (ConceptAnswer jj : nn) {
-				System.out.println("AAAAAAAAAA " + jj.getAnswerConcept());
-			}
-			System.out.println("MMMMMMMMMM " + ConceptModality.getAnswers());
-			System.out.println("JJJJJJJJJJJJJJ " + ConceptModality.getConceptSets());
-			System.out.println("OOOOOOOOOOOOOO " + ConceptModality.getConceptMappings());
+			
 			for (ConceptSet modalityConceptSetMember : modalityConceptSet) {
 				String modalityConceptName = modalityConceptSetMember.getConcept()
 						.getDisplayString();
-				System.out.println("XXXXXXXXXX " + modalityConceptSetMember.getConcept()
-						.getDisplayString());
 				
 				if (modalityConceptName.equals(study)) {
 					// newStudy.setModality(ConceptModality.getDisplayString());

@@ -1,11 +1,13 @@
 package org.openmrs.module.radiology.fragment.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openmrs.Concept;
+import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptClass;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptSet;
@@ -18,7 +20,6 @@ import org.openmrs.module.htmlformentry.FormEntrySession;
 import org.openmrs.module.htmlformentry.HtmlForm;
 import org.openmrs.module.htmlformentry.HtmlFormEntryUtil;
 
-import org.openmrs.module.radiology.ModalityInit;
 import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.RadiologyService;
 import org.openmrs.ui.framework.SimpleObject;
@@ -61,63 +62,6 @@ public class AdminManageRadiologyModuleFragmentController {
 		model.addAttribute("conceptDictionaryFormUrl", conceptDictionaryFormUrl);
 		model.addAttribute("modalityConcept", modalityConceptName);
 		
-		String modalitySoftware = radiologyProperties.getModalitySoftwareAvalability();
-		if (modalitySoftware.toLowerCase()
-				.contains("Yes".toLowerCase())) {
-			model.addAttribute("modalitySoftware", modalitySoftware);
-		} else {
-			model.addAttribute("modalitySoftware", "");
-		}
-		
-		System.out.println("lkkdfdf " + modalitySoftware);
-		String dicomFileRootFolder = radiologyProperties.getSmtpAuthentificationPassword();
-		System.out.println("fssewrwwr " + dicomFileRootFolder);
-		
-		// Get modality ip address and home directory from the saved ModalityInit table
-		List<String> absentModality = new ArrayList<String>();
-		List<ModalityInit> modalityList = Context.getService(RadiologyService.class)
-				.getAllModalityInit();
-		HashMap<String, String> modlist = new HashMap<String, String>();
-		
-		if (modalityList.isEmpty()) {
-			for (ConceptName eachConcept : modalityConceptName) {
-				modlist.put(eachConcept.toString(), "");
-				absentModality.add(eachConcept.toString());
-			}
-		} else {
-			
-			Boolean modPresent = true;
-			for (ConceptName eachConceptName : modalityConceptName) {
-				for (ModalityInit moo : modalityList) {
-					
-					String conceptString = eachConceptName.toString()
-							.trim();
-					String modString = moo.getModalityName()
-							.toString()
-							.trim();
-					if (conceptString.equals(modString)) {
-						modPresent = false;
-						modlist.put(eachConceptName.toString(), moo.getModalityIP());
-						break;
-						
-					} else {
-						modPresent = true;
-					}
-				}
-				if (modPresent) {
-					modlist.put(eachConceptName.toString(), "");
-					absentModality.add(eachConceptName.toString());
-					modPresent = true;
-					
-				}
-				
-			}
-		}
-		
-		model.addAttribute("modalityList", modalityList);
-		model.addAttribute("modlist", modlist);
-		model.addAttribute("absentModality", absentModality);
-		
 	}
 	
 	/**
@@ -130,6 +74,7 @@ public class AdminManageRadiologyModuleFragmentController {
 		List<ConceptSet> modalityConceptSet = Context.getConceptService()
 				.getConceptSetsByConcept(Context.getConceptService()
 						.getConcept(164068));
+		
 		for (ConceptSet addModalityConceptSet : modalityConceptSet) {
 			Concept modalityConceptName = addModalityConceptSet.getConcept();
 			modalityConcept.add(modalityConceptName);
@@ -176,6 +121,33 @@ public class AdminManageRadiologyModuleFragmentController {
 		studyClassNameConcept.removeAll(modalityConceptToBeRemovedFromStudyConcept);
 		
 		studyConcept.addAll(studyClassNameConcept);
+		
+		return studyConcept;
+	}
+	
+	public ArrayList<Concept> getStudy() {
+		ArrayList<Concept> studyConcept = new ArrayList<Concept>();
+		
+		ArrayList<Concept> modalityConcept = getModalityConcept();
+		for (Concept ConceptModality : modalityConcept) {
+			System.out.println("LLLLLLLLL " + ConceptModality.getDisplayString());
+			List<ConceptSet> modalityConceptSet = Context.getConceptService()
+					.getConceptSetsByConcept(ConceptModality);
+			
+			System.out.println("MMMMMMMMMM " + ConceptModality.getAnswers());
+			System.out.println("JJJJJJJJJJJJJJ " + ConceptModality.getConceptSets());
+			System.out.println("OOOOOOOOOOOOOO " + ConceptModality.getConceptMappings());
+			for (ConceptSet modalityConceptSetMember : modalityConceptSet) {
+				String modalityConceptName = modalityConceptSetMember.getConcept()
+						.getDisplayString();
+				System.out.println("XXXXXXXXXX " + modalityConceptSetMember.getConcept()
+						.getDisplayString());
+				
+				studyConcept.add(modalityConceptSetMember.getConcept());
+				
+			}
+			
+		}
 		
 		return studyConcept;
 	}
@@ -279,121 +251,6 @@ public class AdminManageRadiologyModuleFragmentController {
 		properties[2] = "id";
 		properties[3] = "name";
 		return SimpleObject.fromCollection(studySetMembers, ui, properties);
-	}
-	
-	/**
-	 * Update/Save modality ip address
-	 */
-	public List<SimpleObject> updateModalityIP(@RequestParam(value = "modalityName") String modalityName,
-			@RequestParam(value = "modalityIP") String modalityIP, @SpringBean("conceptService") ConceptService service,
-			UiUtils ui) {
-		
-		ArrayList<ModalityInit> getModality = new ArrayList<ModalityInit>();
-		
-		List<ModalityInit> modalityList = Context.getService(RadiologyService.class)
-				.getAllModalityInit();
-		Boolean modalityAbsent = true;
-		Integer modalityID = null;
-		if (modalityList.isEmpty()) {
-			modalityAbsent = true;
-			
-		} else {
-			
-			for (ModalityInit eachModality : modalityList) {
-				if (eachModality.getModalityName()
-						.toString()
-						.trim()
-						.equals(modalityName.toString()
-								.trim())) {
-					modalityAbsent = false;
-					modalityID = eachModality.getId();
-					
-					ModalityInit mm2 = Context.getService(RadiologyService.class)
-							.getModalityInit(modalityID);
-					mm2.setModalityIP(modalityIP);
-					Context.getService(RadiologyService.class)
-							.saveModalityInit(mm2);
-					
-					break;
-				} else {
-					modalityAbsent = true;
-				}
-				
-			}
-			
-		}
-		
-		if (modalityAbsent) {
-			ModalityInit addModality = new ModalityInit();
-			addModality.setModalityName(modalityName);
-			addModality.setModalityIP(modalityIP);
-			Context.getService(RadiologyService.class)
-					.saveModalityInit(addModality);
-			
-		}
-		
-		// properties
-		String[] properties = new String[2];
-		properties[0] = "ModalityName";
-		properties[1] = "ModalityIP";
-		return SimpleObject.fromCollection(getModality, ui, properties);
-	}
-	
-	/**
-	 * Update modality folder path
-	 */
-	public List<SimpleObject> updateModalityRootPath(@RequestParam(value = "modalityName") String modalityName,
-			@RequestParam(value = "modalityRootPath") String modalityRootPath,
-			@SpringBean("conceptService") ConceptService service, UiUtils ui) {
-		
-		ArrayList<ModalityInit> getModality = new ArrayList<ModalityInit>();
-		List<ModalityInit> modalityList = Context.getService(RadiologyService.class)
-				.getAllModalityInit();
-		Boolean modalityAbsent = true;
-		Integer modalityID = null;
-		if (modalityList.isEmpty()) {
-			modalityAbsent = true;
-			
-		} else {
-			
-			for (ModalityInit eachModality : modalityList) {
-				if (eachModality.getModalityName()
-						.toString()
-						.trim()
-						.equals(modalityName.toString()
-								.trim())) {
-					modalityAbsent = false;
-					modalityID = eachModality.getId();
-					
-					ModalityInit mm2 = Context.getService(RadiologyService.class)
-							.getModalityInit(modalityID);
-					mm2.setModalityPath(modalityRootPath);
-					Context.getService(RadiologyService.class)
-							.saveModalityInit(mm2);
-					
-					break;
-				} else {
-					modalityAbsent = true;
-				}
-				
-			}
-			
-		}
-		
-		if (modalityAbsent) {
-			ModalityInit addModality = new ModalityInit();
-			addModality.setModalityName(modalityName);
-			addModality.setModalityPath(modalityRootPath);
-			Context.getService(RadiologyService.class)
-					.saveModalityInit(addModality);
-			
-		}
-		
-		// properties
-		String[] properties = new String[2];
-		properties[0] = "ModalityName";
-		properties[1] = "ModalityIP";
-		return SimpleObject.fromCollection(getModality, ui, properties);
 	}
 	
 }

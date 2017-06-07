@@ -171,12 +171,15 @@ public class DicomUtils {
 	}
 	
 	public static void sendDicomToPACs(String hl7message) {
+		System.out.println("77777 ");
 		final String input[] = {
 				"-c",
 				radiologyProperties.getPacsDicomAeTitle() + "@" + radiologyProperties.getPacsAddress() + ":"
 						+ radiologyProperties.getPacsSTORESCUPort(), hl7message };
+		System.out.println("sendDicomToPACs ");
 		StoreSCU.main(input);
 		// return hl7SendStatus == HL7_SEND_SUCCESS ? true : false;
+		System.out.println("sendDicomToPACs DONE      DONE");
 	}
 	
 	static RadiologyService radiologyService() {

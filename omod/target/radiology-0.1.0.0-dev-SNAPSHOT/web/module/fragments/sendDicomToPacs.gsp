@@ -6,17 +6,67 @@
      jq = jQuery;
      jq(document).ready(function() {
 
-     jq('#sendImageToPACLinkBreadCrumb').hide();
-     jq('#sendDicomToPACBreadCrumb').hide();
+     jq("#file-form").submit(function(event){
+     event.preventDefault();
+     var form = document.getElementById('file-form');
+     var fileSelect = document.getElementById('file-select');
+     var uploadButton = document.getElementById('upload-button');
+
+     jq('#inputSpan').text(" ");
+
+     var files = fileSelect.files;
+     var formData = new FormData();
+
+     if (files.length <= 0) { 
+     jq('#inputSpan').text("File is not selected");
+     return false;
+
+     } 
+
+     // Loop through each of the selected files.
+     for (var i = 0; i < files.length; i++) {
+     var file = files[i];
+
+     var extension = (files[i].name).split('.').pop().toUpperCase();
+     if (extension != "DCM") {
+     jq('#inputSpan').text("Select dcm files only");
+     return false;
+     }
+
+     // Add the file to the request.
+     formData.append('photos[]', file, file.name);
+     }
+
+     var other_data = jq('form').serialize();
+     // Set up the request.
+     var xhr = new XMLHttpRequest(); 
+     // Open the connection.
+        xhr.open('POST', '${ ui.actionLink("sendDicomToPAC") }' + other_data, true);
+
+     // Set up a handler for when the request finishes.
+     xhr.onload = function () {
+     if (xhr.status === 200) {
+     // File(s) uploaded.
+     emr.successMessage("dicom files(s) sent successfull");
+     location.reload();
+     } else {
+     //alert('An error occurred!');
+     }
+     };
+     // Send the Data.
+     xhr.send(formData);
+
+     });
+
      //active orders datatable
      jq('#inProgressRadiologyOrderTable').dataTable({
+     "iDisplayLength": 5,
      "sPaginationType": "full_numbers",
      "bPaginate": true,
      "bAutoWidth": false,
-     "bLengthChange": true,
+     "bLengthChange": false,
      "bSort": true,
      "bJQueryUI": true,
-     "iDisplayLength": 5,
      "aLengthMenu": [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, "All"]],
      "aaSorting": [
      [2, "desc"]
@@ -24,7 +74,33 @@
 
      });
 
+     jq('#sendImageToPACLinkBreadCrumb').hide();
+     jq('#sendDicomToPACBreadCrumb').hide();
+
      });
+
+     function updateList(){
+     jq('#inputSpan').text(" ");
+     var input = document.getElementById('file-select');
+     var output = document.getElementById('inputFile');
+     output.innerHTML = '<ul>';
+     for (var i = 0; i < input.files.length; ++i) {
+
+      output.innerHTML += '<li>' + input.files.item(i).name + '</li>';
+
+     var extension = (input.files.item(i).name).split('.').pop().toUpperCase();
+     if (extension != "DCM") {
+     jq('#inputSpan').text("Select dcm files only");
+     return false;
+     } 
+
+
+     }
+  output.innerHTML += '</ul>';
+
+     }
+
+
 
      //click any active order
      function clickOrder(el) {
@@ -53,19 +129,10 @@
      tableRow.append('<thead><tr><th>Study/Associated Files</th><th>Start Date</th><th>PatientName</th><th>PatientId</th></tr></thead><tbody>');
 
     tableRow.append('<tr><td>${anOrder.study.studyname}</td><td>${anOrder.dateCreated}</td><td>${anOrder.patient.person.personName}</td><td>${ anOrder.patient.patientIdentifier }</td></tr>');
+    tableRow.append('<tr><td style="text-indent: 50px;"> <input type="file" id="file-select" name="photos[]" multiple onchange="updateList()"/> <span id="inputSpan"></span><span id="inputFile" style = "display:inline;"></span><input type="hidden" value='+ ${ anOrder.orderId } +' name="userid" /> </td></tr>');
+    tableRow.append('<tr>  <td>   <button type="submit" id="upload-button">Send</button></td></tr>');
 
-     <% dicomFolderNameFiles.each { hm -> %> 
-     <% patientA = "${ anOrder.patient.patientIdentifier }" %>
-     <% patientB = hm.key %>
-     <% if (patientA == patientB) { %>
-     <% hm.value.each { dicom -> %>
-  tableRow.append('<tr><td style="text-indent: 50px;"> ${dicom}</td></tr>');
-     <% } %> 
-     <% } %> 
- <% } %> 
-
-            tableRow.append('<tr>  <td> <a href="javascript: void(0)" id="linkActButton" onclick="sendDicomFiles(); return false;">Send</a></td></tr>');
-            tableRow.append("</tbody>");
+    tableRow.append("</tbody>");
 
 
      }
@@ -74,60 +141,7 @@
 
      }
 
-     //send dicom files
-     function sendDicomFiles() {
-     var radiologyorderId = localStorage.getItem("radiologyorderId");
-        jq.getJSON('${ ui.actionLink("updateActiveOrders") }', {
-     'radiologyorderId': radiologyorderId
-     })
-     .error(function(xhr, status, err) {
-     alert('AJAX error ' + err);
-     })
-     .success(function(ret) {
-     jq('#sendDicomToPACBreadCrumb').hide();
-     jq('#sendImageToPACLinkBreadCrumb').hide();
-     jq('#sendImageToPACNoLinkBreadCrumb').show();
-     jq('#tableDiv').empty();
-     //dicom files send to PACS and update the active orders
-               // jq("<h1></h1>").text("dicom files(s) sent successfully").appendTo('#tableDiv');
-     emr.successMessage("dicom files(s) sent successfull");
-                jq("<h1></h1>").text("CLICK RADIOLOGY ORDER TO SEND IMAGE TO PAC").appendTo('#tableDiv');
-                jq('#tableDiv').append('<table></table>');
-     jq('#tableDiv table').attr('id', 'updateActiveOrderDatatable');
-     jq("#tableDiv table").addClass("updateActiveOrderTableClass");
-     var tableRow = jq('#tableDiv table');
-                tableRow.append('<thead><tr><th>PatientName</th><th>Order</th><th>OrderStartDate</th><th>OrderPriority</th><th>PatientID</th></tr></thead><tbody>');
-     for (var i = 0; i < ret.length; i++) {
-     var anOrderId = ret[i].orderId;
-     var studyname = ret[i].study.studyname;
-     var dateCreated = ret[i].dateCreated;
-     var urgency = ret[i].urgency;
-     var personName = ret[i].patient.person.personName;
-     var patientIdentifier = ret[i].patient.patientIdentifier.Identifier;
 
-     tableRow.append('<tr><td>'+ personName +'</td><td><a id="studyNameLink" href=' + studyname + ' class="studyNameLink" onclick="clickOrder(this); return false;" ><p style="display:none;">' + anOrderId + '</p>' + studyname + ' </a></td><td>' + dateCreated + '</td><td>' + urgency + '</td><td>'+ patientIdentifier +'</td></tr>');
-
-     }
-
-                tableRow.append("</tbody>");
-     jq('#updateActiveOrderDatatable').dataTable({
-     "sPaginationType": "full_numbers",
-     "bPaginate": true,
-     "bAutoWidth": false,
-     "bLengthChange": true,
-     "bSort": true,
-     "bJQueryUI": true,
-     "iDisplayLength": 5,
-     "aLengthMenu": [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, "All"]],
-     "aaSorting": [
-     [2, "desc"]
-     ] // Sort by first column descending,
-
-     });
-
-     })
-
-     }
 
 
 </script>
@@ -183,10 +197,10 @@
      </table>
 </div>
 
-<!-- dicom files table -->
-<div id = "tableDiv">
-</div>
 
-
-
+<form id="file-form" method="POST" enctype="multipart/form-data">
+  <!-- dicom files table -->
+     <div id = "tableDiv">
+     </div>
+</form>
 

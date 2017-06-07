@@ -10,7 +10,7 @@ import org.openmrs.ConceptSet;
 import org.openmrs.Order;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.radiology.ModalityInit;
+
 import org.openmrs.module.radiology.RadiologyOrder;
 import org.openmrs.module.radiology.RadiologyService;
 import org.openmrs.ui.framework.page.PageModel;
@@ -31,39 +31,6 @@ public class MyPatientSearchPageController {
 				.getPersonName());
 		List<RadiologyOrder> inProgressRadiologyOrders = getScheduledStatusRadiologyOrdersByPatient(patient);
 		model.put("inProgressRadiologyOrders", inProgressRadiologyOrders);
-		
-		List<ModalityInit> modalityList = Context.getService(RadiologyService.class)
-				.getAllModalityInit();
-		
-		String modalityIPAdd = null;
-		String modalityRootPath = null;
-		String modalityComplatePathRootFolder = null;
-		for (RadiologyOrder createSubFolderForEachPatient : inProgressRadiologyOrders) {
-			String cc = createSubFolderForEachPatient.getStudy()
-					.getModality()
-					.toString();
-			for (ModalityInit eachModality : modalityList) {
-				String dd = eachModality.getModalityName()
-						.toString();
-				if (cc.equals(dd)) {
-					modalityIPAdd = eachModality.getModalityIP();
-					modalityRootPath = eachModality.getModalityPath();
-					modalityComplatePathRootFolder = File.separator + File.separator + modalityIPAdd
-							+ System.getProperty("user.home");
-					
-					String fff = File.separator;
-					// String path = System.getProperty("user.home") + File.separator + dicomFileRootFolder;
-					String ospath = System.getProperty("os.name");
-					System.out.println("ospath  " + ospath);
-					
-					System.out.println("modalityIPAdd  " + modalityIPAdd);
-					System.out.println("modalityRootPath  " + modalityRootPath);
-					System.out.println("modalityComplatePathRootFolder  " + modalityComplatePathRootFolder);
-					
-				}
-			}
-			
-		}
 		
 	}
 	

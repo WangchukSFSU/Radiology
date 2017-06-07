@@ -304,30 +304,4 @@ public interface RadiologyService extends OpenmrsService {
 	 */
 	boolean discontinueRadiologyOrderInPacs(RadiologyOrder radiologyOrder);
 	
-	@Transactional(readOnly = true)
-	List<ModalityInit> getAllModalityInit();
-	
-	/**
-	 * Gets a department for a given id.
-	 *
-	 * @param id the department id
-	 * @return the department with the given id
-	 */
-	@Transactional(readOnly = true)
-	ModalityInit getModalityInit(Integer modalityId);
-	
-	/**
-	 * Saves a new or existing department.
-	 *
-	 * @param department the department to save.
-	 * @return the saved department.
-	 */
-	ModalityInit saveModalityInit(ModalityInit modalityinit);
-	
-	/**
-	 * Deletes a department from the database.
-	 *
-	 * @param department the department to delete.
-	 */
-	void purgeModalityInit(ModalityInit modalityinit);
 }

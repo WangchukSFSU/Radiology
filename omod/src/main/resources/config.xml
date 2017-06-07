@@ -173,6 +173,12 @@
 		<description> If modality software is available, enter 'yes' else 'no'
 		</description>
 	</globalProperty>
+               <globalProperty>
+		<property>radiology.dicomStorageLocationOnServer</property>
+		<defaultValue>DicomFolder</defaultValue>
+		<description> Dicom Storage location on the Server machine
+		</description>
+	</globalProperty>
         <globalProperty>
 		<property>radiology.smtpAuthentificationPassword</property>
 		<defaultValue>radiology1234</defaultValue>
@@ -263,7 +269,7 @@
 	</messages>
 	<!-- /Internationalization -->
 
-	<mappingFiles>RadiologyStudy.hbm.xml RadiologyOrder.hbm.xml ModalityInit.hbm.xml
+	<mappingFiles>RadiologyStudy.hbm.xml RadiologyOrder.hbm.xml
 	</mappingFiles>
 
 

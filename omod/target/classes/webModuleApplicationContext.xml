@@ -24,6 +24,7 @@
 <bean class="org.openmrs.ui.framework.StandardModuleUiConfiguration">
     <property name="moduleId" value="radiology"/>
 </bean>
+<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"></bean>
 
 
 

@@ -71,6 +71,11 @@ public class RadiologyProperties extends ModuleProperties {
 		return getGlobalProperty(RadiologyConstants.GP_PACS_STORESCU_PORT, true);
 	}
 	
+	public String getGetDicomFileStorageLocation() {
+		return Context.getAdministrationService()
+				.getGlobalProperty(RadiologyConstants.GP_DICOM_STORAGE_SERVER_LOCATION);
+	}
+	
 	/**
 	 * Return PACS DICOM AE title.
 	 * 

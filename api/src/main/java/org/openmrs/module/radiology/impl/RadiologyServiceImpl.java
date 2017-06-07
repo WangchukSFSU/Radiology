@@ -29,7 +29,6 @@ import org.openmrs.module.emrapi.encounter.domain.EncounterTransaction;
 
 import org.openmrs.module.radiology.DicomUtils;
 
-import org.openmrs.module.radiology.ModalityInit;
 import org.openmrs.module.radiology.MwlStatus;
 import org.openmrs.module.radiology.PerformedProcedureStepStatus;
 import org.openmrs.module.radiology.RadiologyOrder;
@@ -38,8 +37,6 @@ import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.RadiologyService;
 import org.openmrs.module.radiology.ScheduledProcedureStepStatus;
 import org.openmrs.module.radiology.Study;
-
-import org.openmrs.module.radiology.db.ModalityInitDAO;
 
 import org.openmrs.module.radiology.db.RadiologyOrderDAO;
 
@@ -368,6 +365,7 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 	@Transactional
 	@Override
 	public void placeDicomInPacs(String dicomFilePath) {
+		System.out.println("666666 ");
 		DicomUtils.sendDicomToPACs(dicomFilePath);
 	}
 	
@@ -493,49 +491,4 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 		return result;
 	}
 	
-	private ModalityInitDAO modalityInitDao;
-	
-	public ModalityInitDAO getModalityInitDao() {
-		return modalityInitDao;
-	}
-	
-	public void setModalityInitDao(ModalityInitDAO modalityInitDao) {
-		this.modalityInitDao = modalityInitDao;
-	}
-	
-	/**
-	 * @see org.openmrs.module.department.api.DepartmentService#getAllDepartments()
-	 */
-	
-	/**
-	 * @see org.openmrs.module.department.api.DepartmentService#getDepartment(java.lang.Integer)
-	 */
-	@Override
-	public ModalityInit getModalityInit(Integer modalityId) {
-		return modalityInitDao.getModalityInit(modalityId);
-	}
-	
-	/**
-	 * @see org.openmrs.module.department.api.DepartmentService#saveDepartment(org.openmrs.module.department.Department)
-	 */
-	
-	/**
-	 * @see org.openmrs.module.department.api.DepartmentService#purgeDepartment(org.openmrs.module.department.Department)
-	 */
-	
-	@Override
-	public List<ModalityInit> getAllModalityInit() {
-		return modalityInitDao.getAllModalityInit();
-	}
-	
-	@Override
-	public ModalityInit saveModalityInit(ModalityInit modalityinit) {
-		System.out.println(" departList getAllDepartments  modalityinit  " + modalityinit);
-		return modalityInitDao.saveModalityInit(modalityinit);
-	}
-	
-	@Override
-	public void purgeModalityInit(ModalityInit modalityinit) {
-		modalityInitDao.purgeModalityInit(modalityinit);
-	}
 }
