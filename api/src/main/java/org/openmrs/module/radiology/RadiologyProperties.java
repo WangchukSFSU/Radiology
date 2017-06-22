@@ -73,7 +73,7 @@ public class RadiologyProperties extends ModuleProperties {
 	
 	public String getGetDicomFileStorageLocation() {
 		return Context.getAdministrationService()
-				.getGlobalProperty(RadiologyConstants.GP_DICOM_STORAGE_SERVER_LOCATION);
+				.getGlobalProperty(RadiologyConstants.GP_DICOMSTORAGESERVERLOCATION);
 	}
 	
 	/**

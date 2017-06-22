@@ -28,7 +28,7 @@ public class RadiologyConstants {
 	
 	public static final String GP_DICOM_MPPS_PORT = "radiology.dicomMppsPort";
 	
-	public static final String GP_DICOM_STORAGE_SERVER_LOCATION = "radiology.dicomStorageLocationOnServer";
+	public static final String GP_DICOMSTORAGESERVERLOCATION = "radiology.dicomStorageLocationOnServer";
 	
 	public static final String GP_SmtpAuthentificationPassword = "radiology.smtpAuthentificationPassword";
 	

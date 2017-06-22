@@ -117,7 +117,7 @@ public class AdminManageRadiologyModuleFragmentController {
 				.getConceptClassByName("Radiology/Imaging Procedure");
 		List<Concept> studyClassNameConcept = Context.getConceptService()
 				.getConceptsByClass(studyClassName);
-		// get only study with no HtmlForm available
+		// get only study excluding the modality
 		studyClassNameConcept.removeAll(modalityConceptToBeRemovedFromStudyConcept);
 		
 		studyConcept.addAll(studyClassNameConcept);
@@ -130,18 +130,11 @@ public class AdminManageRadiologyModuleFragmentController {
 		
 		ArrayList<Concept> modalityConcept = getModalityConcept();
 		for (Concept ConceptModality : modalityConcept) {
-			System.out.println("LLLLLLLLL " + ConceptModality.getDisplayString());
 			List<ConceptSet> modalityConceptSet = Context.getConceptService()
 					.getConceptSetsByConcept(ConceptModality);
-			
-			System.out.println("MMMMMMMMMM " + ConceptModality.getAnswers());
-			System.out.println("JJJJJJJJJJJJJJ " + ConceptModality.getConceptSets());
-			System.out.println("OOOOOOOOOOOOOO " + ConceptModality.getConceptMappings());
 			for (ConceptSet modalityConceptSetMember : modalityConceptSet) {
 				String modalityConceptName = modalityConceptSetMember.getConcept()
 						.getDisplayString();
-				System.out.println("XXXXXXXXXX " + modalityConceptSetMember.getConcept()
-						.getDisplayString());
 				
 				studyConcept.add(modalityConceptSetMember.getConcept());
 				

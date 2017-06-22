@@ -54,55 +54,57 @@
 	<!-- /Extensions -->
 
 	<!--Required Global Properties -->
-	<globalProperty>
-		<property>@MODULE_ID@.mwlDirectory</property>
+	<setting>
+         
+        <globalProperty>
+		<property>radiology.mwlDirectory</property>
 		<defaultValue>mwl</defaultValue>
 		<description>Directory for mwl entries. Ex: d:/tmp/mwl or /tmp/mwl
 		</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.mppsDirectory</property>
+		<property>radiology.mppsDirectory</property>
 		<defaultValue>mpps</defaultValue>
 		<description>Directory for mpps entries</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.pacsAddress</property>
+		<property>radiology.pacsAddress</property>
 		<defaultValue>localhost</defaultValue>
 		<description>IP address or hostname of the PACS</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.pacsHL7Port</property>
+		<property>radiology.pacsHL7Port</property>
 		<defaultValue>2575</defaultValue>
 		<description>HL7 port of the PACS to send radiology orders to
 		</description>
 	</globalProperty>
         <globalProperty>
-		<property>@MODULE_ID@.pacsStoreSCUPort</property>
+		<property>radiology.pacsStoreSCUPort</property>
 		<defaultValue>11112</defaultValue>
 		<description>Storescp port of the PACS to send radiology study to
 		</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.pacsDicomAeTitle</property>
+		<property>radiology.pacsDicomAeTitle</property>
 		<defaultValue>DCM4CHEE</defaultValue>
 		<description>DICOM AE title of the PACS
 		</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.dicomMppsPort</property>
+		<property>radiology.dicomMppsPort</property>
 		<defaultValue>11114</defaultValue>
 		<description>DICOM port of the radiology module MPPS SCU to receive DICOM MPPS
 			updates
 		</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.dicomAeTitle</property>
+		<property>radiology.dicomAeTitle</property>
 		<defaultValue>RADIOLOGY_MODULE</defaultValue>
 		<description>DICOM AE title of the radiology module
 		</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.dicomApplicationUID</property>
+		<property>radiology.dicomApplicationUID</property>
 		<defaultValue>1.2.826.0.1.3680043.8.2186</defaultValue>
 		<description>
 			You need an application root UID, this will be the prefix
@@ -112,7 +114,7 @@
 		</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.dicomStudyUIDSlug</property>
+		<property>radiology.dicomStudyUIDSlug</property>
 		<defaultValue>1</defaultValue>
 		<description>Example: applicationUID+studyUIDSlug+orderId could be a
 			study UID. Example values: 1.2, 1.1.1 (No
@@ -120,55 +122,55 @@
 		</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.dicomSpecificCharacterSet</property>
+		<property>radiology.dicomSpecificCharacterSet</property>
 		<defaultValue>ISO-8859-1</defaultValue>
 		<description>DICOM working character set
 		</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.dicomWebViewerAddress</property>
+		<property>radiology.dicomWebViewerAddress</property>
 		<defaultValue>localhost</defaultValue>
 		<description>IP address or hostname of the DICOM web viewer
 		</description>
 	</globalProperty>
         <globalProperty>
-		<property>@MODULE_ID@.openMRSServerAddress</property>
+		<property>radiology.openMRSServerAddress</property>
 		<defaultValue>localhost</defaultValue>
 		<description>openMRS Server Address
 		</description>
 	</globalProperty>
         <globalProperty>
-		<property>@MODULE_ID@.dicomWebViewerPort</property>
+		<property>radiology.dicomWebViewerPort</property>
 		<defaultValue>8081</defaultValue>
 		<description>Port of the DICOM web viewer</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.openMRSPort</property>
+		<property>radiology.openMRSPort</property>
 		<defaultValue>8080</defaultValue>
 		<description>openMRS server Port</description>
 	</globalProperty>
         <globalProperty>
-		<property>@MODULE_ID@.smtpAuthentificationEmailAddress</property>
+		<property>radiology.smtpAuthentificationEmailAddress</property>
 		<defaultValue>radioauthentest@gmail.com</defaultValue>
 		<description> Gmail SMTP server authentification user email address as well as email sender
 		</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.dicomWebViewerBaseUrl</property>
-		<defaultValue></defaultValue>
+		<property>radiology.dicomWebViewerBaseUrl</property>
+		<defaultValue>/oviyam2/viewer.html</defaultValue>
 		<description>Base URL of the DICOM web viewer Oviyam
 			"/oviyam2/viewer.html".
 		</description>
 	</globalProperty>
         <globalProperty>
-		<property>@MODULE_ID@.dicomWebViewerWeasisBaseUrl</property>
+		<property>radiology.dicomWebViewerWeasisBaseUrl</property>
 		<defaultValue>/weasis-pacs-connector/viewer</defaultValue>
 		<description>Base URL of the DICOM web viewer Weasis
 			"/weasis-pacs-connector/viewer". 
 		</description>
 	</globalProperty>
         <globalProperty>
-		<property>@MODULE_ID@.modalitySoftwareAvailability</property>
+		<property>radiology.modalitySoftwareAvailability</property>
 		<defaultValue>Yes</defaultValue>
 		<description> If modality software is available, enter 'yes' else 'no'
 		</description>
@@ -187,8 +189,8 @@
 	</globalProperty>       
         
 	<globalProperty>
-		<property>@MODULE_ID@.dicomWebViewerLocalServerName</property>
-		<defaultValue></defaultValue>
+		<property>radiology.dicomWebViewerLocalServerName</property>
+		<defaultValue>oviyamlocal</defaultValue>
 		<description>This value if set, is added as query parameter to the
 			DICOM web
 			viewer URL.
@@ -201,7 +203,7 @@
 		</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.radiologyCareSetting</property>
+		<property>radiology.radiologyCareSetting</property>
 		<defaultValue>6f0c9a92-6f24-11e3-af88-005056821db0</defaultValue>
 		<description>
 			UUID of the Care Setting to use when creating radiology
@@ -212,29 +214,29 @@
 	</globalProperty>
       
 	<globalProperty>
-		<property>@MODULE_ID@.radiologyConceptClasses</property>
+		<property>radiology.radiologyConceptClasses</property>
 		<defaultValue></defaultValue>
 		<description>Comma separated list of concept class UUIDs which define
 			concepts that are orderable as radiology orders
 		</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.radiologyOrderingProviderEncounterRole</property>
+		<property>radiology.radiologyOrderingProviderEncounterRole</property>
 		<defaultValue>13fc9b4a-49ed-429c-9dde-ca005b387a3d</defaultValue>
 		<description>Radiology Ordering Provider Encounter Role UUID</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.radiologyTestOrderType</property>
+		<property>radiology.radiologyTestOrderType</property>
 		<defaultValue>dbdb9a9b-56ea-11e5-a47f-08002719a237</defaultValue>
 		<description>Radiology Test Order Type UUID</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.radiologyOrderEncounterType</property>
+		<property>radiology.radiologyOrderEncounterType</property>
 		<defaultValue>19db8c0d-3520-48f2-babd-77f2d450e5c7</defaultValue>
 		<description>Radiology Order Encounter Type UUID</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.radiologyVisitType</property>
+		<property>radiology.radiologyVisitType</property>
 		<defaultValue>fe898a34-1ade-11e1-9c71-00248140a5eb</defaultValue>
 		<description>Radiology Visit Type UUID</description>
 	</globalProperty>
@@ -246,6 +248,9 @@
             Class name of a custom encounter matcher (e.g. org.openmrs.module.example.CustomEncounterMatcher)
         </description>
     </globalProperty>
+
+        </setting>
+        
 
 	<!--Required Global Properties -->
 

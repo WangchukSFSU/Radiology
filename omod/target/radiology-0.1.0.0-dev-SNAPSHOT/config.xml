@@ -54,7 +54,9 @@
 	<!-- /Extensions -->
 
 	<!--Required Global Properties -->
-	<globalProperty>
+	<setting>
+         
+        <globalProperty>
 		<property>radiology.mwlDirectory</property>
 		<defaultValue>mwl</defaultValue>
 		<description>Directory for mwl entries. Ex: d:/tmp/mwl or /tmp/mwl
@@ -154,21 +156,21 @@
 		</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.dicomWebViewerBaseUrl</property>
-		<defaultValue></defaultValue>
+		<property>radiology.dicomWebViewerBaseUrl</property>
+		<defaultValue>/oviyam2/viewer.html</defaultValue>
 		<description>Base URL of the DICOM web viewer Oviyam
 			"/oviyam2/viewer.html".
 		</description>
 	</globalProperty>
         <globalProperty>
-		<property>@MODULE_ID@.dicomWebViewerWeasisBaseUrl</property>
+		<property>radiology.dicomWebViewerWeasisBaseUrl</property>
 		<defaultValue>/weasis-pacs-connector/viewer</defaultValue>
 		<description>Base URL of the DICOM web viewer Weasis
 			"/weasis-pacs-connector/viewer". 
 		</description>
 	</globalProperty>
         <globalProperty>
-		<property>@MODULE_ID@.modalitySoftwareAvailability</property>
+		<property>radiology.modalitySoftwareAvailability</property>
 		<defaultValue>Yes</defaultValue>
 		<description> If modality software is available, enter 'yes' else 'no'
 		</description>
@@ -187,8 +189,8 @@
 	</globalProperty>       
         
 	<globalProperty>
-		<property>@MODULE_ID@.dicomWebViewerLocalServerName</property>
-		<defaultValue></defaultValue>
+		<property>radiology.dicomWebViewerLocalServerName</property>
+		<defaultValue>oviyamlocal</defaultValue>
 		<description>This value if set, is added as query parameter to the
 			DICOM web
 			viewer URL.
@@ -201,7 +203,7 @@
 		</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.radiologyCareSetting</property>
+		<property>radiology.radiologyCareSetting</property>
 		<defaultValue>6f0c9a92-6f24-11e3-af88-005056821db0</defaultValue>
 		<description>
 			UUID of the Care Setting to use when creating radiology
@@ -212,29 +214,29 @@
 	</globalProperty>
       
 	<globalProperty>
-		<property>@MODULE_ID@.radiologyConceptClasses</property>
+		<property>radiology.radiologyConceptClasses</property>
 		<defaultValue></defaultValue>
 		<description>Comma separated list of concept class UUIDs which define
 			concepts that are orderable as radiology orders
 		</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.radiologyOrderingProviderEncounterRole</property>
+		<property>radiology.radiologyOrderingProviderEncounterRole</property>
 		<defaultValue>13fc9b4a-49ed-429c-9dde-ca005b387a3d</defaultValue>
 		<description>Radiology Ordering Provider Encounter Role UUID</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.radiologyTestOrderType</property>
+		<property>radiology.radiologyTestOrderType</property>
 		<defaultValue>dbdb9a9b-56ea-11e5-a47f-08002719a237</defaultValue>
 		<description>Radiology Test Order Type UUID</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.radiologyOrderEncounterType</property>
+		<property>radiology.radiologyOrderEncounterType</property>
 		<defaultValue>19db8c0d-3520-48f2-babd-77f2d450e5c7</defaultValue>
 		<description>Radiology Order Encounter Type UUID</description>
 	</globalProperty>
 	<globalProperty>
-		<property>@MODULE_ID@.radiologyVisitType</property>
+		<property>radiology.radiologyVisitType</property>
 		<defaultValue>fe898a34-1ade-11e1-9c71-00248140a5eb</defaultValue>
 		<description>Radiology Visit Type UUID</description>
 	</globalProperty>
@@ -246,6 +248,9 @@
             Class name of a custom encounter matcher (e.g. org.openmrs.module.example.CustomEncounterMatcher)
         </description>
     </globalProperty>
+
+        </setting>
+        
 
 	<!--Required Global Properties -->
 

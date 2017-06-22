@@ -115,7 +115,7 @@ public class SendDicomToPacsFragmentController {
 		String radioIdString = page.split("=")[2];
 		int radioId = Integer.parseInt(page.split("=")[2]);
 		
-		List<MultipartFile> pp = ((DefaultMultipartHttpServletRequest) request).getFiles("photos[]");
+		List<MultipartFile> dicomImages = ((DefaultMultipartHttpServletRequest) request).getFiles("photos[]");
 		
 		RadiologyProperties radiologyProperties = new RadiologyProperties();
 		// create temporary server folder for dicom file storage
@@ -138,10 +138,10 @@ public class SendDicomToPacsFragmentController {
 			subFolder.mkdir();
 		}
 		String UploadedFolder = subDirectory;
-		for (int i = 0; i < pp.size(); i++) {
-			byte[] bytes = pp.get(i)
+		for (int i = 0; i < dicomImages.size(); i++) {
+			byte[] bytes = dicomImages.get(i)
 					.getBytes();
-			Path path2 = Paths.get(UploadedFolder + File.separator + pp.get(i)
+			Path path2 = Paths.get(UploadedFolder + File.separator + dicomImages.get(i)
 					.getOriginalFilename());
 			Files.write(path2, bytes);
 			// send dicom to pacs

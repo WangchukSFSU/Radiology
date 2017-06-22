@@ -76,29 +76,7 @@
           <renameColumn columnDataType="int" newColumnName="studyid"
                               oldColumnName="id" tableName="radiology_study" />
      </changeSet>
-     <changeSet id="radiology-13" author="bgeVam">
-          <comment>add roles</comment>
-          <insert tableName="role">
-               <column name="role" value="Radiology: Referring physician" />
-               <column name="description" value="The physician who refers the radiology order" />
-               <column name="uuid" value="15c4c14a-e11b-11e5-b4b0-08002719a237" />
-          </insert>
-          <insert tableName="role">
-               <column name="role" value="Radiology: Reading physician" />
-               <column name="description" value="The physician who reads the performed study" />
-               <column name="uuid" value="16e4d536-e11b-11e5-b4b0-08002719a237" />
-          </insert>
-          <insert tableName="role">
-               <column name="role" value="Radiology: Performing physician" />
-               <column name="description" value="The physician who performs the radiology order" />
-               <column name="uuid" value="175f1c62-e11b-11e5-b4b0-08002719a237" />
-          </insert>
-          <insert tableName="role">
-               <column name="role" value="Radiology: Scheduler" />
-               <column name="description" value="The person who schedules the radiology order" />
-               <column name="uuid" value="17c32561-e11b-11e5-b4b0-08002719a237" />
-          </insert>
-     </changeSet>
+   
      <changeSet id="radiology-14" author="bgeVam">
           <comment>add privileges</comment>
           <insert tableName="privilege">
@@ -492,5 +470,35 @@
           <modifyDataType tableName="radiology_study" columnName="reportCompletedDate"
                                 newDataType="timestamp" />
      </changeSet>
+     <changeSet id="radiology-122" author="tenzin">
+<insert tableName="role">
+               <column name="role" value="Radiology: Referring-Physician" />
+               <column name="description" value="The physician who places radiology order" />
+               <column name="uuid" value="15a4c14a-e11b-11e5-b4b0-08002719a237" />
+          </insert>
+                
+</changeSet>
+  <changeSet id="radiology-123" author="tenzin">
+          <comment>add roles</comment>
+          <insert tableName="role">
+               <column name="role" value="Radiology: Radiologist" />
+               <column name="description" value=" Adds observations" />
+               <column name="uuid" value="16e5d516-e11b-11e5-b4b0-08002719a237" />
+          </insert>
+          <insert tableName="role">
+               <column name="role" value="Radiology: Technician" />
+               <column name="description" value="Takes picture" />
+               <column name="uuid" value="175f1c22-e21b-11e5-b4b0-08002719a237" />
+          </insert>
+          <insert tableName="role">
+               <column name="role" value="Radiology:Scheduler" />
+               <column name="description" value="Schedules the radiology order" />
+               <column name="uuid" value="17c32561-e21b-12e5-b4b0-08002719a237" />
+          </insert>
+     </changeSet>
 
+
+   
+     
 </databaseChangeLog>
+
