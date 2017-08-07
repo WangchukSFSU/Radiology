@@ -1,16 +1,11 @@
 package org.openmrs.module.radiology.page.controller;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-import org.openmrs.Concept;
-import org.openmrs.ConceptSet;
 import org.openmrs.Order;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
-
 import org.openmrs.module.radiology.RadiologyOrder;
 import org.openmrs.module.radiology.RadiologyService;
 import org.openmrs.ui.framework.page.PageModel;

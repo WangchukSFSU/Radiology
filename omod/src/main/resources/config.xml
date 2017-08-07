@@ -149,12 +149,7 @@
 		<defaultValue>8080</defaultValue>
 		<description>openMRS server Port</description>
 	</globalProperty>
-        <globalProperty>
-		<property>radiology.smtpAuthentificationEmailAddress</property>
-		<defaultValue>radioauthentest@gmail.com</defaultValue>
-		<description> Gmail SMTP server authentification user email address as well as email sender
-		</description>
-	</globalProperty>
+     
 	<globalProperty>
 		<property>radiology.dicomWebViewerBaseUrl</property>
 		<defaultValue>/oviyam2/viewer.html</defaultValue>
@@ -181,12 +176,7 @@
 		<description> Dicom Storage location on the Server machine
 		</description>
 	</globalProperty>
-        <globalProperty>
-		<property>radiology.smtpAuthentificationPassword</property>
-		<defaultValue>radiology1234</defaultValue>
-		<description> gmail smtp authentification password
-		</description>
-	</globalProperty>       
+              
         
 	<globalProperty>
 		<property>radiology.dicomWebViewerLocalServerName</property>

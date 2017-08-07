@@ -30,9 +30,7 @@ public class RadiologyConstants {
 	
 	public static final String GP_DICOMSTORAGESERVERLOCATION = "radiology.dicomStorageLocationOnServer";
 	
-	public static final String GP_SmtpAuthentificationPassword = "radiology.smtpAuthentificationPassword";
-	
-	public static final String GP_SmtpAuthentificationEmailAddress = "radiology.smtpAuthentificationEmailAddress";
+	public static final String GP_SmtpAuthentificationEmailAddress = "radiology.sendersEmailAddress";
 	
 	public static final String GP_DICOM_AE_TITLE = "radiology.dicomAeTitle";
 	

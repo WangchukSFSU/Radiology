@@ -71,6 +71,7 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
                     <th>OrderPriority</th>
                      <th>PatientID</th>
                      <th>Orderdiagnosis</th>
+                     <th>Instructions</th>
                
                </tr>
           </thead>
@@ -83,6 +84,7 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
                     <td>${ anOrder.urgency }</td>
                     <td>${ anOrder.patient.patientIdentifier }</td>
                     <td>${ anOrder.orderdiagnosis }</td>
+                    <td>${ anOrder.instructions }</td>
                     
                </tr>
                <% } %>  

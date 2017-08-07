@@ -6,6 +6,9 @@ table#completedOrderTable {
      margin-top: 10px;
 }
 
+.orderDetailDivError {
+     color : red;
+}
 table#updateActiveOrderDatatable {
      margin-left: 0cm;
 }

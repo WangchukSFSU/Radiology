@@ -126,9 +126,9 @@
      jq('#tableDiv table').attr('id', 'tableId');
      jq("#tableDiv table").addClass("tableClass");
      var tableRow = jq('#tableDiv').children();
-     tableRow.append('<thead><tr><th>Study/Associated Files</th><th>Start Date</th><th>PatientName</th><th>PatientId</th></tr></thead><tbody>');
+     tableRow.append('<thead><tr><th>Study/Associated Files</th><th>Start Date</th><th>PatientName</th><th>PatientId</th><th>Diagnosis</th><th>Instructions</th></tr></thead><tbody>');
 
-    tableRow.append('<tr><td>${anOrder.study.studyname}</td><td>${anOrder.dateCreated}</td><td>${anOrder.patient.person.personName}</td><td>${ anOrder.patient.patientIdentifier }</td></tr>');
+    tableRow.append('<tr><td>${anOrder.study.studyname}</td><td>${anOrder.dateCreated}</td><td>${anOrder.patient.person.personName}</td><td>${ anOrder.patient.patientIdentifier }</td><td>${anOrder.orderdiagnosis}</td><td>${anOrder.instructions}</td></tr>');
     tableRow.append('<tr><td style="text-indent: 50px;"> <input type="file" id="file-select" name="photos[]" multiple onchange="updateList()"/> <span id="inputSpan"></span><span id="inputFile" style = "display:inline;"></span><input type="hidden" value='+ ${ anOrder.orderId } +' name="userid" /> </td></tr>');
     tableRow.append('<tr>  <td>   <button type="submit" id="upload-button">Send</button></td></tr>');
 

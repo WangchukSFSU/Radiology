@@ -283,6 +283,29 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 		return studyDAO.saveStudy(studyToBeUpdated);
 	}
 	
+	@Transactional
+	public Encounter updatesaveRadiologyOrderEncounter(Patient patient, Provider provider, Date encounterDateTime) {
+		
+		final EncounterTransaction encounterTransaction = new EncounterTransaction();
+		encounterTransaction.setPatientUuid(patient.getUuid());
+		final EncounterTransaction.Provider encounterProvider = new EncounterTransaction.Provider();
+		encounterProvider.setEncounterRoleUuid(radiologyProperties.getRadiologyOrderingProviderEncounterRole()
+				.getUuid());
+		// sets the provider of the encounterprovider
+		encounterProvider.setUuid(provider.getUuid());
+		final Set<EncounterTransaction.Provider> encounterProviderSet = new HashSet<EncounterTransaction.Provider>();
+		encounterProviderSet.add(encounterProvider);
+		encounterTransaction.setProviders(encounterProviderSet);
+		encounterTransaction.setEncounterDateTime(encounterDateTime);
+		encounterTransaction.setVisitTypeUuid(this.radiologyProperties.getRadiologyVisitType()
+				.getUuid());
+		encounterTransaction.setEncounterTypeUuid(this.radiologyProperties.getRadiologyOrderEncounterType()
+				.getUuid());
+		
+		return this.encounterService.getEncounterByUuid(this.emrEncounterService.save(encounterTransaction)
+				.getEncounterUuid());
+	}
+	
 	/**
 	 * @see RadiologyService#updateStudyReportRadiologist(String, User)
 	 */

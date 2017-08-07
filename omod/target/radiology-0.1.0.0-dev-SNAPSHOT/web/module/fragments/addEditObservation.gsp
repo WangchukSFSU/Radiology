@@ -105,6 +105,7 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
      //close dialog box after form is entered
      jq('#formDialogDiv').dialog('close');
      emr.successMessage("Entered Form Successfully");
+     jq("#orderDetailDivError").text("");
      return false;
      }
 
@@ -703,11 +704,14 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
      
     
      var radiologyorderId = localStorage.getItem("radiologyorderId");
+     
+     
      jq.getJSON('${ ui.actionLink("updateActiveOrders") }', {
      'radiologyorderId': radiologyorderId
      })
      .error(function(xhr, status, err) {
-     alert('AJAX error ' + err);
+    // alert('AJAX error ' + err);
+     jq("#orderDetailDivError").text("**** Please Save Form ****");
      })
      .success(function(ret) {
      jq('#orderDetailBreadCrumb').hide();
@@ -904,7 +908,12 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
 
 
 <!-- display order detail on the order clicked in the active orders -->
+               <div id = "aaa">
+            <span id="orderDetailDivError" class="orderDetailDivError"></span>        
+                    
 <div id = "orderDetailDiv">
+    
+</div>
 </div>
 
 <!-- display previous completed orders -->

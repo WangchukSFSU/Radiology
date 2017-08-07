@@ -11,6 +11,7 @@ package org.openmrs.module.radiology;
 
 import java.util.Date;
 import java.util.List;
+import org.openmrs.Encounter;
 import org.openmrs.Order;
 import org.openmrs.Patient;
 import org.openmrs.Provider;
@@ -139,6 +140,8 @@ public interface RadiologyService extends OpenmrsService {
 	 */
 	Study updateScheduledProcedureStepStatus(String studyInstanceUid, ScheduledProcedureStepStatus scheduledstatus)
 			throws IllegalArgumentException;
+	
+	public Encounter updatesaveRadiologyOrderEncounter(Patient patient, Provider provider, Date encounterDateTime);
 	
 	/**
 	 * <p>

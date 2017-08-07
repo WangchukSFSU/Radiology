@@ -18,7 +18,7 @@ import org.openmrs.Form;
 import org.openmrs.Obs;
 import org.openmrs.Order;
 import org.openmrs.Patient;
-import org.openmrs.User;
+import org.openmrs.Provider;
 import org.openmrs.Visit;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.FormService;
@@ -71,7 +71,8 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		
 		RadiologyProperties radiologyProperties = new RadiologyProperties();
 		// patient dashboard
-		String serverAddress = radiologyProperties.getServersAddress();
+		String serverAddress = radiologyProperties.getOpenMRSServersAddress();
+		
 		String serverPort = radiologyProperties.getOpenMRSServersPort();
 		String patientClinicianUrl = serverAddress + ":" + serverPort
 				+ "/openmrs/coreapps/clinicianfacing/patient.page?patientId=";
@@ -368,7 +369,7 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		
 		String returnUrl = "";
 		for (Form eachform : formlist) {
-			System.out.println("TETETETETET " + eachform.getName());
+			
 			HtmlForm hf = HtmlFormEntryUtil.getService()
 					.getHtmlFormByForm(eachform);
 			Patient patient = getRadiologyOrder.getPatient();
@@ -498,21 +499,45 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 	 * @return the updated active orders
 	 */
 	public List<SimpleObject> updateActiveOrders(@SpringBean("conceptService") ConceptService service, FragmentModel model,
-			@RequestParam(value = "radiologyorderId") String radiologyorderId, UiUtils ui) {
+			@RequestParam(value = "radiologyorderId") String radiologyorderId, UiUtils ui) throws IllegalArgumentException {
 		
 		List<RadiologyOrder> allOrders = Context.getService(RadiologyService.class)
 				.getAllRadiologyOrder();
 		String authenticatedUser = Context.getAuthenticatedUser()
 				.getPersonName()
 				.getFullName();
+		String gg = Context.getAuthenticatedUser()
+				.getPersonName()
+				.toString();
+		List<Provider> provs = Context.getProviderService()
+				.getAllProviders();
+		Provider aa = null;
+		boolean bb = false;
+		for (Provider pp : provs) {
+			
+			if (pp.getName()
+					.contains(gg)) {
+				
+				System.out.println("provider  " + pp);
+				
+			}
+		}
 		
 		RadiologyOrder radiologyOrder;
-		for (Order order : allOrders) {
+		for (RadiologyOrder order : allOrders) {
 			if ((order.getOrderId()
 					.toString().trim()).equals(radiologyorderId.trim())) {
 				
 				radiologyOrder = Context.getService(RadiologyService.class)
 						.getRadiologyOrderByOrderId(order.getOrderId());
+				
+				System.out.println("DSDSDSDS " + radiologyOrder.getStudy()
+						.getStudyReportSavedEncounterId());
+				
+				if (radiologyOrder.getStudy()
+						.getStudyReportSavedEncounterId() == null) {
+					throw new IllegalArgumentException("Save HTMLFORM is required");
+				}
 				// update the performed status to report ready so it is available to referring physician
 				Context.getService(RadiologyService.class)
 						.updateStudyPerformedStatus(radiologyOrder.getStudy()
@@ -525,6 +550,7 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 				Context.getService(RadiologyService.class)
 						.updateStudyReportRadiologist(radiologyOrder.getStudy()
 								.getStudyInstanceUid(), authenticatedUser);
+				
 			}
 		}
 		
@@ -697,6 +723,7 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 		
 		// Do actual encounter creation/updating
 		fes.applyActions();
+		
 		Context.getService(RadiologyService.class)
 				.updateReportSavedEncounterId(radiologyOrderByOrderId.getStudy()
 						.getStudyInstanceUid(), formEncounter.getEncounterId());

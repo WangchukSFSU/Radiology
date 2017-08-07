@@ -1,14 +1,10 @@
 package org.openmrs.module.radiology.page.controller;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import org.openmrs.Order;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.radiology.RadiologyOrder;
-import org.openmrs.module.radiology.RadiologyProperties;
 import org.openmrs.module.radiology.RadiologyService;
 import org.openmrs.ui.framework.page.PageModel;
 

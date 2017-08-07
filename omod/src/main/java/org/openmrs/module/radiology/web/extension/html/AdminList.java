@@ -24,14 +24,13 @@ public class AdminList extends AdministrationSectionExt {
 	
 	@Override
 	public String getTitle() {
-		return "radiology.title";
+		return "";
 	}
 	
 	@Override
 	public Map<String, String> getLinks() {
 		
 		final Map<String, String> map = new HashMap<String, String>();
-		map.put("/module/radiology/manage.form", "radiology.manage");
 		
 		return map;
 	}

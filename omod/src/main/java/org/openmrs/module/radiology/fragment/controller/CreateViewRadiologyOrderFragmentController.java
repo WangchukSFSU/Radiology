@@ -6,20 +6,13 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
 import java.util.Vector;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.ConceptClass;
 import org.openmrs.ConceptSearchResult;
 import org.openmrs.ConceptSet;
+import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.Order;
 import org.openmrs.Patient;
@@ -37,7 +30,6 @@ import org.openmrs.ui.framework.SimpleObject;
 import org.openmrs.ui.framework.UiUtils;
 import org.openmrs.ui.framework.annotation.SpringBean;
 import org.openmrs.ui.framework.fragment.FragmentModel;
-import org.openmrs.ui.framework.page.PageModel;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -97,9 +89,9 @@ public class CreateViewRadiologyOrderFragmentController {
 		model.addAttribute("patientID", patient.getPatientId());
 		model.addAttribute("patientname", patientName);
 		model.addAttribute("patientid", patient.getId());
-		model.addAttribute("radiologistemailaddress", "radiologist@gmail.com");
 		model.addAttribute("subject", "Enquire Patient Observation");
-		model.addAttribute("patientemailaddress", "patient@gmail.com");
+		model.addAttribute("recipientemailaddress", "recipientemailaddress");
+		model.addAttribute("senderemailaddress", "senderemailaddress");
 		model.addAttribute("subjectPatient", "Recent visit information");
 		
 	}
@@ -208,12 +200,14 @@ public class CreateViewRadiologyOrderFragmentController {
 		// get in progress orders of the patient
 		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrdersByPatient(patient);
 		// properties selected from orders
-		String[] properties = new String[5];
+		String[] properties = new String[7];
 		properties[0] = "study.studyname";
 		properties[1] = "dateCreated";
 		properties[2] = "study.scheduledStatus";
 		properties[3] = "study.performedStatus";
 		properties[4] = "orderId";
+		properties[5] = "instructions";
+		properties[6] = "orderdiagnosis";
 		
 		return SimpleObject.fromCollection(inProgressRadiologyOrders, ui, properties);
 	}
@@ -283,16 +277,25 @@ public class CreateViewRadiologyOrderFragmentController {
 		RadiologyOrder radiologyOrder = new RadiologyOrder();
 		// get the user
 		User authenticatedUser = Context.getAuthenticatedUser();
-		System.out.println("User setCreator " + authenticatedUser);
-		// Provider provider = Context.getProviderService()
-		// .getProvider(4);
+		
+		String userName = authenticatedUser.getPersonName()
+				.toString();
+		
 		List<Provider> provs = Context.getProviderService()
 				.getAllProviders();
-		Provider provider = provs.get(0);
+		
+		for (Provider providerName : provs) {
+			
+			if (providerName.getName()
+					.contains(userName)) {
+				
+				radiologyOrder.setOrderer(providerName);
+			}
+		}
 		
 		// add data to new radiology order
 		radiologyOrder.setCreator(authenticatedUser);
-		radiologyOrder.setOrderer(provider);
+		// radiologyOrder.setOrderer(provider);
 		radiologyOrder.setConcept(Context.getConceptService()
 				.getConcept(study));
 		radiologyOrder.setPatient(patient);
@@ -352,6 +355,11 @@ public class CreateViewRadiologyOrderFragmentController {
 		
 	}
 	
+	/**
+	 * Get modality concept from concept dictionary
+	 * 
+	 * @return modality concept
+	 */
 	public ArrayList<Concept> getModalityConcept() {
 		ArrayList<Concept> modalityConcept = new ArrayList();
 		List<ConceptSet> modalityConceptSet = Context.getConceptService()
@@ -457,106 +465,20 @@ public class CreateViewRadiologyOrderFragmentController {
 	}
 	
 	/**
-	 * Send email message to Radiologist if referring physician has questions
-	 * about the observations.
-	 *
-	 * @param recipient email recipient
-	 * @param subject email subject
-	 * @param message email message
+	 * Delete order before the Technician takes the picture and also deletes from PACS
+	 * 
+	 * @param ui
+	 * @param orderId radiology order
+	 * @return the updated inprogress orders
+	 * @throws Exception
 	 */
-	public void contactRadiologist(@RequestParam(value = "recipient", required = false) String recipient,
-			@RequestParam(value = "subject", required = false) String subject,
-			@RequestParam(value = "message", required = false) String message) {
-		
-		// authentification username and password
-		RadiologyProperties radiologyProperties = new RadiologyProperties();
-		final String username = radiologyProperties.getSmtpAuthentificationEmailAddress();
-		final String password = radiologyProperties.getSmtpAuthentificationPassword();
-		
-		// set up smtp server
-		Properties props = new Properties();
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.smtp.host", "smtp.gmail.com");
-		props.put("mail.smtp.port", "587");
-		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
-			
-			// user authentication required
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(username, password);
-			}
-		});
-		try {
-			// Sender and receiver info with the message
-			Message message1 = new MimeMessage(session);
-			message1.setFrom(new InternetAddress(username));
-			message1.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
-			message1.setSubject(subject);
-			message1.setText(message);
-			Transport.send(message1);
-		}
-		catch (MessagingException e) {
-			throw new RuntimeException(e);
-		}
-		
-	}
-	
-	/**
-	 * Send email message to patient
-	 *
-	 * @param recipient email
-	 * @param subject of the email
-	 * @param message content of the email
-	 */
-	public void contactPatient(@RequestParam(value = "recipient", required = false) String recipient,
-			@RequestParam(value = "subject", required = false) String subject,
-			@RequestParam(value = "message", required = false) String message) {
-		
-		RadiologyProperties radiologyProperties = new RadiologyProperties();
-		final String username = radiologyProperties.getSmtpAuthentificationEmailAddress();
-		final String password = radiologyProperties.getSmtpAuthentificationPassword();
-		String p1 = radiologyProperties.getServersPort();
-		String p2 = radiologyProperties.getSmtpAuthentificationPassword();
-		
-		System.out.println("434334 " + username);
-		System.out.println("655465645656 " + password);
-		System.out.println("kjkjkjkjk " + p1);
-		System.out.println("545454545 " + p2);
-		
-		// set up smtp server
-		Properties props = new Properties();
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.smtp.host", "smtp.gmail.com");
-		props.put("mail.smtp.port", "587");
-		Session session = Session.getInstance(props, new javax.mail.Authenticator() {
-			
-			// user authentication required
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(username, password);
-			}
-		});
-		try {
-			// Sender and receiver info with the message
-			Message message1 = new MimeMessage(session);
-			message1.setFrom(new InternetAddress(username));
-			message1.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
-			message1.setSubject(subject);
-			message1.setText(message);
-			Transport.send(message1);
-		}
-		catch (MessagingException e) {
-			throw new RuntimeException(e);
-		}
-		
-	}
-	
 	public List<SimpleObject> deleteOrder(UiUtils ui, @RequestParam(value = "orderId", required = false) Integer orderId)
 			throws Exception {
 		
 		// get the radiology order with the report saved encounter id
 		RadiologyOrder deleteRadiologyOrder = Context.getService(RadiologyService.class)
 				.getRadiologyOrderByOrderId(orderId);
+		
 		// update the performed status to report ready so it is available to referring physician
 		Context.getService(RadiologyService.class)
 				.updateStudyPerformedStatus(deleteRadiologyOrder.getStudy()
@@ -566,8 +488,17 @@ public class CreateViewRadiologyOrderFragmentController {
 						.getStudyInstanceUid(), ScheduledProcedureStepStatus.DEPARTED);
 		
 		RadiologyService radiologyService = Context.getService(RadiologyService.class);
-		// radiologyService.discontinueRadiologyOrder(deleteRadiologyOrder, deleteRadiologyOrder.getOrderer(),
-		// "delete order");
+		
+		deleteRadiologyOrder.getEncounter()
+				.removeOrder(deleteRadiologyOrder);
+		Encounter voidEncounter = deleteRadiologyOrder.getEncounter();
+		
+		Context.getEncounterService()
+				.getEncounter(voidEncounter.getEncounterId())
+				.setVoided(Boolean.TRUE);
+		Context.getEncounterService()
+				.getEncounter(voidEncounter.getEncounterId())
+				.setVoidReason("Void");
 		
 		radiologyService.discontinueRadiologyOrderInPacs(deleteRadiologyOrder);
 		

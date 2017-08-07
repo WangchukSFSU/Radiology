@@ -344,11 +344,6 @@ public class RadiologyProperties extends ModuleProperties {
 				.getGlobalProperty(RadiologyConstants.GP_DICOM_WEB_VIEWER_BASE_URL);
 	}
 	
-	public String getSmtpAuthentificationPassword() {
-		return Context.getAdministrationService()
-				.getGlobalProperty(RadiologyConstants.GP_SmtpAuthentificationPassword);
-	}
-	
 	public String getSmtpAuthentificationEmailAddress() {
 		return Context.getAdministrationService()
 				.getGlobalProperty(RadiologyConstants.GP_SmtpAuthentificationEmailAddress);
