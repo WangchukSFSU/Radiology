@@ -174,7 +174,7 @@
           <thead>
                <tr>
                     <th>PatientName</th>
-                    <th>Order</th>
+                    <th>Study</th>
                     <th>OrderStartDate</th>
                     <th>OrderPriority</th>
                     <th>PatientID</th>

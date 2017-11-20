@@ -222,7 +222,7 @@
 	</globalProperty>
 	<globalProperty>
 		<property>radiology.radiologyOrderEncounterType</property>
-		<defaultValue>19db8c0d-3520-48f2-babd-77f2d450e5c7</defaultValue>
+		<defaultValue>19db8c0d-3520-48f2-babd-77f2d450e5c9</defaultValue>
 		<description>Radiology Order Encounter Type UUID</description>
 	</globalProperty>
 	<globalProperty>

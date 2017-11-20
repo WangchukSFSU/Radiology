@@ -40,9 +40,11 @@ public class AdminManageRadiologyModuleFragmentController {
 		ArrayList<ConceptName> modalityConceptName = new ArrayList();
 		// get modality concept
 		ArrayList<Concept> modalityConcept = getModalityConcept();
+		
 		// convert modality concept to conceptName
 		for (Concept getModalityConceptName : modalityConcept) {
 			modalityConceptName.add(getModalityConceptName.getName());
+			
 		}
 		
 		RadiologyProperties radiologyProperties = new RadiologyProperties();
@@ -67,7 +69,7 @@ public class AdminManageRadiologyModuleFragmentController {
 		ArrayList<Concept> modalityConcept = new ArrayList();
 		List<ConceptSet> modalityConceptSet = Context.getConceptService()
 				.getConceptSetsByConcept(Context.getConceptService()
-						.getConcept(164068));
+						.getConcept(162826));
 		
 		for (ConceptSet addModalityConceptSet : modalityConceptSet) {
 			Concept modalityConceptName = addModalityConceptSet.getConcept();
@@ -83,9 +85,7 @@ public class AdminManageRadiologyModuleFragmentController {
 	 * @param ui UiUtils
 	 * @return study concepts available in the concept dictionary
 	 */
-	public List<SimpleObject> getStudyConceptsAnswerFromModality(@SpringBean("conceptService") ConceptService service,
-			UiUtils ui) {
-		
+	public List<SimpleObject> getStudyConceptsAnswerFromModality(UiUtils ui) {
 		ArrayList<Concept> studySetMembers = getStudyConcept();
 		
 		// properties selected from the study field
@@ -104,11 +104,11 @@ public class AdminManageRadiologyModuleFragmentController {
 	 */
 	public ArrayList<Concept> getStudyConcept() {
 		ArrayList<Concept> studyConcept = new ArrayList<Concept>();
-		
 		ArrayList<Concept> modalityConceptToBeRemovedFromStudyConcept = getModalityConcept();
+		
 		// study class name
 		ConceptClass studyClassName = Context.getConceptService()
-				.getConceptClassByName("Radiology/Imaging Procedure");
+				.getConceptClassByName("Radiology Imaging/Procedure");
 		List<Concept> studyClassNameConcept = Context.getConceptService()
 				.getConceptsByClass(studyClassName);
 		// get only study excluding the modality

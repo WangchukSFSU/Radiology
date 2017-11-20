@@ -13,6 +13,7 @@ import org.openmrs.ConceptClass;
 import org.openmrs.ConceptSearchResult;
 import org.openmrs.ConceptSet;
 import org.openmrs.Encounter;
+import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Order;
 import org.openmrs.Patient;
@@ -51,7 +52,10 @@ public class CreateViewRadiologyOrderFragmentController {
 	 */
 	public void controller(FragmentModel model, @RequestParam(value = "returnUrl", required = false) String returnUrl,
 			@RequestParam(value = "patientId", required = false) Patient patient) {
-		
+		System.out.println("KKKKKKKKKKKK llll " + Context.getUserContext()
+				.getLocationId());
+		System.out.println("KKKKKKKKKKKK lll " + Context.getUserContext()
+				.getLocation());
 		// Priority of the order
 		final List<String> urgencies = new LinkedList<String>();
 		for (Order.Urgency urgency : Order.Urgency.values()) {
@@ -200,7 +204,7 @@ public class CreateViewRadiologyOrderFragmentController {
 		// get in progress orders of the patient
 		List<RadiologyOrder> inProgressRadiologyOrders = getInProgressRadiologyOrdersByPatient(patient);
 		// properties selected from orders
-		String[] properties = new String[7];
+		String[] properties = new String[9];
 		properties[0] = "study.studyname";
 		properties[1] = "dateCreated";
 		properties[2] = "study.scheduledStatus";
@@ -208,6 +212,8 @@ public class CreateViewRadiologyOrderFragmentController {
 		properties[4] = "orderId";
 		properties[5] = "instructions";
 		properties[6] = "orderdiagnosis";
+		properties[7] = "orderer.name";
+		properties[8] = "urgency";
 		
 		return SimpleObject.fromCollection(inProgressRadiologyOrders, ui, properties);
 	}
@@ -270,8 +276,9 @@ public class CreateViewRadiologyOrderFragmentController {
 	public List<SimpleObject> placeRadiologyOrder(@SpringBean("conceptService") ConceptService service, FragmentModel model,
 			@RequestParam("patient") Patient patient, @RequestParam(value = "returnUrl", required = false) String returnUrl,
 			@RequestParam(value = "study") String study, @RequestParam(value = "diagnosis") String diagnosis,
-			@RequestParam(value = "instruction") String instruction, @RequestParam(value = "priority") String priority,
-			UiUtils ui) throws ParseException {
+			@RequestParam(value = "locationName") String locationName,
+			@RequestParam(value = "locationId") Integer locationId, @RequestParam(value = "instruction") String instruction,
+			@RequestParam(value = "priority") String priority, UiUtils ui) throws ParseException {
 		
 		// create new radiology order
 		RadiologyOrder radiologyOrder = new RadiologyOrder();
@@ -303,7 +310,9 @@ public class CreateViewRadiologyOrderFragmentController {
 		radiologyOrder.setInstructions(instruction);
 		radiologyOrder.setUrgency(Order.Urgency.valueOf(priority));
 		radiologyOrder.setOrderdiagnosis(diagnosis);
+		
 		RadiologyService radiologyservice = Context.getService(RadiologyService.class);
+		
 		// create new study
 		Study newStudy = new Study();
 		
@@ -336,6 +345,12 @@ public class CreateViewRadiologyOrderFragmentController {
 						.getId()));
 		// save in database
 		RadiologyOrder saveOrder = radiologyservice.placeRadiologyOrder(radiologyOrder);
+		
+		Location loc = Context.getLocationService()
+				.getLocation(locationId);
+		
+		radiologyOrder.getEncounter()
+				.setLocation(loc);
 		// send to Pacs
 		radiologyservice.placeRadiologyOrderInPacs(saveOrder);
 		// get the updated completed report orders
@@ -364,7 +379,7 @@ public class CreateViewRadiologyOrderFragmentController {
 		ArrayList<Concept> modalityConcept = new ArrayList();
 		List<ConceptSet> modalityConceptSet = Context.getConceptService()
 				.getConceptSetsByConcept(Context.getConceptService()
-						.getConcept(164068));
+						.getConcept(162826));
 		for (ConceptSet addModalityConceptSet : modalityConceptSet) {
 			Concept modalityConceptName = addModalityConceptSet.getConcept();
 			modalityConcept.add(modalityConceptName);

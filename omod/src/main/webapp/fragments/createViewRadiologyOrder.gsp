@@ -13,10 +13,18 @@ def conceptDiagnosisClass = config.requireDiagnosisClass
 %>   
 
 
+<script type="text/javascript">
+var locationName = "${ sessionContext.sessionLocation }"; 
+var locationId = "${ sessionContext.sessionLocation.id }"; 
+
+</script>
 
 <script>
      jq = jQuery;
      jq(document).ready(function() {
+     
+
+
      jq('input.priority').on('change', function() {
      jq('input.priority').not(this).prop('checked', false);  
 
@@ -195,7 +203,7 @@ def conceptDiagnosisClass = config.requireDiagnosisClass
      jq('#performedStatusInProgressOrder table').attr('id', 'patientCompletedOrdersDatatable');
      jq("#performedStatusInProgressOrder table").addClass("patientCompletedOrdersClass");
      var patientCompletedOrdersTable = jq('#performedStatusInProgressOrder table');
-                patientCompletedOrdersTable.append('<thead><tr><th> Order</th><th> Diagnosis</th><th> StartDate</th><th> OrderStatus</th><th> Instructions </th><th> DeleteOrder</th></thead><tbody>');
+                patientCompletedOrdersTable.append('<thead><tr><th>Study</th><th>Provider</th><th>Priority</th><th> Diagnosis</th><th> StartDate</th><th> OrderStatus</th><th> Instructions </th><th> DeleteOrder</th></thead><tbody>');
      for (var i = 0; i < ret.length; i++) {
      var studyName = ret[i].study.studyname;
      var dateCreated = ret[i].dateCreated;
@@ -204,10 +212,12 @@ def conceptDiagnosisClass = config.requireDiagnosisClass
      var orderId = ret[i].orderId; 
      var instructions = ret[i].instructions; 
      var orderdiagnosis = ret[i].orderdiagnosis;
+      var provider = ret[i].orderer.name;
+       var urgency = ret[i].urgency;
      if(scheduledStatus == 'STARTED') { 
-                     patientCompletedOrdersTable.append('<tr><td> ' + studyName + ' </td><td> ' + orderdiagnosis + '</td><td> ' + dateCreated + '</td><td> STARTED </td><td> ' + instructions + '</td><td><p style="display:none;">No</p></td></tr>');
+                     patientCompletedOrdersTable.append('<tr><td> ' + studyName + ' </td><td> ' + provider + ' </td><td> ' + urgency + ' </td><td> ' + orderdiagnosis + '</td><td> ' + dateCreated + '</td><td> COMPLETED </td><td> ' + instructions + '</td><td><p style="display:none;">No</p></td></tr>');
      } else {
-                    patientCompletedOrdersTable.append('<tr><td> ' + studyName + ' </td><td> ' + orderdiagnosis + '</td><td> ' + dateCreated + '</td><td> ' + scheduledStatus + '</td><td> ' + instructions + '</td><td><a href=' + studyName + ' onclick="clickOrder(' + orderId + '); return false;" > <img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/> </a></td></tr>');
+                    patientCompletedOrdersTable.append('<tr><td> ' + studyName + ' </td><td> ' + provider + ' </td><td> ' + urgency + ' </td><td> ' + orderdiagnosis + '</td><td> ' + dateCreated + '</td><td> ' + scheduledStatus + '</td><td> ' + instructions + '</td><td><a href=' + studyName + ' onclick="clickOrder(' + orderId + '); return false;" > <img  class="img-circle" src=" ${ ui.resourceLink ("/images/ic_cancel_2x.png") }"/> </a></td></tr>');
      }
      }
                 patientCompletedOrdersTable.append("</tbody>");
@@ -221,7 +231,7 @@ def conceptDiagnosisClass = config.requireDiagnosisClass
      "iDisplayLength": 5,
      "aLengthMenu": [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, "All"]],
      "aaSorting": [
-     [2, "desc"]
+     [4, "desc"]
      ] // Sort by first column descending,
      });
      })
@@ -308,7 +318,9 @@ def conceptDiagnosisClass = config.requireDiagnosisClass
      'study': studyOrder,
      'diagnosis': diagnosisOrder,
      'instruction': instructionOrder,
-     'priority': priorityOrder
+     'priority': priorityOrder,
+     'locationName': locationName,
+     'locationId' : locationId
      })
 
      .success(function(ret) {
@@ -387,7 +399,7 @@ def conceptDiagnosisClass = config.requireDiagnosisClass
   
             var orderencounterId = ${ anOrder.study.studyReportSavedEncounterId };
           
-            jq('#radiologyOrderDetailsDiv').append("<h1 class='order'  id= 'orderDetailHeading'>RADIOLOGY ORDER DETAILS - CompletedDate :   ${ anOrder.study.reportCompletedDate }  </h1>");
+            jq('#radiologyOrderDetailsDiv').append("<h1 class='order'  id= 'orderDetailHeading'>RADIOLOGY ORDER DETAILS -ReportReady Date :   ${ anOrder.study.reportCompletedDate }  </h1>");
      jq('#radiologyOrderDetailsDiv').append(jq('#radiologyOrderDetailsTableId'));
      localStorage.setItem("orderencounterId", orderencounterId);
      localStorage.setItem("orderId", orderId);
@@ -400,7 +412,7 @@ def conceptDiagnosisClass = config.requireDiagnosisClass
                  jq('#radiologyOrderDetailsTableId').append('<tbody><tr><td><a onclick="ViewReport();"> Obs</a> </td><td> ${anOrder.study.studyReportRadiologist}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td>${anOrder.study.studyname}</td><td><a id="studyLink" class="studyLink" target="_blank" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" +  anOrder.patient.patientIdentifier }" >ViewStudy</a></td><td><a href="mailto:<indicate recipients address>?Subject=${subject}&body=StudyName%20:%20${anOrder.study.studyname}%0DPatientId%20:%20${anOrder.patient.patientIdentifier}%0DDiagnosis%20:%20${anOrder.orderdiagnosis}%0DInstruction%20:%20${anOrder.instructions}%0DDate%20Completed%20:%20${anOrder.study.reportCompletedDate}" target="_top">ContactRadiologist</a></td></tr></tbody>');
      <% } %>
      <% if ((weasisStatus != null) && (oviyamStatus != "")) { %>
-                 jq('#radiologyOrderDetailsTableId').append('<tbody><tr><td><a onclick="ViewReport();"> Obs</a> </td><td> ${anOrder.study.studyReportRadiologist}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td>${anOrder.study.studyname}</td><td><a id="studyLink" class="studyLink" target="_blank" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" +  anOrder.patient.patientIdentifier }" >Oviyam</a><br><a id="studyLink" class="studyLink" target="_blank" href="${ dicomViewerWeasisUrladdress + "studyUID=" + "1.3.6.1.4.1.5962.1.1.0.0.0.1168612284.20369.0.1" + "&patientID=" +  anOrder.patient.patientIdentifier }" >Weasis</a></td><td><a href="mailto:<indicate recipients address>?Subject=${subject}&body=StudyName%20:%20${anOrder.study.studyname}%0DPatientId%20:%20${anOrder.patient.patientIdentifier}%0DDiagnosis%20:%20${anOrder.orderdiagnosis}%0DInstruction%20:%20${anOrder.instructions}%0DDate%20Completed%20:%20${anOrder.study.reportCompletedDate}" target="_top">ContactRadiologist</a></td></tr></tbody>');
+                 jq('#radiologyOrderDetailsTableId').append('<tbody><tr><td><a onclick="ViewReport();"> Obs</a> </td><td> ${anOrder.study.studyReportRadiologist}</td><td> ${anOrder.instructions} </td><td> ${anOrder.orderdiagnosis}</td><td>${anOrder.study.studyname}</td><td><a id="studyLink" class="studyLink" target="_blank" href="${ dicomViewerUrladdress + "studyUID=" + anOrder.study.studyInstanceUid + "&patientID=" +  anOrder.patient.patientIdentifier }" >Oviyam</a><br><a id="studyLink" class="studyLink" target="_blank" href="${ dicomViewerWeasisUrladdress + "studyUID=" + "1.3.6.1.4.1.5962.1.1.0.0.0.1168612284.20369.0.1" + "&patientID=" +  "TEST2351267" }" >Weasis</a></td><td><a href="mailto:<indicate recipients address>?Subject=${subject}&body=StudyName%20:%20${anOrder.study.studyname}%0DPatientId%20:%20${anOrder.patient.patientIdentifier}%0DDiagnosis%20:%20${anOrder.orderdiagnosis}%0DInstruction%20:%20${anOrder.instructions}%0DDate%20Completed%20:%20${anOrder.study.reportCompletedDate}" target="_top">ContactRadiologist</a></td></tr></tbody>');
 
      <% } %> 
      }
@@ -561,9 +573,9 @@ def conceptDiagnosisClass = config.requireDiagnosisClass
      loopOnce = false;
      }
      if(valueText) {
-                obsDialogBoxTextTable.append('<tr><td>' + concept + '</td><td>' + valueText + '</td></tr>');
+                obsDialogBoxTextTable.append('<tr><td>' + concept + '</td><td style="white-space:pre-wrap">' + valueText + '</textarea></td></tr>');
      } else {
-                obsDialogBoxTextTable.append('<tr><td>' + concept + '</td><td>' + valueNumeric + '</td></tr>');
+                obsDialogBoxTextTable.append('<tr><td>' + concept + '</td><td style="white-space:pre-wrap">' + valueNumeric + '</td></tr>');
      }
      }
             obsDialogBoxTextTable.append("</tbody>");
@@ -732,20 +744,19 @@ def conceptDiagnosisClass = config.requireDiagnosisClass
 <!-- completed radiology order table header -->
 <div id="completedOrderDiv">
      <div id="completedOrderHeader" class="performedStatusesContainer">
-          <span class="left"><button type="button" id="CompletedOrdersList">Completed</button></span>
+          <span class="left"><button type="button" id="CompletedOrdersList">ReportReady</button></span>
           <span class="left"><button type="button" id="InProgressOrdersList">InProgress</button></span>
           <span class="right"><button type="button" id="addRadiologyOrderBtn">Add Radiology Order</button></span>
-          <span class="right">
-               <a href="mailto:<indicate recipients address>?Subject=${subjectPatient}&body=PatientName%20:%20${patientname}" class="messageLink" target="_top">Message Patient</a>
+        
 </span>
      </div>
  <!-- completed radiology order table -->
      <div id="performedStatusCompletedOrder">
-          <h1>CLICK COMPLETED RADIOLOGY ORDERS TO VIEW OBS</h1>
+          <h1>CLICK REPORT READY RADIOLOGY ORDERS TO VIEW OBS</h1>
           <table id="performedStatusCompletedOrderTable">
                <thead>
                     <tr>
-                         <th>Order</th>
+                         <th>Study</th>
                          <th>Diagnosis</th>
                          <th>Instructions</th>
                          <th>Radiologist</th>

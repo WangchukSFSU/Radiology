@@ -125,7 +125,7 @@
           <dropColumn columnName="reading_physician_user_id"
                             tableName="radiology_study" />
      </changeSet>
-     <changeSet id="radiology-18" author="teleivo">
+    <changeSet id="radiology-18" author="teleivo">
           <comment>Add radiology encounter type and role necessary to add
                orders, encounters in core 10.2</comment>
           <insert tableName="encounter_type">
@@ -496,9 +496,21 @@
                <column name="uuid" value="17c32561-e21b-12e5-b4b0-08002719a237" />
           </insert>
      </changeSet>
-
-
-   
-     
+ 
+  
+   <changeSet id="radiology-129" author="tenzin">
+          <comment>Add radiology encounter type and role necessary to add
+               orders, encounters in core 10.2</comment>
+          <insert tableName="encounter_type">
+               <column name="name" value="Radiology Order" />
+               <column name="description" value="Ordering radiology exams" />
+               <column name="creator" valueNumeric="1" />
+               <column name="date_created" valueDate="2015-09-18" />
+               <column name="uuid" value="19db8c0d-3520-48f2-babd-77f2d450e5c9" />
+          </insert>
+    
+     </changeSet>
 </databaseChangeLog>
 
+               
+            

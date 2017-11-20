@@ -121,6 +121,7 @@ class RadiologyServiceImpl extends BaseOpenmrsService implements RadiologyServic
 		
 		final Encounter encounter = saveRadiologyOrderEncounter(radiologyOrder.getPatient(), radiologyOrder.getOrderer(),
 			new Date());
+		
 		encounter.addOrder(radiologyOrder);
 		
 		OrderContext orderContext = new OrderContext();

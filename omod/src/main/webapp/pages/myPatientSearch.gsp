@@ -66,11 +66,11 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
           <thead>
                <tr>
                     
-                    <th>Order</th>
+                    <th>Study</th>
                     <th>OrderStartDate</th>
                     <th>OrderPriority</th>
                      <th>PatientID</th>
-                     <th>Orderdiagnosis</th>
+                     <th>Diagnosis</th>
                      <th>Instructions</th>
                
                </tr>

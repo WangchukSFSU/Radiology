@@ -3,6 +3,11 @@
 }
 
 
+
+ #valueText {
+    border: none;
+    width: 100%;
+}
 .contactSpan {
      color : red;
 }

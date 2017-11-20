@@ -574,7 +574,7 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
           jq('#patientCompletedOrders').append('<table></table>');
      jq('#patientCompletedOrders table').attr('id', 'patientCompletedOrdersDatatable');
      var patientCompletedOrdersTable = jq('#patientCompletedOrders table');
-     patientCompletedOrdersTable.append('<thead><tr><th> Report</th><th> StartDate</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> Study</th></tr></thead><tbody>');
+     patientCompletedOrdersTable.append('<thead><tr><th> Report</th><th> StartDate</th><th> Provider</th><th> Instructions </th><th> Diagnosis</th><th> ViewStudy</th></tr></thead><tbody>');
                 
      for (var i = 0; i < ret.length; i++) {
      var provider = ret[i].orderer.name;
@@ -665,7 +665,7 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
      jq('#CancelReportUpdatedDiv').append('<table></table>');
      jq('#CancelReportUpdatedDiv table').attr('id', 'cancepReportUpdatedDatatable');
      var cancelReportUpdatedTable = jq('#CancelReportUpdatedDiv table');
-     cancelReportUpdatedTable.append('<thead><tr><th>Order</th><th>Patient Name</th><th>MRN</th><th>OrderStartDate</th><th>OrderPriority</th><th>SavedReport</th></tr></thead><tbody>');
+     cancelReportUpdatedTable.append('<thead><tr><th>Study</th><th>Patient Name</th><th>OrderNumber</th><th>OrderStartDate</th><th>OrderPriority</th><th>SavedReport</th></tr></thead><tbody>');
      for (var i = 0; i < ret.length; i++) {
      var studyname = ret[i].study.studyname;
      var dateCreated = ret[i].dateCreated;
@@ -727,7 +727,7 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
      jq('#activeOrderTableDiv').append('<table></table>');
      jq('#activeOrderTableDiv table').attr('id', 'updateActiveOrderDatatable');
      var activeOrderTableRow = jq('#activeOrderTableDiv table');
-     activeOrderTableRow.append('<thead><tr><th>Order</th><th>Patient Name</th><th>MRN</th><th>OrderStartDate</th><th>OrderPriority</th><th>SavedReport</th></tr></thead><tbody>');
+     activeOrderTableRow.append('<thead><tr><th>Study</th><th>Patient Name</th><th>PatientID</th><th>OrderStartDate</th><th>OrderPriority</th><th>SavedReport</th></tr></thead><tbody>');
      for (var i = 0; i < ret.length; i++) {
      var anOrderId = ret[i].orderId;
      var studyname = ret[i].study.studyname;
@@ -795,9 +795,9 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
                 }
                 
      if(valueText) {
-                   obsDialogBoxTextTable.append('<tr><td>' + concept + '</td><td>' + valueText + '</td></tr>');
+                obsDialogBoxTextTable.append('<tr><td>' + concept + '</td><td style="white-space:pre-wrap">' + valueText + '</textarea></td></tr>');
      } else {
-                   obsDialogBoxTextTable.append('<tr><td>' + concept + '</td><td>' + valueNumeric + '</td></tr>');
+                obsDialogBoxTextTable.append('<tr><td>' + concept + '</td><td style="white-space:pre-wrap">' + valueNumeric + '</td></tr>');
      }
 
      }
@@ -877,7 +877,7 @@ ui.includeCss("uicommons", "datatables/dataTables_jui.css")
      <table id="activeOrderTable">
           <thead>
                <tr>
-                    <th>Order</th>
+                    <th>Study</th>
                     <th>Patient Name</th>
                     <th>PatientID</th>
                     <th>OrderStartDate</th>

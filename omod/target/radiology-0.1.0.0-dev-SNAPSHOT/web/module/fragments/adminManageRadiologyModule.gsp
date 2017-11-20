@@ -83,6 +83,7 @@
         jq('#studyTableDiv table').attr('id', 'studyTableId');
         jq("#studyTableDiv table").addClass("studyTableClass");
         var studyTableRow = jq('#studyTableDiv').children();
+
         jq.getJSON('${ ui.actionLink("getStudyConceptsAnswerFromModality") }', {})
             .error(function(xhr, status, err) {
                 alert('AJAX error ' + err);

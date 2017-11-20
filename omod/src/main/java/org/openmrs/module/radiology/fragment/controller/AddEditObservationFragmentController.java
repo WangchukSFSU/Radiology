@@ -531,9 +531,6 @@ public class AddEditObservationFragmentController extends BaseHtmlFormFragmentCo
 				radiologyOrder = Context.getService(RadiologyService.class)
 						.getRadiologyOrderByOrderId(order.getOrderId());
 				
-				System.out.println("DSDSDSDS " + radiologyOrder.getStudy()
-						.getStudyReportSavedEncounterId());
-				
 				if (radiologyOrder.getStudy()
 						.getStudyReportSavedEncounterId() == null) {
 					throw new IllegalArgumentException("Save HTMLFORM is required");
